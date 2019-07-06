@@ -1,0 +1,6 @@
+/vendor
+/node_modules
+/spark
+/storage
+/vultr/vendor
+/public/js
