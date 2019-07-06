@@ -134,7 +134,7 @@ class ServerProvidersController extends Controller
 
         return response()->json([
             'message' => "Invalid {$provider} credentials."
-        ]);
+        ], 400);
     }
 
     /**
