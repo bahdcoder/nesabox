@@ -15,9 +15,9 @@ class Model extends BaseModel
     public $incrementing = false;
 
     /**
-     * 
+     *
      * Turn of mass assignment protection
-     * 
+     *
      * @var array
      */
     protected $guarded = [];

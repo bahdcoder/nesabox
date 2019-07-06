@@ -23,12 +23,15 @@ class AddServerProviderRequest extends FormRequest
      */
     public function rules()
     {
+        $providers = [DIGITAL_OCEAN, LINODE, AWS, VULTR];
+
         return [
             'profileName' => 'required',
-            'apiKey' => 'required_if:provider,vultr|required_if:provider,aws',
-            'provider' => 'required|in:digital-ocean,vultr,aws',
-            'apiToken' => 'required_if:provider,digital-ocean',
-            'apiSecret' => 'required_if:provider,aws',
+            'apiKey' => 'required_if:provider,'. VULTR. '|required_if:provider,' . AWS,
+            'provider' => 'required|in:' . implode(',', $providers),
+            'apiToken' => 'required_if:provider,' . DIGITAL_OCEAN,
+            'apiSecret' => 'required_if:provider,' . AWS,
+            'accessToken' => 'required_if:provider,' . LINODE
         ];
     }
 }

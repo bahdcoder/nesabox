@@ -5,7 +5,8 @@ namespace App\Http\ServerProviders;
 use Aws\Ec2\Ec2Client;
 use Aws\Exception\AwsException;
 
-trait InteractsWithAws {
+trait InteractsWithAws
+{
     /**
      * This method tests the aws connection with the token provided
      *
@@ -16,8 +17,10 @@ trait InteractsWithAws {
     public function verifySuccessfulAwsConnection(string $key, string $secret)
     {
         try {
-            return $this->getAwsConnectionInstance($key, $secret)
-                ->describeRegions();
+            return $this->getAwsConnectionInstance(
+                $key,
+                $secret
+            )->describeRegions();
         } catch (AwsException $e) {
             return false;
         }
@@ -28,8 +31,11 @@ trait InteractsWithAws {
      *
      * @return object
      */
-    public function getAwsConnectionInstance(string $key, string $secret, string $region = null)
-    {
+    public function getAwsConnectionInstance(
+        string $key,
+        string $secret,
+        string $region = null
+    ) {
         return new Ec2Client([
             'region' => $region ?? 'us-east-1',
             'version' => 'latest',

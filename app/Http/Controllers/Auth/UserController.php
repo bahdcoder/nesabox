@@ -12,7 +12,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show() {
+    public function show()
+    {
         return new UserResource(auth()->user());
     }
 }

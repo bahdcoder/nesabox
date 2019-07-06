@@ -7,6 +7,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
+     *
+     * Return visible properties of credentials
+     */
+    public function defineCredential($credential)
+    {
+        return [
+            'id' => $credential['id'],
+            'profileName' => $credential['profileName']
+        ];
+    }
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -19,26 +31,28 @@ class UserResource extends JsonResource
             'id' => $this->resource->id,
             'photo_url' => $this->photo_url,
             'providers' => [
-                'digital-ocean' => collect($this->providers['digital-ocean'])->map(function ($credential) {
-                    return [
-                        'id' => $credential['id'],
-                        'profileName' => $credential['profileName']
-                    ];
+                DIGITAL_OCEAN => collect($this->providers[DIGITAL_OCEAN])->map(
+                    function ($credential) {
+                        return $this->defineCredential($credential);
+                    }
+                ),
+                VULTR => collect($this->providers[VULTR])->map(function (
+                    $credential
+                ) {
+                    return $this->defineCredential($credential);
                 }),
-                'vultr' => collect($this->providers['vultr'])->map(function ($credential) {
-                    return [
-                        'id' => $credential['id'],
-                        'profileName' => $credential['profileName']
-                    ];
+                AWS => collect($this->providers[AWS])->map(function (
+                    $credential
+                ) {
+                    return $this->defineCredential($credential);
                 }),
-                'aws' => collect($this->providers['aws'])->map(function ($credential) {
-                    return [
-                        'id' => $credential['id'],
-                        'profileName' => $credential['profileName']
-                    ];
+                LINODE => collect($this->providers[LINODE])->map(function (
+                    $credential
+                ) {
+                    return $this->defineCredential($credential);
                 })
             ],
-            'access_token' => $this->createToken('Personal')->accessToken,
+            'access_token' => $this->createToken('Personal')->accessToken
         ];
     }
 }

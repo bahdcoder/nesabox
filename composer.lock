@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ab3a2ffaf21f3b337dc2bafa0dd829e",
+    "content-hash": "ddc1a4f37a0392abb0cd2dbf65db8bb6",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -139,6 +139,58 @@
             "keywords": [
                 "bahdcoder",
                 "vultr"
+            ]
+        },
+        {
+            "name": "bahdcoder/linode",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./linode",
+                "reference": "68b59b2cc7d74aaaad00078e9bdb04b820cbd939",
+                "shasum": null
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bahdcoder\\Linode\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Bahdcoder\\Linode\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ],
+                "test-coverage": [
+                    "vendor/bin/phpunit --coverage-html coverage"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kati Frantz",
+                    "email": "bahdcoder@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple PHP wrapper around linode API",
+            "homepage": "https://github.com/bahdcoder/linode",
+            "keywords": [
+                "bahdcoder",
+                "linode"
             ]
         },
         {
@@ -859,6 +911,91 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "idimensionz/http-client",
+            "version": "v1.0.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/idimensionz/http-client.git",
+                "reference": "9c1b22715bdffd12d5818fa446616b42e02099e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/idimensionz/http-client/zipball/9c1b22715bdffd12d5818fa446616b42e02099e7",
+                "reference": "9c1b22715bdffd12d5818fa446616b42e02099e7",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3",
+                "php": "^5.3 || ^7.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "^0.4.4",
+                "phake/phake": "<3.0.0",
+                "phpunit/phpunit": "5.7.x-dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iDimensionz\\HttpClient\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT License"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Mullen",
+                    "email": "info@idimensionz.com"
+                }
+            ],
+            "description": "PHP HTTP client interface and implementations",
+            "time": "2017-09-15T01:47:31+00:00"
+        },
+        {
+            "name": "idimensionz/linode-api-v4",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/idimensionz/linode-api-v4.git",
+                "reference": "61fe7aabb5e73f73fc182ace6abac8a91aa33051"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/idimensionz/linode-api-v4/zipball/61fe7aabb5e73f73fc182ace6abac8a91aa33051",
+                "reference": "61fe7aabb5e73f73fc182ace6abac8a91aa33051",
+                "shasum": ""
+            },
+            "require": {
+                "idimensionz/http-client": "v1.0.1.x-dev",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "^0.4.4",
+                "phake/phake": "^3.0.0",
+                "phpunit/phpunit": "^6.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "iDimensionz\\": "src/",
+                    "iDimensionz\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT License"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Mullen",
+                    "email": "info@idimensionz.com"
+                }
+            ],
+            "description": "PHP client for Linode API v4",
+            "time": "2018-11-18T22:14:01+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -5920,7 +6057,9 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "bahdcoder/digitalocean": 20,
-        "bahdcoder/vultr": 20
+        "bahdcoder/vultr": 20,
+        "bahdcoder/linode": 20,
+        "idimensionz/linode-api-v4": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

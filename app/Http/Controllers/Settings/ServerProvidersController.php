@@ -17,37 +17,60 @@ class ServerProvidersController extends Controller
     public function store(AddServerProviderRequest $request)
     {
         switch ($request->provider):
-            case 'digital-ocean':
-                if (! $this->verifySuccessfulDigitalOceanConnection(
-                    $request->apiToken
-                )) {
+            case DIGITAL_OCEAN:
+                if (
+                    !$this->verifySuccessfulDigitalOceanConnection(
+                        $request->apiToken
+                    )
+                ) {
                     return $this->sendCredentialsCheckFailure();
                 }
 
                 $this->updateUserForDigitalOCean($request);
 
                 break;
-            case 'vultr':
-                if (! $this->verifySuccessfulVultrConnection($request->apiKey)) {
-                    return $this->sendCredentialsCheckFailure(); 
+            case VULTR:
+                if (!$this->verifySuccessfulVultrConnection($request->apiKey)) {
+                    return $this->sendCredentialsCheckFailure();
                 }
 
                 $this->updateUserForVultr($request);
 
                 break;
-            case 'aws':
-                if (! $this->verifySuccessfulAwsConnection($request->apiKey, $request->apiSecret)) {
+            case AWS:
+                if (
+                    !$this->verifySuccessfulAwsConnection(
+                        $request->apiKey,
+                        $request->apiSecret
+                    )
+                ) {
                     return $this->sendCredentialsCheckFailure();
                 }
 
                 $this->updateUserForAws($request);
 
                 break;
+            case LINODE:
+                if (
+                    !$this->verifySuccessfullLinodeConnection(
+                        $request->accessToken
+                    )
+                ) {
+                    return $this->sendCredentialsCheckFailure();
+                }
+
+                $this->updateUserForLinode($request);
+
+                break;
             default:
                 break;
         endswitch;
 
-        return new UserResource(auth()->user()->refresh());
+        return new UserResource(
+            auth()
+                ->user()
+                ->refresh()
+        );
     }
 
     /**
@@ -61,18 +84,41 @@ class ServerProvidersController extends Controller
 
         $user->update([
             'providers' => array_merge($user->providers, [
-                'digital-ocean' => array_merge(
-                    $user->providers['digital-ocean'],
+                DIGITAL_OCEAN => array_merge(
+                    $user->providers[DIGITAL_OCEAN],
                     [
                         [
                             'id' => Str::uuid(),
                             'profileName' => $request->profileName,
                             'apiToken' => $request->apiToken,
                             'default' =>
-                                count($user->providers['digital-ocean']) === 0
+                                count($user->providers[DIGITAL_OCEAN]) === 0
                         ]
                     ]
                 )
+            ])
+        ]);
+    }
+
+    /**
+     * Update user linode account credentials
+     *
+     * @return Illuminate\Http\Response
+     */
+    public function updateUserForLinode(AddServerProviderRequest $request)
+    {
+        $user = auth()->user();
+
+        $user->update([
+            'providers' => array_merge($user->providers, [
+                LINODE => array_merge($user->providers[LINODE], [
+                    [
+                        'id' => Str::uuid(),
+                        'profileName' => $request->profileName,
+                        'accessToken' => $request->accessToken,
+                        'default' => count($user->providers[LINODE]) === 0
+                    ]
+                ])
             ])
         ]);
     }
@@ -96,18 +142,19 @@ class ServerProvidersController extends Controller
      *
      * @return Illuminate\Http\Response
      */
-    public function updateUserForAws(AddServerProviderRequest $request) {
+    public function updateUserForAws(AddServerProviderRequest $request)
+    {
         $user = auth()->user();
 
         $user->update([
             'providers' => array_merge($user->providers, [
-                'aws' => array_merge($user->providers['aws'], [
+                AWS => array_merge($user->providers[AWS], [
                     [
                         'id' => Str::uuid(),
                         'apiKey' => $request->apiKey,
                         'apiSecret' => $request->apiSecret,
                         'profileName' => $request->profileName,
-                        'default' => count($user->providers['aws']) === 0
+                        'default' => count($user->providers[AWS]) === 0
                     ]
                 ])
             ])

@@ -9,6 +9,17 @@
 
 define('LARAVEL_START', microtime(true));
 
+/**
+ *
+ * Define constants used globally in the app
+ *
+ */
+define('AWS', 'aws');
+define('VULTR', 'vultr');
+define('LINODE', 'linode');
+define('APP_NAME', 'linode');
+define('DIGITAL_OCEAN', 'digital-ocean');
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

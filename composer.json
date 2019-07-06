@@ -12,7 +12,9 @@
         "aws/aws-sdk-php": "^3.104",
         "bahdcoder/digitalocean": "dev-master",
         "bahdcoder/vultr": "@dev",
+        "bahdcoder/linode": "@dev",
         "fideloper/proxy": "^4.0",
+        "idimensionz/linode-api-v4": "dev-master",
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.3",
         "laravel/tinker": "^1.0",
@@ -72,6 +74,10 @@
         {
             "type": "path",
             "url": "./digitalocean"
-          }
+        },
+        {
+            "type": "path",
+            "url": "./linode"
+        }
     ]
 }
