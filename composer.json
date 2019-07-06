@@ -9,6 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.1.3",
+        "aws/aws-sdk-php": "^3.104",
+        "bahdcoder/digitalocean": "dev-master",
+        "bahdcoder/vultr": "@dev",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.3",
@@ -60,5 +63,15 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    }
+    },
+    "repositories": [
+        {
+          "type": "path",
+          "url": "./vultr"
+        },
+        {
+            "type": "path",
+            "url": "./digitalocean"
+          }
+    ]
 }

@@ -1,6 +1,6 @@
 <?php
-
-use Illuminate\Http\Request;
+use App\Http\Controllers\Settings\ServerProvidersController;
+use App\Http\Controllers\Auth\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+    Route::post('settings/server-providers', [
+        ServerProvidersController::class,
+        'store'
+    ]);
+
+    Route::get('me', [UserController::class, 'show']);
 });
 
 Auth::routes();

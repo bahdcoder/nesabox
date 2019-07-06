@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Http\Resources\UserResource;
+use Thomaswelton\LaravelGravatar\Facades\Gravatar;
 
 class RegisterController extends Controller
 {
@@ -75,7 +76,19 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password'])
+            'password' => Hash::make($data['password']),
+            'providers' => [
+                'digital-ocean' => [],
+                'vultr' => [],
+                'aws' => [],
+                'linode' => []
+            ],
+            'source_control' => [
+                'github' => null,
+                'bitbucket' => null,
+                'gitlab' => null
+            ],
+            'photo_url' => Gravatar::src($data['email'])
         ]);
     }
 
