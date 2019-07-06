@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Settings;
 
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\AddServerProviderRequest;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\Settings\AddServerProviderRequest;
 
 class ServerProvidersController extends Controller
 {
@@ -84,18 +84,15 @@ class ServerProvidersController extends Controller
 
         $user->update([
             'providers' => array_merge($user->providers, [
-                DIGITAL_OCEAN => array_merge(
-                    $user->providers[DIGITAL_OCEAN],
+                DIGITAL_OCEAN => array_merge($user->providers[DIGITAL_OCEAN], [
                     [
-                        [
-                            'id' => Str::uuid(),
-                            'profileName' => $request->profileName,
-                            'apiToken' => $request->apiToken,
-                            'default' =>
-                                count($user->providers[DIGITAL_OCEAN]) === 0
-                        ]
+                        'id' => Str::uuid(),
+                        'profileName' => $request->profileName,
+                        'apiToken' => $request->apiToken,
+                        'default' =>
+                            count($user->providers[DIGITAL_OCEAN]) === 0
                     ]
-                )
+                ])
             ])
         ]);
     }
@@ -132,9 +129,12 @@ class ServerProvidersController extends Controller
     {
         $provider = request()->provider;
 
-        return response()->json([
-            'message' => "Invalid {$provider} credentials."
-        ], 400);
+        return response()->json(
+            [
+                'message' => "Invalid {$provider} credentials."
+            ],
+            400
+        );
     }
 
     /**
@@ -172,12 +172,12 @@ class ServerProvidersController extends Controller
 
         $user->update([
             'providers' => array_merge($user->providers, [
-                'vultr' => array_merge($user->providers['vultr'], [
+                VULTR => array_merge($user->providers[VULTR], [
                     [
                         'id' => Str::uuid(),
-                        'profileName' => $request->profileName,
                         'apiKey' => $request->apiKey,
-                        'default' => count($user->providers['vultr']) === 0
+                        'profileName' => $request->profileName,
+                        'default' => count($user->providers[VULTR]) === 0
                     ]
                 ])
             ])

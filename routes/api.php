@@ -1,6 +1,7 @@
 <?php
-use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Settings\ServerProvidersController;
+use App\Http\Controllers\Settings\SourceControlProvidersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,21 @@ Route::middleware('auth:api')->group(function () {
     ]);
 
     Route::get('me', [UserController::class, 'show']);
+
+    Route::get('settings/source-control/{provider}', [
+        SourceControlProvidersController::class,
+        'getRedirectUrl'
+    ]);
+
+    Route::get('settings/source-control/{provider}/callback', [
+        SourceControlProvidersController::class,
+        'handleProviderCallback'
+    ]);
+
+    Route::post('settings/source-control/{provider}/unlink', [
+        SourceControlProvidersController::class,
+        'unlinkProvider'
+    ]);
 });
 
 Auth::routes();

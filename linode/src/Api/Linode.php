@@ -65,6 +65,6 @@ class Linode extends Api
      */
     public function list()
     {
-        return $this->getResult($this->client->get("linode/instances"));
+        return $this->getResult($this->client->get('linode/instances'));
     }
 }

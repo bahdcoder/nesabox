@@ -27,7 +27,11 @@ class AddServerProviderRequest extends FormRequest
 
         return [
             'profileName' => 'required',
-            'apiKey' => 'required_if:provider,'. VULTR. '|required_if:provider,' . AWS,
+            'apiKey' =>
+                'required_if:provider,' .
+                VULTR .
+                '|required_if:provider,' .
+                AWS,
             'provider' => 'required|in:' . implode(',', $providers),
             'apiToken' => 'required_if:provider,' . DIGITAL_OCEAN,
             'apiSecret' => 'required_if:provider,' . AWS,

@@ -30,6 +30,11 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'id' => $this->resource->id,
             'photo_url' => $this->photo_url,
+            'source_control' => [
+                'github' => (bool) $this->source_control['github'],
+                'gitlab' => (bool) $this->source_control['gitlab'],
+                'bitbucket' => (bool) $this->source_control['bitbucket']
+            ],
             'providers' => [
                 DIGITAL_OCEAN => collect($this->providers[DIGITAL_OCEAN])->map(
                     function ($credential) {
