@@ -4,11 +4,12 @@ namespace App;
 
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use App\Http\ServerProviders\HasServerProviders;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens;
+    use Notifiable, HasApiTokens, HasServerProviders;
 
     /**
      * The attributes that are mass assignable.
@@ -34,4 +35,16 @@ class User extends Authenticatable
         'source_control' => 'array',
         'trial_ends_at' => 'datetime'
     ];
+
+    /**
+     *
+     * A user has many servers
+     *
+     * @return \Illuminate\Database\Relations\HasMany
+     *
+     */
+    public function servers()
+    {
+        return $this->hasMany(Server::class);
+    }
 }

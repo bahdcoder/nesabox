@@ -4,7 +4,7 @@ namespace Bahdcoder\Linode\Api;
 
 use GuzzleHttp\Client;
 
-class Linode extends Api
+class LinodeType extends Api
 {
     /**
      * The api client
@@ -24,21 +24,12 @@ class Linode extends Api
     }
 
     /**
-     * Create a new Linode
+     * Get a list of all linode types
      *
      * @return object
      *
      */
-    public function create() {}
-
-    /**
-     * Get a droplet by id
-     *
-     * @return object
-     *
-     */
-    public function list()
-    {
-        return $this->getResult($this->client->get('linode/instances'));
+    public function list() {
+        return $this->getResult($this->client->get('linode/types'));
     }
 }

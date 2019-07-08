@@ -4,6 +4,7 @@ namespace App\Http\ServerProviders;
 
 use Aws\Ec2\Ec2Client;
 use Aws\Exception\AwsException;
+use App\Exceptions\InvalidProviderCredentials;
 
 trait InteractsWithAws
 {
@@ -21,6 +22,58 @@ trait InteractsWithAws
                 $key,
                 $secret
             )->describeRegions();
+        } catch (AwsException $e) {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * Fetch Aws regions available to user
+     *
+     * @return array|boolean
+     */
+    public function describeAwsRegions()
+    {
+        $credential = auth()
+            ->user()
+            ->getDefaultCredentialsFor(AWS);
+
+        try {
+            return $this->getAwsConnectionInstance(
+                $credential->apiKey,
+                $credential->apiSecret
+            )
+                ->describeRegions()
+                ->get('Regions');
+        } catch (AwsException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Fetch the vpc details
+     * 
+     * @return array|boolean
+     */
+    public function getRegionVpc(string $region, string $credentialId)
+    {
+        $credential = auth()
+            ->user()
+            ->getDefaultCredentialsFor(AWS, $credentialId);
+
+        if (! isset($credential->apiSecret)) {
+            throw new InvalidProviderCredentials(AWS);
+        }
+
+        try {
+            return $this->getAwsConnectionInstance(
+                $credential->apiKey,
+                $credential->apiSecret
+            )
+                ->describeVpcs([
+                    'VpcIds' => []
+                ]);
         } catch (AwsException $e) {
             return false;
         }

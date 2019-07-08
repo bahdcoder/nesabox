@@ -1,7 +1,10 @@
 <?php
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Servers\CreateServersController;
+use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
+use App\Http\Controllers\Servers\AwsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +25,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('me', [UserController::class, 'show']);
 
+    Route::get('servers/regions', [RegionAndSizeController::class, 'index']);
+
+    Route::get('aws/vpc', [AwsController::class, 'vpc']);
+
     Route::get('settings/source-control/{provider}', [
         SourceControlProvidersController::class,
         'getRedirectUrl'
@@ -36,6 +43,8 @@ Route::middleware('auth:api')->group(function () {
         SourceControlProvidersController::class,
         'unlinkProvider'
     ]);
+
+    Route::post('servers', [CreateServersController::class, 'store']);
 });
 
 Auth::routes();

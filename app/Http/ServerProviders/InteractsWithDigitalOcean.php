@@ -4,6 +4,7 @@ namespace App\Http\ServerProviders;
 
 use Bahdcoder\DigitalOcean\DigitalOcean;
 use GuzzleHttp\Exception\GuzzleException;
+use App\Exceptions\InvalidProviderCredentials;
 
 trait InteractsWithDigitalOcean
 {
@@ -16,13 +17,7 @@ trait InteractsWithDigitalOcean
      */
     public function verifySuccessfulDigitalOceanConnection(string $token)
     {
-        try {
-            return $this->getDigitalOceanConnectionInstance($token)
-                ->region()
-                ->getAll();
-        } catch (GuzzleException $e) {
-            return false;
-        }
+        return $this->getDigitalOceanRegions($token);
     }
 
     /**
@@ -45,7 +40,7 @@ trait InteractsWithDigitalOcean
         return $this->getDigitalOceanConnectionInstance(
             auth()
                 ->user()
-                ->getDefaultCredentialsFor('digital-ocean')->apiToken
+                ->getDefaultCredentialsFor(DIGITAL_OCEAN)->apiToken
         )
             ->droplet()
             ->getById($dropletId);

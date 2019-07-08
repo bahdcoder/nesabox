@@ -5,6 +5,7 @@ namespace Bahdcoder\Linode;
 use GuzzleHttp\Client;
 use Bahdcoder\Linode\Api\Region;
 use Bahdcoder\Linode\Api\Linode as LinodeInstance;
+use Bahdcoder\Linode\Api\LinodeType;
 
 class Linode
 {
@@ -74,5 +75,17 @@ class Linode
     public function key()
     {
         return new Key($this->client);
+    }
+
+    /**
+     *
+     * Get the linode type api
+     *
+     * @return \Bahdcoder\Linode\Api\LinodeType
+     *
+     */
+    public function linodeType()
+    {
+        return new LinodeType($this->client);
     }
 }
