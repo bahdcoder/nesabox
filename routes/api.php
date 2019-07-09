@@ -7,6 +7,7 @@ use App\Http\Controllers\Servers\CreateServersController;
 use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
+use App\Http\Controllers\Servers\CustomServerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('servers', [CreateServersController::class, 'store']);
     Route::get('servers/{server}', [GetServerController::class, 'show']);
+
+});
+
+Route::middleware(['guest', 'api-token'])->group(function () {
+    Route::get('servers/{server}/vps', [CustomServerController::class, 'vps']);
 });
 
 Auth::routes();

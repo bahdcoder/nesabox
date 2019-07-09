@@ -25,6 +25,8 @@ class CreateServersController extends Controller
                 break;
             case DIGITAL_OCEAN:
                 $server = $this->createDigitalOceanServer($request);
+            case CUSTOM_PROVIDER:
+                $server = $this->createCustomServer();
                 break;
         endswitch;
 
@@ -40,6 +42,12 @@ class CreateServersController extends Controller
         return new ServerResource($server);
     }
 
+    /**
+     *
+     * Create a server for user using relationship
+     *
+     * @return \App\Server
+     */
     public function createServerForAuthUser()
     {
         $request = request();
@@ -53,8 +61,27 @@ class CreateServersController extends Controller
                 'region' => $request->region,
                 'provider' => $request->provider,
                 'databases' => $request->databases,
-                'credential_id' => $request->credential_id || null
+                'ip_address' => $request->ip_address,
+                'credential_id' => $request->credential_id,
+                'private_ip_address' => $request->private_ip_address,
+                'status' => $request->provider === CUSTOM_PROVIDER ? 'initializing' : 'new',
             ]);
+    }
+
+    /**
+     * Create a custom server
+     *
+     * @return \App\Server|boolean
+     */
+    public function createCustomServer()
+    {
+        $server = $this->createServerForAuthUser();
+
+        $this->createServerDatabases($server);
+
+        $this->generateSshKeyForServer($server);
+
+        return $server;
     }
 
     /**

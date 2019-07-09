@@ -99,6 +99,12 @@ class GetServerController extends Controller
                 }
 
                 return $this->serverResource($server);
+            case CUSTOM_PROVIDER:
+                if ($server->status === 'active') {
+                    return $this->serverResource($server);
+                }
+
+                return $this->handleInitializedServer($server);
             default:
                 return $this->serverResource($server);
         }

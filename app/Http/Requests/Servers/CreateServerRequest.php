@@ -25,10 +25,11 @@ class CreateServerRequest extends FormRequest
      */
     public function rules()
     {
-        $providers = [DIGITAL_OCEAN, LINODE, AWS, VULTR];
+        $providers = [DIGITAL_OCEAN, LINODE, AWS, VULTR, CUSTOM_PROVIDER];
 
         return [
             'size' => 'required',
+            'ip_address' => ['required_if:provider,' . CUSTOM_PROVIDER],
             'name' => [
                 'required',
                 'alpha_dash',
@@ -36,7 +37,11 @@ class CreateServerRequest extends FormRequest
                     return $query->where('user_id', auth()->user()->id);
                 })
             ],
-            'region' => 'required',
+            'region' => [
+                Rule::requiredIf(function () {
+                    return $this->provider !== CUSTOM_PROVIDER;
+                })
+            ],
             'provider' => 'required|in:' . implode(',', $providers),
             'databases' => 'required',
             'databases.*' => 'required|in:mysql,mysql8,mariadb,postgres,mongodb'
@@ -84,18 +89,19 @@ class CreateServerRequest extends FormRequest
                             );
                     }
                 case VULTR:
-                    $vultrRegions = Cache::rememberForever('vultr-data', function () {
-                        return json_decode(
-                            file_get_contents(
-                                base_path('provider-data/vultr.json')
-                            )
-                        )->regions;
-                    });
+                    $vultrRegions = Cache::rememberForever(
+                        'vultr-data',
+                        function () {
+                            return json_decode(
+                                file_get_contents(
+                                    base_path('provider-data/vultr.json')
+                                )
+                            )->regions;
+                        }
+                    );
 
                     if (
-                        !collect($vultrRegions)->first(function (
-                            $region
-                        ) {
+                        !collect($vultrRegions)->first(function ($region) {
                             return $region->DCID === $this->region;
                         })
                     ) {

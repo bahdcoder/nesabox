@@ -18,6 +18,7 @@ define('AWS', 'aws');
 define('VULTR', 'vultr');
 define('LINODE', 'linode');
 define('USER_NAME', 'espectra');
+define('CUSTOM_PROVIDER', 'custom');
 define('DIGITAL_OCEAN', 'digital-ocean');
 
 define('AWS_REGIONS', [

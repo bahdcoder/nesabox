@@ -32,54 +32,90 @@ class Init
     {
         return <<<EOD
 #!/bin/sh
+
+# Define script variables
 USER="espectra"
 SUDO_PASSWORD="espectra"
 SWAP_SIZE="1G"
+export DEBIAN_FRONTEND=noninteractive
+
 apt-get update
 apt-get upgrade -y
 apt-get install -y --force-yes software-properties-common
 apt-add-repository ppa:nginx/development -y
 apt-add-repository ppa:chris-lea/redis-server -y
+
+# Install essential packages
+
 apt-get install -y --force-yes build-essential curl fail2ban gcc git libmcrypt4 libpcre3-dev \
 make python2.7 python-pip supervisor ufw unattended-upgrades unzip whois zsh mc p7zip-full htop
+
+# Turn off password based authentication, and setup ssh
+
 sed -i "/PasswordAuthentication yes/d" /etc/ssh/sshd_config
 echo "" | sudo tee -a /etc/ssh/sshd_config
 echo "" | sudo tee -a /etc/ssh/sshd_config
 echo "PasswordAuthentication no" | sudo tee -a /etc/ssh/sshd_config
+
+# Just in case root ssh folder does not exist, (for some providers), create it.
+
 if [ ! -d /root/.ssh ]
 then
     mkdir -p /root/.ssh
     touch /root/.ssh/authorized_keys
 fi
+
+# Automatically add github.com as a known host for the deployment user
 cat >> /root/.ssh/config << EOF
 Host github.com
     StrictHostKeyChecking no
-    IdentityFile ~/.ssh/espectra
+    IdentityFile ~/.ssh/\$USER
+
+Host gitlab.com
+    StrictHostKeyChecking no
+    IdentityFile ~/.ssh/\$USER
+
+Host bitbucket.org
+    StrictHostKeyChecking no
+    IdentityFile ~/.ssh/\$USER
 EOF
+
+# Add deployment user
 useradd \$USER
 mkdir -p /home/\$USER/.ssh
 adduser \$USER sudo
+
 chsh -s /bin/bash \$USER
 cp /root/.profile /home/\$USER/.profile
 cp /root/.bashrc /home/\$USER/.bashrc
+
 PASSWORD=$(mkpasswd \$SUDO_PASSWORD)
 usermod --password \$PASSWORD \$USER
+
 usermod -a -G www-data \$USER
 id \$USER
 groups \$USER
+
+{$this->addSshKeysToServer()}
+
+# Setup ssh keys for deployment user
 cp /root/.ssh/config /home/\$USER/.ssh/config
 cp /root/.ssh/authorized_keys /home/\$USER/.ssh/authorized_keys
-chown -R espectra:espectra /home/\$USER
+chown -R \$USER:\$USER /home/\$USER
 chmod 0700 /home/\$USER/.ssh
 chmod 0600 /home/\$USER/.ssh/authorized_keys
 ssh-keygen -A
 service ssh restart
+
+# Enable default ufw ports
 ufw allow 22
 ufw allow 80
 ufw allow 443
 ufw --force enable
+
+# Create swap file if it does not exist 
 if [ -f /swapfile ]; then
-    echo "Swap exists."
+    echo "A swap was already created by some providers."
 else
     fallocate -l \$SWAP_SIZE /swapfile
     chmod 600 /swapfile
@@ -89,15 +125,61 @@ else
     echo "vm.swappiness=30" >> /etc/sysctl.conf
     echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.conf
 fi
+
+# Install nginx
+
 apt-get install -y nginx
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
+
+# Enable https
 sudo ufw allow 'Nginx HTTP'
 service nginx restart
+
+# Install redis
 apt-get install -y redis-server
+sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf
+service redis-server restart
+systemctl enable redis-server
+
+# Install certbot
 add-apt-repository -y ppa:certbot/certbot
 apt-get install -y python-certbot-nginx
+
+# Setup security updates
+cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
+Unattended-Upgrade::Allowed-Origins {
+    "Ubuntu bionic-security";
+};
+Unattended-Upgrade::Package-Blacklist {
+    //
+};
+EOF
+
+cat > /etc/apt/apt.conf.d/10periodic << EOF
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+EOF
+
+# Install all databases user selected
 {$this->getDatabasesInstallationScripts()}
+EOD;
+    }
+
+    public function addSshKeysToServer()
+    {
+        if ($this->server->provider !== CUSTOM_PROVIDER) {
+            return '';
+        }
+
+        $sshKey = $this->server->sshkeys()->where('is_app_key', true)->first();
+
+        return <<<EOD
+cat > /root/.ssh/authorized_keys << EOF
+{$sshKey->key}
+EOF
 EOD;
     }
 
