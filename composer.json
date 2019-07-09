@@ -70,8 +70,8 @@
     },
     "repositories": [
         {
-          "type": "path",
-          "url": "./vultr"
+            "type": "path",
+            "url": "./vultr"
         },
         {
             "type": "path",

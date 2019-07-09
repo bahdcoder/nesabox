@@ -14,12 +14,12 @@ class CreateDatabaseUsersTable extends Migration
     public function up()
     {
         Schema::create('database_users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id');
             $table->string('name');
-            $table->integer('server_id');
-            $table->string('type')->default('mysql');
+            $table->uuid('server_id');
             $table->string('password')->nullable();
-            $table->string('status')->default('installing');
+            $table->string('type')->default('mysql');
+            $table->boolean('is_ready')->default(false);
             $table->timestamps();
         });
     }

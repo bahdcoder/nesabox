@@ -181,6 +181,57 @@ define('DIGITAL_OCEAN_REGIONS', [
 
 define('DIGITAL_OCEAN_SIZES', [
     [
+        'id' => '512mb',
+        'name' => '512MB RAM - 1 CPU Core - 20GB SSD'
+    ],
+    [
+        'id' => 's-1vcpu-1gb',
+        'name' => '1GB RAM - 1 CPU Core - 25GB SSD'
+    ],
+    [
+        'id' => 's-1vcpu-3gb',
+        'name' => '1GB RAM - 3 CPU Core - 60GB SSD'
+    ],
+    [
+        'id' => 's-1vcpu-2gb',
+        'name' => '2GB RAM - 1 CPU Core - 50GB SSD'
+    ],
+    [
+        'id' => 's-2vcpu-2gb',
+        'name' => '2GB RAM - 2 CPU Core - 60GB SSD'
+    ],
+    [
+        'id' => 's-1vcpu-3gb',
+        'name' => '3GB RAM - 1 CPU Cores - 60GB SSD'
+    ],
+    [
+        'id' => 'c-2',
+        'name' => '4GB RAM (High CPU) - 2 CPU Cores - 25GB SSD'
+    ],
+    [
+        'id' => 's-2vcpu-4gb',
+        'name' => '4GB RAM - 2 CPU Cores - 80GB SSD'
+    ],
+    [
+        'id' => 's-4vcpu-8gb',
+        'name' => '8GB RAM - 4 CPU Cores - 160GB SSD'
+    ],
+    [
+        'id' => 'gd-2vcpu-8gb',
+        'name' => '8GB RAM (High CPU) - 4 CPU Cores - 50GB SSD'
+    ],
+    [
+        'id' => 'c-8',
+        'name' => '16GB RAM (High CPU) - 8 CPU Cores - 1000GB SSD'
+    ],
+    [
+        'id' => 's-6vcpu-16gb',
+        'name' => '16GB RAM - 6 CPU Core - 320GB SSD'
+    ]
+]);
+
+define('VULTR_SIZES', [
+    [
         'id' => '201',
         'name' => '1GB RAM - 1 CPU Core - 25GB SSD'
     ],
@@ -343,6 +394,8 @@ define('LINODE_SIZES', [
         'name' => '96GB RAM - 48 CPU Cores (Dedicated CPU) - 600GB SS'
     ]
 ]);
+
+define('DIGITAL_OCEAN_SERVER_TYPE', 'ubuntu-18-04-x64');
 
 /*
 |--------------------------------------------------------------------------

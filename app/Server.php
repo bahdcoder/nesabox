@@ -51,27 +51,28 @@ class Server extends Model
         ];
     }
 
-    // /**
-    //  * A server has many ssh key
-    //  *
-    //  * @return
-    //  */
-    // public function sshkeys()
-    // {
-    //     return $this->hasMany(Sshkey::class);
-    // }
+    /**
+     * A server has many ssh key
+     *
+     * @return
+     */
+    public function sshkeys()
+    {
+        return $this->hasMany(Sshkey::class);
+    }
 
-    // /**
-    //  * A server has many ssh keys created by server owner
-    //  *
-    //  * @return
-    //  */
-    // public function personalSshkeys()
-    // {
-    //     return $this->hasMany(Sshkey::class, 'server_id')
-    //         ->where('espectra', false)
-    //         ->where('status', '!=', 'deleted');
-    // }
+    /**
+     * A server has many ssh keys created by server owner
+     *
+     * @return
+     */
+    public function personalSshkeys()
+    {
+        return $this->hasMany(Sshkey::class, 'server_id')->where(
+            'is_app_key',
+            false
+        );
+    }
 
     /**
      * A server has many database users

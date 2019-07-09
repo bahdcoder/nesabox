@@ -14,11 +14,11 @@ class CreateDatabasesTable extends Migration
     public function up()
     {
         Schema::create('databases', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id');
             $table->string('name')->nullable();
             $table->string('type')->default('mysql');
-            $table->string('database_user_id')->nullable();
-            $table->string('status')->default('installing');
+            $table->uuid('database_user_id')->nullable();
+            $table->boolean('is_ready')->default(false);
             $table->timestamps();
         });
     }

@@ -14,19 +14,20 @@ class CreateServersTable extends Migration
     public function up()
     {
         Schema::create('servers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->string('ip')->nullable();
+            $table->uuid('id');
+            $table->bigInteger('user_id');
+            $table->string('ip_address')->nullable();
+            $table->string('private_ip_address')->nullable();
             $table->string('name')->nullable();
             $table->string('region')->nullable();
             $table->string('size')->nullable();
             $table->string('slug')->nullable();
-            $table->text('details')->nullable();
             $table->text('ssh_key')->nullable();
             $table->string('provider')->nullable();
             $table->string('databases')->nullable();
-            $table->string('status')->default('new');
+            $table->boolean('is_ready')->default(false);
             $table->string('identifier')->nullable();
+            $table->string('status')->default('new');
             $table->string('credential_id')->nullable();
             $table->string('node_version')->default('node');
             $table->json('ssh_key_added_to_source_provider')->nullable();

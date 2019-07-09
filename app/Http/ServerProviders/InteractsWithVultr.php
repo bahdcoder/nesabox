@@ -34,14 +34,16 @@ trait InteractsWithVultr
         return new Vultr($token);
     }
 
-    /** */
+    /**
+     * Get a vultr server
+     *
+     * @return array
+     */
     public function getVultrServer(string $identifier)
     {
-        return $this->getVultrConnectionInstance(
-            auth()
-                ->user()
-                ->getDefaultCredentialsFor('vultr')->apiKey
-        )
+        $credential = $this->getAuthUserCredentialsFor(VULTR);
+
+        return $this->getVultrConnectionInstance($credential->apiKey)
             ->server()
             ->get($identifier);
     }

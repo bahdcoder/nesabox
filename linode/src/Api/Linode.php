@@ -29,7 +29,9 @@ class Linode extends Api
      * @return object
      *
      */
-    public function create() {}
+    public function create()
+    {
+    }
 
     /**
      * Get a droplet by id

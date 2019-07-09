@@ -20,8 +20,7 @@ class RegionAndSizeController extends Controller
                 'sizes' => AWS_SIZES
             ],
             DIGITAL_OCEAN => [
-                'regions' => DIGITAL_OCEAN_REGIONS,
-                'sizes' => DIGITAL_OCEAN_SIZES
+                'regions' => DIGITAL_OCEAN_REGIONS
             ],
             LINODE => [
                 'regions' => LINODE_REGIONS,
@@ -32,7 +31,7 @@ class RegionAndSizeController extends Controller
 
     /**
      * Get aws regions
-     * 
+     *
      * @return array
      */
     public function awsRegions()

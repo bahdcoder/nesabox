@@ -2,9 +2,9 @@
 
 namespace App\Http\ServerProviders;
 
+use Illuminate\Support\Facades\Cache;
 use Bahdcoder\DigitalOcean\DigitalOcean;
 use GuzzleHttp\Exception\GuzzleException;
-use App\Exceptions\InvalidProviderCredentials;
 
 trait InteractsWithDigitalOcean
 {
@@ -17,7 +17,13 @@ trait InteractsWithDigitalOcean
      */
     public function verifySuccessfulDigitalOceanConnection(string $token)
     {
-        return $this->getDigitalOceanRegions($token);
+        try {
+            return $this->getDigitalOceanConnectionInstance($token)
+                ->region()
+                ->getAll();
+        } catch (GuzzleException $e) {
+            return false;
+        }
     }
 
     /**
@@ -44,5 +50,35 @@ trait InteractsWithDigitalOcean
         )
             ->droplet()
             ->getById($dropletId);
+    }
+
+    /** */
+    public function getDigitalOceanSizesForRegion(string $region)
+    {
+        // Get JSON content of do cache
+        $data = Cache::rememberForever(
+            'digital-ocean-json-content',
+            function () {
+                return json_decode(
+                    file_get_contents(
+                        base_path('provider-data/digital-ocean.json')
+                    )
+                );
+            }
+        );
+
+        if (
+            !collect($data->regions)->first(function ($r) use ($region) {
+                return $r->slug === $region;
+            })
+        ) {
+            abort(400, 'Invalid region for getting digital ocean sizes.');
+        }
+
+        return collect($data->sizes)
+            ->filter(function ($size) use ($region) {
+                return !in_array($region, $size->regions);
+            })
+            ->values();
     }
 }

@@ -53,7 +53,7 @@ trait InteractsWithAws
 
     /**
      * Fetch the vpc details
-     * 
+     *
      * @return array|boolean
      */
     public function getRegionVpc(string $region, string $credentialId)
@@ -62,7 +62,7 @@ trait InteractsWithAws
             ->user()
             ->getDefaultCredentialsFor(AWS, $credentialId);
 
-        if (! isset($credential->apiSecret)) {
+        if (!isset($credential->apiSecret)) {
             throw new InvalidProviderCredentials(AWS);
         }
 
@@ -70,10 +70,9 @@ trait InteractsWithAws
             return $this->getAwsConnectionInstance(
                 $credential->apiKey,
                 $credential->apiSecret
-            )
-                ->describeVpcs([
-                    'VpcIds' => []
-                ]);
+            )->describeVpcs([
+                'VpcIds' => []
+            ]);
         } catch (AwsException $e) {
             return false;
         }

@@ -32,8 +32,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'providers' => 'array',
-        'source_control' => 'array',
-        'trial_ends_at' => 'datetime'
+        'source_control' => 'array'
     ];
 
     /**

@@ -29,7 +29,8 @@ class LinodeType extends Api
      * @return object
      *
      */
-    public function list() {
+    public function list()
+    {
         return $this->getResult($this->client->get('linode/types'));
     }
 }
