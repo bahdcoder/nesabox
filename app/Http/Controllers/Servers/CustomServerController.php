@@ -12,7 +12,7 @@ class CustomServerController extends Controller
 {
     /**
      * Get the deployment script for a custom server
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function vps(Server $server)
@@ -21,7 +21,7 @@ class CustomServerController extends Controller
 
         $user = User::where('api_token', $token)->first();
 
-        if (! $user) {
+        if (!$user) {
             abort(403, __('Invalid api token.'));
         }
 

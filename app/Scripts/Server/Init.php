@@ -115,7 +115,7 @@ ufw --force enable
 
 # Create swap file if it does not exist 
 if [ -f /swapfile ]; then
-    echo "A swap was already created by some providers."
+    echo "A swap was already created by some providers (Linode)."
 else
     fallocate -l \$SWAP_SIZE /swapfile
     chmod 600 /swapfile
@@ -168,13 +168,23 @@ EOF
 EOD;
     }
 
+    /**
+     * Return script to add ssh keys to server
+     *
+     * @return string
+     */
     public function addSshKeysToServer()
     {
-        if ($this->server->provider !== CUSTOM_PROVIDER) {
+        $supportedProviders = [LINODE, CUSTOM_PROVIDER];
+
+        if (!in_array($this->server->provider, $supportedProviders)) {
             return '';
         }
 
-        $sshKey = $this->server->sshkeys()->where('is_app_key', true)->first();
+        $sshKey = $this->server
+            ->sshkeys()
+            ->where('is_app_key', true)
+            ->first();
 
         return <<<EOD
 cat > /root/.ssh/authorized_keys << EOF

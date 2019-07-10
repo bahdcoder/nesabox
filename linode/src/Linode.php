@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Bahdcoder\Linode\Api\Region;
 use Bahdcoder\Linode\Api\Linode as LinodeInstance;
 use Bahdcoder\Linode\Api\LinodeType;
+use Bahdcoder\Linode\Api\Stackscript;
 
 class Linode
 {
@@ -87,5 +88,10 @@ class Linode
     public function linodeType()
     {
         return new LinodeType($this->client);
+    }
+
+    public function stackScript()
+    {
+        return new Stackscript($this->client);
     }
 }

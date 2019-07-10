@@ -127,6 +127,46 @@ class CreateServerRequest extends FormRequest
                                 __("The size is invalid for {$this->provider}.")
                             );
                     }
+                
+                case LINODE:
+                    $linodeData = Cache::rememberForever(
+                        'linode-data',
+                        function () {
+                            return json_decode(
+                                file_get_contents(
+                                    base_path('provider-data/linode.json')
+                                )
+                            );
+                        }
+                    );
+
+                    if (
+                        !collect($linodeData->regions)->first(function ($region) {
+                            return $region->id === $this->region;
+                        })
+                    ) {
+                        $validator
+                            ->errors()
+                            ->add(
+                                'region',
+                                __(
+                                    "The region is invalid for {$this->provider}."
+                                )
+                            );
+                    }
+
+                    if (
+                        !collect($linodeData->sizes)->first(function ($size) {
+                            return $size->id === $this->size;
+                        })
+                    ) {
+                        $validator
+                            ->errors()
+                            ->add(
+                                'size',
+                                __("The size is invalid for {$this->provider}.")
+                            );
+                    }
             endswitch;
         });
     }

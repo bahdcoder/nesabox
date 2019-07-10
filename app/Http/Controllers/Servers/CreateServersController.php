@@ -28,6 +28,8 @@ class CreateServersController extends Controller
             case CUSTOM_PROVIDER:
                 $server = $this->createCustomServer();
                 break;
+            case LINODE:
+                $server = $this->createLinodeServer($request);
         endswitch;
 
         if (!$server) {
@@ -64,7 +66,10 @@ class CreateServersController extends Controller
                 'ip_address' => $request->ip_address,
                 'credential_id' => $request->credential_id,
                 'private_ip_address' => $request->private_ip_address,
-                'status' => $request->provider === CUSTOM_PROVIDER ? 'initializing' : 'new',
+                'status' =>
+                    $request->provider === CUSTOM_PROVIDER
+                        ? 'initializing'
+                        : 'new'
             ]);
     }
 
@@ -82,6 +87,45 @@ class CreateServersController extends Controller
         $this->generateSshKeyForServer($server);
 
         return $server;
+    }
+
+    public function createLinodeServer(CreateServerRequest $request)
+    {
+        // linode/ubuntu18.04 represents the image prop
+        $credential = $this->getAuthUserCredentialsFor(
+            LINODE,
+            $request->credential_id
+        );
+
+        $server = $this->createServerForAuthUser();
+
+        $this->createServerDatabases($server);
+
+        $this->generateSshKeyForServer($server);
+
+        try {
+            $linode = $this->getLinodeConnectionInstance(
+                $credential->accessToken
+            )
+                ->linode()
+                ->create(
+                    $server->name,
+                    $server->region,
+                    'linode/ubuntu18.04', // This represents the OS - Ubuntu 18.04
+                    $server->size, // equivalent to linode types
+                    $this->getStackScriptForLinode($server, $credential),
+                    str_root_password()
+                );
+
+            $server->update([
+                'identifier' => $linode->id,
+                'ip_address' => $linode->ipv4[0]
+            ]);
+
+            return $server;
+        } catch (GuzzleException | ProcessFailedException $e) {
+            throw new FailedCreatingServer($server, $e);
+        }
     }
 
     /**

@@ -49,15 +49,14 @@ class User extends Authenticatable
 
     /**
      * Roll API Key
-     * 
-     * 
+     *
+     *
      */
-    public function rollApiKey(){
-        do{
+    public function rollApiKey()
+    {
+        do {
             $this->api_token = str_random(40);
-        }   while(
-            $this->where('api_token', $this->api_token)->exists()
-        );
+        } while ($this->where('api_token', $this->api_token)->exists());
 
         $this->save();
     }

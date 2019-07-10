@@ -50,7 +50,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('servers', [CreateServersController::class, 'store']);
     Route::get('servers/{server}', [GetServerController::class, 'show']);
-
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {

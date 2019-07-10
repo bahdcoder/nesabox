@@ -105,6 +105,26 @@ class GetServerController extends Controller
                 }
 
                 return $this->handleInitializedServer($server);
+            case LINODE:
+                if ($server->status === 'active') {
+                    return $this->serverResource($server);
+                }
+
+                if ($server->status === 'initializing') {
+                    return $this->handleInitializedServer($server);
+                }
+
+                $linode = $this->getLinode($server->identifier);
+
+                if ($linode->status === 'running') {
+                    $server->update([
+                        'status' => 'initializing'
+                    ]);
+
+                    return $this->serverResource($server);
+                }
+
+                return $this->serverResource($server);
             default:
                 return $this->serverResource($server);
         }

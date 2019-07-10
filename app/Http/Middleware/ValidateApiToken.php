@@ -17,7 +17,7 @@ class ValidateApiToken
     {
         $token = $request->query('api_token');
 
-        if (! $token) {
+        if (!$token) {
             abort(403, __('Invalid api token.'));
         }
 

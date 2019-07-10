@@ -29,12 +29,32 @@ class Linode extends Api
      * @return object
      *
      */
-    public function create()
-    {
+    public function create(
+        $label,
+        $region,
+        $image,
+        $type,
+        $stackscript_id,
+        $root_pass,
+        $swap_size = 512
+    ) {
+        return $this->getResult(
+            $this->client->post('linode/instances', [
+                'json' => [
+                    'type' => $type,
+                    'image' => $image,
+                    'label' => $label,
+                    'region' => $region,
+                    'root_pass' => $root_pass,
+                    'swap_size' => $swap_size,
+                    'stackscript_id' => $stackscript_id
+                ]
+            ])
+        );
     }
 
     /**
-     * Get a droplet by id
+     * Get all linodes
      *
      * @return object
      *
@@ -42,5 +62,16 @@ class Linode extends Api
     public function list()
     {
         return $this->getResult($this->client->get('linode/instances'));
+    }
+
+    /**
+     * Get a linode by id
+     *
+     * @return object
+     *
+     */
+    public function get($id)
+    {
+        return $this->getResult($this->client->get('linode/instances/' . $id));
     }
 }
