@@ -48,33 +48,6 @@ trait HandlesProcesses
     }
 
     /**
-     * Run the init script on a server
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    public function runInitServerScript(Server $server)
-    {
-        $arguments = $this->buildArgumentsFor('init', $server);
-
-        $scriptPath = base_path('scripts/init.sh');
-
-        return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath} {$arguments}"
-        );
-    }
-
-    /**
-     * Run a command on remote host
-     * @return \Symfony\Component\Process\Process
-     */
-    public function runCommand(Server $server, string $command)
-    {
-        return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} {$command}"
-        );
-    }
-
-    /**
      * Run the add-ssh-key script on a server
      *
      * @return \Symfony\Component\Process\Process
@@ -86,40 +59,7 @@ trait HandlesProcesses
         $scriptPath = base_path('scripts/add-ssh-key.sh');
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath} {$arguments}"
-        );
-    }
-
-    /**
-     * Install ghost blog on server
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    public function runInstallGhostScript(
-        Server $server,
-        Site $site,
-        $credentials = [],
-        $callback
-    ) {
-        // SITE_NAME=$1
-
-        // MYSQL_USER=$2
-        // MYSQL_PASSWORD=$3
-        // MYSQL_DATABASE=$4
-
-        // SITE_PORT_A=$5
-        // SITE_PORT_B=$6
-
-        // generate a mysql database and user for this ghost blog
-        $this->runCreateDatabaseScript($server, 'mysql', $credentials);
-
-        $scriptPath = base_path('scripts/sites/install-ghost.sh');
-
-        $arguments = "{$site->name} {$credentials['username']} {$credentials['password']} {$credentials['database']} {$site->environment['PORTS'][0]} {$site->environment['PORTS'][1]}";
-
-        return $this->execProcessAsync(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath} {$arguments}",
-            $callback
+            $this->sshScript($server, $scriptPath, $arguments)
         );
     }
 
@@ -133,8 +73,31 @@ trait HandlesProcesses
         $scriptPath = base_path('scripts/server/verify-is-ready.sh');
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no espectra@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath}"
+            $this->sshScript(
+                $server,
+                $scriptPath,
+                '',
+                false
+            )
         );
+    }
+
+    /**
+     * 
+     * Generate an ssh command to run a script on
+     * a server
+     * 
+     * @return string
+     */
+    public function sshScript(
+        Server $server,
+        $script,
+        $arguments = '',
+        $root = true
+    ) {
+        $user = $root ? 'root' : USER_NAME;
+
+        return "ssh -o StrictHostKeyChecking=no {$user}@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$script} {$arguments}";
     }
 
     /**
@@ -146,9 +109,7 @@ trait HandlesProcesses
     {
         $scriptPath = base_path('scripts/server/generate-ssh-key.sh');
 
-        $process = $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no espectra@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath}"
-        );
+        $process = $this->execProcess($this->sshScript($server, $scriptPath));
 
         if ($process->isSuccessful()) {
             $key = explode('ssh-rsa', $process->getOutput())[1];
@@ -175,10 +136,6 @@ trait HandlesProcesses
         string $type,
         array $credentials
     ) {
-        // $arguments = "{$server->script}";
-        // DATABASE_NAME=$1
-        // DATABASE_USER=$2
-        // DATABASE_PASSWORD=$3
 
         $database = $credentials['database'];
         $password = $credentials['password'];
@@ -193,7 +150,7 @@ trait HandlesProcesses
         $arguments = "{$database} {$username} {$password}";
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath} {$arguments}"
+            $this->sshScript($server, $scriptPath, $arguments)
         );
     }
 
@@ -208,14 +165,10 @@ trait HandlesProcesses
 
         $wildcard_subdomains = (string) $site->wild_card_subdomains;
 
-        // SITE_NAME=$1
-        // WILD_CARD=$2
-        // SITE_PORT_A=$3
-        // SITE_PORT_=B$4
         $arguments = "{$site->name} {$wildcard_subdomains} {$site->environment['PORTS'][0]} {$site->environment['PORTS'][1]}";
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath} {$arguments}"
+            $this->sshScript($server, $scriptPath, $arguments)
         );
     }
 
@@ -229,7 +182,7 @@ trait HandlesProcesses
         $scriptPath = base_path('scripts/sites/generate-port.sh');
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath}"
+            $this->sshScript($server, $scriptPath)
         );
     }
 
@@ -243,7 +196,7 @@ trait HandlesProcesses
         $scriptPath = base_path('scripts/server/generate-ssh-key.sh');
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath}"
+            $this->sshScript($server, $scriptPath)
         );
     }
 
@@ -261,7 +214,7 @@ trait HandlesProcesses
         $arguments = "{$site->name} {$repoUrl}";
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no espectra@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptPath} {$arguments}"
+            $this->sshScript($server, $scriptPath, $arguments, false)
         );
     }
 
@@ -302,7 +255,7 @@ trait HandlesProcesses
         $scriptName = base_path($scriptPath);
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptName} {$arguments}"
+            $this->sshScript($server, $scriptName, $arguments)
         );
     }
 
@@ -319,29 +272,8 @@ trait HandlesProcesses
         $scriptName = base_path($scriptPath);
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no root@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptName} {$arguments}"
+            $this->sshScript($server, $scriptName, $arguments)
         );
-    }
-
-    /**
-     * Build the arguments for a script
-     *
-     * @return string
-     */
-    public function buildArgumentsFor(string $scriptName, $server = null)
-    {
-        switch ($scriptName) {
-            case 'init':
-                /**
-                 * The first argument is SERVER_NAME
-                 * Second argument is the SERVER_IP
-                 * Third argument is SUDO_PASSWORD
-                 */
-                $sudo_password = str_random(12);
-                return "{$sudo_password}";
-            default:
-                return '';
-        }
     }
 
     /**
@@ -379,10 +311,12 @@ trait HandlesProcesses
     {
         $server = $site->server;
 
+        $user = USER_NAME;
+
         $scriptPath = $this->createDeployScript($site->getDeployScript());
 
         return $this->execProcessAsync(
-            "ssh -o StrictHostKeyChecking=no espectra@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -is' -- < {$scriptPath}",
+            "ssh -o StrictHostKeyChecking=no {$user}@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -is' -- < {$scriptPath}",
             function ($data) {
                 echo $data;
             }
@@ -404,7 +338,7 @@ trait HandlesProcesses
         $scriptName = base_path($scriptPath);
 
         return $this->execProcess(
-            "ssh -o StrictHostKeyChecking=no espectra@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$scriptName}"
+            $this->sshScript($server, $scriptName, '', false)
         );
     }
 

@@ -7,7 +7,7 @@ trait HasServerProviders
     /**
      * Get the default credentials for a provider
      *
-     * @param $provider
+     * @param string $provider
      *
      * @return object
      *

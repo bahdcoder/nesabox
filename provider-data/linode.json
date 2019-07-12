@@ -604,46 +604,27 @@
 
     "regions": [
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "ap-west",
             "country": "in"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "ca-central",
             "country": "ca"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "us-central",
             "country": "us"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "us-west",
             "country": "us"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers"],
             "id": "us-southeast",
             "country": "us"
         },
@@ -658,38 +639,22 @@
             "country": "us"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "eu-west",
             "country": "uk"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "ap-south",
             "country": "sg"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "eu-central",
             "country": "de"
         },
         {
-            "capabilities": [
-                "Linodes",
-                "NodeBalancers",
-                "Block Storage"
-            ],
+            "capabilities": ["Linodes", "NodeBalancers", "Block Storage"],
             "id": "ap-northeast",
             "country": "jp"
         }

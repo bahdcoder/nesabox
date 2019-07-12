@@ -30,12 +30,13 @@ class Init
      */
     public function generate()
     {
+        $user = USER_NAME;
         return <<<EOD
 #!/bin/sh
 
 # Define script variables
-USER="espectra"
-SUDO_PASSWORD="espectra"
+USER="{$user}"
+SUDO_PASSWORD="{$user}"
 SWAP_SIZE="1G"
 export DEBIAN_FRONTEND=noninteractive
 

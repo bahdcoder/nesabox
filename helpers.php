@@ -1,10 +1,9 @@
 <?php
 
-
-if (! function_exists('str_root_password')) {
+if (!function_exists('str_root_password')) {
     /**
      * Returns a random root password
-     * 
+     *
      * @return string
      *
      * */

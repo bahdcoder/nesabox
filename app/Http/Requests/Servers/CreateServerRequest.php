@@ -127,7 +127,7 @@ class CreateServerRequest extends FormRequest
                                 __("The size is invalid for {$this->provider}.")
                             );
                     }
-                
+
                 case LINODE:
                     $linodeData = Cache::rememberForever(
                         'linode-data',
@@ -141,7 +141,9 @@ class CreateServerRequest extends FormRequest
                     );
 
                     if (
-                        !collect($linodeData->regions)->first(function ($region) {
+                        !collect($linodeData->regions)->first(function (
+                            $region
+                        ) {
                             return $region->id === $this->region;
                         })
                     ) {

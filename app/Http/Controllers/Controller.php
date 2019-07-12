@@ -43,8 +43,8 @@ class Controller extends BaseController
 
         if (
             !isset($credential->apiToken) &&
-            isset($credential->apiKey) &&
-            isset($credential->accessToken)
+            !isset($credential->apiKey) &&
+            !isset($credential->accessToken)
         ) {
             throw new InvalidProviderCredentials($provider);
         }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Servers\CustomServerController;
+use App\Http\Controllers\Servers\SshKeysController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('servers', [CreateServersController::class, 'store']);
     Route::get('servers/{server}', [GetServerController::class, 'show']);
+
+    Route::post('servers/{server}/sshkeys', [
+        SshKeysController::class,
+        'store'
+    ]);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {

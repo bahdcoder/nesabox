@@ -36,12 +36,12 @@ trait InteractWithLinode
     {
         try {
             return $this->getLinodeConnectionInstance($credential->accessToken)
-            ->stackScript()
-            ->create(
-                USER_NAME . ' Stackscript',
-                ['linode/ubuntu18.04'],
-                (new Init($server))->generate()
-            )->id;
+                ->stackScript()
+                ->create(
+                    USER_NAME . ' Stackscript',
+                    ['linode/ubuntu18.04'],
+                    (new Init($server))->generate()
+                )->id;
         } catch (GuzzleException $e) {
             return false;
         }
@@ -63,6 +63,6 @@ trait InteractWithLinode
 
         return $this->getLinodeConnectionInstance($credential->accessToken)
             ->linode()
-            ->get($id); 
+            ->get($id);
     }
 }
