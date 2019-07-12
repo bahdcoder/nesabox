@@ -197,10 +197,9 @@ EOD;
     public function getDatabasesInstallationScripts()
     {
         $script = '';
-
         foreach ($this->server->databaseInstances as $database):
             switch ($database->type):
-                case 'mysql':
+                case MYSQL_DB:
                     $script .= <<<EOD
 \n
 apt-get install -y mysql-server
@@ -213,8 +212,9 @@ mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "CREATE USER '\$USER'@
 mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO '\$USER'@'localhost' IDENTIFIED BY '\$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;"
 mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO '\$USER'@'%' IDENTIFIED BY '\$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;"
 mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
+mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE {$database->name}";
 EOD;
-                case 'mongodb':
+                case MONGO_DB:
                     $script .= <<<EOD
 \n
 MONGO_DB_ADMIN_USERNAME="{$database->databaseUser->name}"

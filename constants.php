@@ -12,6 +12,16 @@ define('SSH_USER', 'espectra');
 define('CUSTOM_PROVIDER', 'custom');
 define('DIGITAL_OCEAN', 'digital-ocean');
 
+define('MYSQL_DB', 'mysql');
+define('MYSQL8_DB', 'mysql8');
+define('MARIA_DB', 'mariadb');
+define('MONGO_DB', 'mongodb');
+define('POSTGRES_DB', 'postgresql');
+
+define('STATUS_ACTIVE', 'active');
+define('STATUS_INSTALLING', 'installing');
+define('STATUS_INITIALIZING', 'initializing');
+
 define('AWS_REGIONS', [
     'us-east-2' => 'Ohio',
     'us-east-1' => 'N. Virginia',

@@ -56,8 +56,14 @@ class AddSshkey implements ShouldQueue
 
         if ($process->isSuccessful()) {
             $this->key->update([
-                'is_ready' => true
+                'status' => STATUS_ACTIVE
             ]);
         }
+    }
+
+    public function failed($e) {
+        // TODO: Add server error saying key was deleted.
+        
+        $this->key->delete();
     }
 }

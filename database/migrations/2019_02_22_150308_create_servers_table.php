@@ -25,7 +25,6 @@ class CreateServersTable extends Migration
             $table->text('ssh_key')->nullable();
             $table->string('provider')->nullable();
             $table->string('databases')->nullable();
-            $table->boolean('is_ready')->default(false);
             $table->string('identifier')->nullable();
             $table->string('status')->default('new');
             $table->string('credential_id')->nullable();

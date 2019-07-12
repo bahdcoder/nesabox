@@ -84,6 +84,21 @@ class Server extends Model
         return $this->hasMany(DatabaseUser::class);
     }
 
+    public function mongoDbDatabaseUsers()
+    {
+        return $this->databaseUsers()->where('type', 'mongodb');
+    }
+
+    public function mysqlDatabaseUsers()
+    {
+        return $this->databaseUsers()->where('type', 'mysql');
+    }
+
+    public function databaseInstances()
+    {
+        return $this->hasMany(Database::class);
+    }
+
     // /**
     //  * A server has many sites
     //  *
@@ -94,18 +109,8 @@ class Server extends Model
     //     return $this->hasMany(Site::class);
     // }
 
-    /**
-     * A server has many databases
-     *
-     * @return
-     */
-    public function databaseInstances()
+    public function mongodbDatabases()
     {
-        return $this->hasManyThrough(
-            Database::class,
-            DatabaseUser::class,
-            'server_id',
-            'database_user_id'
-        );
+        return $this->databaseInstances()->where('type', 'mongodb');
     }
 }

@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Cache;
 
-if (! function_exists('cached_provider_data')) {
+if (!function_exists('cached_provider_data')) {
     /**
      * Get cached provider data from json files
-     * 
+     *
      * @return array
      */
     function cached_provider_data($provider)
@@ -23,27 +23,19 @@ if (! function_exists('cached_provider_data')) {
                     }
                 );
             case VULTR:
-                return Cache::rememberForever(
-                    'vultr-data',
-                    function () {
-                        return json_decode(
-                            file_get_contents(
-                                base_path('provider-data/vultr.json')
-                            )
-                        )->regions;
-                    }
-                );
+                return Cache::rememberForever('vultr-data', function () {
+                    return json_decode(
+                        file_get_contents(base_path('provider-data/vultr.json'))
+                    )->regions;
+                });
             case LINODE:
-                return Cache::rememberForever(
-                    'linode-data',
-                    function () {
-                        return json_decode(
-                            file_get_contents(
-                                base_path('provider-data/linode.json')
-                            )
-                        );
-                    }
-                );
+                return Cache::rememberForever('linode-data', function () {
+                    return json_decode(
+                        file_get_contents(
+                            base_path('provider-data/linode.json')
+                        )
+                    );
+                });
         }
 
         return [];

@@ -19,7 +19,6 @@ class CreateSshkeysTable extends Migration
             $table->string('name')->nullable();
             $table->uuid('server_id')->nullable();
             $table->boolean('is_app_key')->default(false);
-            $table->boolean('is_ready')->default(false);
             $table->string('status')->default('installing');
             $table->timestamps();
         });

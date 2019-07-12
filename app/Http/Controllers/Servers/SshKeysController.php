@@ -26,7 +26,8 @@ class SshKeysController extends Controller
 
         $key = $server->sshkeys()->create([
             'key' => $request->key,
-            'name' => $request->name
+            'name' => $request->name,
+            'status' => STATUS_INSTALLING
         ]);
 
         AddSshkey::dispatch($server, $key);

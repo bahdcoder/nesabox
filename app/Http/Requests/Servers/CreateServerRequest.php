@@ -27,6 +27,8 @@ class CreateServerRequest extends FormRequest
     {
         $providers = [DIGITAL_OCEAN, LINODE, AWS, VULTR, CUSTOM_PROVIDER];
 
+        $databases = [MYSQL_DB, MYSQL8_DB, MARIA_DB, POSTGRES_DB, MONGO_DB];
+
         return [
             'size' => 'required',
             'ip_address' => ['required_if:provider,' . CUSTOM_PROVIDER],
@@ -44,7 +46,7 @@ class CreateServerRequest extends FormRequest
             ],
             'provider' => 'required|in:' . implode(',', $providers),
             'databases' => 'required',
-            'databases.*' => 'required|in:mysql,mysql8,mariadb,postgres,mongodb'
+            'databases.*' => 'required|in:' . implode(',', $databases)
         ];
     }
 
@@ -79,7 +81,9 @@ class CreateServerRequest extends FormRequest
                     }
 
                     if (
-                        !collect($digitalOceanData->sizes)->first(function ($size) {
+                        !collect($digitalOceanData->sizes)->first(function (
+                            $size
+                        ) {
                             return $size->slug === $this->size;
                         })
                     ) {
@@ -96,7 +100,9 @@ class CreateServerRequest extends FormRequest
                     $vultrData = cached_provider_data(VULTR);
 
                     if (
-                        !collect($vultrData->regions)->first(function ($region) {
+                        !collect($vultrData->regions)->first(function (
+                            $region
+                        ) {
                             return $region->DCID === $this->region;
                         })
                     ) {

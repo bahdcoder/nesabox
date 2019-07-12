@@ -41,8 +41,7 @@ class GetServerController extends Controller
             $this->generateSshkeyOnServer($server);
 
             $server->update([
-                'status' => 'active',
-                'is_ready' => true
+                'status' => STATUS_ACTIVE
             ]);
         }
 
@@ -58,11 +57,11 @@ class GetServerController extends Controller
     {
         switch ($server->provider) {
             case DIGITAL_OCEAN:
-                if ($server->status === 'active') {
+                if ($server->status === STATUS_ACTIVE) {
                     return $this->serverResource($server);
                 }
 
-                if ($server->status === 'initializing') {
+                if ($server->status === STATUS_INITIALIZING) {
                     return $this->handleInitializedServer($server);
                 }
 
@@ -71,7 +70,7 @@ class GetServerController extends Controller
                 if ($droplet->status === 'active') {
                     $server->update([
                         'ip_address' => $droplet->networks->v4[0]->ip_address,
-                        'status' => 'initializing'
+                        'status' => STATUS_INITIALIZING
                     ]);
 
                     return $this->serverResource($server);
@@ -79,20 +78,20 @@ class GetServerController extends Controller
 
                 return $this->serverResource($server);
             case VULTR:
-                if ($server->status === 'active') {
+                if ($server->status === STATUS_ACTIVE) {
                     return $this->serverResource($server);
                 }
 
-                if ($server->status === 'initializing') {
+                if ($server->status === STATUS_INITIALIZING) {
                     return $this->handleInitializedServer($server);
                 }
 
                 $vultrServer = $this->getVultrServer($server->identifier);
 
-                if ($vultrServer->status === 'active') {
+                if ($vultrServer->status === STATUS_ACTIVE) {
                     $server->update([
                         'ip_address' => $vultrServer->main_ip,
-                        'status' => 'initializing'
+                        'status' => STATUS_INITIALIZING
                     ]);
 
                     return $this->serverResource($server);
@@ -100,17 +99,17 @@ class GetServerController extends Controller
 
                 return $this->serverResource($server);
             case CUSTOM_PROVIDER:
-                if ($server->status === 'active') {
+                if ($server->status === STATUS_ACTIVE) {
                     return $this->serverResource($server);
                 }
 
                 return $this->handleInitializedServer($server);
             case LINODE:
-                if ($server->status === 'active') {
+                if ($server->status === STATUS_ACTIVE) {
                     return $this->serverResource($server);
                 }
 
-                if ($server->status === 'initializing') {
+                if ($server->status === STATUS_INITIALIZING) {
                     return $this->handleInitializedServer($server);
                 }
 
@@ -118,7 +117,7 @@ class GetServerController extends Controller
 
                 if ($linode->status === 'running') {
                     $server->update([
-                        'status' => 'initializing'
+                        'status' => STATUS_INITIALIZING
                     ]);
 
                     return $this->serverResource($server);

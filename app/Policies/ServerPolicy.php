@@ -52,7 +52,7 @@ class ServerPolicy
      */
     public function isReady(User $user, Server $server)
     {
-        return (bool) $server->is_ready;
+        return $server->status === STATUS_ACTIVE;
     }
 
     /**

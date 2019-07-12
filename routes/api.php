@@ -1,14 +1,15 @@
 <?php
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
+use App\Http\Controllers\Servers\SshKeysController;
 use App\Http\Controllers\Servers\GetServerController;
+use App\Http\Controllers\Servers\DatabasesController;
 use App\Http\Controllers\Servers\CustomServerController;
 use App\Http\Controllers\Servers\DigitalOceanController;
 use App\Http\Controllers\Servers\CreateServersController;
 use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
-use App\Http\Controllers\Servers\SshKeysController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,16 @@ Route::middleware('auth:api')->group(function () {
 
     Route::delete('servers/{server}/sshkeys/{sshkey}', [
         SshKeysController::class,
+        'destroy'
+    ]);
+
+    Route::post('servers/{server}/databases', [
+        DatabasesController::class,
+        'store'
+    ]);
+
+    Route::delete('servers/{server}/databases/{sshkey}', [
+        DatabasesController::class,
         'destroy'
     ]);
 });

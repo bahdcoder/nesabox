@@ -15,10 +15,11 @@ class CreateDatabasesTable extends Migration
     {
         Schema::create('databases', function (Blueprint $table) {
             $table->uuid('id');
+            $table->uuid('server_id');
             $table->string('name')->nullable();
             $table->string('type')->default('mysql');
             $table->uuid('database_user_id')->nullable();
-            $table->boolean('is_ready')->default(false);
+            $table->string('status')->default('installing');
             $table->timestamps();
         });
     }

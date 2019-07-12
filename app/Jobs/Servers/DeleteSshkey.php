@@ -13,10 +13,7 @@ use App\Scripts\Server\DeleteSshkey as DeleteSshkeyScript;
 
 class DeleteSshkey implements ShouldQueue
 {
-    use Dispatchable,
-        InteractsWithQueue,
-        Queueable,
-        SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * The server to add ssh key to

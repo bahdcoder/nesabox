@@ -22,9 +22,12 @@ class ServerResource extends JsonResource
             'provider' => $this->provider,
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
-            'is_ready' => (bool) $this->is_ready,
             'node_version' => $this->node_version,
-            'ssh_keys' => SshkeyResource::collection($this->personalSshkeys)
+            'is_ready' => $this->status === STATUS_ACTIVE,
+            'ssh_keys' => SshkeyResource::collection($this->personalSshkeys),
+            $this->mergeWhen((bool) request()->query('with_databases') === true, [
+                'database_users' => DatabaseUserResource::collection($this->databaseUsers)
+            ]),
         ];
     }
 }

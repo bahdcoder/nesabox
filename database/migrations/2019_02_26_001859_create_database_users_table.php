@@ -19,7 +19,7 @@ class CreateDatabaseUsersTable extends Migration
             $table->uuid('server_id');
             $table->string('password')->nullable();
             $table->string('type')->default('mysql');
-            $table->boolean('is_ready')->default(false);
+            $table->string('status')->default('installing');
             $table->timestamps();
         });
     }

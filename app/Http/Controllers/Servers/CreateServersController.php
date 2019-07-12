@@ -70,19 +70,18 @@ class CreateServersController extends Controller
                 'private_ip_address' => $request->private_ip_address,
                 'status' =>
                     $request->provider === CUSTOM_PROVIDER
-                        ? 'initializing'
+                        ? STATUS_INITIALIZING
                         : 'new'
             ]);
 
         $this->createServerDatabases($server);
 
-        if (! in_array($request->provider, [DIGITAL_OCEAN])) {
+        if (!in_array($request->provider, [DIGITAL_OCEAN])) {
             $this->generateSshKeyForServer($server);
         }
 
         return $server;
     }
-
 
     /**
      * Create a custom server
@@ -145,7 +144,7 @@ class CreateServersController extends Controller
         );
 
         $server = $this->createServerForAuthUser();
-        
+
         $this->createServerDatabases($server);
         try {
             $vultrServer = $this->getVultrConnectionInstance(
@@ -228,15 +227,16 @@ class CreateServersController extends Controller
                 ->databaseUsers()
                 ->create([
                     'name' => SSH_USER,
-                    'password' => $password,
                     'type' => $database,
-                    'is_ready' => true
+                    'password' => $password,
+                    'status' => STATUS_ACTIVE
                 ])
                 ->databases()
                 ->create([
                     'name' => SSH_USER,
                     'type' => $database,
-                    'is_ready' => true
+                    'status' => STATUS_ACTIVE,
+                    'server_id' => $server->id
                 ]);
         endforeach;
     }

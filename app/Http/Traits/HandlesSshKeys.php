@@ -12,8 +12,10 @@ trait HandlesSshKeys
      *
      * @return string the newly created key ID
      */
-    public function getSshKeyForDigitalOcean(Server $server, $credential): string
-    {
+    public function getSshKeyForDigitalOcean(
+        Server $server,
+        $credential
+    ): string {
         $sshKey = $this->generateSshKeyForServer($server);
 
         // create an sshkey with digitalocean api
@@ -67,7 +69,7 @@ trait HandlesSshKeys
         return $server->sshkeys()->create([
             'name' => $slug,
             'is_app_key' => true,
-            'is_ready' => true,
+            'status' => STATUS_ACTIVE,
             'key' => trim($getKeyProcess->getOutput())
         ]);
     }
