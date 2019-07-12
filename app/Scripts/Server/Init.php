@@ -3,8 +3,9 @@
 namespace App\Scripts\Server;
 
 use App\Server;
+use App\Scripts\Base as BaseScript;
 
-class Init
+class Init extends BaseScript
 {
     /**
      * The server to be initialized.
@@ -30,7 +31,7 @@ class Init
      */
     public function generate()
     {
-        $user = USER_NAME;
+        $user = SSH_USER;
         return <<<EOD
 #!/bin/sh
 
@@ -176,12 +177,6 @@ EOD;
      */
     public function addSshKeysToServer()
     {
-        $supportedProviders = [LINODE, CUSTOM_PROVIDER];
-
-        if (!in_array($this->server->provider, $supportedProviders)) {
-            return '';
-        }
-
         $sshKey = $this->server
             ->sshkeys()
             ->where('is_app_key', true)

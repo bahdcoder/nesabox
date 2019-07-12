@@ -22,13 +22,9 @@ class PublicKey implements Rule
     {
         $path = $this->createPublicKeyFile($value);
 
-        try {
-            $this->execProcess("ssh-keygen -l -f {$path}");
-
-            return true;
-        } catch (ProcessFailedException $e) {
-            return false;
-        }
+        return (bool) $this->execProcess(
+            "ssh-keygen -l -f {$path}"
+        )->isSuccessful();
     }
 
     /**

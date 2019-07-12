@@ -59,11 +59,13 @@ class CreateServerRequest extends FormRequest
         $validator->after(function ($validator) {
             switch ($this->provider):
                 case DIGITAL_OCEAN:
+                    $digitalOceanData = cached_provider_data(DIGITAL_OCEAN);
+
                     if (
-                        !collect(DIGITAL_OCEAN_REGIONS)->first(function (
+                        !collect($digitalOceanData->regions)->first(function (
                             $region
                         ) {
-                            return $region['id'] === $this->region;
+                            return $region->slug === $this->region;
                         })
                     ) {
                         $validator
@@ -77,8 +79,8 @@ class CreateServerRequest extends FormRequest
                     }
 
                     if (
-                        !collect(DIGITAL_OCEAN_SIZES)->first(function ($size) {
-                            return $size['id'] === $this->size;
+                        !collect($digitalOceanData->sizes)->first(function ($size) {
+                            return $size->slug === $this->size;
                         })
                     ) {
                         $validator
@@ -88,20 +90,13 @@ class CreateServerRequest extends FormRequest
                                 __("The size is invalid for {$this->provider}.")
                             );
                     }
+
+                    break;
                 case VULTR:
-                    $vultrRegions = Cache::rememberForever(
-                        'vultr-data',
-                        function () {
-                            return json_decode(
-                                file_get_contents(
-                                    base_path('provider-data/vultr.json')
-                                )
-                            )->regions;
-                        }
-                    );
+                    $vultrData = cached_provider_data(VULTR);
 
                     if (
-                        !collect($vultrRegions)->first(function ($region) {
+                        !collect($vultrData->regions)->first(function ($region) {
                             return $region->DCID === $this->region;
                         })
                     ) {
@@ -128,17 +123,9 @@ class CreateServerRequest extends FormRequest
                             );
                     }
 
+                    break;
                 case LINODE:
-                    $linodeData = Cache::rememberForever(
-                        'linode-data',
-                        function () {
-                            return json_decode(
-                                file_get_contents(
-                                    base_path('provider-data/linode.json')
-                                )
-                            );
-                        }
-                    );
+                    $linodeData = cached_provider_data(LINODE);
 
                     if (
                         !collect($linodeData->regions)->first(function (
@@ -169,6 +156,8 @@ class CreateServerRequest extends FormRequest
                                 __("The size is invalid for {$this->provider}.")
                             );
                     }
+
+                    break;
             endswitch;
         });
     }

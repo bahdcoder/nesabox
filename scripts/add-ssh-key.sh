@@ -1,7 +1,7 @@
 # this script adds an ssh key to espectra user.
 # SSH access via password will be disabled. Use keys instead.
-USER='espectra'
-PUBLIC_SSH_KEYS="${@}"
+USER=$1
+PUBLIC_SSH_KEYS=$2
 
 cat >> /home/${USER}/.ssh/authorized_keys << EOF
 $PUBLIC_SSH_KEYS

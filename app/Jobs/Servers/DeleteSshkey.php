@@ -5,20 +5,18 @@ namespace App\Jobs\Servers;
 use App\Server;
 use App\Sshkey;
 use Illuminate\Bus\Queueable;
-use App\Http\Traits\HandlesProcesses;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Scripts\Server\AddSshkey as AddSshkeyScript;
+use App\Scripts\Server\DeleteSshkey as DeleteSshkeyScript;
 
-class AddSshkey implements ShouldQueue
+class DeleteSshkey implements ShouldQueue
 {
     use Dispatchable,
         InteractsWithQueue,
         Queueable,
-        SerializesModels,
-        HandlesProcesses;
+        SerializesModels;
 
     /**
      * The server to add ssh key to
@@ -52,12 +50,8 @@ class AddSshkey implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AddSshkeyScript($this->server, $this->key))->run();
+        (new DeleteSshkeyScript($this->server, $this->key))->run();
 
-        if ($process->isSuccessful()) {
-            $this->key->update([
-                'is_ready' => true
-            ]);
-        }
+        $this->key->delete();
     }
 }

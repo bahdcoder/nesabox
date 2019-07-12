@@ -25,11 +25,13 @@ class CreateServersController extends Controller
                 break;
             case DIGITAL_OCEAN:
                 $server = $this->createDigitalOceanServer($request);
+                break;
             case CUSTOM_PROVIDER:
                 $server = $this->createCustomServer();
                 break;
             case LINODE:
                 $server = $this->createLinodeServer($request);
+                break;
         endswitch;
 
         if (!$server) {
@@ -54,7 +56,7 @@ class CreateServersController extends Controller
     {
         $request = request();
 
-        return auth()
+        $server = auth()
             ->user()
             ->servers()
             ->create([
@@ -71,7 +73,16 @@ class CreateServersController extends Controller
                         ? 'initializing'
                         : 'new'
             ]);
+
+        $this->createServerDatabases($server);
+
+        if (! in_array($request->provider, [DIGITAL_OCEAN])) {
+            $this->generateSshKeyForServer($server);
+        }
+
+        return $server;
     }
+
 
     /**
      * Create a custom server
@@ -81,11 +92,8 @@ class CreateServersController extends Controller
     public function createCustomServer()
     {
         $server = $this->createServerForAuthUser();
-
         $this->createServerDatabases($server);
-
         $this->generateSshKeyForServer($server);
-
         return $server;
     }
 
@@ -98,10 +106,6 @@ class CreateServersController extends Controller
         );
 
         $server = $this->createServerForAuthUser();
-
-        $this->createServerDatabases($server);
-
-        $this->generateSshKeyForServer($server);
 
         try {
             $linode = $this->getLinodeConnectionInstance(
@@ -135,17 +139,14 @@ class CreateServersController extends Controller
      */
     public function createVultrServer(CreateServerRequest $request)
     {
-        $user = auth()->user();
-
         $credential = $this->getAuthUserCredentialsFor(
             VULTR,
             $request->credential_id
         );
 
         $server = $this->createServerForAuthUser();
-
+        
         $this->createServerDatabases($server);
-
         try {
             $vultrServer = $this->getVultrConnectionInstance(
                 $credential->apiKey
@@ -159,11 +160,9 @@ class CreateServersController extends Controller
                     [$this->getSshKeyForVultr($server, $credential)],
                     $this->getUserDataForVultr($server, $credential)
                 );
-
             $server->update([
                 'identifier' => $vultrServer->SUBID
             ]);
-
             return $server;
         } catch (GuzzleException | ProcessFailedException $e) {
             throw new FailedCreatingServer($server, $e);
@@ -177,26 +176,16 @@ class CreateServersController extends Controller
      */
     public function createDigitalOceanServer(CreateServerRequest $request)
     {
-        $user = auth()->user();
-
         $credential = $this->getAuthUserCredentialsFor(
             DIGITAL_OCEAN,
             $request->credential_id
         );
 
-        $server = $user->servers()->create([
-            'node_version' => 'node',
-            'name' => $request->name,
-            'size' => $request->size,
-            'region' => $request->region,
-            'provider' => DIGITAL_OCEAN,
-            'databases' => $request->databases,
-            'credential_id' => $credential->id
-        ]);
-
-        $this->createServerDatabases($server);
+        $server = $this->createServerForAuthUser();
 
         try {
+            $keyId = $this->getSshKeyForDigitalOcean($server, $credential);
+
             $droplet = $this->getDigitalOceanConnectionInstance(
                 $credential->apiToken
             )
@@ -209,13 +198,15 @@ class CreateServersController extends Controller
                     false,
                     false,
                     false,
-                    [$this->getSshKeyForDigitalOcean($server)],
+                    [$keyId],
                     $this->getUserData($server)
                 );
 
             $server->update([
                 'identifier' => $droplet->id
             ]);
+
+            // TODO: Delete the newly created ssh key from digital ocean
 
             return $server;
         } catch (GuzzleException | ProcessFailedException $e) {
@@ -236,14 +227,14 @@ class CreateServersController extends Controller
             $server
                 ->databaseUsers()
                 ->create([
-                    'name' => USER_NAME,
+                    'name' => SSH_USER,
                     'password' => $password,
                     'type' => $database,
                     'is_ready' => true
                 ])
                 ->databases()
                 ->create([
-                    'name' => USER_NAME,
+                    'name' => SSH_USER,
                     'type' => $database,
                     'is_ready' => true
                 ]);

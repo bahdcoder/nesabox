@@ -2,12 +2,12 @@
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
 use App\Http\Controllers\Servers\GetServerController;
+use App\Http\Controllers\Servers\CustomServerController;
 use App\Http\Controllers\Servers\DigitalOceanController;
 use App\Http\Controllers\Servers\CreateServersController;
 use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
-use App\Http\Controllers\Servers\CustomServerController;
 use App\Http\Controllers\Servers\SshKeysController;
 
 /*
@@ -55,6 +55,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('servers/{server}/sshkeys', [
         SshKeysController::class,
         'store'
+    ]);
+
+    Route::delete('servers/{server}/sshkeys/{sshkey}', [
+        SshKeysController::class,
+        'destroy'
     ]);
 });
 

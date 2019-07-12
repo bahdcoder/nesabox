@@ -54,7 +54,8 @@ trait HandlesProcesses
      */
     public function runAddSshkeyScript(Server $server, Sshkey $key)
     {
-        $arguments = "'{$key->key}'";
+        $user = SSH_USER;
+        $arguments = "{$user} '{$key->key}'";
 
         $scriptPath = base_path('scripts/add-ssh-key.sh');
 
@@ -73,20 +74,15 @@ trait HandlesProcesses
         $scriptPath = base_path('scripts/server/verify-is-ready.sh');
 
         return $this->execProcess(
-            $this->sshScript(
-                $server,
-                $scriptPath,
-                '',
-                false
-            )
+            $this->sshScript($server, $scriptPath, '', false)
         );
     }
 
     /**
-     * 
+     *
      * Generate an ssh command to run a script on
      * a server
-     * 
+     *
      * @return string
      */
     public function sshScript(
@@ -95,7 +91,7 @@ trait HandlesProcesses
         $arguments = '',
         $root = true
     ) {
-        $user = $root ? 'root' : USER_NAME;
+        $user = $root ? 'root' : SSH_USER;
 
         return "ssh -o StrictHostKeyChecking=no {$user}@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -s' -- < {$script} {$arguments}";
     }
@@ -136,7 +132,6 @@ trait HandlesProcesses
         string $type,
         array $credentials
     ) {
-
         $database = $credentials['database'];
         $password = $credentials['password'];
         $username = $credentials['username'];
@@ -181,9 +176,7 @@ trait HandlesProcesses
     {
         $scriptPath = base_path('scripts/sites/generate-port.sh');
 
-        return $this->execProcess(
-            $this->sshScript($server, $scriptPath)
-        );
+        return $this->execProcess($this->sshScript($server, $scriptPath));
     }
 
     /**
@@ -195,9 +188,7 @@ trait HandlesProcesses
     {
         $scriptPath = base_path('scripts/server/generate-ssh-key.sh');
 
-        return $this->execProcess(
-            $this->sshScript($server, $scriptPath)
-        );
+        return $this->execProcess($this->sshScript($server, $scriptPath));
     }
 
     /**
@@ -297,7 +288,7 @@ trait HandlesProcesses
         return $this->getVultrConnectionInstance($credential->apiKey)
             ->startupscripts()
             ->create(
-                USER_NAME . 'Initialize server script',
+                SSH_USER . 'Initialize server script',
                 $this->getUserData($server)
             )->SCRIPTID;
     }
@@ -311,7 +302,7 @@ trait HandlesProcesses
     {
         $server = $site->server;
 
-        $user = USER_NAME;
+        $user = SSH_USER;
 
         $scriptPath = $this->createDeployScript($site->getDeployScript());
 

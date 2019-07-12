@@ -56,16 +56,7 @@ trait InteractsWithDigitalOcean
     public function getDigitalOceanSizesForRegion(string $region)
     {
         // Get JSON content of do cache
-        $data = Cache::rememberForever(
-            'digital-ocean-json-content',
-            function () {
-                return json_decode(
-                    file_get_contents(
-                        base_path('provider-data/digital-ocean.json')
-                    )
-                );
-            }
-        );
+        $data = cached_provider_data(DIGITAL_OCEAN);
 
         if (
             !collect($data->regions)->first(function ($r) use ($region) {

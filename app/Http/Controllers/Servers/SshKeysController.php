@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Servers;
 
 use App\Server;
 use App\Sshkey;
-use App\Jobs\Servers\AddSshkey;
 use App\Jobs\Servers\DeleteSshKey;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Servers\CreateSshKeyRequest;
+use App\Jobs\Servers\AddSshkey;
+use App\Http\Resources\ServerResource;
 
 class SshKeysController extends Controller
 {
@@ -19,6 +20,8 @@ class SshKeysController extends Controller
      */
     public function store(CreateSshKeyRequest $request, Server $server)
     {
+        $this->authorize('view', $server);
+
         $this->authorize('isReady', $server);
 
         $key = $server->sshkeys()->create([
@@ -28,7 +31,7 @@ class SshKeysController extends Controller
 
         AddSshkey::dispatch($server, $key);
 
-        return $key;
+        return new ServerResource($server);
     }
 
     /**
@@ -39,12 +42,10 @@ class SshKeysController extends Controller
      */
     public function destroy(Server $server, Sshkey $sshkey)
     {
-        $sshkey->update([
-            'status' => 'deleted'
-        ]);
+        $this->authorize('view', $server);
 
         DeleteSshKey::dispatch($server, $sshkey);
 
-        return response()->json();
+        return new ServerResource($server);
     }
 }

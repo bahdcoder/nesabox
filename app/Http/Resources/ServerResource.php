@@ -23,7 +23,8 @@ class ServerResource extends JsonResource
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
             'is_ready' => (bool) $this->is_ready,
-            'node_version' => $this->node_version
+            'node_version' => $this->node_version,
+            'ssh_keys' => SshkeyResource::collection($this->personalSshkeys)
         ];
     }
 }

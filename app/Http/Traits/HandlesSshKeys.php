@@ -12,25 +12,14 @@ trait HandlesSshKeys
      *
      * @return string the newly created key ID
      */
-    public function getSshKeyForDigitalOcean(Server $server): string
+    public function getSshKeyForDigitalOcean(Server $server, $credential): string
     {
         $sshKey = $this->generateSshKeyForServer($server);
-
-        $credential = $this->getAuthUserCredentialsFor(
-            DIGITAL_OCEAN,
-            $server->credential_id
-        );
 
         // create an sshkey with digitalocean api
         $key = $this->getDigitalOceanConnectionInstance($credential->apiToken)
             ->key()
-            ->create($server->slug, $sshKey->key);
-
-        $sshKey->update([
-            'provider' => DIGITAL_OCEAN,
-            'fingerprint' => $key->fingerprint,
-            'identifier' => $key->id
-        ]);
+            ->create(SSH_USER . '-' . $server->slug, $sshKey->key);
 
         return $key->id;
     }

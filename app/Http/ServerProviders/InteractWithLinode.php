@@ -38,7 +38,7 @@ trait InteractWithLinode
             return $this->getLinodeConnectionInstance($credential->accessToken)
                 ->stackScript()
                 ->create(
-                    USER_NAME . ' Stackscript',
+                    SSH_USER . ' Stackscript',
                     ['linode/ubuntu18.04'],
                     (new Init($server))->generate()
                 )->id;
