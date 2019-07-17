@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
+use App\Http\Controllers\Sites\SitesController;
 use App\Http\Controllers\Servers\SshKeysController;
 use App\Http\Controllers\Servers\GetServerController;
 use App\Http\Controllers\Servers\DatabasesController;
@@ -29,6 +30,8 @@ Route::middleware('auth:api')->group(function () {
     ]);
 
     Route::get('me', [UserController::class, 'show']);
+    Route::put('me', [UserController::class, 'update']);
+    Route::put('me/password', [UserController::class, 'changePassword']);
 
     Route::get('servers/regions', [RegionAndSizeController::class, 'index']);
 
@@ -68,14 +71,22 @@ Route::middleware('auth:api')->group(function () {
         'store'
     ]);
 
-    Route::delete('servers/{server}/databases/{sshkey}', [
-        DatabasesController::class,
-        'destroy'
-    ]);
+    // Route::delete('servers/{server}/databases/{database}', [
+    //     DatabasesController::class,
+    //     'destroy'
+    // ]);
+
+    Route::post('servers/{server}/sites', [SitesController::class, 'store']);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {
     Route::get('servers/{server}/vps', [CustomServerController::class, 'vps']);
 });
 
+// $this->post('login', 'Auth\LoginController@login');
+// $this->post('register', 'Auth\RegisterController@register');
+// $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+// $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+// $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+// $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 Auth::routes();

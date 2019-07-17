@@ -25,9 +25,14 @@ class ServerResource extends JsonResource
             'node_version' => $this->node_version,
             'is_ready' => $this->status === STATUS_ACTIVE,
             'ssh_keys' => SshkeyResource::collection($this->personalSshkeys),
-            $this->mergeWhen((bool) request()->query('with_databases') === true, [
-                'database_users' => DatabaseUserResource::collection($this->databaseUsers)
-            ]),
+            $this->mergeWhen(
+                (bool) request()->query('with_databases') === true,
+                [
+                    'database_users' => DatabaseUserResource::collection(
+                        $this->databaseUsers
+                    )
+                ]
+            )
         ];
     }
 }

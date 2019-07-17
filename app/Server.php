@@ -99,15 +99,15 @@ class Server extends Model
         return $this->hasMany(Database::class);
     }
 
-    // /**
-    //  * A server has many sites
-    //  *
-    //  * @return
-    //  */
-    // public function sites()
-    // {
-    //     return $this->hasMany(Site::class);
-    // }
+    /**
+     * A server has many sites
+     *
+     * @return
+     */
+    public function sites()
+    {
+        return $this->hasMany(Site::class);
+    }
 
     public function mongodbDatabases()
     {

@@ -61,9 +61,10 @@ class AddSshkey implements ShouldQueue
         }
     }
 
-    public function failed($e) {
+    public function failed($e)
+    {
         // TODO: Add server error saying key was deleted.
-        
+
         $this->key->delete();
     }
 }
