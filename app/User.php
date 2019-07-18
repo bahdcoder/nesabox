@@ -48,6 +48,18 @@ class User extends Authenticatable
     }
 
     /**
+     *
+     * A user has many personal sshkeys
+     *
+     * @return \Illuminate\Database\Relations\HasMany
+     *
+     */
+    public function sshkeys()
+    {
+        return $this->hasMany(Sshkey::class);
+    }
+
+    /**
      * Roll API Key
      *
      *

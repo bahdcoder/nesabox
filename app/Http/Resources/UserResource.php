@@ -30,11 +30,13 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'id' => $this->resource->id,
+            'api_token' => $this->api_token,
             'photo_url' => $this->photo_url,
+            'sshkeys' => SshkeyResource::collection($this->sshkeys),
             'source_control' => [
                 'github' => (bool) $this->source_control['github'],
                 'gitlab' => (bool) $this->source_control['gitlab'],
-                'bitbucket' => (bool) $this->source_control['bitbucket']
+                // 'bitbucket' => (bool) $this->source_control['bitbucket'] TODO: Fix Bitbucket connection
             ],
             'providers' => [
                 DIGITAL_OCEAN => collect($this->providers[DIGITAL_OCEAN])->map(

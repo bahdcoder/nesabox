@@ -60,4 +60,20 @@ class UserController extends Controller
                 ->fresh()
         );
     }
+
+    /**
+     * Regenerate the authenticated user's api token
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function apiToken()
+    {
+        auth()->user()->rollApiKey();
+
+        return new UserResource(
+            auth()
+                ->user()
+                ->fresh()
+        );
+    }
 }

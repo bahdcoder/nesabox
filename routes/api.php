@@ -11,6 +11,7 @@ use App\Http\Controllers\Servers\CreateServersController;
 use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
+use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ use App\Http\Controllers\Settings\SourceControlProvidersController;
 |
 */
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::post('settings/server-providers', [
         ServerProvidersController::class,
         'store'
@@ -31,7 +32,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('me', [UserController::class, 'show']);
     Route::put('me', [UserController::class, 'update']);
+    Route::post('me/apitoken', [UserController::class, 'apiToken']);
+    Route::post('me/sshkeys', [UserSshkeysController::class, 'store']);
     Route::put('me/password', [UserController::class, 'changePassword']);
+    Route::delete('me/sshkeys/{sshkey}', [UserSshkeysController::class, 'destroy']);
 
     Route::get('servers/regions', [RegionAndSizeController::class, 'index']);
 
