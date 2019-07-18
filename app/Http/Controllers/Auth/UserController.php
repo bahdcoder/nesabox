@@ -68,7 +68,9 @@ class UserController extends Controller
      */
     public function apiToken()
     {
-        auth()->user()->rollApiKey();
+        auth()
+            ->user()
+            ->rollApiKey();
 
         return new UserResource(
             auth()

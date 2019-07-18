@@ -30,12 +30,20 @@ Route::middleware(['auth:api'])->group(function () {
         'store'
     ]);
 
+    Route::delete('settings/server-providers/{credentialId}', [
+        ServerProvidersController::class,
+        'destroy'
+    ]);
+
     Route::get('me', [UserController::class, 'show']);
     Route::put('me', [UserController::class, 'update']);
     Route::post('me/apitoken', [UserController::class, 'apiToken']);
     Route::post('me/sshkeys', [UserSshkeysController::class, 'store']);
     Route::put('me/password', [UserController::class, 'changePassword']);
-    Route::delete('me/sshkeys/{sshkey}', [UserSshkeysController::class, 'destroy']);
+    Route::delete('me/sshkeys/{sshkey}', [
+        UserSshkeysController::class,
+        'destroy'
+    ]);
 
     Route::get('servers/regions', [RegionAndSizeController::class, 'index']);
 

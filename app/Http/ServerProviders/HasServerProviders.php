@@ -4,6 +4,38 @@ namespace App\Http\ServerProviders;
 
 trait HasServerProviders
 {
+    public function getCredentialProvider($credentialId)
+    {
+        $provider = collect([DIGITAL_OCEAN, AWS, LINODE, VULTR])->first(function (
+            $cloudProvider
+        ) use ($credentialId) {
+            $credential = collect($this->providers[$cloudProvider])->first(
+                function ($cred) use ($credentialId) {
+                    return $credentialId === $cred['id'];
+                }
+            );
+
+            return (bool) $credential;
+        });
+
+        return $provider;
+    }
+
+    public function deleteCredential($credentialId)
+    {
+        $provider = $this->getCredentialProvider($credentialId);
+
+        $newCredentials = [];
+
+        $newCredentials[$provider] = collect($this->providers[$provider])->filter(function ($credential) use ($credentialId) {
+            return $credential['id'] !== $credentialId;
+        })->all();
+
+        $this->update([
+            'providers' => array_merge($this->providers, $newCredentials)
+        ]);
+    }
+
     /**
      * Get the default credentials for a provider
      *

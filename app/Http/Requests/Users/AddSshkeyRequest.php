@@ -34,11 +34,13 @@ class AddSshkeyRequest extends FormRequest
     {
         return [
             'name' => 'required|alpha_dash',
-            'key' => ['required', new PublicKey(), Rule::unique('sshkeys')->where(function ($query) {
-                return $query->where(
-                    'is_profile_key', true
-                );
-            })]
+            'key' => [
+                'required',
+                new PublicKey(),
+                Rule::unique('sshkeys')->where(function ($query) {
+                    return $query->where('is_profile_key', true);
+                })
+            ]
         ];
     }
 }

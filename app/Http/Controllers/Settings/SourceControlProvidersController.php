@@ -77,7 +77,7 @@ class SourceControlProvidersController extends Controller
         $user = auth()->user();
 
         $data = [];
-        $data[$provider] = null;
+    $data[$provider] = null;
 
         $user->update([
             'source_control' => array_merge($user->source_control, $data)

@@ -35,7 +35,7 @@ class UserResource extends JsonResource
             'sshkeys' => SshkeyResource::collection($this->sshkeys),
             'source_control' => [
                 'github' => (bool) $this->source_control['github'],
-                'gitlab' => (bool) $this->source_control['gitlab'],
+                'gitlab' => (bool) $this->source_control['gitlab']
                 // 'bitbucket' => (bool) $this->source_control['bitbucket'] TODO: Fix Bitbucket connection
             ],
             'providers' => [
@@ -49,11 +49,11 @@ class UserResource extends JsonResource
                 ) {
                     return $this->defineCredential($credential);
                 }),
-                AWS => collect($this->providers[AWS])->map(function (
-                    $credential
-                ) {
-                    return $this->defineCredential($credential);
-                }),
+                // AWS => collect($this->providers[AWS])->map(function (
+                //     $credential
+                // ) {
+                //     return $this->defineCredential($credential);
+                // }),
                 LINODE => collect($this->providers[LINODE])->map(function (
                     $credential
                 ) {
