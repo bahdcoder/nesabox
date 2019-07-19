@@ -26,7 +26,7 @@ if (!function_exists('cached_provider_data')) {
                 return Cache::rememberForever('vultr-data', function () {
                     return json_decode(
                         file_get_contents(base_path('provider-data/vultr.json'))
-                    )->regions;
+                    );
                 });
             case LINODE:
                 return Cache::rememberForever('linode-data', function () {
@@ -52,5 +52,25 @@ if (!function_exists('str_root_password')) {
     function str_root_password()
     {
         return str_shuffle(str_random(10) . '{}[]%&');
+    }
+}
+
+if (! function_exists('get_ram')) {
+    function get_ram($value) { 
+        if ($value < 1024) {
+            return "{$value}MB";
+        }
+
+        $inGb = floor($value / 1024);
+
+        return "{$inGb}GB";
+    }
+}
+
+if (! function_exists('get_disk')) {
+    function get_disk($value) {
+        $inGb = floor($value / 1024);
+
+        return "{$inGb}GB";
     }
 }

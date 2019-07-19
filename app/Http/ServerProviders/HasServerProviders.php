@@ -6,17 +6,17 @@ trait HasServerProviders
 {
     public function getCredentialProvider($credentialId)
     {
-        $provider = collect([DIGITAL_OCEAN, AWS, LINODE, VULTR])->first(function (
-            $cloudProvider
-        ) use ($credentialId) {
-            $credential = collect($this->providers[$cloudProvider])->first(
-                function ($cred) use ($credentialId) {
-                    return $credentialId === $cred['id'];
-                }
-            );
+        $provider = collect([DIGITAL_OCEAN, AWS, LINODE, VULTR])->first(
+            function ($cloudProvider) use ($credentialId) {
+                $credential = collect($this->providers[$cloudProvider])->first(
+                    function ($cred) use ($credentialId) {
+                        return $credentialId === $cred['id'];
+                    }
+                );
 
-            return (bool) $credential;
-        });
+                return (bool) $credential;
+            }
+        );
 
         return $provider;
     }
@@ -27,9 +27,11 @@ trait HasServerProviders
 
         $newCredentials = [];
 
-        $newCredentials[$provider] = collect($this->providers[$provider])->filter(function ($credential) use ($credentialId) {
-            return $credential['id'] !== $credentialId;
-        })->all();
+        $newCredentials[$provider] = collect($this->providers[$provider])
+            ->filter(function ($credential) use ($credentialId) {
+                return $credential['id'] !== $credentialId;
+            })
+            ->all();
 
         $this->update([
             'providers' => array_merge($this->providers, $newCredentials)

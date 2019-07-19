@@ -18,6 +18,8 @@ class ServerResource extends JsonResource
             'id' => $this->id,
             'size' => $this->size,
             'slug' => $this->slug,
+            'name' => $this->name,
+            'status' => $this->status,
             'region' => $this->region,
             'provider' => $this->provider,
             'databases' => $this->databases,
@@ -32,7 +34,13 @@ class ServerResource extends JsonResource
                         $this->databaseUsers
                     )
                 ]
-            )
+            ),
+            $this->mergeWhen((bool) $this->provider === CUSTOM_PROVIDER, [
+                'deploy_script' => route(
+                    'servers.custom-deploy-script',
+                    $this->id
+                )
+            ])
         ];
     }
 }

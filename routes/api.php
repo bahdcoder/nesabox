@@ -12,6 +12,7 @@ use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
+use App\Http\Controllers\Servers\GetServersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,8 @@ Route::middleware(['auth:api'])->group(function () {
         ServerProvidersController::class,
         'destroy'
     ]);
+
+    Route::get('servers', [GetServersController::class, 'index']);
 
     Route::get('me', [UserController::class, 'show']);
     Route::put('me', [UserController::class, 'update']);
@@ -92,7 +95,10 @@ Route::middleware(['auth:api'])->group(function () {
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {
-    Route::get('servers/{server}/vps', [CustomServerController::class, 'vps']);
+    Route::get('servers/{server}/vps', [
+        CustomServerController::class,
+        'vps'
+    ])->name('servers.custom-deploy-script');
 });
 
 // $this->post('login', 'Auth\LoginController@login');

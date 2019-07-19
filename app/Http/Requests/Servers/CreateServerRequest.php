@@ -31,7 +31,8 @@ class CreateServerRequest extends FormRequest
 
         return [
             'size' => 'required',
-            'ip_address' => ['required_if:provider,' . CUSTOM_PROVIDER],
+            'private_ip_address' => 'ipv4|nullable',
+            'ip_address' => ['required_if:provider,' . CUSTOM_PROVIDER, 'ipv4', 'nullable'],
             'name' => [
                 'required',
                 'alpha_dash',
@@ -42,7 +43,8 @@ class CreateServerRequest extends FormRequest
             'region' => [
                 Rule::requiredIf(function () {
                     return $this->provider !== CUSTOM_PROVIDER;
-                })
+                }),
+                'string'
             ],
             'provider' => 'required|in:' . implode(',', $providers),
             'databases' => 'required',

@@ -75,7 +75,9 @@ class ServerProvidersController extends Controller
 
     public function destroy($credentialId)
     {
-        auth()->user()->deleteCredential($credentialId);
+        auth()
+            ->user()
+            ->deleteCredential($credentialId);
 
         return new UserResource(auth()->user());
     }

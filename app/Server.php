@@ -2,12 +2,8 @@
 
 namespace App;
 
-use Cviebrock\EloquentSluggable\Sluggable;
-
 class Server extends Model
 {
-    use Sluggable;
-
     /**
      * Fields to cast to native types
      *
@@ -34,21 +30,9 @@ class Server extends Model
                 'bitbucket' => false,
                 'gitlab' => false
             ];
-        });
-    }
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
+            $model->slug = str_slug($model->name) . '-' . str_random(8);
+        });
     }
 
     /**

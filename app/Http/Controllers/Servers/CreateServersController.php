@@ -92,7 +92,7 @@ class CreateServersController extends Controller
     {
         $server = $this->createServerForAuthUser();
         $this->createServerDatabases($server);
-        $this->generateSshKeyForServer($server);
+
         return $server;
     }
 
