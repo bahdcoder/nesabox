@@ -35,12 +35,10 @@ class ServerResource extends JsonResource
                     )
                 ]
             ),
-            $this->mergeWhen((bool) $this->provider === CUSTOM_PROVIDER, [
-                'deploy_script' => route(
-                    'servers.custom-deploy-script',
-                    $this->id
-                )
-            ])
+            'deploy_script' => $this->provider === CUSTOM_PROVIDER ? route(
+                'servers.custom-deploy-script',
+                $this->id
+            ) : null
         ];
     }
 }

@@ -86,7 +86,7 @@ class Initialize implements ShouldQueue
 
                 $key = trim("ssh-rsa{$key}");
 
-                $this->server->update([
+                return $this->server->update([
                     'ssh_key' => $key,
                     'status' => STATUS_ACTIVE
                 ]);
