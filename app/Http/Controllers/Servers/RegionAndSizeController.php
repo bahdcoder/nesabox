@@ -27,7 +27,9 @@ class RegionAndSizeController extends Controller
             //     'sizes' => AWS_SIZES
             // ],
             DIGITAL_OCEAN => [
-                'regions' => collect($digitalocean->regions)->map(function ($region) {
+                'regions' => collect($digitalocean->regions)->map(function (
+                    $region
+                ) {
                     return [
                         'label' => $region->name,
                         'value' => $region->slug
@@ -59,7 +61,7 @@ class RegionAndSizeController extends Controller
                         'label' => "{$size->label} - {$ram} {$size->vcpus} CPU {$core} {$gb} SSD",
                         'value' => $size->id
                     ];
-                }),
+                })
             ],
             VULTR => [
                 'regions' => collect($vultr->regions)->map(function ($region) {

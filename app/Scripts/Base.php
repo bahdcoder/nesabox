@@ -40,7 +40,7 @@ class Base
         $func = $callback ? 'execProcessAsync' : 'execProcess';
 
         return $this->$func(
-            "ssh {$this->sshUser}@{$this->server->ip_address} -i ~/.ssh/{$this->server->slug} 'bash -se' <<  EOF-CUSTOM
+            "ssh -o StrictHostKeyChecking=no {$this->sshUser}@{$this->server->ip_address} -i ~/.ssh/{$this->server->slug} 'bash -se' <<  EOF-CUSTOM
 {$this->generate()}
 EOF-CUSTOM",
             $callback

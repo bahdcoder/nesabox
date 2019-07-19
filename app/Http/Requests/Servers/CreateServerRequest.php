@@ -32,7 +32,11 @@ class CreateServerRequest extends FormRequest
         return [
             'size' => 'required',
             'private_ip_address' => 'ipv4|nullable',
-            'ip_address' => ['required_if:provider,' . CUSTOM_PROVIDER, 'ipv4', 'nullable'],
+            'ip_address' => [
+                'required_if:provider,' . CUSTOM_PROVIDER,
+                'ipv4',
+                'nullable'
+            ],
             'name' => [
                 'required',
                 'alpha_dash',

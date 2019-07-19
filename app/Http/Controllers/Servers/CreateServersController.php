@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Servers;
 
 use App\Server;
+use App\Jobs\Servers\Initialize;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Servers\CreateServerRequest;
 use GuzzleHttp\Exception\GuzzleException;
@@ -37,11 +38,13 @@ class CreateServersController extends Controller
         if (!$server) {
             return response()->json(
                 [
-                    'message' => __('Failed creating digital ocean server.')
+                    'message' => __('Failed creating server.')
                 ],
                 400
             );
         }
+
+        Initialize::dispatch($server)->delay(now()->addSeconds(60));
 
         return new ServerResource($server);
     }

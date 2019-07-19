@@ -58,6 +58,11 @@ class Server extends Model
         );
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      * A server has many database users
      *

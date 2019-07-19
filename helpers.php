@@ -55,8 +55,9 @@ if (!function_exists('str_root_password')) {
     }
 }
 
-if (! function_exists('get_ram')) {
-    function get_ram($value) { 
+if (!function_exists('get_ram')) {
+    function get_ram($value)
+    {
         if ($value < 1024) {
             return "{$value}MB";
         }
@@ -67,8 +68,9 @@ if (! function_exists('get_ram')) {
     }
 }
 
-if (! function_exists('get_disk')) {
-    function get_disk($value) {
+if (!function_exists('get_disk')) {
+    function get_disk($value)
+    {
         $inGb = floor($value / 1024);
 
         return "{$inGb}GB";
