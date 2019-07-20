@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Exceptions\ServerNotReadyException;
+use App\Notifications\Servers\ServerIsReady;
 use App\Http\ServerProviders\InteractsWithVultr;
 use App\Http\ServerProviders\HasServerProviders;
 use App\Http\ServerProviders\InteractWithLinode;
@@ -39,14 +40,14 @@ class Initialize implements ShouldQueue
      *
      * @var integer
      */
-    public $retryAfter = 60;
+    public $retryAfter = 120;
 
     /**
      * The number of times the job may be attempted.
      *
      * @var int
      */
-    public $tries = 10;
+    public $tries = 15;
 
     /**
      * Create a new job instance.
@@ -66,6 +67,8 @@ class Initialize implements ShouldQueue
     public function handle()
     {
         $this->sync();
+
+        $this->server->user->notify(new ServerIsReady($this->server));
     }
 
     /**
@@ -115,7 +118,10 @@ class Initialize implements ShouldQueue
                     return $this->handleInitializedServer($server);
                 }
 
-                $droplet = $this->getDigitalOceanDroplet($server->identifier, $server->user);
+                $droplet = $this->getDigitalOceanDroplet(
+                    $server->identifier,
+                    $server->user
+                );
 
                 if ($droplet->status === 'active') {
                     $server->update([
@@ -139,7 +145,11 @@ class Initialize implements ShouldQueue
                     return $this->handleInitializedServer($server);
                 }
 
-                $vultrServer = $this->getVultrServer($server->identifier);
+                $vultrServer = $this->getVultrServer(
+                    $server->identifier,
+                    $server->user,
+                    $server->credential_id
+                );
 
                 if ($vultrServer->status === STATUS_ACTIVE) {
                     $server->update([
@@ -168,7 +178,7 @@ class Initialize implements ShouldQueue
                     return $this->handleInitializedServer($server);
                 }
 
-                $linode = $this->getLinode($server->identifier);
+                $linode = $this->getLinode($server->identifier, $server->user, $server->credential_id);
 
                 if ($linode->status === 'running') {
                     $server->update([

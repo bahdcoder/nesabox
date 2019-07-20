@@ -5,6 +5,7 @@ use App\Http\Controllers\Sites\SitesController;
 use App\Http\Controllers\Servers\SshKeysController;
 use App\Http\Controllers\Servers\GetServerController;
 use App\Http\Controllers\Servers\DatabasesController;
+use App\Http\Controllers\Servers\GetServersController;
 use App\Http\Controllers\Servers\CustomServerController;
 use App\Http\Controllers\Servers\DigitalOceanController;
 use App\Http\Controllers\Servers\CreateServersController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
-use App\Http\Controllers\Servers\GetServersController;
 
 /*
 |--------------------------------------------------------------------------

@@ -39,11 +39,17 @@ trait InteractsWithVultr
      *
      * @return array
      */
-    public function getVultrServer(string $identifier)
-    {
-        $credential = $this->getAuthUserCredentialsFor(VULTR);
-
-        return $this->getVultrConnectionInstance($credential->apiKey)
+    public function getVultrServer(
+        string $identifier,
+        $user = null,
+        $credential_id = null
+    ) {
+        return $this->getVultrConnectionInstance(
+            ($user ? $user : auth()->user())->getDefaultCredentialsFor(
+                VULTR,
+                $credential_id
+            )->apiKey
+        )
             ->server()
             ->get($identifier);
     }

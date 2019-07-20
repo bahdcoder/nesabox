@@ -79,10 +79,6 @@ class CreateServersController extends Controller
 
         $this->createServerDatabases($server);
 
-        if (!in_array($request->provider, [DIGITAL_OCEAN])) {
-            $this->generateSshKeyForServer($server);
-        }
-
         return $server;
     }
 
@@ -94,7 +90,10 @@ class CreateServersController extends Controller
     public function createCustomServer()
     {
         $server = $this->createServerForAuthUser();
+
         $this->createServerDatabases($server);
+
+        $this->generateSshKeyForServer($server);
 
         return $server;
     }
@@ -108,6 +107,8 @@ class CreateServersController extends Controller
         );
 
         $server = $this->createServerForAuthUser();
+
+        $this->generateSshKeyForServer($server);
 
         try {
             $linode = $this->getLinodeConnectionInstance(

@@ -48,8 +48,8 @@ class RegionAndSizeController extends Controller
             LINODE => [
                 'regions' => collect($linode->regions)->map(function ($region) {
                     return [
-                        'label' => $region->id,
-                        'value' => Str::title($region->id)
+                        'label' => Str::title($region->id),
+                        'value' => $region->id
                     ];
                 }),
                 'sizes' => collect($linode->sizes)->map(function ($size) {

@@ -78,6 +78,9 @@ trait HasServerProviders
             ->user()
             ->getDefaultCredentialsFor($provider, $credential_id);
 
+        // dd($credential);
+        var_dump($credential_id);
+
         if (
             !isset($credential->apiToken) &&
             !isset($credential->apiKey) &&

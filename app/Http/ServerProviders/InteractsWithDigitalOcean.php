@@ -44,9 +44,9 @@ trait InteractsWithDigitalOcean
     public function getDigitalOceanDroplet(string $dropletId, $user = null)
     {
         return $this->getDigitalOceanConnectionInstance(
-            ($user ? $user : auth()
-            ->user())
-                ->getDefaultCredentialsFor(DIGITAL_OCEAN)->apiToken
+            ($user ? $user : auth()->user())->getDefaultCredentialsFor(
+                DIGITAL_OCEAN
+            )->apiToken
         )
             ->droplet()
             ->getById($dropletId);

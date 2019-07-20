@@ -57,11 +57,14 @@ trait InteractWithLinode
         return new Linode($token);
     }
 
-    public function getLinode($id)
+    public function getLinode($id, $user = null, $credential_id = null)
     {
-        $credential = $this->getAuthUserCredentialsFor(LINODE);
-
-        return $this->getLinodeConnectionInstance($credential->accessToken)
+        return $this->getLinodeConnectionInstance(
+            ($user ? $user : auth()->user())->getDefaultCredentialsFor(
+                LINODE,
+                $credential_id
+            )->accessToken
+        )
             ->linode()
             ->get($id);
     }
