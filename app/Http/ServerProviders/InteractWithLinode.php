@@ -2,10 +2,10 @@
 
 namespace App\Http\ServerProviders;
 
-use Bahdcoder\Linode\Linode;
-use GuzzleHttp\Exception\GuzzleException;
 use App\Server;
+use Bahdcoder\Linode\Linode;
 use App\Scripts\Server\Init;
+use GuzzleHttp\Exception\GuzzleException;
 
 trait InteractWithLinode
 {
