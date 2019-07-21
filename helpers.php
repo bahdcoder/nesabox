@@ -56,6 +56,13 @@ if (!function_exists('str_root_password')) {
 }
 
 if (!function_exists('get_ram')) {
+    /**
+     * Get RAM in GB
+     *
+     * @param integer $value
+     *
+     * @return string
+     */
     function get_ram($value)
     {
         if ($value < 1024) {
@@ -69,10 +76,50 @@ if (!function_exists('get_ram')) {
 }
 
 if (!function_exists('get_disk')) {
+    /**
+     * Get RAM in GB
+     *
+     * @param integer $value
+     *
+     * @return string
+     */
     function get_disk($value)
     {
         $inGb = floor($value / 1024);
 
         return "{$inGb}GB";
+    }
+}
+
+if (!function_exists('get_region_name')) {
+    /**
+     * Get the name of a region depending
+     * on the provider passed
+     *
+     * @return string
+     */
+    function get_region_name(string $provider, $id)
+    {
+        $data = cached_provider_data($provider);
+
+        if ($provider === DIGITAL_OCEAN) {
+            return collect($data->regions)->first(function ($region) use ($id) {
+                return $region->slug = $id;
+            })->name;
+        }
+
+        if ($provider === VULTR) {
+            return collect($data->regions)->first(function ($region) use ($id) {
+                return $region->DCID = $id;
+            })->name;
+        }
+
+        if ($provider === LINODE) {
+            return collect($data->regions)->first(function ($region) use ($id) {
+                return $region->id = $id;
+            })->name;
+        }
+
+        return null;
     }
 }

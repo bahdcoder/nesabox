@@ -16,7 +16,9 @@ class SshkeyResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'name' => $this->resource->name
+            'name' => $this->resource->name,
+            'status' => $this->resource->status,
+            'isReady' => $this->resource->status === STATUS_ACTIVE
         ];
     }
 }

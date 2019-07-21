@@ -1,36 +1,36 @@
 {
-	"authHost": "https://api.nesabox.com",
-	"authEndpoint": "/broadcasting/auth",
-	"clients": [
-		{
-			"appId": "7fe121da43500653",
-			"key": "cddabebf83f025b8501934e242ac2047"
-		}
-	],
-	"database": "redis",
-	"databaseConfig": {
-		"redis": {},
-		"sqlite": {
-			"databasePath": "/database/laravel-echo-server.sqlite"
-		}
-	},
-	"devMode": false,
-	"host": null,
-	"port": "6001",
-	"protocol": "https",
-	"socketio": {},
-	"sslCertPath": "/etc/nginx/ssl/api.nesabox.com/588911/server.crt",
-	"sslKeyPath": "/etc/nginx/ssl/api.nesabox.com/588911/server.key",
-	"sslCertChainPath": "",
-	"sslPassphrase": "",
-	"subscribers": {
-		"http": true,
-		"redis": true
-	},
-	"apiOriginAllow": {
-		"allowCors": true,
-		"allowOrigin": "*",
-		"allowMethods": "GET, POST",
-		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
-	}
+    "authHost": "https://api.nesabox.com",
+    "authEndpoint": "/broadcasting/auth",
+    "clients": [
+        {
+            "appId": "7fe121da43500653",
+            "key": "cddabebf83f025b8501934e242ac2047"
+        }
+    ],
+    "database": "redis",
+    "databaseConfig": {
+        "redis": {},
+        "sqlite": {
+            "databasePath": "/database/laravel-echo-server.sqlite"
+        }
+    },
+    "devMode": false,
+    "host": null,
+    "port": "6001",
+    "protocol": "https",
+    "socketio": {},
+    "sslCertPath": "/etc/nginx/ssl/api.nesabox.com/588911/server.crt",
+    "sslKeyPath": "/etc/nginx/ssl/api.nesabox.com/588911/server.key",
+    "sslCertChainPath": "",
+    "sslPassphrase": "",
+    "subscribers": {
+        "http": true,
+        "redis": true
+    },
+    "apiOriginAllow": {
+        "allowCors": true,
+        "allowOrigin": "*",
+        "allowMethods": "GET, POST",
+        "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+    }
 }

@@ -45,6 +45,10 @@ class SshKeysController extends Controller
     {
         $this->authorize('view', $server);
 
+        $sshkey->update([
+            'status' => STATUS_DELETING
+        ]);
+
         DeleteSshKey::dispatch($server, $sshkey);
 
         return new ServerResource($server);

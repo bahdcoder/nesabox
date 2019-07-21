@@ -178,7 +178,11 @@ class Initialize implements ShouldQueue
                     return $this->handleInitializedServer($server);
                 }
 
-                $linode = $this->getLinode($server->identifier, $server->user, $server->credential_id);
+                $linode = $this->getLinode(
+                    $server->identifier,
+                    $server->user,
+                    $server->credential_id
+                );
 
                 if ($linode->status === 'running') {
                     $server->update([

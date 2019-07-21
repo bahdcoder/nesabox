@@ -55,7 +55,7 @@ class Server extends Model
         return $this->hasMany(Sshkey::class, 'server_id')->where(
             'is_app_key',
             false
-        );
+        )->where('status', '!=', STATUS_DELETING);
     }
 
     public function user()

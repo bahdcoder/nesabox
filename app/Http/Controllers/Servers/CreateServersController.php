@@ -65,12 +65,15 @@ class CreateServersController extends Controller
             ->create([
                 'name' => $request->name,
                 'size' => $request->size,
-                'region' => $request->region,
                 'provider' => $request->provider,
                 'databases' => $request->databases,
                 'ip_address' => $request->ip_address,
                 'credential_id' => $request->credential_id,
                 'private_ip_address' => $request->private_ip_address,
+                'region' => get_region_name(
+                    $request->provider,
+                    $request->region
+                ),
                 'status' =>
                     $request->provider === CUSTOM_PROVIDER
                         ? STATUS_INITIALIZING

@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\AddSshkey as AddSshkeyScript;
 
 class AddSshkey implements ShouldQueue
@@ -58,6 +59,8 @@ class AddSshkey implements ShouldQueue
             $this->key->update([
                 'status' => STATUS_ACTIVE
             ]);
+
+            $this->server->user->notify(new ServerIsReady($this->server));
         }
     }
 

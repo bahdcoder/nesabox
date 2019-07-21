@@ -21,12 +21,14 @@ class ServerResource extends JsonResource
             'name' => $this->name,
             'status' => $this->status,
             'region' => $this->region,
+            'ssh_key' => $this->ssh_key,
             'provider' => $this->provider,
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
             'node_version' => $this->node_version,
             'is_ready' => $this->status === STATUS_ACTIVE,
-            'ssh_keys' => SshkeyResource::collection($this->personalSshkeys),
+            'nesa_key' => $this->sshkeys()->where('is_app_key', true)->first()->key,
+            'sshkeys' => SshkeyResource::collection($this->personalSshkeys),
             $this->mergeWhen(
                 (bool) request()->query('with_databases') === true,
                 [

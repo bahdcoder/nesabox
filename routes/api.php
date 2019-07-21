@@ -13,6 +13,7 @@ use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
+use App\Notifications\Servers\ServerIsReady;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,3 +109,7 @@ Route::middleware(['guest', 'api-token'])->group(function () {
 // $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 // $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 Auth::routes();
+
+Route::get('beans', function () {
+    \App\User::first()->notify(new ServerIsReady(\App\Server::latest()->first()));
+});
