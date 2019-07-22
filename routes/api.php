@@ -14,6 +14,7 @@ use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 use App\Notifications\Servers\ServerIsReady;
+use App\Http\Controllers\Servers\DaemonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,8 @@ Route::middleware(['auth:api'])->group(function () {
     // ]);
 
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
+
+    Route::post('servers/{server}/daemons', [DaemonController::class, 'store']);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {
@@ -111,5 +114,7 @@ Route::middleware(['guest', 'api-token'])->group(function () {
 Auth::routes();
 
 Route::get('beans', function () {
-    \App\User::first()->notify(new ServerIsReady(\App\Server::latest()->first()));
+    \App\User::first()->notify(
+        new ServerIsReady(\App\Server::latest()->first())
+    );
 });

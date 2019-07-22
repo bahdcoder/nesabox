@@ -85,6 +85,7 @@ EOF
 # Add deployment user
 useradd \$USER
 mkdir -p /home/\$USER/.ssh
+mkdir -p /home/\$USER/.\$USER
 adduser \$USER sudo
 
 chsh -s /bin/bash \$USER

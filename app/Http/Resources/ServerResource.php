@@ -27,7 +27,10 @@ class ServerResource extends JsonResource
             'ip_address' => $this->ip_address,
             'node_version' => $this->node_version,
             'is_ready' => $this->status === STATUS_ACTIVE,
-            'nesa_key' => $this->sshkeys()->where('is_app_key', true)->first()->key,
+            'daemons' => DaemonsResource::collection($this->daemons),
+            'nesa_key' => $this->sshkeys()
+                ->where('is_app_key', true)
+                ->first()->key,
             'sshkeys' => SshkeyResource::collection($this->personalSshkeys),
             $this->mergeWhen(
                 (bool) request()->query('with_databases') === true,

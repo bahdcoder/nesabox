@@ -45,6 +45,11 @@ class Server extends Model
         return $this->hasMany(Sshkey::class);
     }
 
+    public function daemons()
+    {
+        return $this->hasMany(Daemon::class);
+    }
+
     /**
      * A server has many ssh keys created by server owner
      *
@@ -52,10 +57,9 @@ class Server extends Model
      */
     public function personalSshkeys()
     {
-        return $this->hasMany(Sshkey::class, 'server_id')->where(
-            'is_app_key',
-            false
-        )->where('status', '!=', STATUS_DELETING);
+        return $this->hasMany(Sshkey::class, 'server_id')
+            ->where('is_app_key', false)
+            ->where('status', '!=', STATUS_DELETING);
     }
 
     public function user()
