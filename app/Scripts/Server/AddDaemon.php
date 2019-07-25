@@ -3,14 +3,22 @@
 namespace App\Scripts\Server;
 
 use App\Daemon;
+use App\Server;
 use App\Scripts\Base;
 
 class AddDaemon extends Base
 {
     /**
-     * The server to be initialized.
+     * The daemon to be added.
      *
      * @var \App\Daemon
+     */
+    public $server;
+
+    /**
+     * The server to be initialized.
+     * 
+     * @var \App\Server
      */
     public $daemon;
 
@@ -19,9 +27,10 @@ class AddDaemon extends Base
      *
      * @return void
      */
-    public function __construct(Daemon $daemon)
+    public function __construct(Server $server, Daemon $daemon)
     {
         $this->daemon = $daemon;
+        $this->server = $server;
     }
 
 
@@ -30,18 +39,15 @@ class AddDaemon extends Base
         $user = SSH_USER;
 
         return <<<EOD
-touch "/home/{$user}/.{$user}/daemon-{$this->daemon->id}.out.log"
-touch "/home/{$user}/.{$user}/daemon-{$this->daemon->id}.error.log"
+touch "/home/{$user}/.{$user}/daemon-{$this->daemon->slug}.out.log"
 
-cat >> /etc/supervisor/conf.d/daemon-{$this->daemon->id}.conf << EOF
+cat >> /etc/supervisor/conf.d/daemon-{$this->daemon->slug}.conf << EOF
 {$this->getDaemonConfig()}
 EOF
+
+supervisorctl reread
+supervisorctl update 
 EOD;
-        // first, we'll create the stdout and stderr log files
-
-        // secondly, we'll create the supervisor daemon config file
-
-        // 
     }
 
     public function getDaemonConfig()
@@ -49,17 +55,19 @@ EOD;
         $user = SSH_USER;
 
         return <<<EOD
-[program:daemon-{$this->daemon->id}]
+[program:daemon-{$this->daemon->slug}]
 {$this->getDirectory()}
 command={$this->daemon->command}
 
 process_name=%(program_name)s_%(process_num)02d
 autostart=true
 autorestart=true
+stopasgroup=true
+stopsignal=QUIT
 user={$this->daemon->user}
 numprocs={$this->daemon->processes}
-stderr_logfile=/home/{$user}/.{$user}/daemon-{$this->daemon->id}.error.log
-stdout_logfile=/home/{$user}/.{$user}/daemon-{$this->daemon->id}.out.log
+redirect_stderr=true
+stdout_logfile=/home/{$user}/.{$user}/daemon-{$this->daemon->slug}.out.log
 EOD;
     }
 

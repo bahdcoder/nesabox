@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Servers;
 
 use App\Server;
+use App\Daemon;
+use App\Jobs\Servers\AddDaemon;
 use App\Http\Controllers\Controller;
+use App\Scripts\Server\DaemonStatus;
+use App\Scripts\Server\DeleteDaemon;
+use App\Scripts\Server\RestartDaemon;
+use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\AddDaemonRequest;
-use App\Scripts\Server\AddDaemon;
 
 class DaemonController extends Controller
 {
@@ -17,9 +22,47 @@ class DaemonController extends Controller
             'command' => $request->command,
             'processes' => $request->processes,
             'directory' => $request->directory,
-            'user' => $request->user
+            'user' => $request->user,
+            'slug' => str_random(8)
         ]);
 
-        return (new AddDaemon($daemon))->generate();
+        $daemon->rollSlug();
+
+        AddDaemon::dispatch($daemon);
+
+        return new ServerResource($server->fresh());
+    }
+
+    public function status(Server $server, Daemon $daemon)
+    {
+        $this->authorize('view', $server);
+
+        $process = (new DaemonStatus($server, $daemon))->run();
+
+        return response()->json([
+            'data' => $process->isSuccessful() ? $process->getOutput() : $process->getErrorOutput()
+        ]);
+    }
+
+    public function restart(Server $server, Daemon $daemon)
+    {
+        $this->authorize('view', $server);
+
+        $process = (new RestartDaemon($server, $daemon))->run();
+
+        return response()->json([
+            'data' => $process->isSuccessful() ? $process->getOutput() : $process->getErrorOutput()
+        ]);
+    }
+
+    public function destroy(Server $server, Daemon $daemon)
+    {
+        $this->authorize('view', $server);
+
+        $process = $process = (new DeleteDaemon($server, $daemon))->run();
+
+        $daemon->delete();
+
+        return new ServerResource($server->fresh());
     }
 }

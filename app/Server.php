@@ -50,6 +50,11 @@ class Server extends Model
         return $this->hasMany(Daemon::class);
     }
 
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
+
     /**
      * A server has many ssh keys created by server owner
      *

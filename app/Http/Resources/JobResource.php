@@ -3,8 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
-class DaemonsResource extends JsonResource
+class JobResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +19,10 @@ class DaemonsResource extends JsonResource
             'id' => $this->resource->id,
             'slug' => $this->resource->slug,
             'user' => $this->resource->user,
-            'status' => $this->resource->status,
+            'cron' => $this->resource->cron,
             'command' => $this->resource->command,
-            'processes' => $this->resource->processes,
-            'isReady' => $this->resource->status === STATUS_ACTIVE,
+            'isReady' => $this->status === STATUS_ACTIVE,
+            'frequency' => __('app.' . $this->resource->frequency)
         ];
     }
 }

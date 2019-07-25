@@ -27,6 +27,7 @@ class ServerResource extends JsonResource
             'ip_address' => $this->ip_address,
             'node_version' => $this->node_version,
             'is_ready' => $this->status === STATUS_ACTIVE,
+            'jobs' => JobResource::collection($this->jobs),
             'daemons' => DaemonsResource::collection($this->daemons),
             'nesa_key' => $this->sshkeys()
                 ->where('is_app_key', true)

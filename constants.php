@@ -8,7 +8,7 @@
 define('AWS', 'aws');
 define('VULTR', 'vultr');
 define('LINODE', 'linode');
-define('SSH_USER', 'espectra');
+define('SSH_USER', 'nesa');
 define('CUSTOM_PROVIDER', 'custom');
 define('DIGITAL_OCEAN', 'digital-ocean');
 

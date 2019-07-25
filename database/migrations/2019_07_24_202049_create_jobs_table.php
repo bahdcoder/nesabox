@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDaemonsTable extends Migration
+class CreateJobsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateDaemonsTable extends Migration
      */
     public function up()
     {
-        Schema::create('daemons', function (Blueprint $table) {
+        Schema::create('jobs', function (Blueprint $table) {
             $table->uuid('id');
+            $table->string('cron');
             $table->string('user');
-            $table->string('command');
             $table->uuid('server_id');
-            $table->integer('processes');
+            $table->string('command');
             $table->string('slug')->nullable();
-            $table->string('directory')->nullable();
+            $table->string('frequency')->nullable();
             $table->string('status')->default('installing');
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ class CreateDaemonsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('daemons');
+        Schema::dropIfExists('jobs');
     }
 }

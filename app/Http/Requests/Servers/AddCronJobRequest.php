@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Servers;
 
+use App\Rules\Cron;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddDaemonRequest extends FormRequest
+class AddCronJobRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +26,9 @@ class AddDaemonRequest extends FormRequest
     {
         return [
             'user' => 'required',
-            'command' => 'required|max:100',
-            'processes' => 'required|integer'
+            'command' => 'required',
+            'cron' => ['required_if:frequency,custom', new Cron()],
+            'frequency' => 'required|in:everyMinute,everyFiveMinutes,everyTenMinutes,hourly,daily,weekly,monthly,custom',
         ];
     }
 }

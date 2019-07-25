@@ -129,6 +129,10 @@ else
     echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.conf
 fi
 
+# Make sure supervisor autostarts
+systemctl enable supervisor.service
+service supervisor start
+
 # Install nginx
 
 apt-get install -y nginx
@@ -168,6 +172,13 @@ EOF
 
 # Install all databases user selected
 {$this->getDatabasesInstallationScripts()}
+
+# Install node, npm and n
+
+curl -o- https://deb.nodesource.com/setup_10.x | bash
+apt-get install nodejs
+npm i -g n
+n latest
 EOD;
     }
 

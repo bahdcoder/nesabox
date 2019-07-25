@@ -43,7 +43,7 @@ trait HandlesSshKeys
     }
 
     /**
-     * Generate an ssh key on espectra server for this specific server
+     * Generate an ssh key on server for this specific server
      *
      * @return
      */
