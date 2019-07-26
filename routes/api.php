@@ -89,6 +89,11 @@ Route::middleware(['auth:api'])->group(function () {
         'store'
     ]);
 
+    Route::delete('servers/{server}/databases/{database}', [
+        DatabasesController::class,
+        'destroy'
+    ]);
+
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
 
     Route::post('servers/{server}/daemons', [DaemonController::class, 'store']);

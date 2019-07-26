@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\CreateDatabaseRequest;
 use App\Scripts\Server\AddDatabase as AddDatabaseScript;
+use App\Scripts\Server\DeleteDatabase as DeleteDatabaseScript;
 
 class DatabasesController extends Controller
 {
@@ -49,5 +50,20 @@ class DatabasesController extends Controller
         }
 
         return new ServerResource($server->fresh());
+    }
+
+    public function destroy(Server $server, Database $database)
+    {
+        $process = (new DeleteDatabaseScript($server, $database))->run();
+
+        if (! $process->isSuccessful()) {
+            abort(400, $process->getErrorOutput());
+        }
+
+        $database->databaseUser->delete();
+
+        $database->delete();
+
+        return new ServerResource($server);
     }
 }
