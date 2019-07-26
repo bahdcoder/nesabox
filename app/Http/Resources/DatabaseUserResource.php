@@ -18,8 +18,7 @@ class DatabaseUserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
-            'is_ready' => $this->status === STATUS_ACTIVE,
-            'databases' => DatabaseResource::collection($this->databases)
+            'is_ready' => $this->status === STATUS_ACTIVE
         ];
     }
 }

@@ -17,6 +17,7 @@ class DatabaseResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'user' => $this->databaseUser->name,
             'is_ready' => $this->status === STATUS_ACTIVE
         ];
     }

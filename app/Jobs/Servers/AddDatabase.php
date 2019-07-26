@@ -53,7 +53,6 @@ class AddDatabase implements ShouldQueue
         ))->run();
 
         if ($process->isSuccessful()) {
-            dd('success', $process->getOutput());
             $this->database->update([
                 'status' => STATUS_ACTIVE
             ]);
@@ -64,7 +63,6 @@ class AddDatabase implements ShouldQueue
                 ]);
             }
         } else {
-            dd('failed', $process->getErrorOutput());
             $this->database->delete();
 
             if ($this->databaseUser) {

@@ -35,7 +35,8 @@ class CreateDatabaseRequest extends FormRequest
                         'server_id',
                         $this->route('server')->id
                     );
-                })
+                }),
+                'alpha_dash'
             ],
             'user' => [
                 'required_with:password',

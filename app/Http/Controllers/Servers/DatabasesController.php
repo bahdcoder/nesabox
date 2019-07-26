@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Servers;
 
 use App\Server;
 use App\Database;
+use App\DatabaseUser;
 use App\Jobs\Servers\AddDatabase;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\CreateDatabaseRequest;
+use App\Scripts\Server\AddDatabase as AddDatabaseScript;
 
 class DatabasesController extends Controller
 {
@@ -21,7 +23,7 @@ class DatabasesController extends Controller
                     $request->only(
                         ['name', 'password', 'type'],
                         [
-                            'status' => STATUS_INSTALLING
+                            'status' => STATUS_ACTIVE
                         ]
                     )
                 )
@@ -32,12 +34,20 @@ class DatabasesController extends Controller
             'type' => $request->type,
             'name' => $request->name,
             'server_id' => $server->id,
-            'status' => STATUS_INSTALLING,
-            'database_user_id' => $databaseUser ? $databaseUser->id : null
+            'status' => STATUS_ACTIVE,
+            'database_user_id' => $databaseUser ? $databaseUser->id : DatabaseUser::where('name', SSH_USER)->where('server_id', $server->id)->first()->id
         ]);
 
-        AddDatabase::dispatch($server, $database, $databaseUser);
+        $process = (new AddDatabaseScript($server, $database, $databaseUser))->run();
 
-        return new ServerResource($server);
+        if (! $process->isSuccessful()) {
+            $database->delete();
+
+            $databaseUser && $databaseUser->delete();
+
+            abort(400, $process->getErrorOutput());
+        }
+
+        return new ServerResource($server->fresh());
     }
 }

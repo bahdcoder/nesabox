@@ -111,4 +111,9 @@ class Server extends Model
     {
         return $this->databaseInstances()->where('type', 'mongodb');
     }
+
+    public function mysqlDatabases()
+    {
+        return $this->databaseInstances()->where('type', 'mysql');
+    }
 }

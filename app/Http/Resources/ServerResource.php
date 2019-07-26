@@ -29,18 +29,14 @@ class ServerResource extends JsonResource
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
             'daemons' => DaemonsResource::collection($this->daemons),
+            'mysql_database_users' => DatabaseUserResource::collection($this->mysqlDatabaseUsers),
+            'mongodb_database_users' => DatabaseUserResource::collection($this->mongoDbDatabaseUsers),
             'nesa_key' => $this->sshkeys()
                 ->where('is_app_key', true)
                 ->first()->key,
             'sshkeys' => SshkeyResource::collection($this->personalSshkeys),
-            $this->mergeWhen(
-                (bool) request()->query('with_databases') === true,
-                [
-                    'database_users' => DatabaseUserResource::collection(
-                        $this->databaseUsers
-                    )
-                ]
-            ),
+            'mongodb_databases' => DatabaseResource::collection($this->mongodbDatabases),
+            'mysql_databases' => DatabaseResource::collection($this->mysqlDatabases),
             'deploy_script' =>
                 $this->provider === CUSTOM_PROVIDER
                     ? route('servers.custom-deploy-script', $this->id)
