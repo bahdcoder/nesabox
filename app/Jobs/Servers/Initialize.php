@@ -135,7 +135,7 @@ class Initialize implements ShouldQueue
                         'Droplet not yet active.'
                     );
                 }
-
+            break;
             case VULTR:
                 if ($server->status === STATUS_ACTIVE) {
                     return;
@@ -163,12 +163,14 @@ class Initialize implements ShouldQueue
                         'Vultr server not ready.'
                     );
                 }
+                break;
             case CUSTOM_PROVIDER:
                 if ($server->status === STATUS_ACTIVE) {
                     return;
                 }
 
                 return $this->handleInitializedServer($server);
+                break;
             case LINODE:
                 if ($server->status === STATUS_ACTIVE) {
                     return;
@@ -193,6 +195,7 @@ class Initialize implements ShouldQueue
                 }
 
                 return $this->handleInitializedServer($server);
+                break;
         }
     }
 }

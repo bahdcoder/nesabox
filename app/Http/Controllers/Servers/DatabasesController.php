@@ -44,7 +44,7 @@ class DatabasesController extends Controller
         if (! $process->isSuccessful()) {
             $database->delete();
 
-            $databaseUser && $databaseUser->delete();
+            if ($databaseUser && $databaseUser->name !== SSH_USER) $databaseUser->delete();
 
             abort(400, $process->getErrorOutput());
         }
@@ -60,7 +60,7 @@ class DatabasesController extends Controller
             abort(400, $process->getErrorOutput());
         }
 
-        $database->databaseUser->delete();
+        if ($database->databaseUser && $database->databaseUser->name !== SSH_USER) $database->databaseUser->delete();
 
         $database->delete();
 

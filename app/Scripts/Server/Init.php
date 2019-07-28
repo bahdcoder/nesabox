@@ -226,33 +226,33 @@ mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO '
 mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
 mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE {$database->name}";
 EOD;
+                break;
                 case MONGO_DB:
                     $script .= <<<EOD
 \n
 MONGO_DB_ADMIN_USERNAME="{$database->databaseUser->name}"
 MONGO_DB_ADMIN_PASSWORD="{$database->databaseUser->password}"
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-sudo echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
-sudo apt-get update
-sudo apt-get install -y mongodb-org
-sudo service mongod start
-sudo systemctl enable mongod
-cat > app.js << EOF
-db.createUser ({
-    user: "\$MONGO_DB_ADMIN_USERNAME",
-    pwd: "\$MONGO_DB_ADMIN_PASSWORD",
-    roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
-    }
-)
-printjson(db.getUsers())
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+apt-get update
+apt-get install -y mongodb-org
+systemctl enable mongod
+systemctl restart mongod
+
+mongo --eval "db.getSiblingDB('admin').createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'userAdminAnyDatabase', db: 'admin' }]})"
+mongo << EOF
+use admin
+db.createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'userAdminAnyDatabase', db: 'admin' }]})
 EOF
-mongo admin app.js
-rm app.js
+
 cat >> /etc/mongod.conf << EOF
 security:
-    authorization: enabled
+  authorization: "enabled"
 EOF
+
+systemctl restart mongod
 EOD;
+break;
                 default:
                     break;
             endswitch;

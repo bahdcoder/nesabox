@@ -47,9 +47,18 @@ class DeleteDatabase extends Base
         switch ($this->database->type) {
             case MYSQL_DB:
                 return $this->generateMysqlScript();
+            case MONGO_DB:
+                return $this->generateMongodbScript();
             default:
                 return '';
         }
+    }
+
+    public function generateMongodbScript()
+    {
+        return <<<EOD
+
+EOD;
     }
 
     public function generateMysqlDeleteUserScript()

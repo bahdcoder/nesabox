@@ -94,8 +94,6 @@ class CreateServersController extends Controller
     {
         $server = $this->createServerForAuthUser();
 
-        $this->createServerDatabases($server);
-
         $this->generateSshKeyForServer($server);
 
         return $server;
@@ -152,7 +150,6 @@ class CreateServersController extends Controller
 
         $server = $this->createServerForAuthUser();
 
-        $this->createServerDatabases($server);
         try {
             $vultrServer = $this->getVultrConnectionInstance(
                 $credential->apiKey
@@ -227,15 +224,13 @@ class CreateServersController extends Controller
      */
     public function createServerDatabases(Server $server)
     {
-        $password = str_random(36);
-
         foreach ($server->databases as $database):
             $server
                 ->databaseUsers()
                 ->create([
                     'name' => SSH_USER,
                     'type' => $database,
-                    'password' => $password,
+                    'password' => str_random(12),
                     'status' => STATUS_ACTIVE
                 ])
                 ->databases()

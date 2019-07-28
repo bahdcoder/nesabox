@@ -43,7 +43,10 @@ nginx -V
 test $? -eq 0 || abort Verification Failed. Server not ready.
 
 redis-cli --version
-test $? -eq 0 || abort Verification Failed. Server not ready.      
+test $? -eq 0 || abort Verification Failed. Server not ready.    
+
+node -v
+test $? -eq 0 || abort Verification Failed. Server not ready.
 EOD;
     }
 }

@@ -37,10 +37,11 @@ class ServerResource extends JsonResource
             'sshkeys' => SshkeyResource::collection($this->personalSshkeys),
             'mongodb_databases' => DatabaseResource::collection($this->mongodbDatabases),
             'mysql_databases' => DatabaseResource::collection($this->mysqlDatabases),
-            'deploy_script' =>
-                $this->provider === CUSTOM_PROVIDER
-                    ? route('servers.custom-deploy-script', $this->id)
-                    : null
+            // 'deploy_script' =>
+            //     $this->provider === CUSTOM_PROVIDER
+            //         ? route('servers.custom-deploy-script', $this->id)
+            //         : null
+            'deploy_script' => route('servers.custom-deploy-script', $this->id)
         ];
     }
 }

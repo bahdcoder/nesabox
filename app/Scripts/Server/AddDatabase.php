@@ -59,9 +59,33 @@ class AddDatabase extends Base
         switch ($this->database->type) {
             case MYSQL_DB:
                 return $this->generateMysqlScript();
+            case MONGO_DB:
+                return $this->generateMongodbScript();
             default:
                 return '';
         }
+    }
+
+    public function generateMongodbScript()
+    {
+        $nesaUser = \App\DatabaseUser::where('server_id', $this->server->id)->where('name', SSH_USER)->first();
+
+        return <<<EOD
+cat > app-new-mongodb-database-9490.js << EOF
+    db.createUser ({
+        user: "{$this->databaseUser->name}",
+        pwd: "{$this->databaseUser->password}",
+        roles: ['dbOwner']
+    })
+EOF
+
+mongo {$this->database->name} app-new-mongodb-database-9490.js -u {$nesaUser->name} -p {$nesaUser->password} --authenticationDatabase admin
+
+rm app-new-mongodb-database-9490.js
+
+systemctl restart mongod
+
+EOD;
     }
 
     public function generateMysqlPermissionsScript()
