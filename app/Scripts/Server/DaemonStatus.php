@@ -39,5 +39,4 @@ class DaemonStatus extends Base
 supervisorctl status daemon-{$this->daemon->slug}:*
 EOD;
     }
-
 }

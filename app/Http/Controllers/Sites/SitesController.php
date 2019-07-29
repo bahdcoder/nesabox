@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Sites;
 use App\Site;
 use App\Server;
 use Illuminate\Http\Request;
-use App\Jobs\Sites\CreateSite;
+use App\Scripts\Sites\GetSitePort;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ServerResource;
 use App\Http\Requests\Sites\CreateSiteRequest;
+use App\Scripts\Sites\CreateSite as CreateSiteScript;
 
 class SitesController extends Controller
 {
@@ -21,15 +23,26 @@ class SitesController extends Controller
     {
         $site = $server->sites()->create([
             'name' => $request->name,
-            'status' => STATUS_INSTALLING,
-            'wild_card_subdomains' => $request->wild_card_subdomains
-                ? true
-                : false
+            'status' => STATUS_ACTIVE
         ]);
 
-        CreateSite::dispatch($server, $site);
+        // Because we can't escape the $ (in nginx config) properly in the CreateSiteScript, we'll use 
+        // a manual file based script for this one.
+        $process = $this->runCreateSiteScript($server, $site->fresh());
 
-        return response()->json($site);
+        if (! $process->isSuccessful()) {
+            $site->delete();
+
+            abort(400, 'Failed adding site.');
+        }
+
+        $site->update([
+            'environment' => [
+                'PORT' => $process->getOutput()
+            ]
+        ]);
+
+        return new ServerResource($server);
     }
 
     /**

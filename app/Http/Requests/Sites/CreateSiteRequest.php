@@ -32,8 +32,8 @@ class CreateSiteRequest extends FormRequest
                     return $q->where('server_id', $this->route('server')->id);
                 }),
                 new Domain()
-            ],
-            'wild_card_subdomains' => 'boolean'
+            ]
+            // 'wild_card_subdomains' => 'boolean'
         ];
     }
 }

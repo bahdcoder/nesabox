@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Servers;
 use App\Server;
 use App\Database;
 use App\DatabaseUser;
-use App\Jobs\Servers\AddDatabase;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\CreateDatabaseRequest;
@@ -36,15 +35,25 @@ class DatabasesController extends Controller
             'name' => $request->name,
             'server_id' => $server->id,
             'status' => STATUS_ACTIVE,
-            'database_user_id' => $databaseUser ? $databaseUser->id : DatabaseUser::where('name', SSH_USER)->where('server_id', $server->id)->first()->id
+            'database_user_id' => $databaseUser
+                ? $databaseUser->id
+                : DatabaseUser::where('name', SSH_USER)
+                    ->where('server_id', $server->id)
+                    ->first()->id
         ]);
 
-        $process = (new AddDatabaseScript($server, $database, $databaseUser))->run();
+        $process = (new AddDatabaseScript(
+            $server,
+            $database,
+            $databaseUser
+        ))->run();
 
-        if (! $process->isSuccessful()) {
+        if (!$process->isSuccessful()) {
             $database->delete();
 
-            if ($databaseUser && $databaseUser->name !== SSH_USER) $databaseUser->delete();
+            if ($databaseUser && $databaseUser->name !== SSH_USER) {
+                $databaseUser->delete();
+            }
 
             abort(400, $process->getErrorOutput());
         }
@@ -56,11 +65,16 @@ class DatabasesController extends Controller
     {
         $process = (new DeleteDatabaseScript($server, $database))->run();
 
-        if (! $process->isSuccessful()) {
+        if (!$process->isSuccessful()) {
             abort(400, $process->getErrorOutput());
         }
 
-        if ($database->databaseUser && $database->databaseUser->name !== SSH_USER) $database->databaseUser->delete();
+        if (
+            $database->databaseUser &&
+            $database->databaseUser->name !== SSH_USER
+        ) {
+            $database->databaseUser->delete();
+        }
 
         $database->delete();
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Scripts\Server;
+namespace App\Scripts\Sites;
 
+use App\Site;
 use App\Server;
-use App\Daemon;
 use App\Scripts\Base;
 
-class RestartDaemon extends Base
+class InstallGhost extends Base
 {
     /**
      * The server.
@@ -16,27 +16,32 @@ class RestartDaemon extends Base
     public $server;
 
     /**
-     * The daemon to restart.
-     *
-     * @var \App\Daemon
+     * Site to install ghost on
+     * 
+     * @var \App\Site
      */
-    public $daemon;
+    public $site;
 
     /**
      * Initialize this class
      *
      * @return void
      */
-    public function __construct(Server $server, Daemon $daemon)
+    public function __construct(Server $server, Site $site)
     {
-        $this->daemon = $daemon;
+        $this->site = $site;
         $this->server = $server;
     }
 
+    /**
+     * Generate the init script
+     *
+     * @return string
+     */
     public function generate()
     {
         return <<<EOD
-supervisorctl restart daemon-{$this->daemon->slug}:*
+
 EOD;
     }
 }

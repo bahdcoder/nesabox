@@ -17,7 +17,7 @@ class AddDaemon implements ShouldQueue
 
     /**
      * The daemon to be added
-     * 
+     *
      * @var \App\Daemon
      */
     public $daemon;
@@ -39,7 +39,10 @@ class AddDaemon implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AddDaemonScript($this->daemon->server, $this->daemon))->run();
+        $process = (new AddDaemonScript(
+            $this->daemon->server,
+            $this->daemon
+        ))->run();
 
         if ($process->isSuccessful()) {
             $this->daemon->update([
@@ -49,7 +52,9 @@ class AddDaemon implements ShouldQueue
 
         echo $process->getErrorOutput();
 
-        $this->daemon->server->user->notify(new ServerIsReady($this->daemon->server));
+        $this->daemon->server->user->notify(
+            new ServerIsReady($this->daemon->server)
+        );
     }
 
     public function failed($e)

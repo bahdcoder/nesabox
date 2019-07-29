@@ -17,7 +17,7 @@ class AddCronJob extends Base
 
     /**
      * The server to be initialized.
-     * 
+     *
      * @var \App\Server
      */
     public $cronJob;
@@ -32,7 +32,6 @@ class AddCronJob extends Base
         $this->cronJob = $cronJob;
         $this->server = $server;
     }
-
 
     public function generate()
     {

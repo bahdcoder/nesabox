@@ -68,7 +68,9 @@ class AddDatabase extends Base
 
     public function generateMongodbScript()
     {
-        $nesaUser = \App\DatabaseUser::where('server_id', $this->server->id)->where('name', SSH_USER)->first();
+        $nesaUser = \App\DatabaseUser::where('server_id', $this->server->id)
+            ->where('name', SSH_USER)
+            ->first();
 
         return <<<EOD
 cat > app-new-mongodb-database-9490.js << EOF

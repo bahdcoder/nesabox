@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 use App\Notifications\Servers\ServerIsReady;
 use App\Http\Controllers\Servers\DaemonController;
 use App\Http\Controllers\Servers\CronJobController;
+use App\Http\Controllers\Sites\GhostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,13 +98,36 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
 
     Route::post('servers/{server}/daemons', [DaemonController::class, 'store']);
-    Route::delete('servers/{server}/daemons/{daemon}', [DaemonController::class, 'destroy']);
-    Route::get('servers/{server}/daemons/{daemon}/status', [DaemonController::class, 'status']);
-    Route::post('servers/{server}/daemons/{daemon}/restart', [DaemonController::class, 'restart']);
+    Route::delete('servers/{server}/daemons/{daemon}', [
+        DaemonController::class,
+        'destroy'
+    ]);
+    Route::get('servers/{server}/daemons/{daemon}/status', [
+        DaemonController::class,
+        'status'
+    ]);
+    Route::post('servers/{server}/daemons/{daemon}/restart', [
+        DaemonController::class,
+        'restart'
+    ]);
 
-    Route::post('servers/{server}/cron-jobs', [CronJobController::class, 'store']);
-    Route::post('servers/{server}/cron-jobs/{job}/log', [CronJobController::class, 'log']);
-    Route::delete('servers/{server}/cron-jobs/{job}', [CronJobController::class, 'destroy']);
+    Route::post('servers/{server}/cron-jobs', [
+        CronJobController::class,
+        'store'
+    ]);
+    Route::post('servers/{server}/cron-jobs/{job}/log', [
+        CronJobController::class,
+        'log'
+    ]);
+    Route::delete('servers/{server}/cron-jobs/{job}', [
+        CronJobController::class,
+        'destroy'
+    ]);
+
+    Route::post('servers/{server}/sites/{site}/install-ghost', [
+        GhostController::class,
+        'store'
+    ]);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {

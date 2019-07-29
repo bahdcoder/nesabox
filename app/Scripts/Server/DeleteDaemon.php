@@ -20,7 +20,7 @@ class DeleteDaemon extends Base
      *
      * @var \App\Daemon
      */
-     public $daemon;
+    public $daemon;
 
     /**
      * Initialize this class
@@ -46,5 +46,4 @@ rm /etc/supervisor/conf.d/daemon-{$this->daemon->slug}.conf
 
 EOD;
     }
-
 }

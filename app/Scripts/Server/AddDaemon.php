@@ -17,7 +17,7 @@ class AddDaemon extends Base
 
     /**
      * The server to be initialized.
-     * 
+     *
      * @var \App\Server
      */
     public $daemon;
@@ -32,7 +32,6 @@ class AddDaemon extends Base
         $this->daemon = $daemon;
         $this->server = $server;
     }
-
 
     public function generate()
     {

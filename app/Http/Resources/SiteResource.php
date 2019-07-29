@@ -14,6 +14,12 @@ class SiteResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->resource->id,
+            'name' => $this->resource->name,
+            'status' => $this->resource->status,
+            'app_type' => $this->resource->app_type ?? 'None',
+            'installing_ghost' => $this->resource->installing_ghost_status === STATUS_INSTALLING,
+        ];
     }
 }

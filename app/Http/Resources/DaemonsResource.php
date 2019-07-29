@@ -21,7 +21,7 @@ class DaemonsResource extends JsonResource
             'status' => $this->resource->status,
             'command' => $this->resource->command,
             'processes' => $this->resource->processes,
-            'isReady' => $this->resource->status === STATUS_ACTIVE,
+            'isReady' => $this->resource->status === STATUS_ACTIVE
         ];
     }
 }

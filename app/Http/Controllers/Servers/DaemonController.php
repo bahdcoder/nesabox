@@ -40,7 +40,9 @@ class DaemonController extends Controller
         $process = (new DaemonStatus($server, $daemon))->run();
 
         return response()->json([
-            'data' => $process->isSuccessful() ? $process->getOutput() : $process->getErrorOutput()
+            'data' => $process->isSuccessful()
+                ? $process->getOutput()
+                : $process->getErrorOutput()
         ]);
     }
 
@@ -51,7 +53,9 @@ class DaemonController extends Controller
         $process = (new RestartDaemon($server, $daemon))->run();
 
         return response()->json([
-            'data' => $process->isSuccessful() ? $process->getOutput() : $process->getErrorOutput()
+            'data' => $process->isSuccessful()
+                ? $process->getOutput()
+                : $process->getErrorOutput()
         ]);
     }
 

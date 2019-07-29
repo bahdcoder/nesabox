@@ -154,13 +154,11 @@ trait HandlesProcesses
      *
      * @return \Symfony\Component\Process\Process
      */
-    public function runCreateServerScript(Server $server, Site $site)
+    public function runCreateSiteScript(Server $server, Site $site)
     {
         $scriptPath = base_path('scripts/sites/add-site.sh');
 
-        $wildcard_subdomains = (string) $site->wild_card_subdomains;
-
-        $arguments = "{$site->name} {$wildcard_subdomains} {$site->environment['PORTS'][0]} {$site->environment['PORTS'][1]}";
+        $arguments = "{$site->name} {$site->environment['PORT']}";
 
         return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments)

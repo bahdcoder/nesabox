@@ -17,7 +17,7 @@ class DeleteCronJob extends Base
 
     /**
      * The server to be initialized.
-     * 
+     *
      * @var \App\Server
      */
     public $cronJob;
@@ -32,7 +32,6 @@ class DeleteCronJob extends Base
         $this->cronJob = $cronJob;
         $this->server = $server;
     }
-
 
     public function generate()
     {

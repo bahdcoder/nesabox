@@ -135,7 +135,7 @@ class Initialize implements ShouldQueue
                         'Droplet not yet active.'
                     );
                 }
-            break;
+                break;
             case VULTR:
                 if ($server->status === STATUS_ACTIVE) {
                     return;

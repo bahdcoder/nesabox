@@ -226,7 +226,7 @@ mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO '
 mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
 mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE {$database->name}";
 EOD;
-                break;
+                    break;
                 case MONGO_DB:
                     $script .= <<<EOD
 \n
@@ -252,7 +252,7 @@ EOF
 
 systemctl restart mongod
 EOD;
-break;
+                    break;
                 default:
                     break;
             endswitch;

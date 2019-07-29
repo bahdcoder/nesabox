@@ -28,7 +28,6 @@ class CreateServersTable extends Migration
             $table->string('identifier')->nullable();
             $table->string('status')->default('new');
             $table->string('credential_id')->nullable();
-            $table->string('node_version')->default('node');
             $table->json('ssh_key_added_to_source_provider')->nullable();
             $table->timestamps();
         });

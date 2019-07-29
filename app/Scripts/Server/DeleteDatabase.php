@@ -29,10 +29,8 @@ class DeleteDatabase extends Base
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Database $database
-    ) {
+    public function __construct(Server $server, Database $database)
+    {
         $this->server = $server;
         $this->database = $database;
     }
@@ -63,7 +61,7 @@ EOD;
 
     public function generateMysqlDeleteUserScript()
     {
-        if (! request()->query('delete_user')) {
+        if (!request()->query('delete_user')) {
             return '';
         }
 

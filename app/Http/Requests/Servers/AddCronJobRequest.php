@@ -28,7 +28,8 @@ class AddCronJobRequest extends FormRequest
             'user' => 'required',
             'command' => 'required',
             'cron' => ['required_if:frequency,custom', new Cron()],
-            'frequency' => 'required|in:everyMinute,everyFiveMinutes,everyTenMinutes,hourly,daily,weekly,monthly,custom',
+            'frequency' =>
+                'required|in:everyMinute,everyFiveMinutes,everyTenMinutes,hourly,daily,weekly,monthly,custom'
         ];
     }
 }

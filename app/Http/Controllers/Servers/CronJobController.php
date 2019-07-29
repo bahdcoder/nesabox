@@ -38,7 +38,10 @@ class CronJobController extends Controller
             'user' => $request->user,
             'command' => $request->command,
             'frequency' => $request->frequency,
-            'cron' => $request->frequency === 'custom' ? $request->cron : $this->{$request->frequency}()->expression,
+            'cron' =>
+                $request->frequency === 'custom'
+                    ? $request->cron
+                    : $this->{$request->frequency}()->expression
         ]);
 
         $job->rollSlug();
@@ -65,7 +68,9 @@ class CronJobController extends Controller
     {
         $process = (new CronJobOutput($server, $job))->run();
 
-        if (! $process->isSuccessful()) abort(400);
+        if (!$process->isSuccessful()) {
+            abort(400);
+        }
 
         return $process->getOutput();
     }
@@ -75,14 +80,16 @@ class CronJobController extends Controller
      *
      * @param  \App\Job  $job
      * @param \App\Server $server
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Server $server, Job $job)
     {
         $process = (new DeleteCronJob($server, $job))->run();
 
-        if (! $process->isSuccessful()) abort(400);
+        if (!$process->isSuccessful()) {
+            abort(400);
+        }
 
         $job->delete();
 
