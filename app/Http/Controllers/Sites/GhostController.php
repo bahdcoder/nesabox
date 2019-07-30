@@ -8,6 +8,7 @@ use App\DatabaseUser;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Jobs\Sites\InstallGhost;
+use App\Jobs\Sites\UninstallGhost;
 
 class GhostController extends Controller
 {
@@ -39,6 +40,24 @@ class GhostController extends Controller
         ]);
 
         InstallGhost::dispatch($server, $site, $databaseUser, $database);
+
+        return new ServerResource($server);
+    }
+
+    /**
+     * Uninstall ghost blog from a site
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Server $server, Site $site)
+    {
+        $this->authorize('view', $server);
+
+        $site->update([
+            'installing_ghost_status' => STATUS_UNINSTALLING
+        ]);
+
+        UninstallGhost::dispatch($server, $site);
 
         return new ServerResource($server);
     }

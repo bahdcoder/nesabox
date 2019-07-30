@@ -22,6 +22,7 @@ define('STATUS_ACTIVE', 'active');
 define('STATUS_DELETING', 'deleting');
 define('STATUS_INSTALLING', 'installing');
 define('STATUS_INITIALIZING', 'initializing');
+define('STATUS_UNINSTALLING', 'uninstalling');
 
 define('AWS_REGIONS', [
     'us-east-2' => 'Ohio',

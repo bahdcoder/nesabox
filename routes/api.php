@@ -128,6 +128,11 @@ Route::middleware(['auth:api'])->group(function () {
         GhostController::class,
         'store'
     ]);
+
+    Route::post('servers/{server}/sites/{site}/uninstall-ghost', [
+        GhostController::class,
+        'destroy'
+    ]);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {

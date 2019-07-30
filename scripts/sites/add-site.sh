@@ -60,4 +60,7 @@ ln -s /etc/nginx/sites-available/$NESABOX_SITE_NAME /etc/nginx/sites-enabled/
 
 systemctl restart nginx
 
+# Install ssl certificate for nesabox site
+certbot --agree-tos -n --nginx --redirect -d $NESABOX_SITE_NAME -m nesa@nesabox.com &>/dev/null
+
 echo $SITE_PORT

@@ -22,7 +22,8 @@ class SiteResource extends JsonResource
             'is_ready' => $this->resource->status === STATUS_ACTIVE,
             'nesabox_domain' => $this->resource->getNexaboxSiteDomain(),
             'installing_ghost' =>
-                $this->resource->installing_ghost_status === STATUS_INSTALLING
+                $this->resource->installing_ghost_status === STATUS_INSTALLING,
+            'uninstalling_ghost' => $this->resource->installing_ghost_status === STATUS_UNINSTALLING
         ];
     }
 }

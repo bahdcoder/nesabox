@@ -14,7 +14,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Sites\InstallGhost as InstallGhostScript;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class InstallGhost implements ShouldQueue
 {
@@ -32,7 +31,7 @@ class InstallGhost implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 3600;
+    public $timeout = 7200;
 
     /**
      * The server to ssh into
@@ -98,15 +97,12 @@ class InstallGhost implements ShouldQueue
 
         if ($process->isSuccessful()) {
             $this->site->update([
+                'app_type' => 'ghost',
+                'status' => STATUS_ACTIVE,
                 'installing_ghost_status' => STATUS_ACTIVE,
-                'app_type' => 'ghost'
             ]);
 
             $this->databaseUser->update([
-                'status' => STATUS_ACTIVE
-            ]);
-
-            $this->site->update([
                 'status' => STATUS_ACTIVE
             ]);
 

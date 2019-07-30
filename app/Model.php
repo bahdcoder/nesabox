@@ -44,7 +44,7 @@ class Model extends BaseModel
     public function rollSlug()
     {
         do {
-            $this->slug = str_random(8);
+            $this->slug = strtolower(str_random(8));
         } while ($this->where('slug', $this->slug)->exists());
 
         $this->save();

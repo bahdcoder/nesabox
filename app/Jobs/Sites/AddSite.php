@@ -54,6 +54,8 @@ class AddSite implements ShouldQueue
      */
     public function handle()
     {
+        $this->createDomainRecord($this->site);
+
         // Because we can't escape the $ (in nginx config) properly in the CreateSiteScript, we'll use
         // a manual file based script for this one.
         $process = $this->runCreateSiteScript($this->server, $this->site);
@@ -70,8 +72,6 @@ class AddSite implements ShouldQueue
             ],
             'status' => STATUS_ACTIVE
         ]);
-
-        $this->createDomainRecord($this->site);
 
         $this->server->user->notify(new ServerIsReady($this->server));
     }
