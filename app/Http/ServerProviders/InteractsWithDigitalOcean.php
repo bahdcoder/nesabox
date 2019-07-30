@@ -2,7 +2,7 @@
 
 namespace App\Http\ServerProviders;
 
-use Illuminate\Support\Facades\Cache;
+use App\Site;
 use Bahdcoder\DigitalOcean\DigitalOcean;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -34,6 +34,24 @@ trait InteractsWithDigitalOcean
     public function getDigitalOceanConnectionInstance(string $token)
     {
         return new DigitalOcean($token);
+    }
+
+    /**
+     * This method creates a new domain record
+     *
+     * @return object
+     */
+    public function createDomainRecord(Site $site)
+    {
+        return $this->getDigitalOceanConnectionInstance(
+            config('services.digital-ocean.api-token')
+        )
+            ->domainRecord()
+            ->create(config('services.digital-ocean.app-domain'), [
+                'type' => 'A',
+                'name' => $site->slug,
+                'data' => $site->server->ip_address
+            ]);
     }
 
     /**

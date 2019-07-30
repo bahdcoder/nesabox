@@ -35,4 +35,18 @@ class Model extends BaseModel
             $model->{$model->getKeyName()} = (string) Str::uuid();
         });
     }
+
+    /**
+     * Roll model slug
+     *
+     * @return null
+     */
+    public function rollSlug()
+    {
+        do {
+            $this->slug = str_random(8);
+        } while ($this->where('slug', $this->slug)->exists());
+
+        $this->save();
+    }
 }

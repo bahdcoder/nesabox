@@ -57,4 +57,17 @@ class Site extends Model
     {
         return (new Deploy($this->server, $this))->generate();
     }
+
+    /**
+     *
+     * Get the nexabox site domain for this site
+     *
+     * @return string
+     */
+    public function getNexaboxSiteDomain()
+    {
+        $domain = config('services.digital-ocean.app-domain');
+
+        return "{$this->slug}.{$domain}";
+    }
 }

@@ -19,7 +19,10 @@ class SiteResource extends JsonResource
             'name' => $this->resource->name,
             'status' => $this->resource->status,
             'app_type' => $this->resource->app_type ?? 'None',
-            'installing_ghost' => $this->resource->installing_ghost_status === STATUS_INSTALLING,
+            'is_ready' => $this->resource->status === STATUS_ACTIVE,
+            'nesabox_domain' => $this->resource->getNexaboxSiteDomain(),
+            'installing_ghost' =>
+                $this->resource->installing_ghost_status === STATUS_INSTALLING
         ];
     }
 }

@@ -21,6 +21,7 @@ trait HandlesProcesses
         $process = new Process($command);
 
         $process->setTimeout($timeOut);
+        $process->setIdleTimeout($timeOut);
 
         $process->{$mustRun ? 'mustRun' : 'run'}();
 
@@ -37,6 +38,7 @@ trait HandlesProcesses
         $process = new Process($command);
 
         $process->setTimeout($timeOut);
+        $process->setIdleTimeout($timeOut);
 
         $process->start();
 
@@ -158,7 +160,7 @@ trait HandlesProcesses
     {
         $scriptPath = base_path('scripts/sites/add-site.sh');
 
-        $arguments = "{$site->name} {$site->environment['PORT']}";
+        $arguments = "{$site->name} {$site->getNexaboxSiteDomain()}";
 
         return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments)

@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Sites;
 
 use App\Site;
 use App\Server;
+use App\Jobs\Sites\AddSite;
 use Illuminate\Http\Request;
-use App\Scripts\Sites\GetSitePort;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Sites\CreateSiteRequest;
-use App\Scripts\Sites\CreateSite as CreateSiteScript;
 
 class SitesController extends Controller
 {
@@ -23,24 +22,12 @@ class SitesController extends Controller
     {
         $site = $server->sites()->create([
             'name' => $request->name,
-            'status' => STATUS_ACTIVE
+            'status' => STATUS_INSTALLING
         ]);
 
-        // Because we can't escape the $ (in nginx config) properly in the CreateSiteScript, we'll use 
-        // a manual file based script for this one.
-        $process = $this->runCreateSiteScript($server, $site->fresh());
+        $site->rollSlug();
 
-        if (! $process->isSuccessful()) {
-            $site->delete();
-
-            abort(400, 'Failed adding site.');
-        }
-
-        $site->update([
-            'environment' => [
-                'PORT' => $process->getOutput()
-            ]
-        ]);
+        AddSite::dispatch($server, $site);
 
         return new ServerResource($server);
     }

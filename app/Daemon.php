@@ -13,18 +13,4 @@ class Daemon extends Model
     {
         return $this->belongsTo(Server::class);
     }
-
-    /**
-     * Roll daemon slug
-     *
-     *
-     */
-    public function rollSlug()
-    {
-        do {
-            $this->slug = str_random(8);
-        } while ($this->where('slug', $this->slug)->exists());
-
-        $this->save();
-    }
 }

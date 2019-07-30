@@ -178,7 +178,12 @@ EOF
 curl -o- https://deb.nodesource.com/setup_10.x | bash
 apt-get install nodejs
 npm i -g n
+# Install latest version of node
 n latest
+
+# Give permissions to nesa user to be able to manage npm and node
+chown -R {$user} /usr/local/
+
 EOD;
     }
 

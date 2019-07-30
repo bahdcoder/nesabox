@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Bahdcoder\DigitalOcean\Api\Key;
 use Bahdcoder\DigitalOcean\Api\Region;
 use Bahdcoder\DigitalOcean\Api\Droplet;
+use Bahdcoder\DigitalOcean\Api\DomainRecord;
 
 class DigitalOcean
 {
@@ -75,5 +76,15 @@ class DigitalOcean
     public function key()
     {
         return new Key($this->client);
+    }
+
+    /**
+     * Get the domain records api
+     *
+     * @return \Bahdcoder\DigitalOcean\Api\DomainRecord
+     */
+    public function domainRecord()
+    {
+        return new DomainRecord($this->client);
     }
 }

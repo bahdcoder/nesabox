@@ -17,6 +17,7 @@ class CreateSitesTable extends Migration
             $table->uuid('id');
             $table->uuid('server_id');
             $table->text('logs')->nullable();
+            $table->string('slug')->nullable();
             $table->string('name')->nullable();
             $table->string('status')->nullable();
             $table->string('app_type')->nullable();

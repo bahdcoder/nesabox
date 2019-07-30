@@ -65,7 +65,7 @@ echo 'Downloading latest version of ghost'
 echo '                                                                       '
 echo '-----------------------------------------------------------------------'
 # Download the latest ghost
-curl -L https://github.com/TryGhost/Ghost/releases/download/2.19.3/Ghost-2.19.3.zip -o ghost-latest.zip
+curl -L https://github.com/TryGhost/Ghost/releases/download/2.25.9/Ghost-2.25.9.zip -o ghost-latest.zip
 test $? -eq 0 || abort Failed downloading ghost zip.
 
 echo '-----------------------------------------------------------------------'
@@ -95,7 +95,6 @@ echo 'Installing latest supported node version of ghost'
 echo '                                                     '
 echo '---------------------------------------------------- '
 # Install ghost dependencies
-
 npm i -g yarn
 
 echo '--------------------------------------------------------------------------------'
