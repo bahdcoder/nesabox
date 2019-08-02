@@ -55,6 +55,22 @@ trait InteractsWithDigitalOcean
     }
 
     /**
+     * This method updates an existing domain record
+     *
+     * @return object
+     */
+    public function updateDomainRecord(Site $site)
+    {
+        return $this->getDigitalOceanConnectionInstance(
+            config('services.digital-ocean.api-token')
+        )
+            ->domainRecord()
+            ->update(config('services.digital-ocean.app-domain'), $site->digital_ocean_record, [
+                'name' => $site->slug
+            ]);
+    }
+
+    /**
      * This method gets a single droplet from digital ocean.
      *
      * @return object

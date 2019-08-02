@@ -20,6 +20,7 @@ define('POSTGRES_DB', 'postgresql');
 
 define('STATUS_ACTIVE', 'active');
 define('STATUS_DELETING', 'deleting');
+define('STATUS_UPDATING', 'updating');
 define('STATUS_INSTALLING', 'installing');
 define('STATUS_INITIALIZING', 'initializing');
 define('STATUS_UNINSTALLING', 'uninstalling');

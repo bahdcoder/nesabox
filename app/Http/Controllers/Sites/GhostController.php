@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Jobs\Sites\InstallGhost;
 use App\Jobs\Sites\UninstallGhost;
+use App\Scripts\Sites\UpdateGhostConfig;
 
 class GhostController extends Controller
 {
@@ -60,5 +61,39 @@ class GhostController extends Controller
         UninstallGhost::dispatch($server, $site);
 
         return new ServerResource($server);
+    }
+
+    /**
+     * Get the config of a ghost blog
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function getConfig(Server $server, Site $site)
+    {
+        $user = SSH_USER;
+
+        $pathToConfig = "/home/{$user}/{$site->name}/config.production.json";
+
+        $process = $this->getFileContent($server, $pathToConfig);
+
+        if (! $process->isSuccessFul()) abort(400, $process->getErrorOutput());
+
+        return $process->getOutput();
+    }
+
+    /**
+     * Set the config of a ghost blog. Also reload pm2 for this site
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function setConfig(Server $server, Site $site)
+    {
+        $this->authorize('view', $server);
+        
+        $process = (new UpdateGhostConfig($server, $site, request()->configProductionJson))->run();
+
+        if (! $process->isSuccessFul()) abort(400, $process->getErrorOutput());
+
+        return $process->getOutput();
     }
 }

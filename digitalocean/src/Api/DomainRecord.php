@@ -34,6 +34,20 @@ class DomainRecord extends Api
             $this->client->post("domains/{$domain}/records", [
                 'json' => $data
             ])
+        )->domain_record;
+    }
+
+    /**
+     * Update an existing domain record
+     *
+     * @return object
+     */
+    public function update($domain, $recordId, $data)
+    {
+        return $this->getResult(
+            $this->client->put("domains/{$domain}/records/{$recordId}", [
+                'json' => $data
+            ])
         );
     }
 }

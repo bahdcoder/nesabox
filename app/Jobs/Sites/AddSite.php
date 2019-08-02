@@ -54,7 +54,7 @@ class AddSite implements ShouldQueue
      */
     public function handle()
     {
-        $this->createDomainRecord($this->site);
+        $record = $this->createDomainRecord($this->site);
 
         // Because we can't escape the $ (in nginx config) properly in the CreateSiteScript, we'll use
         // a manual file based script for this one.
@@ -70,7 +70,8 @@ class AddSite implements ShouldQueue
             'environment' => [
                 'PORT' => $process->getOutput()
             ],
-            'status' => STATUS_ACTIVE
+            'status' => STATUS_ACTIVE,
+            'digital_ocean_record' => $record->id
         ]);
 
         $this->server->user->notify(new ServerIsReady($this->server));

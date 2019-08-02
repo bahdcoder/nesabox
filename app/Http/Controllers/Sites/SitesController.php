@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Sites;
 
 use App\Site;
 use App\Server;
+use App\Rules\Subdomain;
 use App\Jobs\Sites\AddSite;
 use Illuminate\Http\Request;
+use App\Jobs\Sites\UpdateSiteSlug;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Sites\CreateSiteRequest;
@@ -26,36 +28,10 @@ class SitesController extends Controller
         ]);
 
         $site->rollSlug();
-
+        
         AddSite::dispatch($server, $site);
 
-        return new ServerResource($server);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Server $server, Site $site)
-    {
-        if (request()->ajax()) {
-            return response()->json($site);
-        }
-
-        return view('sites.show')->withSite($site);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return new ServerResource($server->fresh());
     }
 
     /**
@@ -65,9 +41,19 @@ class SitesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Server $server, Site $site, Request $request)
     {
-        //
+        $this->validate($request, [
+            'slug' => ['unique:sites,slug,' . $site->id, new Subdomain]
+        ]);
+
+        $site->update([
+            'updating_slug_status' => STATUS_UPDATING
+        ]);
+
+        UpdateSiteSlug::dispatch($server, $site, $request->slug);
+
+        return new ServerResource($server->fresh());
     }
 
     /**

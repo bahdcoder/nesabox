@@ -17,10 +17,12 @@ class SiteResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
+            'slug' => $this->resource->slug,
             'status' => $this->resource->status,
             'app_type' => $this->resource->app_type ?? 'None',
             'is_ready' => $this->resource->status === STATUS_ACTIVE,
             'nesabox_domain' => $this->resource->getNexaboxSiteDomain(),
+            'updating_slug' => $this->resource->updating_slug_status === STATUS_UPDATING,
             'installing_ghost' =>
                 $this->resource->installing_ghost_status === STATUS_INSTALLING,
             'uninstalling_ghost' => $this->resource->installing_ghost_status === STATUS_UNINSTALLING

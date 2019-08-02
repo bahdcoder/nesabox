@@ -346,4 +346,64 @@ trait HandlesProcesses
 
         return storage_path("app/deploy_scripts/{$file}.sh");
     }
+
+    /**
+     * Get the contents of a file from the server
+     *
+     * @return \Symphony\Process\Process
+     */
+    public function getFileContent(Server $server, $pathToFile)
+    {
+        $scriptPath = 'scripts/server/get-file-contents.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $arguments = "{$pathToFile}";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments)
+        );
+    }
+
+    /**
+     * Update ghost config and restart ghost blog pm2 instance
+     * 
+     * @return \Symphony\Process\Process
+     */
+    public function updateGhostConfig(Server $server, Site $site, $config)
+    {
+        $scriptPath = 'scripts/sites/update-ghost-config.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $user = SSH_USER;
+
+        $arguments = "{$user} {$site->name} '{$config}'";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments)
+        );
+    }
+
+    /**
+     * Update the site slug
+     * 
+     * @return \Symphony\Process\Process
+     */
+    public function updateSiteSlug(Server $server, Site $site, string $slug)
+    {
+        $scriptPath = 'scripts/sites/update-site-slug.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $old_site_name = $site->getNexaboxSiteDomain();
+
+        $new_site_name = $site->getNexaboxSiteDomain($slug);
+
+        $arguments = "{$old_site_name} {$new_site_name} {$site->environment['PORT']}";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments)
+        );
+    }
 }

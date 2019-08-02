@@ -72,4 +72,9 @@ class User extends Authenticatable
 
         $this->save();
     }
+
+    public function phone()
+    {
+        return $this->hasOne(Phone::class);
+    }
 }

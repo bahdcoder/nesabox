@@ -96,6 +96,7 @@ Route::middleware(['auth:api'])->group(function () {
     ]);
 
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
+    Route::put('servers/{server}/sites/{site}', [SitesController::class, 'update']);
 
     Route::post('servers/{server}/daemons', [DaemonController::class, 'store']);
     Route::delete('servers/{server}/daemons/{daemon}', [
@@ -132,6 +133,16 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('servers/{server}/sites/{site}/uninstall-ghost', [
         GhostController::class,
         'destroy'
+    ]);
+
+    Route::get('servers/{server}/sites/{site}/ghost-config', [
+        GhostController::class,
+        'getConfig'
+    ]);
+
+    Route::post('servers/{server}/sites/{site}/ghost-config', [
+        GhostController::class,
+        'setConfig'
     ]);
 });
 

@@ -64,10 +64,11 @@ class Site extends Model
      *
      * @return string
      */
-    public function getNexaboxSiteDomain()
+    public function getNexaboxSiteDomain(string $slug = null)
     {
+        $subdomain = $slug ?? $this->slug;
         $domain = config('services.digital-ocean.app-domain');
 
-        return "{$this->slug}.{$domain}";
+        return "{$subdomain}.{$domain}";
     }
 }
