@@ -1,6 +1,8 @@
 <?php
 
+use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 if (!function_exists('cached_provider_data')) {
     /**
@@ -121,5 +123,23 @@ if (!function_exists('get_region_name')) {
         }
 
         return null;
+    }
+}
+
+
+if (!function_exists('github_api')) {
+    /**
+     * Get an http client for github api interaction
+     * 
+     * @return \Guzzle\Client
+     */
+    function github_api($apiToken = null) {
+        return new HttpClient([
+            'base_uri' => 'https://api.github.com',
+            'headers' => [
+                'Authorization' =>
+                    'token ' . ($apiToken ? $apiToken : auth()->user()->source_control['github'])
+            ]
+        ]);
     }
 }

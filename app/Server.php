@@ -2,8 +2,15 @@
 
 namespace App;
 
+use App\Exceptions\ServerNotReadyException;
+
 class Server extends Model
 {
+    public function throwError()
+    {
+        // abort(400);
+        throw new ServerNotReadyException('Server is not ready.');
+    }
     /**
      * Fields to cast to native types
      *

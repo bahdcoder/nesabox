@@ -9,11 +9,12 @@ use App\Http\ServerProviders\InteractsWithAws;
 use App\Exceptions\InvalidProviderCredentials;
 use App\Http\ServerProviders\InteractsWithVultr;
 use App\Http\ServerProviders\InteractWithLinode;
+use App\Http\ServerProviders\HasServerProviders;
 use Illuminate\Routing\Controller as BaseController;
 use App\Http\ServerProviders\InteractsWithDigitalOcean;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\Http\ServerProviders\HasServerProviders;
+use App\Http\SourceControlProviders\InteractsWithGithub;
 
 class Controller extends BaseController
 {
@@ -26,5 +27,6 @@ class Controller extends BaseController
         InteractsWithVultr,
         InteractsWithAws,
         InteractWithLinode,
-        HasServerProviders;
+        HasServerProviders,
+        InteractsWithGithub;
 }

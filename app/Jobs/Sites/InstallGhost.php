@@ -115,6 +115,7 @@ class InstallGhost implements ShouldQueue
     public function handleFailed()
     {
         $this->site->update([
+            'app_type' => null,
             'installing_ghost_status' => null
         ]);
 
@@ -127,7 +128,6 @@ class InstallGhost implements ShouldQueue
 
     public function failed(Exception $e)
     {
-        echo $e;
         $this->handleFailed();
     }
 }

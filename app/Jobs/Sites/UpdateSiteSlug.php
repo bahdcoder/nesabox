@@ -83,7 +83,7 @@ class UpdateSiteSlug implements ShouldQueue
 
         $this->updateDomainRecord($this->site->fresh());
 
-        $process = $this->updateSiteSlug($this->server, $this->site->fresh(), $this->slug);
+        $process = $this->updateSiteSlug($this->server, $this->site->fresh(), $this->slug, $oldSiteSlug);
 
         if ($process->isSuccessful()) {
             $this->site->update([

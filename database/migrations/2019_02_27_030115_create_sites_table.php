@@ -23,7 +23,7 @@ class CreateSitesTable extends Migration
             $table->string('app_type')->nullable();
             $table->text('environment')->nullable();
             $table->string('repository')->nullable();
-            $table->text('deploy_script')->nullable();
+            // $table->text('deploy_script')->nullable();
             $table->string('slack_channel')->nullable();
             $table->boolean('deploying')->default(false);
             $table->boolean('quick_deploy')->default(false);

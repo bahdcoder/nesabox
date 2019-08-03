@@ -202,10 +202,12 @@ trait HandlesProcesses
 
         $repoUrl = $site->getSshUrl();
 
-        $arguments = "{$site->name} {$repoUrl}";
+        $user = SSH_USER;
+
+        $arguments = "'/home/{$user}/{$site->name}' {$site->repository_branch} {$repoUrl}";
 
         return $this->execProcess(
-            $this->sshScript($server, $scriptPath, $arguments, false)
+            $this->sshScript($server, $scriptPath, $arguments)
         );
     }
 
@@ -390,13 +392,13 @@ trait HandlesProcesses
      * 
      * @return \Symphony\Process\Process
      */
-    public function updateSiteSlug(Server $server, Site $site, string $slug)
+    public function updateSiteSlug(Server $server, Site $site, string $slug, string $oldSiteSlug)
     {
         $scriptPath = 'scripts/sites/update-site-slug.sh';
 
         $scriptName = base_path($scriptPath);
 
-        $old_site_name = $site->getNexaboxSiteDomain();
+        $old_site_name = $site->getNexaboxSiteDomain($oldSiteSlug);
 
         $new_site_name = $site->getNexaboxSiteDomain($slug);
 

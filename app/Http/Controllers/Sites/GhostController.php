@@ -23,6 +23,7 @@ class GhostController extends Controller
         $this->authorize('view', $server);
 
         $site->update([
+            'app_type' => 'ghost',
             'installing_ghost_status' => STATUS_INSTALLING
         ]);
 

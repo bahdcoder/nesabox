@@ -13,7 +13,9 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        FailedCreatingServer::class,
+        ServerNotReadyException::class,
+        InvalidProviderCredentials::class,
     ];
 
     /**

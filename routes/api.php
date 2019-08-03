@@ -17,6 +17,7 @@ use App\Notifications\Servers\ServerIsReady;
 use App\Http\Controllers\Servers\DaemonController;
 use App\Http\Controllers\Servers\CronJobController;
 use App\Http\Controllers\Sites\GhostController;
+use App\Http\Controllers\Sites\GitRepositoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,6 +145,11 @@ Route::middleware(['auth:api'])->group(function () {
         GhostController::class,
         'setConfig'
     ]);
+
+    Route::post('servers/{server}/sites/{site}/install-repository', [
+        GitRepositoryController::class,
+        'store'
+    ]);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {
@@ -162,7 +168,5 @@ Route::middleware(['guest', 'api-token'])->group(function () {
 Auth::routes();
 
 Route::get('beans', function () {
-    \App\User::first()->notify(
-        new ServerIsReady(\App\Server::latest()->first())
-    );
+    \App\Server::first()->throwError();
 });
