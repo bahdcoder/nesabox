@@ -27,10 +27,8 @@ class UninstallGhost extends Base
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Site $site
-    ) {
+    public function __construct(Server $server, Site $site)
+    {
         $this->site = $site;
         $this->server = $server;
     }

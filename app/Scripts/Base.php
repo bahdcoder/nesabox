@@ -41,6 +41,8 @@ class Base
 
         return $this->$func(
             "ssh -o StrictHostKeyChecking=no {$this->sshUser}@{$this->server->ip_address} -i ~/.ssh/{$this->server->slug} 'bash -se' <<  EOF-CUSTOM
+set -e
+
 {$this->generate()}
 EOF-CUSTOM",
             $callback

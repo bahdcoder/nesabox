@@ -26,8 +26,8 @@ class UpdateGhostConfig extends Base
     public $site;
 
     /**
-     * The new ghost config 
-     * 
+     * The new ghost config
+     *
      * @var string
      */
     public $config;
@@ -37,11 +37,8 @@ class UpdateGhostConfig extends Base
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Site $site,
-        string $config
-    ) {
+    public function __construct(Server $server, Site $site, string $config)
+    {
         $this->site = $site;
         $this->config = $config;
         $this->server = $server;

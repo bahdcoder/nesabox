@@ -369,7 +369,7 @@ trait HandlesProcesses
 
     /**
      * Update ghost config and restart ghost blog pm2 instance
-     * 
+     *
      * @return \Symphony\Process\Process
      */
     public function updateGhostConfig(Server $server, Site $site, $config)
@@ -389,11 +389,15 @@ trait HandlesProcesses
 
     /**
      * Update the site slug
-     * 
+     *
      * @return \Symphony\Process\Process
      */
-    public function updateSiteSlug(Server $server, Site $site, string $slug, string $oldSiteSlug)
-    {
+    public function updateSiteSlug(
+        Server $server,
+        Site $site,
+        string $slug,
+        string $oldSiteSlug
+    ) {
         $scriptPath = 'scripts/sites/update-site-slug.sh';
 
         $scriptName = base_path($scriptPath);

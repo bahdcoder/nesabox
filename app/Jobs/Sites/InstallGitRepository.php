@@ -13,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
 use App\Http\SourceControlProviders\InteractsWithGithub;
 
- class InstallGitRepository implements ShouldQueue
+class InstallGitRepository implements ShouldQueue
 {
     use Dispatchable,
         InteractsWithQueue,
@@ -54,8 +54,16 @@ use App\Http\SourceControlProviders\InteractsWithGithub;
      */
     public function handle()
     {
-        if (! $this->server->ssh_key_added_to_source_provider[$this->site->repository_provider]) {
-            $this->addPublicKey($this->site->repository_provider, $this->server, $this->server->ssh_key);
+        if (
+            !$this->server->ssh_key_added_to_source_provider[
+                $this->site->repository_provider
+            ]
+        ) {
+            $this->addPublicKey(
+                $this->site->repository_provider,
+                $this->server,
+                $this->server->ssh_key
+            );
 
             $updates = [];
             $updates[$this->site->repository_provider] = true;

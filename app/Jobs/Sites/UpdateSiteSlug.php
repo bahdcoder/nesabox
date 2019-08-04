@@ -15,9 +15,14 @@ use App\Http\ServerProviders\InteractsWithDigitalOcean;
 
 class UpdateSiteSlug implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, HandlesProcesses, InteractsWithDigitalOcean;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        HandlesProcesses,
+        InteractsWithDigitalOcean;
 
-        /**
+    /**
      * The number of times the job may be attempted.
      *
      * @var int
@@ -47,7 +52,7 @@ class UpdateSiteSlug implements ShouldQueue
 
     /**
      * The new slug from request
-     * 
+     *
      * @var string
      */
     public $slug;
@@ -57,11 +62,7 @@ class UpdateSiteSlug implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Site $site,
-        string $slug
-    )
+    public function __construct(Server $server, Site $site, string $slug)
     {
         $this->slug = $slug;
         $this->site = $site;
@@ -78,12 +79,17 @@ class UpdateSiteSlug implements ShouldQueue
         $oldSiteSlug = $this->site->slug;
 
         $this->site->update([
-            'slug' => $this->slug,
+            'slug' => $this->slug
         ]);
 
         $this->updateDomainRecord($this->site->fresh());
 
-        $process = $this->updateSiteSlug($this->server, $this->site->fresh(), $this->slug, $oldSiteSlug);
+        $process = $this->updateSiteSlug(
+            $this->server,
+            $this->site->fresh(),
+            $this->slug,
+            $oldSiteSlug
+        );
 
         if ($process->isSuccessful()) {
             $this->site->update([

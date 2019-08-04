@@ -28,7 +28,7 @@ class SitesController extends Controller
         ]);
 
         $site->rollSlug();
-        
+
         AddSite::dispatch($server, $site);
 
         return new ServerResource($server->fresh());
@@ -43,8 +43,24 @@ class SitesController extends Controller
      */
     public function update(Server $server, Site $site, Request $request)
     {
+        $site->update(
+            $request->only(['before_deploy_script', 'after_deploy_script', 'before_start_script'])
+        );
+
+        return new ServerResource($server->fresh());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateSlug(Server $server, Site $site, Request $request)
+    {
         $this->validate($request, [
-            'slug' => ['unique:sites,slug,' . $site->id, new Subdomain]
+            'slug' => ['unique:sites,slug,' . $site->id, new Subdomain()]
         ]);
 
         $site->update([

@@ -90,16 +90,15 @@ class InstallGhost implements ShouldQueue
             $this->site,
             $this->databaseUser,
             $this->database
-        ))
-            ->run(function ($data) {
-                echo $data;
-            });
+        ))->run(function ($data) {
+            echo $data;
+        });
 
         if ($process->isSuccessful()) {
             $this->site->update([
                 'app_type' => 'ghost',
                 'status' => STATUS_ACTIVE,
-                'installing_ghost_status' => STATUS_ACTIVE,
+                'installing_ghost_status' => STATUS_ACTIVE
             ]);
 
             $this->databaseUser->update([

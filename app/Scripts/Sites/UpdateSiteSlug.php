@@ -24,7 +24,7 @@ class UpdateSiteSlug extends Base
 
     /**
      * The new site slug
-     * 
+     *
      * @var string
      */
     public $slug;
@@ -34,11 +34,8 @@ class UpdateSiteSlug extends Base
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Site $site,
-        string $slug
-    ) {
+    public function __construct(Server $server, Site $site, string $slug)
+    {
         $this->site = $site;
         $this->slug = $slug;
         $this->server = $server;

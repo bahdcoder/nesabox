@@ -64,7 +64,11 @@ class InstallGhost extends Base
     public function generate()
     {
         $user = SSH_USER;
-        $createMysqlScript = (new AddDatabase($this->server, $this->database, $this->databaseUser))->generateMysqlScript();
+        $createMysqlScript = (new AddDatabase(
+            $this->server,
+            $this->database,
+            $this->databaseUser
+        ))->generateMysqlScript();
 
         return <<<EOD
 {$createMysqlScript}

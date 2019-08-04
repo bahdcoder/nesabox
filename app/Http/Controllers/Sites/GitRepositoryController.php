@@ -16,8 +16,17 @@ class GitRepositoryController extends Controller
         Site $site,
         InstallRepositoryRequest $request
     ) {
-
         $this->authorize('view', $server);
+
+        $user = SSH_USER;
+
+        $beforeDeployScript = <<<EOD
+cd /home/{$user}/{$site->name}
+
+git pull origin {$request->branch}
+
+npm install --production  
+EOD;
 
         $site->update([
             'app_type' => 'git',
@@ -25,6 +34,7 @@ class GitRepositoryController extends Controller
             'repository_branch' => $request->branch,
             'repository_status' => STATUS_INSTALLING,
             'repository_provider' => $request->provider,
+            'before_deploy_script' => $beforeDeployScript
         ]);
 
         InstallGitRepository::dispatch($server, $site->fresh());

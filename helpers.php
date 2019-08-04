@@ -126,19 +126,22 @@ if (!function_exists('get_region_name')) {
     }
 }
 
-
 if (!function_exists('github_api')) {
     /**
      * Get an http client for github api interaction
-     * 
+     *
      * @return \Guzzle\Client
      */
-    function github_api($apiToken = null) {
+    function github_api($apiToken = null)
+    {
         return new HttpClient([
             'base_uri' => 'https://api.github.com',
             'headers' => [
                 'Authorization' =>
-                    'token ' . ($apiToken ? $apiToken : auth()->user()->source_control['github'])
+                    'token ' .
+                    ($apiToken
+                        ? $apiToken
+                        : auth()->user()->source_control['github'])
             ]
         ]);
     }

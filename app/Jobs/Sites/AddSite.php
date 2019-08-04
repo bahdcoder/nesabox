@@ -68,7 +68,7 @@ class AddSite implements ShouldQueue
 
         $this->site->update([
             'environment' => [
-                'PORT' => $process->getOutput()
+                'PORT' => trim($process->getOutput())
             ],
             'status' => STATUS_ACTIVE,
             'digital_ocean_record' => $record->id

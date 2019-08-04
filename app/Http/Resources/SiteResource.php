@@ -17,7 +17,8 @@ class SiteResource extends JsonResource
         $isReadyStatus = [
             'None' => false,
             'git' => $this->resource->repository_status === STATUS_ACTIVE,
-            'ghost' => $this->resource->installing_ghost_status === STATUS_ACTIVE
+            'ghost' =>
+                $this->resource->installing_ghost_status === STATUS_ACTIVE
         ];
 
         return [
@@ -30,12 +31,23 @@ class SiteResource extends JsonResource
             'is_ready' => $this->resource->status === STATUS_ACTIVE,
             'repository_branch' => $this->resource->repository_branch,
             'nesabox_domain' => $this->resource->getNexaboxSiteDomain(),
-            'is_app_ready' => $isReadyStatus[$this->resource->app_type ?? 'None'],
-            'updating_slug' => $this->resource->updating_slug_status === STATUS_UPDATING,
-            'installing_repository' => $this->resource->repository_status === STATUS_INSTALLING,
+            'after_deploy_script' => $this->resource->after_deploy_script,
+            'repository_provider' => $this->resource->repository_provider,
+            'before_deploy_script' => $this->resource->before_deploy_script,
+            'is_app_ready' =>
+                $isReadyStatus[$this->resource->app_type ?? 'None'],
+            'updating_slug' =>
+                $this->resource->updating_slug_status === STATUS_UPDATING,
+            'deployment_trigger_url' => route('sites.trigger-deployment', [
+                $this->resource->id,
+                'api_token' => $this->resource->server->user->api_token
+            ]),
+            'installing_repository' =>
+                $this->resource->repository_status === STATUS_INSTALLING,
             'installing_ghost' =>
                 $this->resource->installing_ghost_status === STATUS_INSTALLING,
-            'uninstalling_ghost' => $this->resource->installing_ghost_status === STATUS_UNINSTALLING
+            'uninstalling_ghost' =>
+                $this->resource->installing_ghost_status === STATUS_UNINSTALLING
         ];
     }
 }

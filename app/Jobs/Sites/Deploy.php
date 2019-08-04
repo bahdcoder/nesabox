@@ -3,17 +3,15 @@
 namespace App\Jobs\Sites;
 
 use App\Site;
-use Exception;
 use App\Server;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\ServerIsReady;
-use App\Scripts\Sites\UninstallGhost as UninstallGhostScript;
+use App\Scripts\Sites\DeployGitSite;
 
-class UninstallGhost implements ShouldQueue
+class Deploy implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,7 +27,7 @@ class UninstallGhost implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 3600;
+    public $timeout = 7200;
 
     /**
      * The server to ssh into
@@ -50,8 +48,10 @@ class UninstallGhost implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Server $server, Site $site)
-    {
+    public function __construct(
+        Server $server,
+        Site $site
+    ) {
         $this->site = $site;
         $this->server = $server;
     }
@@ -63,20 +63,14 @@ class UninstallGhost implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new UninstallGhostScript(
-            $this->server,
-            $this->site
-        ))->run();
+        $process = (new DeployGitSite($this->server, $this->site))->run(function ($data) {
+            echo $data;
+        });
 
         if ($process->isSuccessful()) {
-            $this->site->update([
-                'installing_ghost_status' => null,
-                'app_type' => null
-            ]);
-
-            $this->server->user->notify(new ServerIsReady($this->server));
+            echo 'Deployed successfully.';
         } else {
-            // $this->handleFailed();
+            echo 'Deployment failed.';
         }
     }
 }

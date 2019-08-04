@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUpdatingSiteSlugFieldToSitesTable extends Migration
+class AddBeforeAndAfterDeployScript extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,8 @@ class AddUpdatingSiteSlugFieldToSitesTable extends Migration
     public function up()
     {
         Schema::table('sites', function (Blueprint $table) {
-            $table
-                ->string('updating_slug_status')
-                ->nullable()
-                ->default(null);
+            $table->text('before_deploy_script')->nullable();
+            $table->text('after_deploy_script')->nullable();
         });
     }
 
@@ -29,7 +27,8 @@ class AddUpdatingSiteSlugFieldToSitesTable extends Migration
     public function down()
     {
         Schema::table('sites', function (Blueprint $table) {
-            $table->dropColumn('updating_slug_status');
+            $table->dropColumn('before_deploy_script')->nullable();
+            $table->dropColumn('after_deploy_script')->nullable();
         });
     }
 }

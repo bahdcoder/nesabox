@@ -9,6 +9,5 @@ class FileContentController extends Controller
 {
     public function getFileContent(Server $server)
     {
-        
     }
 }

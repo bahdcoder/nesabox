@@ -65,9 +65,13 @@ trait InteractsWithDigitalOcean
             config('services.digital-ocean.api-token')
         )
             ->domainRecord()
-            ->update(config('services.digital-ocean.app-domain'), $site->digital_ocean_record, [
-                'name' => $site->slug
-            ]);
+            ->update(
+                config('services.digital-ocean.app-domain'),
+                $site->digital_ocean_record,
+                [
+                    'name' => $site->slug
+                ]
+            );
     }
 
     /**

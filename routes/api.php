@@ -2,10 +2,15 @@
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
 use App\Http\Controllers\Sites\SitesController;
+use App\Http\Controllers\Sites\GhostController;
+use App\Http\Controllers\Servers\DaemonController;
 use App\Http\Controllers\Servers\SshKeysController;
+use App\Http\Controllers\Servers\CronJobController;
+use App\Http\Controllers\Sites\DeploymentController;
 use App\Http\Controllers\Servers\GetServerController;
 use App\Http\Controllers\Servers\DatabasesController;
 use App\Http\Controllers\Servers\GetServersController;
+use App\Http\Controllers\Sites\GitRepositoryController;
 use App\Http\Controllers\Servers\CustomServerController;
 use App\Http\Controllers\Servers\DigitalOceanController;
 use App\Http\Controllers\Servers\CreateServersController;
@@ -13,11 +18,7 @@ use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
-use App\Notifications\Servers\ServerIsReady;
-use App\Http\Controllers\Servers\DaemonController;
-use App\Http\Controllers\Servers\CronJobController;
-use App\Http\Controllers\Sites\GhostController;
-use App\Http\Controllers\Sites\GitRepositoryController;
+use App\Http\Controllers\Sites\EnvController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,9 +98,19 @@ Route::middleware(['auth:api'])->group(function () {
     ]);
 
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
-    Route::put('servers/{server}/sites/{site}', [SitesController::class, 'update']);
+
+    Route::put('servers/{server}/sites/{site}/update-slug', [
+        SitesController::class,
+        'updateSlug'
+    ]);
+
+    Route::put('servers/{server}/sites/{site}', [
+        SitesController::class,
+        'update'
+    ]);
 
     Route::post('servers/{server}/daemons', [DaemonController::class, 'store']);
+
     Route::delete('servers/{server}/daemons/{daemon}', [
         DaemonController::class,
         'destroy'
@@ -150,6 +161,26 @@ Route::middleware(['auth:api'])->group(function () {
         GitRepositoryController::class,
         'store'
     ]);
+
+    Route::get('servers/{server}/sites/{site}/env-variables', [
+        EnvController::class,
+        'index'
+    ]);
+
+    Route::post('servers/{server}/sites/{site}/env-variables', [
+        EnvController::class,
+        'store'
+    ]);
+
+    Route::delete('servers/{server}/sites/{site}/env-variables/{key}', [
+        EnvController::class,
+        'destroy'
+    ]);
+
+    Route::post('servers/{server}/sites/{site}/deployments', [
+        DeploymentController::class,
+        'deploy'
+    ]);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {
@@ -157,6 +188,16 @@ Route::middleware(['guest', 'api-token'])->group(function () {
         CustomServerController::class,
         'vps'
     ])->name('servers.custom-deploy-script');
+
+    Route::get('sites/{site}/trigger-deployment', [
+        DeploymentController::class,
+        'http'
+    ]);
+
+    Route::post('sites/{site}/trigger-deployment', [
+        DeploymentController::class,
+        'http'
+    ])->name('sites.trigger-deployment');
 });
 
 // $this->post('login', 'Auth\LoginController@login');

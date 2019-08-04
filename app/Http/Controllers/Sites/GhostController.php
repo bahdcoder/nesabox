@@ -66,7 +66,7 @@ class GhostController extends Controller
 
     /**
      * Get the config of a ghost blog
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function getConfig(Server $server, Site $site)
@@ -77,23 +77,31 @@ class GhostController extends Controller
 
         $process = $this->getFileContent($server, $pathToConfig);
 
-        if (! $process->isSuccessFul()) abort(400, $process->getErrorOutput());
+        if (!$process->isSuccessFul()) {
+            abort(400, $process->getErrorOutput());
+        }
 
         return $process->getOutput();
     }
 
     /**
      * Set the config of a ghost blog. Also reload pm2 for this site
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function setConfig(Server $server, Site $site)
     {
         $this->authorize('view', $server);
-        
-        $process = (new UpdateGhostConfig($server, $site, request()->configProductionJson))->run();
 
-        if (! $process->isSuccessFul()) abort(400, $process->getErrorOutput());
+        $process = (new UpdateGhostConfig(
+            $server,
+            $site,
+            request()->configProductionJson
+        ))->run();
+
+        if (!$process->isSuccessFul()) {
+            abort(400, $process->getErrorOutput());
+        }
 
         return $process->getOutput();
     }
