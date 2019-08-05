@@ -48,10 +48,8 @@ class Deploy implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Site $site
-    ) {
+    public function __construct(Server $server, Site $site)
+    {
         $this->site = $site;
         $this->server = $server;
     }
@@ -63,9 +61,11 @@ class Deploy implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new DeployGitSite($this->server, $this->site))->run(function ($data) {
-            echo $data;
-        });
+        $process = (new DeployGitSite($this->server, $this->site))->run(
+            function ($data) {
+                echo $data;
+            }
+        );
 
         if ($process->isSuccessful()) {
             echo 'Deployed successfully.';

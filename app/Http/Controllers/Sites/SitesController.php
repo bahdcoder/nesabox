@@ -44,7 +44,11 @@ class SitesController extends Controller
     public function update(Server $server, Site $site, Request $request)
     {
         $site->update(
-            $request->only(['before_deploy_script', 'after_deploy_script', 'before_start_script'])
+            $request->only([
+                'before_deploy_script',
+                'after_deploy_script',
+                'before_start_script'
+            ])
         );
 
         return new ServerResource($server->fresh());

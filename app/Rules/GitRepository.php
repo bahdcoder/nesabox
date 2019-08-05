@@ -43,7 +43,7 @@ class GitRepository implements Rule
                     $this->request->branch
                 );
             default:
-                return false;
+                return true;
         }
     }
 
