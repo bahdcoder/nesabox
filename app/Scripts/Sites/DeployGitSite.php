@@ -57,7 +57,9 @@ class DeployGitSite extends Base
             $pckManager = 'npm';
         }
 
-        $startCommand = isset($env['NPM_START_COMMAND_CONFIG']) ? $env['NPM_START_COMMAND_CONFIG'] : config('nesa.default_start_command');
+        $startCommand = isset($env['NPM_START_COMMAND_CONFIG'])
+            ? $env['NPM_START_COMMAND_CONFIG']
+            : config('nesa.default_start_command');
         // Deploy steps
 
         // 1 - We'll get the site node version from the NODE_VERSION_CONFIG environment variable

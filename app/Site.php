@@ -33,6 +33,8 @@ class Site extends Model
         switch ($this->repository_provider) {
             case 'github':
                 return "git@github.com:{$this->repository}.git";
+            case 'gitlab':
+                return "git@gitlab.com:{$this->repository}.git";
             default:
                 # code...
                 break;

@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
 use App\Http\SourceControlProviders\InteractsWithGithub;
+use App\Http\SourceControlProviders\InteractsWithGitlab;
 
 class InstallGitRepository implements ShouldQueue
 {
@@ -20,7 +21,15 @@ class InstallGitRepository implements ShouldQueue
         Queueable,
         SerializesModels,
         HandlesProcesses,
-        InteractsWithGithub;
+        InteractsWithGithub,
+        InteractsWithGitlab;
+
+    /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 1;
 
     /**
      * Site on which we want to install repository
@@ -85,6 +94,15 @@ class InstallGitRepository implements ShouldQueue
             $this->site->update([
                 'repository_status' => STATUS_ACTIVE
             ]);
+        } else {
+            $this->site->update([
+                'app_type' => null,
+                'repository' => null,
+                'repository_branch' => '',
+                'repository_status' => null,
+                'repository_provider' => null,
+                'before_deploy_script' => null
+            ]);
         }
 
         $this->server->user->notify(new ServerIsReady($this->server->fresh()));
@@ -97,15 +115,38 @@ class InstallGitRepository implements ShouldQueue
      */
     public function addPublicKey(string $provider, Server $server, string $key)
     {
+        $keyTitle = config('app.name') . " - {$server->name}";
+
+        echo $this->server->user->source_control['gitlab'];
+
         switch ($provider) {
             case 'github':
                 return $this->addGithubPublicKey(
-                    config('app.name') . " - {$server->name}",
+                    $keyTitle,
                     $key,
                     $this->server->user->source_control['github']
+                );
+            case 'gitlab':
+                return $this->addGitlabPublicKey(
+                    $keyTitle,
+                    $key,
+                    $this->server->user->source_control['gitlab']
                 );
             default:
                 break;
         }
+    }
+
+    public function failed($e)
+    {
+        echo $e;
+        $this->site->update([
+            'app_type' => null,
+            'repository' => null,
+            'repository_branch' => '',
+            'repository_status' => null,
+            'repository_provider' => null,
+            'before_deploy_script' => null
+        ]);
     }
 }

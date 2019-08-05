@@ -19,6 +19,7 @@ use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 use App\Http\Controllers\Sites\EnvController;
+use App\Jobs\Servers\Initialize;
 
 /*
 |--------------------------------------------------------------------------
@@ -209,5 +210,6 @@ Route::middleware(['guest', 'api-token'])->group(function () {
 Auth::routes();
 
 Route::get('beans', function () {
-    \App\Server::first()->throwError();
+    // \App\Server::first()->throwError();
+    Initialize::dispatch(\App\Server::first());
 });

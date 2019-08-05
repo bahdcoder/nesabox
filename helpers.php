@@ -146,3 +146,24 @@ if (!function_exists('github_api')) {
         ]);
     }
 }
+
+if (!function_exists('gitlab_api')) {
+    /**
+     * Get an http client for github api interaction
+     *
+     * @return \Guzzle\Client
+     */
+    function gitlab_api($apiToken = null)
+    {
+        return new HttpClient([
+            'base_uri' => 'https://gitlab.com/api/v4/',
+            'headers' => [
+                'Authorization' =>
+                    'Bearer ' .
+                    ($apiToken
+                        ? $apiToken
+                        : auth()->user()->source_control['gitlab'])
+            ]
+        ]);
+    }
+}

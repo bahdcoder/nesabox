@@ -40,14 +40,14 @@ class Initialize implements ShouldQueue
      *
      * @var integer
      */
-    public $retryAfter = 120;
+    // public $retryAfter = 120;
 
     /**
      * The number of times the job may be attempted.
      *
      * @var int
      */
-    public $tries = 15;
+    public $tries = 1; // TODO: change it back !!!!
 
     /**
      * Create a new job instance.
@@ -82,7 +82,9 @@ class Initialize implements ShouldQueue
         $process = (new VerifyIsReady($this->server))->as(SSH_USER)->run();
 
         if ($process->isSuccessful()) {
-            $generateKeyProcess = (new GenerateSshkey($this->server))->run();
+            $generateKeyProcess = (new GenerateSshkey($this->server))->run(function ($data) {
+                echo $data;
+            });
 
             if ($generateKeyProcess->isSuccessful()) {
                 $key = explode('ssh-rsa', $generateKeyProcess->getOutput())[1];

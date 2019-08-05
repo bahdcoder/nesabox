@@ -42,8 +42,10 @@ class GitRepository implements Rule
                     $this->request->repository,
                     $this->request->branch
                 );
+            case 'gitlab':
+                return true;
             default:
-                return false;
+                return true;
         }
     }
 
