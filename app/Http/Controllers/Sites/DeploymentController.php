@@ -22,11 +22,23 @@ class DeploymentController extends Controller
     {
         $this->authorize('view', $site->server);
 
-        $process = (new DeployGitSite($server, $site))->generate();
+        $deployment = activity()
+            ->causedBy(auth()->user())
+            ->performedOn($site)
+            ->withProperty('log', '')
+            ->withProperty('status', 'pending')
+            ->log('Deployment');
 
-        Deploy::dispatch($server, $site);
+        if ($site->deploying) {
+            return new SiteResource($site->fresh());
+        }
+        
+        $site->update([
+            'deploying' => true
+        ]);
 
-        return $process;
+        Deploy::dispatch($server, $site, $deployment);
+
         return new SiteResource($site->fresh());
     }
 }

@@ -4,12 +4,14 @@ namespace App\Jobs\Sites;
 
 use App\Site;
 use App\Server;
+use App\Activity;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Scripts\Sites\DeployGitSite;
+use App\Notifications\Sites\SiteUpdated;
 
 class Deploy implements ShouldQueue
 {
@@ -44,14 +46,25 @@ class Deploy implements ShouldQueue
     public $site;
 
     /**
+     * The deployment activity instance
+     *
+     * @var \App\Activity
+     */
+    public $deployment;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Server $server, Site $site)
-    {
+    public function __construct(
+        Server $server,
+        Site $site,
+        Activity $deployment
+    ) {
         $this->site = $site;
         $this->server = $server;
+        $this->deployment = $deployment;
     }
 
     /**
@@ -61,16 +74,35 @@ class Deploy implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new DeployGitSite($this->server, $this->site))->as(SSH_USER)->run(
-            function ($data) {
-                echo $data;
-            }
-        );
+        $process = (new DeployGitSite($this->server, $this->site))
+            ->as(SSH_USER)
+            ->run(function ($log) {
+                $this->deployment->update([
+                    'properties->log' =>
+                        $this->deployment->properties['log'] . $log
+                ]);
+
+                $this->server->user->notify(
+                    new SiteUpdated($this->site->fresh())
+                );
+            });
+
+        $this->site->update([
+            'deploying' => false
+        ]);
 
         if ($process->isSuccessful()) {
-            echo 'Deployed successfully.';
+            $this->deployment->update([
+                'properties->status' => 'success'
+            ]);
         } else {
-            echo 'Deployment failed.';
+            $this->deployment->update([
+                'properties->status' => 'failed'
+            ]);
         }
+
+        $this->server->user->notify(
+            new SiteUpdated($this->site->fresh())
+        );
     }
 }
