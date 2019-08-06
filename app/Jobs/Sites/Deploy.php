@@ -61,7 +61,7 @@ class Deploy implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new DeployGitSite($this->server, $this->site))->run(
+        $process = (new DeployGitSite($this->server, $this->site))->as(SSH_USER)->run(
             function ($data) {
                 echo $data;
             }

@@ -34,9 +34,11 @@ class GenerateSshkey extends Base
         $user = SSH_USER;
 
         return <<<EOD
-ssh-keygen -f ~/.ssh/{$user} -t rsa -b 4096 -P '' -C root@{$this->server->name}
+ssh-keygen -f /home/{$user}/.ssh/{$user} -t rsa -b 4096 -P '' -C root@{$this->server->name}
 
-cat ~/.ssh/{$user}.pub
+chown nesa -R /home/{$user}/.ssh
+ 
+cat /home/{$user}/.ssh/{$user}.pub
 EOD;
     }
 }

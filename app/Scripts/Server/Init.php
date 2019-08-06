@@ -105,7 +105,9 @@ groups \$USER
 cp /root/.ssh/config /home/\$USER/.ssh/config
 cp /root/.ssh/authorized_keys /home/\$USER/.ssh/authorized_keys
 chown -R \$USER:\$USER /home/\$USER
+chown {$user} -R /home/{$user}
 chmod 0700 /home/\$USER/.ssh
+chmod -R 755 /home/{$user}
 chmod 0600 /home/\$USER/.ssh/authorized_keys
 ssh-keygen -A
 service ssh restart
@@ -183,6 +185,7 @@ n latest
 
 # Give permissions to nesa user to be able to manage npm and node
 chown -R {$user} /usr/local/
+chmod -R 755 /usr/local/
 
 EOD;
     }

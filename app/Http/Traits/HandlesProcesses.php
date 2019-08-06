@@ -206,8 +206,11 @@ trait HandlesProcesses
 
         $arguments = "'/home/{$user}/{$site->name}' {$site->repository_branch} {$repoUrl}";
 
-        return $this->execProcess(
-            $this->sshScript($server, $scriptPath, $arguments)
+        return $this->execProcessAsync(
+            $this->sshScript($server, $scriptPath, $arguments, false),
+            function ($e) {
+                echo $e;
+            }
         );
     }
 
@@ -408,8 +411,11 @@ trait HandlesProcesses
 
         $arguments = "{$old_site_name} {$new_site_name} {$site->environment['PORT']}";
 
-        return $this->execProcess(
-            $this->sshScript($server, $scriptName, $arguments)
+        return $this->execProcessAsync(
+            $this->sshScript($server, $scriptName, $arguments),
+            function ($data) {
+                echo $data;
+            }
         );
     }
 }
