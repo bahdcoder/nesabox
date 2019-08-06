@@ -36,7 +36,10 @@ class SiteResource extends JsonResource
             'after_deploy_script' => $this->resource->after_deploy_script,
             'repository_provider' => $this->resource->repository_provider,
             'before_deploy_script' => $this->resource->before_deploy_script,
-            'deployments' => Activity::forSubject($this->resource)->where('description', 'Deployment')->latest()->paginate(),
+            'deployments' => Activity::forSubject($this->resource)
+                ->where('description', 'Deployment')
+                ->latest()
+                ->paginate(),
             'is_app_ready' =>
                 $isReadyStatus[$this->resource->app_type ?? 'None'],
             'updating_slug' =>

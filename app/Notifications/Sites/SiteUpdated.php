@@ -55,7 +55,8 @@ class SiteUpdated extends Notification implements ShouldQueue
     {
         return (new BroadcastMessage([
             'site' => (new SiteResource($this->site))->resolve()
-        ]))->onConnection('redis')
+        ]))
+            ->onConnection('redis')
             ->onQueue('broadcasts');
     }
 }

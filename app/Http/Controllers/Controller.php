@@ -15,6 +15,7 @@ use App\Http\ServerProviders\InteractsWithDigitalOcean;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\SourceControlProviders\InteractsWithGithub;
+use App\Http\SourceControlProviders\InteractsWithGitlab;
 
 class Controller extends BaseController
 {
@@ -28,5 +29,6 @@ class Controller extends BaseController
         InteractsWithAws,
         InteractWithLinode,
         HasServerProviders,
-        InteractsWithGithub;
+        InteractsWithGithub,
+        InteractsWithGitlab;
 }

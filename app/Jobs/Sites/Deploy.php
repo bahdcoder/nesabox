@@ -101,8 +101,6 @@ class Deploy implements ShouldQueue
             ]);
         }
 
-        $this->server->user->notify(
-            new SiteUpdated($this->site->fresh())
-        );
+        $this->server->user->notify(new SiteUpdated($this->site->fresh()));
     }
 }
