@@ -124,7 +124,7 @@ return [
     |
     */
 
-    'memory_limit' => 64,
+    'memory_limit' => 128,
 
     /*
     |--------------------------------------------------------------------------
@@ -143,26 +143,21 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'default',
-                    'webhooks',
-                    'notifications',
-                    'provision-server',
-                    'install-database',
-                    'add-ssh-key-to-server',
-                    'on-demand-runs-long',
-                    'on-demand-runs-short'
+                    'broadcasts',
+                    'notifications'
                 ],
                 'balance' => 'simple',
-                'processes' => 10,
-                'tries' => 3
+                'processes' => 12,
+                'tries' => 1
             ]
         ],
 
         'local' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => ['default', 'broadcasts', 'notifications'],
                 'balance' => 'simple',
-                'processes' => 3,
+                'processes' => 10,
                 'tries' => 3
             ]
         ]
