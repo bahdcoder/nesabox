@@ -2,6 +2,7 @@
 
 SITE_NAME=$1
 NESABOX_SITE_NAME=$2
+NESA_USER=$3
 
 read LOWERPORT UPPERPORT < /proc/sys/net/ipv4/ip_local_port_range
 \
@@ -62,5 +63,9 @@ systemctl restart nginx
 
 # Install ssl certificate for nesabox site
 certbot --agree-tos -n --nginx --redirect -d $NESABOX_SITE_NAME -m nesa@nesabox.com &>/dev/null
+
+# Make sure to give nesa user rights again. 
+chown -R $NESA_USER /usr/local
+chmod -R 755 /usr/local
 
 echo $SITE_PORT

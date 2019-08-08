@@ -48,7 +48,7 @@ class ServerResource extends JsonResource
             ),
             'deploy_script' =>
                 $this->provider === CUSTOM_PROVIDER
-                    ? route('servers.custom-deploy-script', $this->id)
+                    ? route('servers.custom-deploy-script', [$this->id, 'api_token' => $this->resource->user->api_token])
                     : null
         ];
     }

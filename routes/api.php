@@ -19,6 +19,8 @@ use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 use App\Http\Controllers\Sites\EnvController;
+use App\Http\Controllers\Servers\InitializationCallbackController;
+use App\Notifications\Servers\ServerIsReady;
 
 /*
 |--------------------------------------------------------------------------
@@ -198,6 +200,11 @@ Route::middleware(['guest', 'api-token'])->group(function () {
         DeploymentController::class,
         'http'
     ])->name('sites.trigger-deployment');
+
+    Route::post('servers/{server}/initialization-callback', [
+        InitializationCallbackController::class,
+        'callback'
+    ])->name('servers.initialization-callback');
 });
 
 // $this->post('login', 'Auth\LoginController@login');
@@ -209,5 +216,6 @@ Route::middleware(['guest', 'api-token'])->group(function () {
 Auth::routes();
 
 Route::get('beans', function () {
-    \App\Server::first()->throwError();
+    // \App\Server::first()->throwError();
+    \App\User::first()->notify(new ServerIsReady(\App\Server::first()));
 });

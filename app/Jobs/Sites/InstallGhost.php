@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Sites\InstallGhost as InstallGhostScript;
+use App\Notifications\Sites\SiteUpdated;
 
 class InstallGhost implements ShouldQueue
 {
@@ -90,8 +91,14 @@ class InstallGhost implements ShouldQueue
             $this->site,
             $this->databaseUser,
             $this->database
-        ))->run(function ($data) {
-            echo $data;
+        ))->run(function ($log) {
+            $this->site->update([
+                'logs' => $this->site->logs . $log
+            ]);
+
+            $this->server->user->notify(
+                new SiteUpdated($this->site->fresh())
+            );
         });
 
         if ($process->isSuccessful()) {
@@ -105,7 +112,9 @@ class InstallGhost implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->server->user->notify(new ServerIsReady($this->server));
+            $this->server->user->notify(
+                new SiteUpdated($this->site->fresh())
+            );
         } else {
             $this->handleFailed();
         }
@@ -114,6 +123,7 @@ class InstallGhost implements ShouldQueue
     public function handleFailed()
     {
         $this->site->update([
+            'logs' => null,
             'app_type' => null,
             'installing_ghost_status' => null
         ]);
@@ -122,7 +132,9 @@ class InstallGhost implements ShouldQueue
 
         $this->database->delete();
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+        $this->server->user->notify(
+            new SiteUpdated($this->site->fresh())
+        );
     }
 
     public function failed(Exception $e)

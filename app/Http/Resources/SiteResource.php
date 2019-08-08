@@ -24,6 +24,7 @@ class SiteResource extends JsonResource
 
         return [
             'id' => $this->resource->id,
+            'logs' => $this->resource->logs,
             'name' => $this->resource->name,
             'slug' => $this->resource->slug,
             'status' => $this->resource->status,

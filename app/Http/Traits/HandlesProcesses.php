@@ -160,7 +160,9 @@ trait HandlesProcesses
     {
         $scriptPath = base_path('scripts/sites/add-site.sh');
 
-        $arguments = "{$site->name} {$site->getNexaboxSiteDomain()}";
+        $user = SSH_USER;
+
+        $arguments = "{$site->name} {$site->getNexaboxSiteDomain()} {$user}";
 
         return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments)

@@ -32,6 +32,9 @@ class Init extends BaseScript
     public function generate()
     {
         $user = SSH_USER;
+
+        $callbackEndpoint = route('servers.initialization-callback', [$this->server->id, 'api_token' => $this->server->user->api_token]);
+
         return <<<EOD
 #!/bin/sh
 
@@ -71,46 +74,66 @@ fi
 cat >> /root/.ssh/config << EOF
 Host github.com
     StrictHostKeyChecking no
-    IdentityFile ~/.ssh/\$USER
+    IdentityFile ~/.ssh/{$user}
 
 Host gitlab.com
     StrictHostKeyChecking no
-    IdentityFile ~/.ssh/\$USER
+    IdentityFile ~/.ssh/{$user}
 
 Host bitbucket.org
     StrictHostKeyChecking no
-    IdentityFile ~/.ssh/\$USER
+    IdentityFile ~/.ssh/{$user}
 EOF
 
 # Add deployment user
-useradd \$USER
-mkdir -p /home/\$USER/.ssh
-mkdir -p /home/\$USER/.\$USER
-adduser \$USER sudo
+useradd {$user}
+mkdir -p /home/{$user}/.ssh
+mkdir -p /home/{$user}/.{$user}
+adduser {$user} sudo
 
-chsh -s /bin/bash \$USER
-cp /root/.profile /home/\$USER/.profile
-cp /root/.bashrc /home/\$USER/.bashrc
+chsh -s /bin/bash {$user}
+cp /root/.profile /home/{$user}/.profile
+cp /root/.bashrc /home/{$user}/.bashrc
 
 PASSWORD=$(mkpasswd \$SUDO_PASSWORD)
-usermod --password \$PASSWORD \$USER
+usermod --password \$PASSWORD {$user}
 
-usermod -a -G www-data \$USER
-id \$USER
-groups \$USER
+usermod -a -G www-data {$user}
+id {$user}
+groups {$user}
+
+# Install node, npm and n
+
+curl --silent --location https://deb.nodesource.com/setup_10.x | bash -
+
+apt-get update
+
+sudo apt-get install -y --force-yes nodejs
+
+npm i -g n
+# Install latest version of node
+n latest
+
+# Give permissions to nesa user to be able to manage npm and node
+chown -R {$user} /usr/local
+chmod -R 755 /usr/local
 
 {$this->addSshKeysToServer()}
 
 # Setup ssh keys for deployment user
-cp /root/.ssh/config /home/\$USER/.ssh/config
-cp /root/.ssh/authorized_keys /home/\$USER/.ssh/authorized_keys
-chown -R \$USER:\$USER /home/\$USER
+cp /root/.ssh/config /home/{$user}/.ssh/config
+cp /root/.ssh/authorized_keys /home/{$user}/.ssh/authorized_keys
+chown -R {$user}:{$user} /home/{$user}
 chown {$user} -R /home/{$user}
-chmod 0700 /home/\$USER/.ssh
 chmod -R 755 /home/{$user}
-chmod 0600 /home/\$USER/.ssh/authorized_keys
+chmod 700 /home/{$user}/.ssh
+chmod 600 /home/{$user}/.ssh/authorized_keys
 ssh-keygen -A
 service ssh restart
+
+# Geenerate ssh key
+ssh-keygen -f /home/{$user}/.ssh/{$user} -t rsa -b 4096 -P '' -C root@{$this->server->name}
+chown nesa -R /home/{$user}/.ssh
 
 # Enable default ufw ports
 ufw allow 22
@@ -175,18 +198,20 @@ EOF
 # Install all databases user selected
 {$this->getDatabasesInstallationScripts()}
 
-# Install node, npm and n
+generate_post_data()
+{
+    cat <<EOF
+{
+    "ssh_key": "$(cat /home/{$user}/.ssh/{$user}.pub)"
+}
+EOF
+}
 
-curl -o- https://deb.nodesource.com/setup_10.x | bash
-apt-get install nodejs
-npm i -g n
-# Install latest version of node
-n latest
-
-# Give permissions to nesa user to be able to manage npm and node
-chown -R {$user} /usr/local/
-chmod -R 755 /usr/local/
-
+# Call API to mark this server as completely initialized.
+curl -i \
+-H "Accept: application/json" \
+-H "Content-Type:application/json" \
+-X POST --data "$(generate_post_data)" "{$callbackEndpoint}"
 EOD;
     }
 
@@ -204,6 +229,8 @@ EOD;
 
         return <<<EOD
 cat > /root/.ssh/authorized_keys << EOF
+# Nesabox key
+
 {$sshKey->key}
 EOF
 EOD;

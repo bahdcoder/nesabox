@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Sites;
 use App\Site;
 use App\Server;
 use App\DatabaseUser;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ServerResource;
 use App\Jobs\Sites\InstallGhost;
 use App\Jobs\Sites\UninstallGhost;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\SiteResource;
+use App\Http\Resources\ServerResource;
 use App\Scripts\Sites\UpdateGhostConfig;
 
 class GhostController extends Controller
@@ -43,7 +44,7 @@ class GhostController extends Controller
 
         InstallGhost::dispatch($server, $site, $databaseUser, $database);
 
-        return new ServerResource($server);
+        return new SiteResource($site->fresh());
     }
 
     /**

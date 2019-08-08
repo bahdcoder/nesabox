@@ -16,9 +16,9 @@ class CreateSitesTable extends Migration
         Schema::create('sites', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('server_id');
-            $table->text('logs')->nullable();
             $table->string('slug')->nullable();
             $table->string('name')->nullable();
+            $table->longText('logs')->nullable();
             $table->string('status')->nullable();
             $table->string('app_type')->nullable();
             $table->text('environment')->nullable();

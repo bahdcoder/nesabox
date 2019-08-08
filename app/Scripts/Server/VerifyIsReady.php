@@ -47,6 +47,9 @@ test $? -eq 0 || abort Verification Failed. Server not ready.
 
 node -v
 test $? -eq 0 || abort Verification Failed. Server not ready.
+
+npm -v
+test $? -eq 0 || abort Verification Failed. Server not ready.
 EOD;
     }
 }

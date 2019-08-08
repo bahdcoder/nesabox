@@ -29,6 +29,10 @@ class ServerIsReady extends Notification implements ShouldQueue
     public function __construct(Server $server)
     {
         $this->server = $server;
+
+        $this->onConnection('redis');
+
+        $this->onQueue('notifications');
     }
 
     /**
@@ -64,8 +68,8 @@ class ServerIsReady extends Notification implements ShouldQueue
      */
     public function toBroadcast($notifiable)
     {
-        return new BroadcastMessage([
+        return (new BroadcastMessage([
             'server' => (new ServerResource($this->server))->resolve()
-        ]);
+        ]))->onConnection('redis')->onQueue('broadcasts');
     }
 }
