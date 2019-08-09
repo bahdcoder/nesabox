@@ -63,6 +63,7 @@ return [
 
     'digital-ocean' => [
         'api-token' => env('DIGITAL_OCEAN_API_TOKEN'),
-        'app-domain' => env('DIGITAL_OCEAN_APP_DOMAIN')
+        'app-domain' => env('DIGITAL_OCEAN_APP_DOMAIN'),
+        'metrics-domain' => env('DIGITAL_OCEAN_METRICS_DOMAIN')
     ]
 ];

@@ -141,11 +141,7 @@ return [
         'production' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => [
-                    'default',
-                    'broadcasts',
-                    'notifications'
-                ],
+                'queue' => ['default', 'broadcasts', 'notifications'],
                 'balance' => 'simple',
                 'processes' => 12,
                 'tries' => 1
@@ -157,8 +153,9 @@ return [
                 'connection' => 'redis',
                 'queue' => ['default', 'broadcasts', 'notifications'],
                 'balance' => 'simple',
-                'processes' => 10,
-                'tries' => 3
+                'processes' => 12,
+                'tries' => 1,
+                'timeout' => 1200
             ]
         ]
     ]

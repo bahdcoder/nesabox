@@ -117,9 +117,11 @@ if (!function_exists('get_region_name')) {
         }
 
         if ($provider === LINODE) {
-            return collect($data->regions)->first(function ($region) use ($id) {
-                return $region->id = $id;
-            })->name;
+            return ucfirst(
+                collect($data->regions)->first(function ($region) use ($id) {
+                    return $region->id = $id;
+                })->id
+            );
         }
 
         return null;

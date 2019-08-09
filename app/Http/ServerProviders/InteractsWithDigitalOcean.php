@@ -5,6 +5,7 @@ namespace App\Http\ServerProviders;
 use App\Site;
 use Bahdcoder\DigitalOcean\DigitalOcean;
 use GuzzleHttp\Exception\GuzzleException;
+use App\Server;
 
 trait InteractsWithDigitalOcean
 {
@@ -51,6 +52,24 @@ trait InteractsWithDigitalOcean
                 'type' => 'A',
                 'name' => $site->slug,
                 'data' => $site->server->ip_address
+            ]);
+    }
+
+    /**
+     * This method creates a new domain record for the server metrics site
+     *
+     * @return object
+     */
+    public function createMetricsDomainRecord(Server $server)
+    {
+        return $this->getDigitalOceanConnectionInstance(
+            config('services.digital-ocean.api-token')
+        )
+            ->domainRecord()
+            ->create(config('services.digital-ocean.metrics-domain'), [
+                'type' => 'A',
+                'name' => $server->slug . '-metrics', // TODO: Remove this once you buy nesametrics.com
+                'data' => $server->ip_address
             ]);
     }
 

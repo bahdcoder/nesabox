@@ -21,6 +21,7 @@ use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Notifications\Servers\ServerIsReady;
+use App\Http\Controllers\Servers\MonitoringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -183,6 +184,11 @@ Route::middleware(['auth:api'])->group(function () {
         DeploymentController::class,
         'deploy'
     ]);
+
+    Route::post('servers/{server}/install-monitoring', [
+        MonitoringController::class,
+        'store'
+    ]);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {
@@ -217,5 +223,6 @@ Auth::routes();
 
 Route::get('beans', function () {
     // \App\Server::first()->throwError();
-    \App\User::first()->notify(new ServerIsReady(\App\Server::first()));
+    echo env('APP_URL');
+    // \App\User::first()->notify(new ServerIsReady(\App\Server::first()));
 });

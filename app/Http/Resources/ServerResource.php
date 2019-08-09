@@ -26,6 +26,11 @@ class ServerResource extends JsonResource
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
             'node_version' => $this->node_version,
+            'server_monitoring_username' => $this->server_monitoring_username,
+            'server_monitoring_password' => $this->server_monitoring_password,
+            'server_monitoring_installed' => $this->server_monitoring_status === STATUS_ACTIVE,
+            'server_monitoring_site' => 'https://'. $this->resource->getNesaboxServerMonitoringDomain(),
+            'server_monitoring_installing' => $this->server_monitoring_status === STATUS_INSTALLING,
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
             'daemons' => DaemonsResource::collection($this->daemons),
@@ -47,8 +52,11 @@ class ServerResource extends JsonResource
                 $this->mysqlDatabases
             ),
             'deploy_script' =>
-                $this->provider === CUSTOM_PROVIDER
-                    ? route('servers.custom-deploy-script', [$this->id, 'api_token' => $this->resource->user->api_token])
+                $this->provider !== CUSTOM_PROVIDER
+                    ? route('servers.custom-deploy-script', [
+                        $this->id,
+                        'api_token' => $this->resource->user->api_token
+                    ])
                     : null
         ];
     }

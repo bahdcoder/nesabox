@@ -393,6 +393,53 @@ trait HandlesProcesses
     }
 
     /**
+     * Install server monitoring with netdata
+     *
+     * @return \Symphony\Process\Process
+     */
+    public function installServerMonitoring(Server $server)
+    {
+        $scriptPath = 'scripts/server/install-monitoring.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        // METRICS_SITE_NAME=$1
+        // NGINX_USER=$2
+        // NGINX_PASSWORD=$3
+        // DATABASE_USER=$4
+        // DATABASE_PASSWORD=$5
+        // MONGODB_AUTH_USER=$6
+        // MONGODB_AUTH_PASSWORD=$7
+        $metrics_site_name = $server->getNesaboxServerMonitoringDomain();
+
+        $database_user = str_random(12);
+        $database_pass = str_random(12);
+
+        // Let's get the auth user for mongo db
+        $mongodbDatabaseUser = $server
+            ->databaseUsers()
+            ->where('type', MONGO_DB)
+            ->first();
+
+        $mongodb_auth_user = '';
+        $mongodb_auth_password = '';
+
+        if ($mongodbDatabaseUser) {
+            $mongodb_auth_user = $mongodbDatabaseUser->name;
+            $mongodb_auth_password = $mongodbDatabaseUser->password;
+        }
+        
+        $arguments = "{$metrics_site_name} {$server->server_monitoring_username} {$server->server_monitoring_password} {$database_user} {$database_pass} {$mongodb_auth_user} {$mongodb_auth_password}";
+
+        return $this->execProcessAsync(
+            $this->sshScript($server, $scriptName, $arguments),
+            function ($data) {
+                echo $data;
+            }
+        );
+    }
+
+    /**
      * Update the site slug
      *
      * @return \Symphony\Process\Process

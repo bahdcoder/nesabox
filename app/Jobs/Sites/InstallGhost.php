@@ -96,9 +96,7 @@ class InstallGhost implements ShouldQueue
                 'logs' => $this->site->logs . $log
             ]);
 
-            $this->server->user->notify(
-                new SiteUpdated($this->site->fresh())
-            );
+            $this->server->user->notify(new SiteUpdated($this->site->fresh()));
         });
 
         if ($process->isSuccessful()) {
@@ -112,9 +110,7 @@ class InstallGhost implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->server->user->notify(
-                new SiteUpdated($this->site->fresh())
-            );
+            $this->server->user->notify(new SiteUpdated($this->site->fresh()));
         } else {
             $this->handleFailed();
         }
@@ -132,9 +128,7 @@ class InstallGhost implements ShouldQueue
 
         $this->database->delete();
 
-        $this->server->user->notify(
-            new SiteUpdated($this->site->fresh())
-        );
+        $this->server->user->notify(new SiteUpdated($this->site->fresh()));
     }
 
     public function failed(Exception $e)

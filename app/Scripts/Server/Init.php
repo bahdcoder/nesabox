@@ -33,7 +33,10 @@ class Init extends BaseScript
     {
         $user = SSH_USER;
 
-        $callbackEndpoint = route('servers.initialization-callback', [$this->server->id, 'api_token' => $this->server->user->api_token]);
+        $callbackEndpoint = route('servers.initialization-callback', [
+            $this->server->id,
+            'api_token' => $this->server->user->api_token
+        ]);
 
         return <<<EOD
 #!/bin/sh
@@ -274,11 +277,7 @@ apt-get install -y mongodb-org
 systemctl enable mongod
 systemctl restart mongod
 
-mongo --eval "db.getSiblingDB('admin').createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'userAdminAnyDatabase', db: 'admin' }]})"
-mongo << EOF
-use admin
-db.createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'userAdminAnyDatabase', db: 'admin' }]})
-EOF
+mongo --eval "db.getSiblingDB('admin').createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'root', db: 'admin' }]})"
 
 cat >> /etc/mongod.conf << EOF
 security:

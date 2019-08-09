@@ -123,4 +123,21 @@ class Server extends Model
     {
         return $this->databaseInstances()->where('type', 'mysql');
     }
+
+    /**
+     *
+     * Get the nexabox server monitoring domain for this server
+     *
+     * @return string
+     */
+    public function getNesaboxServerMonitoringDomain(string $slug = null)
+    {
+        $subdomain = $slug ?? $this->slug;
+
+        $subdomain = $subdomain . '-metrics';
+
+        $domain = config('services.digital-ocean.metrics-domain');
+
+        return "{$subdomain}.{$domain}";
+    }
 }

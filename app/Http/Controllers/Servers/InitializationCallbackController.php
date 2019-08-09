@@ -12,9 +12,10 @@ class InitializationCallbackController extends Controller
 {
     /**
      * This endpoint is triggered from a server after installation/initialization is complete.
-     * 
+     *
      */
-    public function callback(Server $server) {
+    public function callback(Server $server)
+    {
         $server->update([
             'ssh_key' => request()->all()['ssh_key'],
             'status' => STATUS_ACTIVE
