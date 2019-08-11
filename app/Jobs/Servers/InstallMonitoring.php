@@ -57,7 +57,7 @@ class InstallMonitoring implements ShouldQueue
         $process = $this->installServerMonitoring($this->server->fresh());
 
         if ($process->isSuccessful()) {
-            $this->site->update([
+            $this->server->update([
                 'server_monitoring_status' => STATUS_ACTIVE
             ]);
         }

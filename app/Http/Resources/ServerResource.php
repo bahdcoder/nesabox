@@ -14,6 +14,11 @@ class ServerResource extends JsonResource
      */
     public function toArray($request)
     {
+        $deploy_script_route = route('servers.custom-deploy-script', [
+            $this->id,
+            'api_token' => $this->resource->user->api_token
+        ]);
+
         return [
             'id' => $this->id,
             'size' => $this->size,
@@ -28,9 +33,13 @@ class ServerResource extends JsonResource
             'node_version' => $this->node_version,
             'server_monitoring_username' => $this->server_monitoring_username,
             'server_monitoring_password' => $this->server_monitoring_password,
-            'server_monitoring_installed' => $this->server_monitoring_status === STATUS_ACTIVE,
-            'server_monitoring_site' => 'https://'. $this->resource->getNesaboxServerMonitoringDomain(),
-            'server_monitoring_installing' => $this->server_monitoring_status === STATUS_INSTALLING,
+            'server_monitoring_installed' =>
+                $this->server_monitoring_status === STATUS_ACTIVE,
+            'server_monitoring_site' =>
+                'https://' .
+                $this->resource->getNesaboxServerMonitoringDomain(),
+            'server_monitoring_installing' =>
+                $this->server_monitoring_status === STATUS_INSTALLING,
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
             'daemons' => DaemonsResource::collection($this->daemons),
@@ -51,13 +60,10 @@ class ServerResource extends JsonResource
             'mysql_databases' => DatabaseResource::collection(
                 $this->mysqlDatabases
             ),
-            'deploy_script' =>
-                $this->provider !== CUSTOM_PROVIDER
-                    ? route('servers.custom-deploy-script', [
-                        $this->id,
-                        'api_token' => $this->resource->user->api_token
-                    ])
-                    : null
+            $this->when($this->provider === CUSTOM_PROVIDER, [
+                'deploy_script' => $deploy_script_route,
+                'deploy_command' => "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh"
+            ])
         ];
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Servers;
 
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateServerRequest extends FormRequest
@@ -123,8 +122,8 @@ class CreateServerRequest extends FormRequest
                     }
 
                     if (
-                        !collect(VULTR_SIZES)->first(function ($size) {
-                            return $size['id'] === $this->size;
+                        !collect($vultrData->plans)->first(function ($size) {
+                            return $size->VPSPLANID === $this->size;
                         })
                     ) {
                         $validator

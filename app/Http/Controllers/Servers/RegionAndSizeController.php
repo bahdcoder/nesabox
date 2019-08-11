@@ -70,12 +70,21 @@ class RegionAndSizeController extends Controller
                         'value' => $region->DCID
                     ];
                 }),
-                'sizes' => collect(VULTR_SIZES)->map(function ($size) {
-                    return [
-                        'label' => $size['name'],
-                        'value' => $size['id']
-                    ];
-                })
+                'sizes' => collect($vultr->plans)
+                    ->sortBy(function ($size) {
+                        return (int) $size->ram;
+                    })
+                    ->values()
+                    ->map(function ($size) {
+                        $ram = get_ram($size->ram);
+                        $gb = $size->disk;
+                        $core = str_plural('Core', $size->vcpu_count);
+
+                        return [
+                            'label' => "{$ram} RAM - {$size->vcpu_count} CPU {$core} - {$gb} GB SSD",
+                            'value' => $size->VPSPLANID
+                        ];
+                    })
             ]
         ]);
     }

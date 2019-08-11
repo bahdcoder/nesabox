@@ -73,20 +73,7 @@ class AddDatabase extends Base
             ->first();
 
         return <<<EOD
-cat > app-new-mongodb-database-9490.js << EOF
-    db.createUser ({
-        user: "{$this->databaseUser->name}",
-        pwd: "{$this->databaseUser->password}",
-        roles: ['dbOwner']
-    })
-EOF
-
-mongo {$this->database->name} app-new-mongodb-database-9490.js -u {$nesaUser->name} -p {$nesaUser->password} --authenticationDatabase admin
-
-rm app-new-mongodb-database-9490.js
-
-systemctl restart mongod
-
+mongo --eval "db.getSiblingDB('admin').createUser({ user: '{$this->databaseUser->name}', pwd: '{$this->databaseUser->password}', roles: ['dbOwner']})" -u {$nesaUser->name} -p {$nesaUser->password} --authenticationDatabase admin
 EOD;
     }
 

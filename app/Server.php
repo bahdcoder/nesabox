@@ -2,15 +2,8 @@
 
 namespace App;
 
-use App\Exceptions\ServerNotReadyException;
-
 class Server extends Model
 {
-    public function throwError()
-    {
-        // abort(400);
-        throw new ServerNotReadyException('Server is not ready.');
-    }
     /**
      * Fields to cast to native types
      *
@@ -38,7 +31,9 @@ class Server extends Model
                 'gitlab' => false
             ];
 
-            $model->slug = str_slug($model->name) . '-' . str_random(8);
+            $model->slug = strtolower(
+                str_slug($model->name) . '-' . str_random(8)
+            );
         });
     }
 

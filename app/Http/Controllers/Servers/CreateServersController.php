@@ -66,6 +66,7 @@ class CreateServersController extends Controller
                 'name' => $request->name,
                 'size' => $request->size,
                 'provider' => $request->provider,
+                'sudo_password' => str_random(12),
                 'databases' => $request->databases,
                 'ip_address' => $request->ip_address,
                 'credential_id' => $request->credential_id,
@@ -111,6 +112,12 @@ class CreateServersController extends Controller
 
         $this->generateSshKeyForServer($server);
 
+        $rootPassword = str_root_password();
+
+        $server->update([
+            'root_password' => $rootPassword
+        ]);
+
         try {
             $linode = $this->getLinodeConnectionInstance(
                 $credential->accessToken
@@ -122,7 +129,7 @@ class CreateServersController extends Controller
                     'linode/ubuntu18.04', // This represents the OS - Ubuntu 18.04
                     $server->size, // equivalent to linode types
                     $this->getStackScriptForLinode($server, $credential),
-                    str_root_password()
+                    $rootPassword
                 );
 
             $server->update([

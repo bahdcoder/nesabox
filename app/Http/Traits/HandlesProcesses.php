@@ -428,7 +428,7 @@ trait HandlesProcesses
             $mongodb_auth_user = $mongodbDatabaseUser->name;
             $mongodb_auth_password = $mongodbDatabaseUser->password;
         }
-        
+
         $arguments = "{$metrics_site_name} {$server->server_monitoring_username} {$server->server_monitoring_password} {$database_user} {$database_pass} {$mongodb_auth_user} {$mongodb_auth_password}";
 
         return $this->execProcessAsync(

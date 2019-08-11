@@ -43,9 +43,15 @@ class Init extends BaseScript
 
 # Define script variables
 USER="{$user}"
-SUDO_PASSWORD="{$user}"
+SUDO_PASSWORD="{$this->server->sudo_password}"
 SWAP_SIZE="1G"
 export DEBIAN_FRONTEND=noninteractive
+
+# Set The Hostname If Necessary (on linode servers for example)
+
+echo "{$this->server->name}" > /etc/hostname
+sed -i 's/127\.0\.0\.1.*localhost/127.0.0.1     {$this->server->name}.localdomain {$this->server->name} localhost/' /etc/hosts
+hostname {$this->server->name}
 
 apt-get update
 apt-get upgrade -y
@@ -268,8 +274,6 @@ EOD;
                 case MONGO_DB:
                     $script .= <<<EOD
 \n
-MONGO_DB_ADMIN_USERNAME="{$database->databaseUser->name}"
-MONGO_DB_ADMIN_PASSWORD="{$database->databaseUser->password}"
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 apt-get update
@@ -277,13 +281,15 @@ apt-get install -y mongodb-org
 systemctl enable mongod
 systemctl restart mongod
 
-mongo --eval "db.getSiblingDB('admin').createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'root', db: 'admin' }]})"
+mongo << EOF
+use admin
+db.createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'root', db: 'admin' }, { role: 'userAdminAnyDatabase', db: 'admin' }]})
+EOF
 
 cat >> /etc/mongod.conf << EOF
 security:
   authorization: "enabled"
 EOF
-
 systemctl restart mongod
 EOD;
                     break;

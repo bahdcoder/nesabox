@@ -64,22 +64,16 @@ class InstallGhost extends Base
     public function generate()
     {
         $user = SSH_USER;
-        $createMysqlScript = (new AddDatabase(
-            $this->server,
-            $this->database,
-            $this->databaseUser
-        ))->generateMysqlScript();
 
         return <<<EOD
-{$createMysqlScript}
 # Create site folder
 mkdir /home/{$user}/{$this->site->name}
 
 # Change folder owner to espectra
-chown {$user}:{$user} /home/{$user}/{$this->site->name}
+# chown {$user}:{$user} /home/{$user}/{$this->site->name}
 
 # Change folder permissions
-chmod 775 /home/{$user}/{$this->site->name}
+# chmod 775 /home/{$user}/{$this->site->name}
 
 # Change directory to the site folder
 cd /home/{$user}/{$this->site->name}

@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Sites\InstallGhost as InstallGhostScript;
 use App\Notifications\Sites\SiteUpdated;
+use App\Scripts\Server\AddDatabase;
 
 class InstallGhost implements ShouldQueue
 {
@@ -86,18 +87,29 @@ class InstallGhost implements ShouldQueue
      */
     public function handle()
     {
+        (new AddDatabase(
+            $this->server,
+            $this->database,
+            $this->databaseUser
+        ))->run();
+
         $process = (new InstallGhostScript(
             $this->server,
             $this->site,
             $this->databaseUser,
             $this->database
-        ))->run(function ($log) {
-            $this->site->update([
-                'logs' => $this->site->logs . $log
-            ]);
+        ))
+            ->as(SSH_USER)
+            ->run(function ($log) {
+                echo $log;
+                $this->site->update([
+                    'logs' => $this->site->logs . $log
+                ]);
 
-            $this->server->user->notify(new SiteUpdated($this->site->fresh()));
-        });
+                $this->server->user->notify(
+                    new SiteUpdated($this->site->fresh())
+                );
+            });
 
         if ($process->isSuccessful()) {
             $this->site->update([
@@ -112,6 +124,7 @@ class InstallGhost implements ShouldQueue
 
             $this->server->user->notify(new SiteUpdated($this->site->fresh()));
         } else {
+            echo $process->getErrorOutput();
             $this->handleFailed();
         }
     }
