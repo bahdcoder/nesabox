@@ -107,4 +107,9 @@ class UpdateSiteSlug implements ShouldQueue
 
         $this->server->user->notify(new ServerIsReady($this->server));
     }
+
+    public function failed($e)
+    {
+        echo $e;
+    }
 }
