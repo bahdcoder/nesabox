@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Http\ServerProviders\InteractsWithDigitalOcean;
+use App\Notifications\Servers\ServerIsReady;
 use App\Server;
 
 class InstallMonitoring implements ShouldQueue
@@ -60,11 +61,27 @@ class InstallMonitoring implements ShouldQueue
             $this->server->update([
                 'server_monitoring_status' => STATUS_ACTIVE
             ]);
+        } else {
+            this.handleFailed($process->getErrorOutput());
         }
+
+        $this->server->user->notify(new ServerIsReady($this->server));
+    }
+
+    public function handleFailed($error = null)
+    {
+        if ($error) echo $error;
+
+        $this->server->update([
+            'server_monitoring_status' => null,
+            'server_monitoring_username' => null,
+            'server_monitoring_password' => null
+        ]);
     }
 
     public function failed($e)
     {
         echo $e;
+        $this->handleFailed();
     }
 }
