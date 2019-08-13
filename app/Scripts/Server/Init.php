@@ -38,6 +38,8 @@ class Init extends BaseScript
             'api_token' => $this->server->user->api_token
         ]);
 
+        $defaultNginxConfigEndpoint = route('default-servers-nginx-config');
+
         return <<<EOD
 #!/bin/sh
 
@@ -175,6 +177,11 @@ rm /etc/nginx/sites-available/default
 
 # Enable https
 sudo ufw allow 'Nginx HTTP'
+
+# Update config to use default for nesabox servers
+rm /etc/nginx/nginx.conf
+curl -Ss '{$defaultNginxConfigEndpoint}' > /etc/nginx/nginx.conf
+
 service nginx restart
 
 # Install redis
