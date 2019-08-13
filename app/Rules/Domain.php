@@ -15,10 +15,7 @@ class Domain implements Rule
      */
     public function passes($attribute, $value)
     {
-        return (bool) preg_match(
-            "/^([a-zA-Z0-9][a-zA-Z0-9-_]*\.)*[a-zA-Z0-9]*[a-zA-Z0-9-_]*[[a-zA-Z0-9]+$/",
-            $value
-        );
+        return (bool) preg_match("/^([\w-]+\.)*[\w\-]+\.\w{2,10}$/", $value);
     }
 
     /**

@@ -59,6 +59,15 @@ class Site extends Model
         return (new Deploy($this->server, $this))->generate();
     }
 
+    public function pm2Processes()
+    {
+        return $this->hasMany(Pm2Process::class)->where(
+            'status',
+            '!=',
+            STATUS_DELETING
+        );
+    }
+
     /**
      *
      * Get the nexabox site domain for this site

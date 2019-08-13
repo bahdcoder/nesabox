@@ -1,12 +1,4 @@
 SITE_NAME=$1
 
-abort() {
-  echo
-  echo "  $@" 1>&2
-  echo
-  exit 1
-}
-
-certbot --agree-tos -n --nginx --redirect -d $SITE_NAME -m worker@espectra.com
-
-test $? -eq 0 || abort Failed generating certificate.
+# Install ssl certificate for nesabox site
+certbot --agree-tos -n --nginx --redirect -d $SITE_NAME -m nesa@nesabox.com

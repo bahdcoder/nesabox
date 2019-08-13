@@ -75,23 +75,10 @@ class Initialize implements ShouldQueue
      *
      * Handle server initialization
      *
-     *
+     *@return null
      */
     public function handleInitializedServer()
     {
-        // $process = (new VerifyIsReady($this->server))->as(SSH_USER)->run();
-        // if ($process->isSuccessful()) {
-        //     $generateKeyProcess = (new GenerateSshkey($this->server))->run();
-        //     if ($generateKeyProcess->isSuccessful()) {
-        //         $key = explode('ssh-rsa', $generateKeyProcess->getOutput())[1];
-        //         $key = trim("ssh-rsa{$key}");
-        // return $this->server->update([
-        //     'ssh_key' => $key,
-        //     'status' => STATUS_ACTIVE
-        // ]);
-        //     }
-        // }
-        // throw new ServerNotReadyException('Failed verify is ready script.');
     }
 
     /**

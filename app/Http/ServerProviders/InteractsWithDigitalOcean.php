@@ -3,9 +3,9 @@
 namespace App\Http\ServerProviders;
 
 use App\Site;
+use App\Server;
 use Bahdcoder\DigitalOcean\DigitalOcean;
 use GuzzleHttp\Exception\GuzzleException;
-use App\Server;
 
 trait InteractsWithDigitalOcean
 {
@@ -52,6 +52,24 @@ trait InteractsWithDigitalOcean
                 'type' => 'A',
                 'name' => $site->slug,
                 'data' => $site->server->ip_address
+            ]);
+    }
+
+    /**
+     * This method creates a new domain record for server logging site
+     *
+     * @return object
+     */
+    public function createLoggingDomainRecord(Server $server)
+    {
+        return $this->getDigitalOceanConnectionInstance(
+            config('services.digital-ocean.api-token')
+        )
+            ->domainRecord()
+            ->create(config('services.digital-ocean.app-domain'), [
+                'type' => 'A',
+                'name' => $server->slug,
+                'data' => $server->ip_address
             ]);
     }
 

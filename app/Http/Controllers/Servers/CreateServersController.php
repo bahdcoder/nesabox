@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Servers;
 use App\Server;
 use App\Jobs\Servers\Initialize;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Servers\CreateServerRequest;
-use GuzzleHttp\Exception\GuzzleException;
 use App\Http\Resources\ServerResource;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use App\Exceptions\InvalidProviderCredentials;
 use App\Exceptions\FailedCreatingServer;
+use App\Jobs\Servers\CreateServerARecord;
+use GuzzleHttp\Exception\GuzzleException;
+use App\Http\Requests\Servers\CreateServerRequest;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CreateServersController extends Controller
 {
@@ -80,6 +80,8 @@ class CreateServersController extends Controller
                         ? STATUS_INITIALIZING
                         : 'new'
             ]);
+
+        $server->rollServerSlug();
 
         $this->createServerDatabases($server);
 

@@ -30,6 +30,16 @@ class SiteResource extends JsonResource
             'status' => $this->resource->status,
             'repository' => $this->resource->repository,
             'deploying' => (bool) $this->resource->deploying,
+            'pm2_processes' => collect($this->resource->pm2Processes)->map(
+                function ($process, $index) {
+                    return [
+                        'id' => $process->id,
+                        'label' => $process->name,
+                        'value' => $process->logs_path,
+                        'deletable' => $index !== 0
+                    ];
+                }
+            ),
             'app_type' => $this->resource->app_type ?? 'None',
             'is_ready' => $this->resource->status === STATUS_ACTIVE,
             'repository_branch' => $this->resource->repository_branch,

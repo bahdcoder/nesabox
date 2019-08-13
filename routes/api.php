@@ -22,6 +22,8 @@ use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Notifications\Servers\ServerIsReady;
 use App\Http\Controllers\Servers\MonitoringController;
+use App\Server;
+use App\Http\Controllers\Sites\Pm2ProcessController;
 
 /*
 |--------------------------------------------------------------------------
@@ -189,6 +191,16 @@ Route::middleware(['auth:api'])->group(function () {
         MonitoringController::class,
         'store'
     ]);
+
+    Route::post('servers/{server}/sites/{site}/pm2-processes', [
+        Pm2ProcessController::class,
+        'store'
+    ]);
+
+    Route::delete('servers/{server}/sites/{site}/pm2-processes/{pm2-process}', [
+        Pm2ProcessController::class,
+        'destroy'
+    ]);
 });
 
 Route::middleware(['guest', 'api-token'])->group(function () {
@@ -225,4 +237,101 @@ Route::get('beans', function () {
     // \App\Server::first()->throwError();
     echo env('APP_URL');
     // \App\User::first()->notify(new ServerIsReady(\App\Server::first()));
+});
+
+Route::get('logs-watcher-package-json', function () {
+    return <<<EOD
+{
+    "name": "watch-files-app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.19.0",
+        "read-last-lines": "^1.7.1",
+        "socket.io": "^2.2.0",
+        "throttle-debounce": "^2.1.0"
+    }
+}
+EOD;
+});
+
+Route::get('logs-watcher-nginx-config/{server}', function (Server $server) {
+    $name = $server->getLogWatcherSiteDomain();
+
+    return <<<EOD
+server {
+    listen 80;
+    server_name {$name};
+
+    location / {
+        proxy_pass http://localhost:23443;
+        proxy_set_header Host \$http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_max_temp_file_size 0;
+        proxy_redirect off;
+        proxy_read_timeout 240s;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Real-IP \$remote_addr;
+    }
+}
+EOD;
+});
+
+Route::get('logs-watcher-index-js', function () {
+    return <<<EOD
+const Fs = require('fs')
+const Http = require('http')
+const Axios = require('axios')
+const SocketIo = require('socket.io')
+const ReadLastLines = require('read-last-lines')
+
+const API_URL = process.env.API_URL
+
+const Server = Http.createServer((req, res) => {})
+
+const Io = SocketIo(Server)
+
+Io.on('connection', socket => {
+    socket.on(
+        'subscribe',
+        ({ access_token, linesCount = 1000, filePaths } = {}) => {
+            Axios.get(`\${API_URL}/me`, {
+                headers: {
+                    Authorization: `Bearer \${access_token}`
+                }
+            }).then(({}) => {
+                // We'll emit the logs for each of the watched files, before proceeding to
+                // setup watchers
+                const emitFileContent = (filePath) =>
+                    ReadLastLines.read(filePath, linesCount).then(lines => {
+                        socket.emit(`\${filePath}`, lines)
+                    })
+
+                const filesToWatch = filePaths.split(' ')
+
+                filesToWatch.forEach(filePath => {
+                    if (! Fs.existsSync(filePath)) return
+
+                    emitFileContent(filePath)
+                    Fs.watchFile(filePath, () => emitFileContent(filePath))
+                })
+            })
+        }
+    )
+})
+
+Server.listen(process.env.PORT)
+
+EOD;
 });

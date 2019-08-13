@@ -30,11 +30,23 @@ class Server extends Model
                 'bitbucket' => false,
                 'gitlab' => false
             ];
-
-            $model->slug = strtolower(
-                str_slug($model->name) . '-' . str_random(8)
-            );
         });
+    }
+
+    /**
+     * Roll model slug
+     *
+     * @return null
+     */
+    public function rollServerSlug()
+    {
+        do {
+            $this->slug = strtolower(
+                str_slug($this->name) . '-' . str_random(8)
+            );
+        } while ($this->where('slug', $this->slug)->exists());
+
+        $this->save();
     }
 
     /**
@@ -117,6 +129,13 @@ class Server extends Model
     public function mysqlDatabases()
     {
         return $this->databaseInstances()->where('type', 'mysql');
+    }
+
+    public function getLogWatcherSiteDomain()
+    {
+        $domain = config('services.digital-ocean.app-domain');
+
+        return "{$this->slug}.{$domain}";
     }
 
     /**

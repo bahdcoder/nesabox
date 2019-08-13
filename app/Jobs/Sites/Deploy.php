@@ -95,6 +95,14 @@ class Deploy implements ShouldQueue
             $this->deployment->update([
                 'properties->status' => 'success'
             ]);
+
+            $user = SSH_USER;
+
+            $this->site->pm2Processes()->create([
+                'command' => null,
+                'name' => $this->site->name,
+                'logs_path' => "/home/{$user}/.pm2/logs/{$this->site->name}"
+            ]);
         } else {
             $this->deployment->update([
                 'properties->status' => 'failed'

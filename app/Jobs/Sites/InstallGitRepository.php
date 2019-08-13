@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
 use App\Http\SourceControlProviders\InteractsWithGithub;
 use App\Http\SourceControlProviders\InteractsWithGitlab;
+use App\Pm2Process;
 
 class InstallGitRepository implements ShouldQueue
 {
@@ -86,6 +87,13 @@ class InstallGitRepository implements ShouldQueue
         if ($process->isSuccessful()) {
             $this->site->update([
                 'repository_status' => STATUS_ACTIVE
+            ]);
+            $user = SSH_USER;
+
+            $this->site->pm2Processes()->create([
+                'status' => STATUS_ACTIVE,
+                'name' => $this->site->name,
+                'logs_path' => "/home/{$user}/.pm2/logs/{$this->site->name}"
             ]);
         } else {
             $this->site->update([

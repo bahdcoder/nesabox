@@ -142,7 +142,7 @@ NODE_ENV=production yarn knex-migrator init
 mysql -e "UPDATE migrations_lock set locked=0 where lock_key='km01';" -u {$this->databaseUser->name} -p'{$this->databaseUser->password}' {$this->database->name}
 
 # Start the first pm2 instance
-NODE_ENV=production pm2 start index.js --name {$this->site->name} --interpreter /usr/local/n/versions/node/10.13.0/bin/node
+NODE_ENV=production pm2 start index.js --log ~/.pm2/logs/{$this->site->name}.log --name {$this->site->name} --interpreter /usr/local/n/versions/node/10.13.0/bin/node
 EOD;
     }
 }

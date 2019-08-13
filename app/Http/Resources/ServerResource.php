@@ -31,6 +31,7 @@ class ServerResource extends JsonResource
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
             'node_version' => $this->node_version,
+            'log_watcher_site' => "https://{$this->resource->getLogWatcherSiteDomain()}",
             'server_monitoring_username' => $this->server_monitoring_username,
             'server_monitoring_password' => $this->server_monitoring_password,
             'server_monitoring_installed' =>

@@ -207,6 +207,9 @@ EOF
 # Install all databases user selected
 {$this->getDatabasesInstallationScripts()}
 
+# Setup the logs monitoring site
+{$this->setupLogsMonitoringSite()}
+
 generate_post_data()
 {
     cat <<EOF
@@ -221,6 +224,45 @@ curl -i \
 -H "Accept: application/json" \
 -H "Content-Type:application/json" \
 -X POST --data "$(generate_post_data)" "{$callbackEndpoint}"
+EOD;
+    }
+
+    public function setupLogsMonitoringSite()
+    {
+        $user = SSH_USER;
+        $domain = $this->server->getLogWatcherSiteDomain();
+        $apiUrl = config('app.url');
+        return <<<EOD
+su {$user} <<EOF
+cd /home/{$user}
+# Install latest version of node, just in case
+n 12.8.0
+
+# Install pm2 process manager
+npm install -g pm2
+
+# Change directory into the .nesa folder
+cd ~/.{$user}
+
+# Create the file watching project
+mkdir -p /home/{$user}/.{$user}/nesabox-logs-watcher
+curl -Ss '{$apiUrl}/logs-watcher-index-js' > /home/{$user}/.{$user}/nesabox-logs-watcher/index.js
+curl -Ss '{$apiUrl}/logs-watcher-package-json' > /home/{$user}/.{$user}/nesabox-logs-watcher/package.json
+
+cd /home/{$user}/.{$user}/nesabox-logs-watcher
+npm install
+export API_URL={$apiUrl}
+export PORT=23443
+export NODE_ENV=production
+pm2 start index.js --name nesabox-logs-watcher --interpreter /usr/local/n/versions/node/12.8.0/bin/node
+EOF
+
+# Setup the nginx config
+curl -Ss '{$apiUrl}/logs-watcher-nginx-config/{$this->server->id}' > /etc/nginx/sites-available/{$domain}
+
+ln -s /etc/nginx/sites-available/{$domain} /etc/nginx/sites-enabled/
+systemctl restart nginx
+
 EOD;
     }
 

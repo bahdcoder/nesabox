@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Notifications\Servers\ServerIsReady;
+use App\Jobs\Servers\CreateServerARecord;
 
 class InitializationCallbackController extends Controller
 {
@@ -20,6 +21,8 @@ class InitializationCallbackController extends Controller
             'ssh_key' => request()->all()['ssh_key'],
             'status' => STATUS_ACTIVE
         ]);
+
+        CreateServerARecord::dispatch($server);
 
         $server->user->notify(new ServerIsReady($server->fresh()));
 

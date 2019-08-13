@@ -103,12 +103,27 @@ cd /home/{$user}/{$this->site->name}
 
 echo "Starting application"
 
-pm2 reload {$this->site->name} --update-env || pm2 start {$pckManager} --no-automation --name {$this->site->name} --log ~/.pm2/{$this->site->name} --interpreter /usr/local/n/versions/node/{$nodeVersion}/bin/node -- run {$startCommand}
-
+pm2 reload {$this->site->name} --update-env || pm2 start {$pckManager} --log ~/.pm2/logs/{$this->site->name} --no-automation --name {$this->site->name} --interpreter /usr/local/n/versions/node/{$nodeVersion}/bin/node -- run {$startCommand}
+{$this->generateWorkerProcessses($nodeVersion, $pckManager)}
 echo "Running after deploy script"
 
 {$this->site->after_deploy_script}
 EOD;
+    }
+
+    public function generateWorkerProcessses($nodeVersion, $pckManager)
+    {
+        $script = '';
+
+        foreach($this->site->pm2Processes as $process):
+            $script.= <<<EOD
+\n
+echo "Starting process : {$process->name}";
+pm2 reload {$process->slug} --update-env || pm2 start {$pckManager} --log ~/.pm2/logs/{$process->slug} --no-automation --name {$process->slug} --interpreter /usr/local/n/versions/node/{$nodeVersion}/bin/node -- run {$process->command}
+EOD;
+        endforeach;
+
+        return $script;
     }
 
     public function setEnvironmentVariables()
