@@ -97,6 +97,7 @@ class UpdateSiteSlug implements ShouldQueue
                 'updating_slug_status' => null
             ]);
         } else {
+            echo $process->getErrorOutput();
             $this->site->update([
                 'slug' => $oldSiteSlug,
                 'updating_slug_status' => null
