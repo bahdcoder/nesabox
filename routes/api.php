@@ -326,6 +326,7 @@ http {
 
         include /etc/nginx/conf.d/*.conf;
         include /etc/nginx/sites-enabled/*;
+        # include /etc/nginx/nesabox-sites-enabled/*;
 }
 
 

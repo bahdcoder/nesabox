@@ -36,7 +36,7 @@ class SiteResource extends JsonResource
                         'id' => $process->id,
                         'label' => $process->name,
                         'value' => $process->logs_path,
-                        'deletable' => $index !== 0
+                        'deletable' => $process->name !== $this->resource->name
                     ];
                 }
             ),

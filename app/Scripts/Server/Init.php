@@ -180,7 +180,7 @@ sudo ufw allow 'Nginx HTTP'
 
 # Update config to use default for nesabox servers
 rm /etc/nginx/nginx.conf
-curl -Ss '{$defaultNginxConfigEndpoint}' > /etc/nginx/nginx.conf
+curl -Ss '{$defaultNginxConfigEndpoint}' >/etc/nginx/nginx.conf
 
 service nginx restart
 

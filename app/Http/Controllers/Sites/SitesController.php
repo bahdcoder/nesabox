@@ -24,10 +24,9 @@ class SitesController extends Controller
     {
         $site = $server->sites()->create([
             'name' => $request->name,
+            'slug' => $request->slug,
             'status' => STATUS_INSTALLING
         ]);
-
-        $site->rollSlug();
 
         AddSite::dispatch($server, $site);
 

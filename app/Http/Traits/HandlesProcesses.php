@@ -164,11 +164,8 @@ trait HandlesProcesses
 
         $arguments = "{$site->name} {$site->getNexaboxSiteDomain()} {$user}";
 
-        return $this->execProcessAsync(
-            $this->sshScript($server, $scriptPath, $arguments),
-            function ($log) {
-                echo $log;
-            }
+        return $this->execProcess(
+            $this->sshScript($server, $scriptPath, $arguments)
         );
     }
 

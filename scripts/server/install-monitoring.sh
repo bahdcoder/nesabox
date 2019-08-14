@@ -6,7 +6,7 @@ DATABASE_PASSWORD=$5
 MONGODB_AUTH_USER=$6
 MONGODB_AUTH_PASSWORD=$7
 
-
+set -e
 # Hide netdata behind an nginx configuration
 
 # Create config file
@@ -43,6 +43,11 @@ systemctl restart nginx
 
 # Generate ssl certificate for this sites
 certbot --agree-tos -n --nginx --redirect -d $METRICS_SITE_NAME -m nesa@nesabox.com
+
+# Just in case the error - 'Another instance of certbot is already running persists, use this.'
+# if [ $? -eq 0 ]; then
+#     find / -type f -name ".certbot.lock" -exec rm {} \;
+# fi
 
 # Run the script that installs all packages needed for netdata to work correctly.
 

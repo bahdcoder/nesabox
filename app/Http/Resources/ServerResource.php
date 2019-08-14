@@ -61,7 +61,7 @@ class ServerResource extends JsonResource
             'mysql_databases' => DatabaseResource::collection(
                 $this->mysqlDatabases
             ),
-            $this->when($this->provider === CUSTOM_PROVIDER, [
+            $this->mergeWhen($this->provider === CUSTOM_PROVIDER, [
                 'deploy_script' => $deploy_script_route,
                 'deploy_command' => "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh"
             ])

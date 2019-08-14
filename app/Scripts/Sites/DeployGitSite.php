@@ -53,7 +53,7 @@ class DeployGitSite extends Base
             : config('nesa.default_package_manager');
 
         // If the user set garbage, just use npm
-        if ($pckManager !== 'yarn' || $pckManager !== 'npm') {
+        if (! in_array($pckManager, ['yarn', 'npm'])) {
             $pckManager = 'npm';
         }
 
@@ -115,7 +115,7 @@ EOD;
     {
         $script = '';
 
-        foreach($this->site->pm2Processes as $process):
+        foreach($this->site->pm2ProcessesExceptWeb() as $process):
             $script.= <<<EOD
 \n
 echo "Starting process : {$process->name}";

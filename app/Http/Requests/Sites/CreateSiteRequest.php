@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Sites;
 
 use App\Rules\Domain;
+use App\Rules\Subdomain;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -32,7 +33,8 @@ class CreateSiteRequest extends FormRequest
                     return $q->where('server_id', $this->route('server')->id);
                 }),
                 new Domain()
-            ]
+            ],
+            'slug' => ['required', 'unique:sites', new Subdomain()]
             // 'wild_card_subdomains' => 'boolean'
         ];
     }
