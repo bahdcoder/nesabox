@@ -1,25 +1,15 @@
 # Nesabox api
 
-su nesa <<EOF
-cd /home/nesa
-# Install latest version of node, just in case
-n 12.8.0
+# Ideas
 
-# Install pm2 process manager
-npm install -g pm2
+- For now, we'll get rid of all `*.nesabox.com` support domains. Then, we'll figure out a way to setup a `*.nesaboxapp.com` something. Wow lol I feel free.
+- This means, all certbot issues are completely gone !!!
 
-# Change directory into the .nesa folder
-cd ~/.nesa
+# How to setup realtime logs
 
-# Create the file watching project
-mkdir -p /home/nesa/.nesa/nesabox-logs-watcher
-curl -Ss 'https://9094ca87.ngrok.io/logs-watcher-index-js' > /home/nesa/.nesa/nesabox-logs-watcher/index.js
-curl -Ss 'https://9094ca87.ngrok.io/logs-watcher-package-json' > /home/nesa/.nesa/nesabox-logs-watcher/package.json
+1 - Setup log watching app on user's server as usual
+2 - Setup socket-io client (server side) on log-watcher.nesabox.com on your nesabox server
+3 - When user visits page, user subscribes (emits subscribe) to log-watcher.nesabox.com site. 
+4 - If confirmed, log-watcher.nesabox.com subscribes to log-watcher on user's server. 
+5 - When file changes on user's server, log-watcher receives the file changes, and emits to the client browser.
 
-cd /home/nesa/.nesa/nesabox-logs-watcher
-npm install
-export API_URL=https://9094ca87.ngrok.io
-export PORT=23443
-export NODE_ENV=production
-pm2 start index.js --name nesabox-logs-watcher --interpreter /usr/local/n/versions/node/12.8.0/bin/node
-EOF
