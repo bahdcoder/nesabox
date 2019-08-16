@@ -100,6 +100,7 @@ EOF
 useradd {$user}
 mkdir -p /home/{$user}/.ssh
 mkdir -p /home/{$user}/.{$user}
+mkdir -p /home/{$user}/.{$user}/ecosystems
 adduser {$user} sudo
 
 chsh -s /bin/bash {$user}
@@ -175,13 +176,17 @@ apt-get install -y nginx
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 
+# Clone the h5bp nginx configs
+git clone https://github.com/h5bp/server-configs-nginx.git /etc/nginx/h5bp-repository
+mv /etc/nginx/h5bp-repository/h5bp /etc/nginx/h5bp
+cp /etc/nginx/h5bp-repository/nginx.conf /etc/nginx/nginx.conf
+rm -r /etc/nginx/h5bp-repository
+
+# Add nesa configs folder
+mkdir /etc/nginx/nesa-conf
+
 # Enable https
 sudo ufw allow 'Nginx HTTP'
-
-# Update config to use default for nesabox servers
-rm /etc/nginx/nginx.conf
-curl -Ss '{$defaultNginxConfigEndpoint}' >/etc/nginx/nginx.conf
-
 service nginx restart
 
 # Install redis
@@ -265,10 +270,10 @@ pm2 start index.js --name nesabox-logs-watcher --interpreter /usr/local/n/versio
 EOF
 
 # Setup the nginx config
-curl -Ss '{$apiUrl}/logs-watcher-nginx-config/{$this->server->id}' > /etc/nginx/sites-available/{$domain}
+# curl -Ss '{$apiUrl}/logs-watcher-nginx-config/{$this->server->id}' > /etc/nginx/sites-available/{$domain}
 
-ln -s /etc/nginx/sites-available/{$domain} /etc/nginx/sites-enabled/
-systemctl restart nginx
+# ln -s /etc/nginx/sites-available/{$domain} /etc/nginx/sites-enabled/
+# systemctl restart nginx
 
 EOD;
     }

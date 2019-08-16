@@ -5,6 +5,22 @@
 - For now, we'll get rid of all `*.nesabox.com` support domains. Then, we'll figure out a way to setup a `*.nesaboxapp.com` something. Wow lol I feel free.
 - This means, all certbot issues are completely gone !!!
 
+# How to handle nginx configuration
+- Install nginx
+- Clone the h5bp nginx configs
+        - `git clone https://github.com/h5bp/server-configs-nginx.git h5bp-repository`
+        - `mv /etc/nginx/h5bp-repository/h5bp /etc/nginx/h5bp`
+        - `rm -r /etc/nginx/h5bp-repository`
+- Replace the default nginx configuration with the one from h5bp 
+        - `rm /etc/nginx/nginx.conf`
+        - `cp /etc/nginx/h5bp/nginx.conf /etc/nginx/nginx.conf`
+- Add a folder called `nesa-conf`
+        - `mkdir /etc/nginx/nesa-conf`
+- To add a site, add a folder in the `nesa-conf` folder for that site
+        - `mkdir /etc/nginx/nesa-conf/ssl-http2.nesabox.com`
+        - Add a default configuration for that site.
+        - `cat > /etc/nginx/nesa-conf/ssl-http2.nesabox.com/base.conf << EOF EOF`
+
 # How to setup realtime logs
 
 1 - Setup log watching app on user's server as usual

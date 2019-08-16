@@ -22,12 +22,12 @@ class InitializationCallbackController extends Controller
             'status' => STATUS_ACTIVE
         ]);
 
-        CreateServerARecord::dispatch($server);
+        // CreateServerARecord::dispatch($server);
 
         $server->user->notify(new ServerIsReady($server->fresh()));
 
         return response()->json([
-            'message' => 'Cheers ! Server marked as active.'
+            'message' => 'Great ! Server is now active.'
         ]);
     }
 }

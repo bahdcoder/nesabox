@@ -96,6 +96,27 @@ npm i -g yarn
 # Install pm2
 npm install -g pm2
 
+# Generate PM2 Ecosystem config file
+cat > /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js  << EOF
+module.exports = {
+    apps: [{
+        name: '{$this->site->name}',
+        script: 'index.js',
+        instances: 1,
+        autorestart: true,
+        exec_mode: 'cluster',
+        log_date_format: 'YYYY-MM-DD HH:mm',
+        cwd: '/home/nesa/{$this->site->name}',
+        interpreter: '/usr/local/n/versions/node/10.13.0/bin/node',
+        env: {
+            NODE_ENV: 'production'
+        },
+        error_file: '/home/nesa/.pm2/logs/{$this->site->name}',
+        out_file: '/home/nesa/.pm2/logs/{$this->site->name}',
+    }]
+}
+EOF
+
 # Generate ghost blog config
 cat > /home/{$user}/{$this->site->name}/config.production.json << EOF
 {
@@ -141,8 +162,8 @@ NODE_ENV=production yarn knex-migrator init
 # We are going to manually remove migration lock for now
 mysql -e "UPDATE migrations_lock set locked=0 where lock_key='km01';" -u {$this->databaseUser->name} -p'{$this->databaseUser->password}' {$this->database->name}
 
-# Start the first pm2 instance
-NODE_ENV=production pm2 start index.js --log ~/.pm2/logs/{$this->site->name}.log --name {$this->site->name} --interpreter /usr/local/n/versions/node/10.13.0/bin/node
+# Start the ecosystem file for thi ghost installation
+pm2 start /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js
 EOD;
     }
 }

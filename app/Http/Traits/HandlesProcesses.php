@@ -162,7 +162,7 @@ trait HandlesProcesses
 
         $user = SSH_USER;
 
-        $arguments = "{$site->name} {$site->getNexaboxSiteDomain()} {$user}";
+        $arguments = "{$site->name} {$user}";
 
         return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments)
