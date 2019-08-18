@@ -9,6 +9,13 @@ use App\Jobs\Servers\InstallMonitoring;
 
 class MonitoringController extends Controller
 {
+    public function index(Server $server)
+    {
+        $this->authorize('view', $server);
+
+        return response()->json($server->fetchMetrics());
+    }
+
     public function store(Server $server)
     {
         $this->authorize('view', $server);

@@ -70,7 +70,9 @@ class Site extends Model
 
     public function pm2ProcessesExceptWeb()
     {
-        return $this->pm2Processes()->where('name', '!=', $this->name)->get();
+        return $this->pm2Processes()
+            ->where('name', '!=', $this->name)
+            ->get();
     }
 
     /**

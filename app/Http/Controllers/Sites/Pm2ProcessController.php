@@ -40,7 +40,12 @@ class Pm2ProcessController extends Controller
             'status' => STATUS_DELETING
         ]);
 
-        if ($site->pm2Processes()->first() && $pm2Process->id === $site->pm2Processes()->first()->id) abort(400, __('Cannot delete the main web process.'));
+        if (
+            $site->pm2Processes()->first() &&
+            $pm2Process->id === $site->pm2Processes()->first()->id
+        ) {
+            abort(400, __('Cannot delete the main web process.'));
+        }
 
         DestroyPm2Process::dispatch($server, $site, $pm2Process);
 

@@ -18,6 +18,7 @@ use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Notifications\Servers\ServerIsReady;
@@ -192,6 +193,11 @@ Route::middleware(['auth:api'])->group(function () {
         'store'
     ]);
 
+    Route::get('servers/{server}/metrics', [
+        MonitoringController::class,
+        'index'
+    ]);
+
     Route::post('servers/{server}/sites/{site}/pm2-processes', [
         Pm2ProcessController::class,
         'store'
@@ -233,11 +239,15 @@ Route::middleware(['guest', 'api-token'])->group(function () {
 // $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 Auth::routes();
 
-Route::get('beans', function () {
-    // \App\Server::first()->throwError();
-    echo env('APP_URL');
-    // \App\User::first()->notify(new ServerIsReady(\App\Server::first()));
-});
+Route::get('/nesa-metrics/package.json', [
+    FileController::class,
+    'nesaMetricsPackageJson'
+]);
+
+Route::get('/nesa-metrics/index.js', [
+    FileController::class,
+    'nesaMetricsIndexJs'
+]);
 
 Route::get('logs-watcher-package-json', function () {
     return <<<EOD

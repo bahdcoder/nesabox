@@ -141,7 +141,12 @@ return [
         'production' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default', 'broadcasts', 'notifications', 'deletions'],
+                'queue' => [
+                    'default',
+                    'broadcasts',
+                    'notifications',
+                    'deletions'
+                ],
                 'balance' => 'simple',
                 'processes' => 12,
                 'tries' => 1
@@ -151,7 +156,12 @@ return [
         'local' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default', 'broadcasts', 'notifications', 'deletions'],
+                'queue' => [
+                    'default',
+                    'broadcasts',
+                    'notifications',
+                    'deletions'
+                ],
                 'balance' => 'simple',
                 'processes' => 12,
                 'tries' => 1,

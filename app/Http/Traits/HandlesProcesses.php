@@ -403,15 +403,10 @@ trait HandlesProcesses
 
         $scriptName = base_path($scriptPath);
 
-        // METRICS_SITE_NAME=$1
-        // NGINX_USER=$2
-        // NGINX_PASSWORD=$3
-        // DATABASE_USER=$4
-        // DATABASE_PASSWORD=$5
-        // MONGODB_AUTH_USER=$6
-        // MONGODB_AUTH_PASSWORD=$7
-        $metrics_site_name = $server->getNesaboxServerMonitoringDomain();
-
+        // DATABASE_USER=$1
+        // DATABASE_PASSWORD=$2
+        // MONGODB_AUTH_USER=$3
+        // MONGODB_AUTH_PASSWORD=$4
         $database_user = str_random(12);
         $database_pass = str_random(12);
 
@@ -429,7 +424,7 @@ trait HandlesProcesses
             $mongodb_auth_password = $mongodbDatabaseUser->password;
         }
 
-        $arguments = "{$metrics_site_name} {$server->server_monitoring_username} {$server->server_monitoring_password} {$database_user} {$database_pass} {$mongodb_auth_user} {$mongodb_auth_password}";
+        $arguments = "{$database_user} {$database_pass} {$mongodb_auth_user} {$mongodb_auth_password}";
 
         return $this->execProcessAsync(
             $this->sshScript($server, $scriptName, $arguments),

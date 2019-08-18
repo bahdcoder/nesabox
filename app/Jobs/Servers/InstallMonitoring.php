@@ -45,15 +45,6 @@ class InstallMonitoring implements ShouldQueue
      */
     public function handle()
     {
-        // first, we'll add the dns record to digital ocean
-        $this->createMetricsDomainRecord($this->server);
-        // next, we'll call the process background job
-
-        $this->server->update([
-            'server_monitoring_username' => str_random(12),
-            'server_monitoring_password' => str_random(12)
-        ]);
-
         // finally dispatch a notification to the user once its done.
         $process = $this->installServerMonitoring($this->server->fresh());
 
@@ -61,6 +52,8 @@ class InstallMonitoring implements ShouldQueue
             $this->server->update([
                 'server_monitoring_status' => STATUS_ACTIVE
             ]);
+        } else {
+            $this->handleFailed();
         }
 
         $this->server->user->notify(new ServerIsReady($this->server));
@@ -68,7 +61,9 @@ class InstallMonitoring implements ShouldQueue
 
     public function handleFailed($error = null)
     {
-        if ($error) echo $error;
+        if ($error) {
+            echo $error;
+        }
 
         $this->server->update([
             'server_monitoring_status' => null,

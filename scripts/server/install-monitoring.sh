@@ -1,53 +1,7 @@
-METRICS_SITE_NAME=$1
-NGINX_USER=$2
-NGINX_PASSWORD=$3
-DATABASE_USER=$4
-DATABASE_PASSWORD=$5
-MONGODB_AUTH_USER=$6
-MONGODB_AUTH_PASSWORD=$7
-
-set -e
-# Hide netdata behind an nginx configuration
-
-# Create config file
-cat > /etc/nginx/sites-available/$METRICS_SITE_NAME << EOF
-server {
-    listen 80;
-    server_name $METRICS_SITE_NAME;
-
-    location / {
-    	proxy_pass http://localhost:19999;
-    	proxy_set_header Host \$http_host;
-    	proxy_set_header X-NginX-Proxy true;
-    	proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    	proxy_http_version 1.1;
-    	proxy_set_header Upgrade \$http_upgrade;
-    	proxy_set_header Connection "upgrade";
-    	proxy_max_temp_file_size 0;
-    	proxy_redirect off;
-    	proxy_read_timeout 240s;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_set_header X-Real-IP \$remote_addr;
-
-        auth_basic "Authentication is required to access this site.";
-	    auth_basic_user_file /etc/nginx/.htpasswd;
-    }
-}
-EOF
-
-# Enable the nginx config for this site
-ln -s /etc/nginx/sites-available/$METRICS_SITE_NAME /etc/nginx/sites-enabled/
-
-# Restart nginx
-systemctl restart nginx
-
-# Generate ssl certificate for this sites
-certbot --agree-tos -n --nginx --redirect -d $METRICS_SITE_NAME -m nesa@nesabox.com
-
-# Just in case the error - 'Another instance of certbot is already running persists, use this.'
-# if [ $? -eq 0 ]; then
-#     find / -type f -name ".certbot.lock" -exec rm {} \;
-# fi
+DATABASE_USER=$1
+DATABASE_PASSWORD=$2
+MONGODB_AUTH_USER=$3
+MONGODB_AUTH_PASSWORD=$4
 
 # Run the script that installs all packages needed for netdata to work correctly.
 
@@ -266,17 +220,3 @@ systemctl restart netdata
 
 cd ~
 rm -r netdata-temp-folder
-
-# Install apache tools for securing nginx
-apt-get install -y apache2-utils
-
-# Create htpassword file if it does not exist
-if [[ ! -e /etc/nginx/.htpasswd ]]; then
-    touch /etc/nginx/.htpasswd
-fi
-
-# Create a user and password for accessing nginx site
-htpasswd -b /etc/nginx/.htpasswd $NGINX_USER $NGINX_PASSWORD
-
-# Restart nginx
-systemctl restart nginx

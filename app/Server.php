@@ -2,6 +2,8 @@
 
 namespace App;
 
+use GuzzleHttp\Client;
+
 class Server extends Model
 {
     /**
@@ -136,6 +138,21 @@ class Server extends Model
         $domain = config('services.digital-ocean.app-domain');
 
         return "{$this->slug}.{$domain}";
+    }
+
+    public function fetchMetrics()
+    {
+        $nesaMetricsPort = config('nesa.metrics_port');
+
+        return json_decode(
+            (new Client([
+                'base_uri' => "http://{$this->ip_address}:{$nesaMetricsPort}"
+            ]))->post('/', [
+                'json' => [
+                    'url' => '?chart=system.cpu&after=-60&format=json'
+                ]
+            ])->getBody()
+        );
     }
 
     /**

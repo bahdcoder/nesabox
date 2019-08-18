@@ -38,7 +38,9 @@ class Init extends BaseScript
             'api_token' => $this->server->user->api_token
         ]);
 
-        $defaultNginxConfigEndpoint = route('default-servers-nginx-config');
+        $nesaboxIp = config('nesa.ip');
+
+        $metricsPort = config('nesa.metrics_port');
 
         return <<<EOD
 #!/bin/sh
@@ -151,6 +153,9 @@ chown nesa -R /home/{$user}/.ssh
 ufw allow 22
 ufw allow 80
 ufw allow 443
+
+# Enable access to nesabox IP ADDRESS for this server
+ufw allow from {$nesaboxIp} to any port {$metricsPort}
 ufw --force enable
 
 # Create swap file if it does not exist 
@@ -187,6 +192,7 @@ mkdir /etc/nginx/nesa-conf
 
 # Enable https
 sudo ufw allow 'Nginx HTTP'
+sudo ufw allow 'Nginx HTTPS'
 service nginx restart
 
 # Install redis
@@ -219,8 +225,11 @@ EOF
 # Install all databases user selected
 {$this->getDatabasesInstallationScripts()}
 
-# Setup the logs monitoring site
-{$this->setupLogsMonitoringSite()}
+# Install netdata
+{$this->installNetData()}
+
+# Setup the server monitoring script
+{$this->setupServerMonitoringScript()}
 
 generate_post_data()
 {
@@ -239,8 +248,307 @@ curl -i \
 EOD;
     }
 
+    public function netDataConfigMysql()
+    {
+        $database_user = str_random(12);
+        $database_pass = str_random(12);
+
+        if (!in_array(MYSQL_DB, $this->server->databases)) {
+            return '';
+        }
+
+        return <<<EOD
+mysql -e "CREATE USER '{$database_user}'@'localhost' IDENTIFIED BY '{$database_pass}';"
+mysql -e "GRANT USAGE ON *.* TO {$database_user}@localhost IDENTIFIED BY '{$database_pass}';"
+mysql -e "FLUSH PRIVILEGES;"
+
+# Create a mysql.conf file to enable the mysql netdata plugin
+cat >> /etc/netdata/python.d/mysql.conf << EOF
+tcp:
+    name: 'local'
+    host: '127.0.0.1'
+    port: '3306'
+    user: '{$database_user}'
+    pass: '{$database_pass}'
+EOF   
+EOD;
+    }
+
+    public function netDataConfigMongodb()
+    {
+        if (!in_array(MONGO_DB, $this->server->databases)) {
+            return '';
+        }
+
+        $database_user = str_random(12);
+        $database_pass = str_random(12);
+
+        // Let's get the auth user for mongo db
+        $mongodbDatabaseUser = $this->server
+            ->databaseUsers()
+            ->where('type', MONGO_DB)
+            ->first();
+
+        $mongodb_auth_user = '';
+        $mongodb_auth_password = '';
+
+        if ($mongodbDatabaseUser) {
+            $mongodb_auth_user = $mongodbDatabaseUser->name;
+            $mongodb_auth_password = $mongodbDatabaseUser->password;
+        }
+
+        return <<<EOD
+# Create a mongodb user for monitoring
+mongo --eval "db.createUser({ user: '{$database_user}', pwd: '{$database_pass}', roles: [{role: 'read', db: 'admin' }, { role: 'clusterMonitor', db: 'admin' }, {role: 'read', db: 'local' }]})" -u {$mongodb_auth_user} -p {$mongodb_auth_password} --authenticationDatabase admin
+
+# Create a mongodb.conf file to enable the mongodb netdata plugin
+cat >> /etc/netdata/python.d/mongodb.conf << EOF
+    local:
+        name   : 'local'
+        host   : '127.0.0.1'
+        port   : 27017
+        authdb : 'admin'
+        user   : '{$database_user}'
+        pass   : '{$database_pass}'
+EOF
+EOD;
+    }
+
+    public function installNetData()
+    {
+        return <<<EOD
+curl -Ss 'https://raw.githubusercontent.com/netdata/netdata-demo-site/master/install-required-packages.sh' >/tmp/kickstart.sh && bash /tmp/kickstart.sh -i netdata-all --non-interactive
+
+# clone the netdata repository and run netdata installer
+
+git clone https://github.com/netdata/netdata.git netdata-temp-folder --depth=100
+
+# Execute the netdata install script
+cd netdata-temp-folder
+
+./netdata-installer.sh --dont-wait
+
+cd ~
+
+# Download fresh netdata.conf file
+curl -o /etc/netdata/netdata.conf http://localhost:19999/netdata.conf
+
+
+# Enable python.d plugins
+cat >> /etc/netdata/python.d.conf << EOF
+# netdata python.d.plugin configuration
+#
+# This file is in YaML format.
+# Generally the format is:
+#
+# name: value
+#
+
+# Enable / disable the whole python.d.plugin (all its modules)
+enabled: yes
+
+# ----------------------------------------------------------------------
+# Enable / Disable python.d.plugin modules
+default_run: yes
+#
+# If "default_run" = "yes" the default for all modules is enabled (yes).
+# Setting any of these to "no" will disable it.
+#
+# If "default_run" = "no" the default for all modules is disabled (no).
+# Setting any of these to "yes" will enable it.
+
+# Enable / Disable explicit garbage collection (full collection run). Default is enabled.
+gc_run: yes
+
+# Garbage collection interval in seconds. Default is 300.
+gc_interval: 300
+
+# apache: yes
+
+# apache_cache has been replaced by web_log
+# adaptec_raid: yes
+apache_cache: no
+# beanstalk: yes
+# bind_rndc: yes
+# boinc: yes
+# ceph: yes
+chrony: no
+# couchdb: yes
+# dns_query_time: yes
+# dnsdist: yes
+# dockerd: yes
+# dovecot: yes
+# elasticsearch: yes
+# energid: yes
+
+# this is just an example
+example: no
+
+# exim: yes
+# fail2ban: yes
+# freeradius: yes
+go_expvar: no
+
+# gunicorn_log has been replaced by web_log
+gunicorn_log: no
+# haproxy: yes
+# hddtemp: yes
+# httpcheck: yes
+# icecast: yes
+# ipfs: yes
+# isc_dhcpd: yes
+# litespeed: yes
+logind: no
+# megacli: yes
+# memcached: yes
+mongodb: yes
+# monit: yes
+mysql: yes
+nginx: yes
+# nginx_plus: yes
+# nvidia_smi: yes
+
+# nginx_log has been replaced by web_log
+nginx_log: no
+# nsd: yes
+# ntpd: yes
+# openldap: yes
+# oracledb: yes
+# ovpn_status_log: yes
+# phpfpm: yes
+# portcheck: yes
+# postfix: yes
+# postgres: yes
+# powerdns: yes
+# proxysql: yes
+# puppet: yes
+# rabbitmq: yes
+redis: yes
+# rethinkdbs: yes
+# retroshare: yes
+# riakkv: yes
+# samba: yes
+# sensors: yes
+# smartd_log: yes
+# spigotmc: yes
+# springboot: yes
+# squid: yes
+# traefik: yes
+# tomcat: yes
+# tor: yes
+unbound: no
+# uwsgi: yes
+# varnish: yes
+# w1sensor: yes
+# web_log: yes
+EOF
+
+cat >> /etc/nginx/conf.d/stub-status.conf << EOF
+# -----------------------------------------------------------------------------
+# | Stub module provides access to basic status information. (Do not remove)  |
+# -----------------------------------------------------------------------------
+
+server {
+     listen 80 default_server;
+     listen [::]:80 default_server;
+     location /stub_status {
+        stub_status;
+        allow 127.0.0.1;
+        deny all;
+    }
+}
+EOF
+
+cat >> /etc/netdata/python.d/nginx.conf << EOF
+localhost:
+  name : 'local'
+  url  : 'http://127.0.0.1/stub_status'
+EOF
+
+{$this->netDataConfigMysql()}
+
+{$this->netDataConfigMongodb()}
+
+# Add recommended configuration for netdata
+
+cat >> /etc/sysctl.conf << EOF
+vm.dirty_expire_centisecs=60000
+vm.dirty_background_ratio=80
+vm.dirty_ratio=90
+EOF
+
+# Increase max open files limit
+mkdir -p /etc/systemd/system/netdata.service.d
+cat >> /etc/systemd/system/netdata.service.d/limits.conf << EOF
+[Service]
+LimitNOFILE=30000
+EOF
+
+# Reload system daemon
+systemctl daemon-reload
+
+# Restart netdata
+systemctl restart netdata
+
+# Cleanup
+
+cd ~
+rm -r netdata-temp-folder
+EOD;
+    }
+
+    public function setupServerMonitoringScript()
+    {
+        $user = SSH_USER;
+        $apiUrl = config('app.url');
+
+        return <<<EOD
+# Create system.service file
+cat > /lib/systemd/system/nesa-metrics.service << EOF
+[Unit]
+Description=Server metrics available on https://nesabox.com
+Documentation=https://docs.nesabox.com
+After=network.target
+
+[Service]
+Type=simple
+User=nesa  
+ExecStart=/usr/local/n/versions/node/12.8.1/bin/node /home/nesa/.nesa/nesa-metrics/index.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+su {$user} <<EOF
+cd /home/{$user}
+# Install latest version of node, just in case
+n 12.8.1
+
+# Install pm2 process manager
+npm install -g pm2
+
+# Change directory into the .nesa folder
+cd ~/.{$user}
+
+# Create the nesa-metrics project
+mkdir -p /home/{$user}/.{$user}/nesa-metrics
+
+curl -Ss '{$apiUrl}/nesa-metrics/package.json' > /home/{$user}/.{$user}/nesa-metrics/package.json
+curl -Ss '{$apiUrl}/nesa-metrics/index.js' > /home/{$user}/.{$user}/nesa-metrics/index.js
+
+cd /home/{$user}/.{$user}/nesa-metrics
+npm install
+EOF
+
+systemctl daemon-reload
+systemctl start nesa-metrics
+EOD;
+    }
+
     public function setupLogsMonitoringSite()
     {
+        return;
         $user = SSH_USER;
         $domain = $this->server->getLogWatcherSiteDomain();
         $apiUrl = config('app.url');
@@ -328,17 +636,28 @@ EOD;
                 case MONGO_DB:
                     $script .= <<<EOD
 \n
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
-apt-get update
-apt-get install -y mongodb-org
-systemctl enable mongod
-systemctl restart mongod
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 
-mongo << EOF
-use admin
-db.createUser({ user: '{$database->databaseUser->name}', pwd: '{$database->databaseUser->password}', roles: [{ role: 'root', db: 'admin' }, { role: 'userAdminAnyDatabase', db: 'admin' }]})
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+sudo service mongod start
+
+systemctl restart mongod
+systemctl status mongod
+
+cat > app.js << EOF
+db.createUser ({
+    user: "{$database->databaseUser->name}",
+    pwd: "{$database->databaseUser->password}",
+    roles: [{ role: 'root', db: 'admin' }, { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]}
+)
+printjson(db.getUsers())
 EOF
+
+mongo admin app.js
+
+rm app.js
 
 cat >> /etc/mongod.conf << EOF
 security:

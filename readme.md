@@ -29,3 +29,6 @@
 4 - If confirmed, log-watcher.nesabox.com subscribes to log-watcher on user's server. 
 5 - When file changes on user's server, log-watcher receives the file changes, and emits to the client browser.
 
+# How to securely get metrics from server
+
+1 - We'll have an endpoint on nesabox, this endpoint connects to the server, a node js script on the server makes a local api request to fetch netdata data, then returns it to nesabox which inturn returns it to the browser.
