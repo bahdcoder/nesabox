@@ -22,6 +22,14 @@ class Site extends Model
      */
     protected $hidden = ['deploy_script'];
 
+    public function getDeploymentsAttribute()
+    {
+        return Activity::forSubject($this)
+            ->where('description', 'Deployment')
+            ->latest()
+            ->paginate();
+    }
+
     /**
      *
      * Build the ssh clone url based on the repository provider

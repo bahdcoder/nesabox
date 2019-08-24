@@ -33,13 +33,13 @@ class GhostController extends Controller
             'type' => MYSQL_DB,
             'server_id' => $server->id,
             'password' => str_random(12),
-            'name' => str_slug("ghost-user-{$site->slug}", '_')
+            'name' => str_random(12)
         ]);
 
         $database = $databaseUser->databases()->create([
             'type' => MYSQL_DB,
             'server_id' => $server->id,
-            'name' => str_slug("ghost-db-{$site->slug}", '_')
+            'name' => str_random(12)
         ]);
 
         InstallGhost::dispatch($server, $site, $databaseUser, $database);

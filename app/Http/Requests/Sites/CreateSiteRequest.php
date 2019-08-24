@@ -33,8 +33,7 @@ class CreateSiteRequest extends FormRequest
                     return $q->where('server_id', $this->route('server')->id);
                 }),
                 new Domain()
-            ],
-            'slug' => ['required', 'unique:sites', new Subdomain()]
+            ]
             // 'wild_card_subdomains' => 'boolean'
         ];
     }

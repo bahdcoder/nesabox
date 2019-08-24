@@ -4,11 +4,9 @@ namespace App\Scripts\Sites;
 
 use App\Site;
 use App\Server;
-use App\Database;
 use App\Scripts\Base;
-use App\DatabaseUser;
 
-class UpdateGhostConfig extends Base
+class UpdatePm2EcosystemFile extends Base
 {
     /**
      * The server.
@@ -52,10 +50,22 @@ class UpdateGhostConfig extends Base
     {
         $user = SSH_USER;
         return <<<EOD
-cat > /home/{$user}/{$this->site->name}/config.production.json << EOF
+cat > /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js << EOF
 {$this->config}
 EOF
+EOD;
+    }
 
+    public function reloadPm2()
+    {
+        $user = SSH_USER;
+
+        // Do not reload pm2 if this site has never been deployed.
+        if ($this->site->deployments->count() === 0) {
+            return '';
+        }
+
+        return <<<EOD
 # Reload pm2 site - no downtime
 pm2 reload /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js --update-env
 EOD;

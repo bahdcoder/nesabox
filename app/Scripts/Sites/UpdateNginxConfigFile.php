@@ -6,7 +6,7 @@ use App\Site;
 use App\Server;
 use App\Scripts\Base;
 
-class UpdateSiteSlug extends Base
+class UpdateNginxConfigFile extends Base
 {
     /**
      * The server.
@@ -23,21 +23,21 @@ class UpdateSiteSlug extends Base
     public $site;
 
     /**
-     * The new site slug
-     *
+     * The file hash in storage
+     * 
      * @var string
      */
-    public $slug;
+    public $hash;
 
     /**
      * Initialize this class
      *
      * @return void
      */
-    public function __construct(Server $server, Site $site, string $slug)
+    public function __construct(Server $server, Site $site, string $hash)
     {
         $this->site = $site;
-        $this->slug = $slug;
+        $this->hash = $hash;
         $this->server = $server;
     }
 
@@ -48,9 +48,13 @@ class UpdateSiteSlug extends Base
      */
     public function generate()
     {
-        $user = SSH_USER;
-        return <<<EOD
+        $apiUrl = config('app.url');
 
+        return <<<EOD
+curl -Ss "{$apiUrl}/get-update-nginx-config/{$this->hash}" > /etc/nginx/conf.d/{$this->site->name}.conf
+
+nginx -t
+systemctl reload nginx
 EOD;
     }
 }

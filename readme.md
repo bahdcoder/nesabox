@@ -32,3 +32,5 @@
 # How to securely get metrics from server
 
 1 - We'll have an endpoint on nesabox, this endpoint connects to the server, a node js script on the server makes a local api request to fetch netdata data, then returns it to nesabox which inturn returns it to the browser.
+
+2 - So I guess there is no much harm signing a certificate on the server, and consuming it with node js

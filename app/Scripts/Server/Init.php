@@ -228,6 +228,9 @@ EOF
 # Install netdata
 {$this->installNetData()}
 
+# Install latest versions of node and pm2
+{$this->installLatestNodeAndPm2()}
+
 # Setup the server monitoring script
 {$this->setupServerMonitoringScript()}
 
@@ -245,6 +248,18 @@ curl -i \
 -H "Accept: application/json" \
 -H "Content-Type:application/json" \
 -X POST --data "$(generate_post_data)" "{$callbackEndpoint}"
+EOD;
+    }
+
+    public function installLatestNodeAndPm2()
+    {
+        $user = SSH_USER;
+        return <<<EOD
+su {$user} <<EOF
+n lts
+npm i -g pm2
+npm i -g yarn
+EOF
 EOD;
     }
 

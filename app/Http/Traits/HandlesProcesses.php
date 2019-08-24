@@ -206,7 +206,7 @@ trait HandlesProcesses
 
         $user = SSH_USER;
 
-        $arguments = "'/home/{$user}/{$site->name}' {$site->repository_branch} {$repoUrl}";
+        $arguments = "{$site->name} {$site->repository_branch} {$repoUrl} {$user} {$site->environment['PORT']}";
 
         return $this->execProcessAsync(
             $this->sshScript($server, $scriptPath, $arguments, false),
@@ -301,57 +301,17 @@ trait HandlesProcesses
     }
 
     /**
-     * Run deploy script for a site
-     *
-     * @return Process
-     */
-    public function runDeployScriptForSite(Site $site)
-    {
-        $server = $site->server;
-
-        $user = SSH_USER;
-
-        $scriptPath = $this->createDeployScript($site->getDeployScript());
-
-        return $this->execProcessAsync(
-            "ssh -o StrictHostKeyChecking=no {$user}@{$server->ip_address} -i ~/.ssh/{$server->slug} 'bash -is' -- < {$scriptPath}",
-            function ($data) {
-                echo $data;
-            }
-        );
-    }
-
-    /**
-     *
-     * Install nvm/node
-     *
-     * @return Process
-     */
-    public function runInstallNvmScript(Site $site)
-    {
-        $server = $site->server;
-
-        $scriptPath = 'scripts/server/install-nvm.sh';
-
-        $scriptName = base_path($scriptPath);
-
-        return $this->execProcess(
-            $this->sshScript($server, $scriptName, '', false)
-        );
-    }
-
-    /**
      * Create a public key file and return path to file
      *
      * @return string
      */
-    public function createDeployScript($script)
+    public function createUpdateNginxConfigScript($script)
     {
         $file = str_random(60);
 
-        Storage::disk('local')->put("deploy_scripts/{$file}.sh", $script);
+        Storage::disk('local')->put("update_nginx_config/{$file}.conf", $script);
 
-        return storage_path("app/deploy_scripts/{$file}.sh");
+        return $file;
     }
 
     /**

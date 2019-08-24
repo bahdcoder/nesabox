@@ -120,7 +120,7 @@ class Server extends Model
      */
     public function sites()
     {
-        return $this->hasMany(Site::class);
+        return $this->hasMany(Site::class)->where('deleting_site', false);
     }
 
     public function mongodbDatabases()
@@ -147,11 +147,13 @@ class Server extends Model
         return json_decode(
             (new Client([
                 'base_uri' => "http://{$this->ip_address}:{$nesaMetricsPort}"
-            ]))->post('/', [
-                'json' => [
-                    'url' => '?chart=system.cpu&after=-60&format=json'
-                ]
-            ])->getBody()
+            ]))
+                ->post('/', [
+                    'json' => [
+                        'url' => '?chart=system.cpu&after=-60&format=json'
+                    ]
+                ])
+                ->getBody()
         );
     }
 

@@ -19,6 +19,8 @@ use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\NginxController;
+use App\Http\Controllers\Pm2Controller;
 use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Notifications\Servers\ServerIsReady;
@@ -105,14 +107,14 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
 
-    Route::put('servers/{server}/sites/{site}/update-slug', [
-        SitesController::class,
-        'updateSlug'
-    ]);
-
     Route::put('servers/{server}/sites/{site}', [
         SitesController::class,
         'update'
+    ]);
+
+    Route::delete('servers/{server}/sites/{site}', [
+        SitesController::class,
+        'destroy'
     ]);
 
     Route::post('servers/{server}/daemons', [DaemonController::class, 'store']);
@@ -121,10 +123,12 @@ Route::middleware(['auth:api'])->group(function () {
         DaemonController::class,
         'destroy'
     ]);
+
     Route::get('servers/{server}/daemons/{daemon}/status', [
         DaemonController::class,
         'status'
     ]);
+
     Route::post('servers/{server}/daemons/{daemon}/restart', [
         DaemonController::class,
         'restart'
@@ -207,7 +211,32 @@ Route::middleware(['auth:api'])->group(function () {
         Pm2ProcessController::class,
         'destroy'
     ]);
+
+    Route::get('servers/{server}/sites/{site}/ecosystem-file', [
+        Pm2Controller::class,
+        'show'
+    ]);
+
+    Route::post('servers/{server}/sites/{site}/ecosystem-file', [
+        Pm2Controller::class,
+        'update'
+    ]);
+
+    Route::get('servers/{server}/sites/{site}/nginx-config', [
+        NginxController::class,
+        'show'
+    ]);
+
+    Route::post('servers/{server}/sites/{site}/nginx-config', [
+        NginxController::class,
+        'update'
+    ]);
 });
+
+Route::get('get-update-nginx-config/{hash}', [
+    NginxController::class,
+    'getUpdatingConfig'
+]);
 
 Route::middleware(['guest', 'api-token'])->group(function () {
     Route::get('servers/{server}/vps', [

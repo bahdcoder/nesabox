@@ -61,6 +61,7 @@ class AddSite implements ShouldQueue
         if (!$process->isSuccessful()) {
             $this->site->delete();
 
+            echo $process->getErrorOutput();
             abort(400, $process->getErrorOutput());
         }
 
@@ -76,7 +77,6 @@ class AddSite implements ShouldQueue
 
     public function failed($e)
     {
-        echo $e;
-        dd($e);
+        $this->site->delete();
     }
 }

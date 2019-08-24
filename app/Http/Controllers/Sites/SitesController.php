@@ -11,6 +11,8 @@ use App\Jobs\Sites\UpdateSiteSlug;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Sites\CreateSiteRequest;
+use App\Jobs\Sites\DeleteSite as AppDeleteSite;
+use App\Scripts\Sites\DeleteSite;
 
 class SitesController extends Controller
 {
@@ -24,7 +26,6 @@ class SitesController extends Controller
     {
         $site = $server->sites()->create([
             'name' => $request->name,
-            'slug' => $request->slug,
             'status' => STATUS_INSTALLING
         ]);
 
@@ -42,35 +43,7 @@ class SitesController extends Controller
      */
     public function update(Server $server, Site $site, Request $request)
     {
-        $site->update(
-            $request->only([
-                'before_deploy_script',
-                'after_deploy_script',
-                'before_start_script'
-            ])
-        );
-
-        return new ServerResource($server->fresh());
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateSlug(Server $server, Site $site, Request $request)
-    {
-        $this->validate($request, [
-            'slug' => ['unique:sites,slug,' . $site->id, new Subdomain()]
-        ]);
-
-        $site->update([
-            'updating_slug_status' => STATUS_UPDATING
-        ]);
-
-        UpdateSiteSlug::dispatch($server, $site, $request->slug);
+        $site->update($request->only(['before_deploy_script']));
 
         return new ServerResource($server->fresh());
     }
@@ -81,8 +54,30 @@ class SitesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Server $server, Site $site)
     {
-        //
+        if (
+            $site->deploying ||
+            $site->repository_status === STATUS_INSTALLING ||
+            $site->repository_status === STATUS_UNINSTALLING ||
+            $site->installing_ghost_status === STATUS_INSTALLING ||
+            $site->installing_ghost_status ===
+            STATUS_UNINSTALLING
+        ) {
+            abort(
+                400,
+                __(
+                    'Cannot delete site. Site is currently running some server actions.'
+                )
+            );
+        }
+
+        AppDeleteSite::dispatch($server, $site);
+
+        $site->update([
+            'deleting_site' => true
+        ]);
+
+        return new ServerResource($server);
     }
 }

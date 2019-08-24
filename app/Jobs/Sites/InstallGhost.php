@@ -101,7 +101,6 @@ class InstallGhost implements ShouldQueue
         ))
             ->as(SSH_USER)
             ->run(function ($log) {
-                echo '--------------->' . $log;
                 $this->site->update([
                     'logs' => $this->site->logs . $log
                 ]);

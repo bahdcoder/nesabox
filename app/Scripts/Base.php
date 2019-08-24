@@ -17,6 +17,14 @@ class Base
     public $sshUser = 'root';
 
     /**
+     * 
+     * Exit on first error
+     * 
+     * @var boolean;
+     */
+    public $setE = true;
+
+    /**
      *
      * @param string $user
      *
@@ -27,6 +35,20 @@ class Base
         $this->sshUser = $user;
 
         return $this;
+    }
+
+    public function noSetE()
+    {
+        $this->setE = false;
+
+        return $this;
+    }
+
+    public function setE()
+    {
+        if ($this->setE) return "set -e";
+
+        return '';
     }
 
     /**
@@ -41,7 +63,7 @@ class Base
 
         return $this->$func(
             "ssh -o StrictHostKeyChecking=no {$this->sshUser}@{$this->server->ip_address} -i ~/.ssh/{$this->server->slug} 'bash -se' <<  EOF-CUSTOM
-set -e
+{$this->setE()}
 
 {$this->generate()}
 EOF-CUSTOM",
