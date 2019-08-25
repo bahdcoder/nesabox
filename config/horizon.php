@@ -145,7 +145,8 @@ return [
                     'default',
                     'broadcasts',
                     'notifications',
-                    'deletions'
+                    'deletions',
+                    'firewall_rules'
                 ],
                 'balance' => 'simple',
                 'processes' => 12,
@@ -160,7 +161,8 @@ return [
                     'default',
                     'broadcasts',
                     'notifications',
-                    'deletions'
+                    'deletions',
+                    'firewall_rules'
                 ],
                 'balance' => 'simple',
                 'processes' => 12,

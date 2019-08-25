@@ -113,6 +113,11 @@ class Server extends Model
         return $this->hasMany(Database::class);
     }
 
+    public function firewallRules()
+    {
+        return $this->hasMany(FirewallRule::class);
+    }
+
     /**
      * A server has many sites
      *

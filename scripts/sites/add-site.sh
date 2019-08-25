@@ -65,4 +65,6 @@ server {
 }
 EOF
 
+systemctl restart nginx
+
 echo $SITE_PORT

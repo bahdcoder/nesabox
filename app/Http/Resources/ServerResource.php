@@ -50,6 +50,7 @@ class ServerResource extends JsonResource
             'mongodb_database_users' => DatabaseUserResource::collection(
                 $this->mongoDbDatabaseUsers
             ),
+            'firewall_rules' => FirewallRuleResource::collection($this->resource->firewallRules),
             'nesa_key' => $this->sshkeys()
                 ->where('is_app_key', true)
                 ->first()->key,

@@ -25,6 +25,7 @@ use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Notifications\Servers\ServerIsReady;
 use App\Http\Controllers\Servers\MonitoringController;
+use App\Http\Controllers\Servers\UfwController;
 use App\Server;
 use App\Http\Controllers\Sites\Pm2ProcessController;
 
@@ -230,6 +231,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('servers/{server}/sites/{site}/nginx-config', [
         NginxController::class,
         'update'
+    ]);
+
+    Route::post('servers/{server}/firewall-rules', [
+        UfwController::class,
+        'store'
     ]);
 });
 
