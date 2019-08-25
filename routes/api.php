@@ -237,6 +237,11 @@ Route::middleware(['auth:api'])->group(function () {
         UfwController::class,
         'store'
     ]);
+
+    Route::delete('servers/{server}/firewall-rules/{firewallRule}', [
+        UfwController::class,
+        'destroy'
+    ]);
 });
 
 Route::get('get-update-nginx-config/{hash}', [

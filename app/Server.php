@@ -115,7 +115,7 @@ class Server extends Model
 
     public function firewallRules()
     {
-        return $this->hasMany(FirewallRule::class);
+        return $this->hasMany(FirewallRule::class)->where('status', '!=', 'deleting');
     }
 
     /**

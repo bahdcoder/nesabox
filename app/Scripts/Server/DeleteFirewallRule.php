@@ -6,7 +6,7 @@ use App\Server;
 use App\Scripts\Base;
 use App\FirewallRule;
 
-class AddFirewallRule extends Base
+class DeleteFirewallRule extends Base
 {
     /**
      * The daemon to be added.
@@ -16,7 +16,7 @@ class AddFirewallRule extends Base
     public $server;
 
     /**
-     * The server to be initialized.
+     * The rule to be deleted.
      *
      * @var \App\Server
      */
@@ -35,26 +35,24 @@ class AddFirewallRule extends Base
 
     public function generate()
     {
-        echo $this->generateFireWallRules();
         return <<<EOD
-{$this->generateFireWallRules()}
+{$this->generateDeleteFireWallRules()}
 EOD;
     }
 
-    public function generateFireWallRules()
+    public function generateDeleteFireWallRules()
     {
         $script = '';
         if ($this->rule->from) {
             foreach(explode(',', $this->rule->from) as $ip):
                 $script .= <<<EOD
-\n
-ufw allow from {$ip} to any port {$this->rule->port}
+ufw delete allow from {$ip} to any port {$this->rule->port}
 EOD;
             endforeach;
 
             return $script;
         } else {
-            return "ufw allow {$this->rule->port}";
+            return "ufw delete allow {$this->rule->port}";
         }
     }
 }

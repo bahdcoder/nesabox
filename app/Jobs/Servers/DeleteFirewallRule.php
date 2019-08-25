@@ -4,15 +4,15 @@ namespace App\Jobs\Servers;
 
 use App\Server;
 use App\FirewallRule;
+use App\Notifications\Servers\ServerIsReady;
+use App\Scripts\Server\DeleteFirewallRule as AppDeleteFirewallRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\ServerIsReady;
-use App\Scripts\Server\AddFirewallRule as AppAddFirewallRule;
 
-class AddFirewallRule implements ShouldQueue
+class DeleteFirewallRule implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -40,16 +40,15 @@ class AddFirewallRule implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppAddFirewallRule($this->server, $this->rule))->run();
+        $process = (new AppDeleteFirewallRule($this->server, $this->rule))->run();
 
         if ($process->isSuccessful()) {
+            $this->rule->delete();
+        } else {
+            // TODO: alert the user
             $this->rule->update([
                 'status' => STATUS_ACTIVE
             ]);
-        } else {
-            // TODO: Alert the frontend
-            echo $process->getErrorOutput();
-            $this->rule->delete();
         }
 
         $this->server->user->notify(new ServerIsReady($this->server));
