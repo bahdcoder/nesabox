@@ -15,7 +15,7 @@ class NginxController extends Controller
      */
     public function show(Server $server, Site $site)
     {
-        $pathToConfig = "/etc/nginx/conf.d/{$site->name}.conf";
+        $pathToConfig = "/etc/nginx/sites-available/{$site->name}";
 
         $process = $this->getFileContent($server, $pathToConfig);
 

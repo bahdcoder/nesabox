@@ -57,7 +57,7 @@ cat > /home/{$user}/{$this->site->name}/config.production.json << EOF
 EOF
 
 # Reload pm2 site - no downtime
-pm2 reload /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js --update-env
+pm2 restart /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js --update-env
 EOD;
     }
 }

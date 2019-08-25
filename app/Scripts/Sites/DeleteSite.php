@@ -44,7 +44,7 @@ class DeleteSite extends Base
 
         return <<<EOD
 # Remove nginx config of site
-rm /etc/nginx/conf.d/{$this->site->name}.conf
+rm /etc/nginx/sites-available/{$this->site->name}
 
 rm -rf /etc/nginx/nesa-conf/{$this->site->name}
 

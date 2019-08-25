@@ -51,7 +51,7 @@ class UpdateNginxConfigFile extends Base
         $apiUrl = config('app.url');
 
         return <<<EOD
-curl -Ss "{$apiUrl}/get-update-nginx-config/{$this->hash}" > /etc/nginx/conf.d/{$this->site->name}.conf
+curl -Ss "{$apiUrl}/get-update-nginx-config/{$this->hash}" > /etc/nginx/sites-available/{$this->site->name}
 
 nginx -t
 systemctl reload nginx

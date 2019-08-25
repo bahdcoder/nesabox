@@ -185,6 +185,8 @@ rm /etc/nginx/sites-available/default
 git clone https://github.com/h5bp/server-configs-nginx.git /etc/nginx/h5bp-repository
 mv /etc/nginx/h5bp-repository/h5bp /etc/nginx/h5bp
 cp /etc/nginx/h5bp-repository/nginx.conf /etc/nginx/nginx.conf
+
+# We'll change the folder for available nginx configurations from conf.d/*.conf to /sites-available/*
 rm -r /etc/nginx/h5bp-repository
 
 # Add nesa configs folder
@@ -201,9 +203,8 @@ sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf
 service redis-server restart
 systemctl enable redis-server
 
-# Install certbot
-add-apt-repository -y ppa:certbot/certbot
-apt-get install -y python-certbot-nginx
+# Install acme.sh for issuing let'sencrypt certificates
+curl https://get.acme.sh | sh
 
 # Setup security updates
 cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
@@ -458,7 +459,7 @@ unbound: no
 # web_log: yes
 EOF
 
-cat >> /etc/nginx/conf.d/stub-status.conf << EOF
+cat >> /etc/nginx/sites-available/stub-status.conf << EOF
 # -----------------------------------------------------------------------------
 # | Stub module provides access to basic status information. (Do not remove)  |
 # -----------------------------------------------------------------------------
