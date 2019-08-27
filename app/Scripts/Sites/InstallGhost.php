@@ -163,7 +163,7 @@ NODE_ENV=production yarn knex-migrator init
 mysql -e "UPDATE migrations_lock set locked=0 where lock_key='km01';" -u {$this->databaseUser->name} -p'{$this->databaseUser->password}' {$this->database->name}
 
 # Start the ecosystem file for thi ghost installation
-pm2 start /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js
+pm2 startOrReload /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js
 EOD;
     }
 }

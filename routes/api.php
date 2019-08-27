@@ -28,6 +28,7 @@ use App\Http\Controllers\Servers\MonitoringController;
 use App\Http\Controllers\Servers\UfwController;
 use App\Server;
 use App\Http\Controllers\Sites\Pm2ProcessController;
+use App\Http\Controllers\Sites\SslCertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -241,6 +242,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::delete('servers/{server}/firewall-rules/{firewallRule}', [
         UfwController::class,
         'destroy'
+    ]);
+
+    Route::post('servers/{server}/sites/{site}/lets-encrypt', [
+        SslCertificateController::class,
+        'letsEncrypt'
     ]);
 });
 

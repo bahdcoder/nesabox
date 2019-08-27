@@ -352,6 +352,22 @@ trait HandlesProcesses
         );
     }
 
+    public function addLetsEncryptCertificate(Server $server, Site $site)
+    {
+        $scriptPath = 'scripts/sites/add-site-ssl.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $arguments = "{$site->name}";
+
+        return $this->execProcessAsync(
+            $this->sshScript($server, $scriptName, $arguments),
+            function ($data) {
+                echo '          ' . $data;
+            }
+        );
+    }
+
     /**
      * Install server monitoring with netdata
      *

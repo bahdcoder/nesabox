@@ -27,7 +27,7 @@ git pull origin {$request->branch}
 
 npm install --production  
 
-pm2 start /home/{$user}/.{$user}/ecosystems/{$site->name}.config.js
+pm2 startOrReload /home/{$user}/.{$user}/ecosystems/{$site->name}.config.js
 EOD;
 
         $site->update([

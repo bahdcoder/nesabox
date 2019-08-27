@@ -124,6 +124,12 @@ apt-get update
 
 sudo apt-get install -y --force-yes nodejs
 
+node -v
+npm -v
+
+# Install an npm package used to replace lines in files. I can't kill myself abeg
+npm i -g replace-in-file
+
 npm i -g n
 # Install latest version of node
 n latest
@@ -185,6 +191,12 @@ rm /etc/nginx/sites-available/default
 git clone https://github.com/h5bp/server-configs-nginx.git /etc/nginx/h5bp-repository
 mv /etc/nginx/h5bp-repository/h5bp /etc/nginx/h5bp
 cp /etc/nginx/h5bp-repository/nginx.conf /etc/nginx/nginx.conf
+
+# Make sure to change location of sites from conf.d to sites-enabled
+cd /etc/nginx
+replace-in-file 'include conf.d/*.conf;' 'include sites-enabled/*;' nginx.conf
+
+cd ~
 
 # We'll change the folder for available nginx configurations from conf.d/*.conf to /sites-available/*
 rm -r /etc/nginx/h5bp-repository
@@ -590,7 +602,7 @@ npm install
 export API_URL={$apiUrl}
 export PORT=23443
 export NODE_ENV=production
-pm2 start index.js --name nesabox-logs-watcher --interpreter /usr/local/n/versions/node/12.8.0/bin/node
+pm2 startOrReload index.js --name nesabox-logs-watcher --interpreter /usr/local/n/versions/node/12.8.0/bin/node
 EOF
 
 # Setup the nginx config

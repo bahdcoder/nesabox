@@ -1,5 +1,7 @@
 SITE_NAME=$1
 
+set -e
+
 mkdir -p /etc/nginx/ssl/$SITE_NAME
 
 # We'll obtain the certificate and copy it to the nginx folder
@@ -25,7 +27,7 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name www.$SITE_NAME;
+    server_name .$SITE_NAME;
     return 301 https://\$host\$request_uri;
 }
 
@@ -46,6 +48,10 @@ EOF
 # Change the following in main site configuration;
 
 # listen 80; ----> listen 443 ssl http2;
+replace-in-file 'listen 80;' 'listen 443 ssl http2;'  /etc/nginx/sites-available/$SITE_NAME
 # listen [::]:80; ---->listen [::]:443 ssl http2;
+replace-in-file 'listen [::]:80;' 'listen [::]:443 ssl http2;'  /etc/nginx/sites-available/$SITE_NAME
 
+# Reload nginx
+systemctl reload nginx
 # Yaay ! SSL is configured !!!
