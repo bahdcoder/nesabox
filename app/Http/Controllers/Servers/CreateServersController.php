@@ -185,7 +185,7 @@ class CreateServersController extends Controller
                 ->server()
                 ->create(
                     $server->name,
-                    $server->region,
+                    $request->region,
                     $server->size,
                     '270', // This represents the OS - Ubuntu 18.04
                     [$this->getSshKeyForVultr($server, $credential)],
