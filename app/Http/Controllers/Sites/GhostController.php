@@ -39,7 +39,8 @@ class GhostController extends Controller
         $database = $databaseUser->databases()->create([
             'type' => MYSQL_DB,
             'server_id' => $server->id,
-            'name' => str_random(12)
+            'name' => str_random(12),
+            'status' => STATUS_ACTIVE
         ]);
 
         InstallGhost::dispatch($server, $site, $databaseUser, $database);
