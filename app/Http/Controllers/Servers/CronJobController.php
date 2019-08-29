@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Servers;
 
-use App\Server;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Servers\AddCronJobRequest;
-use Illuminate\Console\Scheduling\ManagesFrequencies;
-use App\Http\Resources\ServerResource;
-use App\Scripts\Server\AddCronJob;
 use App\Job;
+use App\Server;
+use App\Http\Controllers\Controller;
 use App\Scripts\Server\CronJobOutput;
-use App\Scripts\Server\DeleteCronJob;
+use App\Http\Resources\ServerResource;
+use App\Http\Requests\Servers\AddCronJobRequest;
+use App\Jobs\Servers\AddCronJob as AppAddCronJob;
+use App\Jobs\Servers\DeleteCronJob;
+use Illuminate\Console\Scheduling\ManagesFrequencies;
 
 class CronJobController extends Controller
 {
@@ -41,18 +40,13 @@ class CronJobController extends Controller
             'cron' =>
                 $request->frequency === 'custom'
                     ? $request->cron
-                    : $this->{$request->frequency}()->expression
+                    : $this->{$request->frequency}()->expression,
+            'status' => STATUS_INSTALLING
         ]);
 
         $job->rollSlug();
 
-        $process = (new AddCronJob($server, $job))->run();
-
-        if ($process->isSuccessful()) {
-            $job->update([
-                'status' => 'active'
-            ]);
-        }
+        AppAddCronJob::dispatch($server, $job);
 
         return new ServerResource($server->fresh());
     }
@@ -85,13 +79,11 @@ class CronJobController extends Controller
      */
     public function destroy(Server $server, Job $job)
     {
-        $process = (new DeleteCronJob($server, $job))->run();
+        $job->update([
+            'status' => STATUS_DELETING
+        ]);
 
-        if (!$process->isSuccessful()) {
-            abort(400);
-        }
-
-        $job->delete();
+        DeleteCronJob::dispatch($server, $job);
 
         return new ServerResource($server->fresh());
     }

@@ -42,13 +42,11 @@ class NginxController extends Controller
         // We'll create a file that contains the config, then get the config from the server over http
         $hash = $this->createUpdateNginxConfigScript($script);
 
-        $process = (new UpdateNginxConfigFile(
-            $server,
-            $site,
-            $hash
-        ))->run(function ($logs) {
-            echo $logs;
-        });
+        $process = (new UpdateNginxConfigFile($server, $site, $hash))->run(
+            function ($logs) {
+                echo $logs;
+            }
+        );
 
         if (!$process->isSuccessFul()) {
             abort(400, __($process->getErrorOutput()));

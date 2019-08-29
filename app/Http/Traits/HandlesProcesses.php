@@ -309,7 +309,10 @@ trait HandlesProcesses
     {
         $file = str_random(60);
 
-        Storage::disk('local')->put("update_nginx_config/{$file}.conf", $script);
+        Storage::disk('local')->put(
+            "update_nginx_config/{$file}.conf",
+            $script
+        );
 
         return $file;
     }

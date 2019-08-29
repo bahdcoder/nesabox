@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Servers;
 use App\Server;
 use App\Database;
 use App\DatabaseUser;
+use App\Jobs\Servers\AddDatabase;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\CreateDatabaseRequest;
-use App\Scripts\Server\AddDatabase as AddDatabaseScript;
-use App\Scripts\Server\DeleteDatabase as DeleteDatabaseScript;
 
 class DatabasesController extends Controller
 {
@@ -23,7 +22,7 @@ class DatabasesController extends Controller
                     $request->only(
                         ['name', 'password', 'type'],
                         [
-                            'status' => STATUS_ACTIVE
+                            'status' => STATUS_INSTALLING
                         ]
                     )
                 )
@@ -34,7 +33,7 @@ class DatabasesController extends Controller
             'type' => $request->type,
             'name' => $request->name,
             'server_id' => $server->id,
-            'status' => STATUS_ACTIVE,
+            'status' => STATUS_INSTALLING,
             'database_user_id' => $databaseUser
                 ? $databaseUser->id
                 : DatabaseUser::where('name', SSH_USER)
@@ -42,41 +41,16 @@ class DatabasesController extends Controller
                     ->first()->id
         ]);
 
-        $process = (new AddDatabaseScript(
-            $server,
-            $database,
-            $databaseUser
-        ))->run();
-
-        if (!$process->isSuccessful()) {
-            $database->delete();
-
-            if ($databaseUser && $databaseUser->name !== SSH_USER) {
-                $databaseUser->delete();
-            }
-
-            abort(400, $process->getErrorOutput());
-        }
+        AddDatabase::dispatch($server, $database, $databaseUser);
 
         return new ServerResource($server->fresh());
     }
 
     public function destroy(Server $server, Database $database)
     {
-        $process = (new DeleteDatabaseScript($server, $database))->run();
-
-        if (!$process->isSuccessful()) {
-            abort(400, $process->getErrorOutput());
-        }
-
-        if (
-            $database->databaseUser &&
-            $database->databaseUser->name !== SSH_USER
-        ) {
-            $database->databaseUser->delete();
-        }
-
-        $database->delete();
+        $database->update([
+            'status' => STATUS_DELETING
+        ]);
 
         return new ServerResource($server);
     }

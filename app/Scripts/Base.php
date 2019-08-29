@@ -17,9 +17,9 @@ class Base
     public $sshUser = 'root';
 
     /**
-     * 
+     *
      * Exit on first error
-     * 
+     *
      * @var boolean;
      */
     public $setE = true;
@@ -46,7 +46,9 @@ class Base
 
     public function setE()
     {
-        if ($this->setE) return "set -e";
+        if ($this->setE) {
+            return 'set -e';
+        }
 
         return '';
     }

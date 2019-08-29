@@ -58,17 +58,29 @@ class Server extends Model
      */
     public function sshkeys()
     {
-        return $this->hasMany(Sshkey::class);
+        return $this->hasMany(Sshkey::class)->where(
+            'status',
+            '!=',
+            STATUS_DELETING
+        );
     }
 
     public function daemons()
     {
-        return $this->hasMany(Daemon::class);
+        return $this->hasMany(Daemon::class)->where(
+            'status',
+            '!=',
+            STATUS_DELETING
+        );
     }
 
     public function jobs()
     {
-        return $this->hasMany(Job::class);
+        return $this->hasMany(Job::class)->where(
+            'status',
+            '!=',
+            STATUS_DELETING
+        );
     }
 
     /**
@@ -115,7 +127,11 @@ class Server extends Model
 
     public function firewallRules()
     {
-        return $this->hasMany(FirewallRule::class)->where('status', '!=', 'deleting');
+        return $this->hasMany(FirewallRule::class)->where(
+            'status',
+            '!=',
+            'deleting'
+        );
     }
 
     /**

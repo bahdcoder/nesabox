@@ -61,9 +61,13 @@ class SiteResource extends JsonResource
             'installing_ghost' =>
                 $this->resource->installing_ghost_status === STATUS_INSTALLING,
             'uninstalling_ghost' =>
-                $this->resource->installing_ghost_status === STATUS_UNINSTALLING,
-            'installing_certificate' => $this->resource->installing_certificate_status === STATUS_INSTALLING,
-            'ssl_certificate_installed' => $this->resource->installing_certificate_status === STATUS_ACTIVE,
+                $this->resource->installing_ghost_status ===
+                STATUS_UNINSTALLING,
+            'installing_certificate' =>
+                $this->resource->installing_certificate_status ===
+                STATUS_INSTALLING,
+            'ssl_certificate_installed' =>
+                $this->resource->installing_certificate_status === STATUS_ACTIVE
         ];
     }
 }

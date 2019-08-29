@@ -146,7 +146,9 @@ return [
                     'broadcasts',
                     'notifications',
                     'deletions',
-                    'firewall_rules'
+                    'firewall_rules',
+                    'databases',
+                    'cron_jobs'
                 ],
                 'balance' => 'simple',
                 'processes' => 12,
@@ -162,7 +164,9 @@ return [
                     'broadcasts',
                     'notifications',
                     'deletions',
-                    'firewall_rules'
+                    'firewall_rules',
+                    'databases',
+                    'cron_jobs'
                 ],
                 'balance' => 'simple',
                 'processes' => 12,

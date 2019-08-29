@@ -35,7 +35,7 @@ class UfwController extends Controller
         $rule->update([
             'status' => STATUS_DELETING
         ]);
-        
+
         DeleteFirewallRule::dispatch($server, $rule);
 
         return new ServerResource($server);

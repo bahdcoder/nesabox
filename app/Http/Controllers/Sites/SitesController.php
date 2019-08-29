@@ -61,8 +61,7 @@ class SitesController extends Controller
             $site->repository_status === STATUS_INSTALLING ||
             $site->repository_status === STATUS_UNINSTALLING ||
             $site->installing_ghost_status === STATUS_INSTALLING ||
-            $site->installing_ghost_status ===
-            STATUS_UNINSTALLING
+            $site->installing_ghost_status === STATUS_UNINSTALLING
         ) {
             abort(
                 400,

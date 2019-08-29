@@ -81,22 +81,26 @@ class CreateServersController extends Controller
                         : 'new'
             ]);
 
-        collect([[
-            'name' => 'SSH',
-            'port' => 22,
-            'from' => 'Any',
-            'status' => STATUS_ACTIVE
-        ], [
-            'name' => 'HTTP',
-            'port' => 80,
-            'from' => 'Any',
-            'status' => STATUS_ACTIVE
-        ], [
-            'name' => 'HTTPS',
-            'port' => 443,
-            'from' => 'Any',
-            'status' => STATUS_ACTIVE
-        ]])->each(function ($rule) use ($server) {
+        collect([
+            [
+                'name' => 'SSH',
+                'port' => 22,
+                'from' => 'Any',
+                'status' => STATUS_ACTIVE
+            ],
+            [
+                'name' => 'HTTP',
+                'port' => 80,
+                'from' => 'Any',
+                'status' => STATUS_ACTIVE
+            ],
+            [
+                'name' => 'HTTPS',
+                'port' => 443,
+                'from' => 'Any',
+                'status' => STATUS_ACTIVE
+            ]
+        ])->each(function ($rule) use ($server) {
             $server->firewallRules()->create($rule);
         });
 

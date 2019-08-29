@@ -5,6 +5,7 @@ namespace App\Jobs\Servers;
 use App\Server;
 use App\Database;
 use App\DatabaseUser;
+use App\Notifications\Servers\ServerIsReady;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,6 +38,8 @@ class AddDatabase implements ShouldQueue
         $this->database = $database;
 
         $this->databaseUser = $user;
+
+        $this->onQueue('databases');
     }
 
     /**
@@ -69,5 +72,7 @@ class AddDatabase implements ShouldQueue
                 $this->databaseUser->delete();
             }
         }
+
+        $this->server->user->notify(new ServerIsReady($this->server));
     }
 }

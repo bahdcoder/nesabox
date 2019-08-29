@@ -3,34 +3,42 @@
 namespace App\Jobs\Servers;
 
 use App\Server;
-use App\FirewallRule;
-use App\Notifications\Servers\ServerIsReady;
-use App\Scripts\Server\DeleteFirewallRule as AppDeleteFirewallRule;
+use App\Daemon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Notifications\Servers\ServerIsReady;
+use App\Scripts\Server\DeleteDaemon as AppDeleteDaemon;
 
-class DeleteFirewallRule implements ShouldQueue
+class DeleteDaemon implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * The server.
+     *
+     * @var \App\Server
+     */
     public $server;
 
-    public $rule;
+    /**
+     * The daemon to restart.
+     *
+     * @var \App\Daemon
+     */
+    public $daemon;
 
     /**
-     * Create a new job instance.
+     * Initialize this class
      *
      * @return void
      */
-    public function __construct(Server $server, FirewallRule $rule)
+    public function __construct(Server $server, Daemon $daemon)
     {
-        $this->rule = $rule;
+        $this->daemon = $daemon;
         $this->server = $server;
-
-        $this->onQueue('firewall_rules');
     }
 
     /**
@@ -40,16 +48,13 @@ class DeleteFirewallRule implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppDeleteFirewallRule(
-            $this->server,
-            $this->rule
-        ))->run();
+        // $process = $process = (new DeleteDaemon($server, $daemon))->run();
+        $process = (new AppDeleteDaemon($this->server, $this->daemon))->run();
 
         if ($process->isSuccessful()) {
-            $this->rule->delete();
+            $this->daemon->delete();
         } else {
-            // TODO: alert the user
-            $this->rule->update([
+            $this->daemon([
                 'status' => STATUS_ACTIVE
             ]);
         }

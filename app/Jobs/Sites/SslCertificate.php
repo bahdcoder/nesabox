@@ -14,7 +14,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class SslCertificate implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, HandlesProcesses;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        HandlesProcesses;
 
     /**
      * The server to ssh into

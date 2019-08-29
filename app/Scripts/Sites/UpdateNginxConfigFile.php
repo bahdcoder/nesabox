@@ -24,7 +24,7 @@ class UpdateNginxConfigFile extends Base
 
     /**
      * The file hash in storage
-     * 
+     *
      * @var string
      */
     public $hash;

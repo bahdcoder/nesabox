@@ -50,8 +50,6 @@ class AddDaemon implements ShouldQueue
             ]);
         }
 
-        echo $process->getErrorOutput();
-
         $this->daemon->server->user->notify(
             new ServerIsReady($this->daemon->server)
         );

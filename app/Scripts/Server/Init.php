@@ -194,7 +194,7 @@ cp /etc/nginx/h5bp-repository/nginx.conf /etc/nginx/nginx.conf
 
 # Make sure to change location of sites from conf.d to sites-enabled
 cd /etc/nginx
-replace-in-file 'include conf.d/*.conf;' 'include sites-enabled/*;' nginx.conf
+replace-in-file 'include conf.d/*.conf;' 'include /etc/nginx/sites-enabled/*;' nginx.conf
 
 cd ~
 
@@ -216,7 +216,12 @@ service redis-server restart
 systemctl enable redis-server
 
 # Install acme.sh for issuing let'sencrypt certificates
-curl https://get.acme.sh | sh
+cd ~
+git clone https://github.com/Neilpang/acme.sh.git
+cd ./acme.sh
+./acme.sh --install
+cd ~
+rm -rf acme.sh
 
 # Setup security updates
 cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF

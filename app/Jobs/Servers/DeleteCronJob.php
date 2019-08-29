@@ -2,35 +2,33 @@
 
 namespace App\Jobs\Servers;
 
-use App\Server;
-use App\FirewallRule;
+use App\Job;
 use App\Notifications\Servers\ServerIsReady;
-use App\Scripts\Server\DeleteFirewallRule as AppDeleteFirewallRule;
+use App\Server;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Scripts\Server\DeleteCronJob as AppDeleteCronJob;
 
-class DeleteFirewallRule implements ShouldQueue
+class DeleteCronJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $server;
 
-    public $rule;
+    public $cronJob;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Server $server, FirewallRule $rule)
+    public function __construct(Server $server, Job $cronJob)
     {
-        $this->rule = $rule;
         $this->server = $server;
-
-        $this->onQueue('firewall_rules');
+        $this->cronJob = $cronJob;
     }
 
     /**
@@ -40,16 +38,13 @@ class DeleteFirewallRule implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppDeleteFirewallRule(
-            $this->server,
-            $this->rule
-        ))->run();
+        $process = (new AppDeleteCronJob($this->server, $this->cronJob))->run();
 
         if ($process->isSuccessful()) {
-            $this->rule->delete();
+            $this->cronJob->delete();
         } else {
-            // TODO: alert the user
-            $this->rule->update([
+            // TODO: Alert user of why cron job deletion failed
+            $this->cronJob->update([
                 'status' => STATUS_ACTIVE
             ]);
         }

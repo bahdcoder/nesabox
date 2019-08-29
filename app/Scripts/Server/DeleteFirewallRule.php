@@ -44,7 +44,7 @@ EOD;
     {
         $script = '';
         if ($this->rule->from) {
-            foreach(explode(',', $this->rule->from) as $ip):
+            foreach (explode(',', $this->rule->from) as $ip):
                 $script .= <<<EOD
 ufw delete allow from {$ip} to any port {$this->rule->port}
 EOD;

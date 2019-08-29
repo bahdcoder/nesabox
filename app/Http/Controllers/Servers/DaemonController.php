@@ -7,10 +7,10 @@ use App\Daemon;
 use App\Jobs\Servers\AddDaemon;
 use App\Http\Controllers\Controller;
 use App\Scripts\Server\DaemonStatus;
-use App\Scripts\Server\DeleteDaemon;
 use App\Scripts\Server\RestartDaemon;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\AddDaemonRequest;
+use App\Jobs\Servers\DeleteDaemon;
 
 class DaemonController extends Controller
 {
@@ -63,9 +63,11 @@ class DaemonController extends Controller
     {
         $this->authorize('view', $server);
 
-        $process = $process = (new DeleteDaemon($server, $daemon))->run();
+        $daemon->update([
+            'status' => STATUS_DELETING
+        ]);
 
-        $daemon->delete();
+        DeleteDaemon::dispatch($server, $daemon);
 
         return new ServerResource($server->fresh());
     }
