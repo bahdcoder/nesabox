@@ -58,14 +58,21 @@ class SslCertificate implements ShouldQueue
             $this->site->update([
                 'installing_certificate_status' => STATUS_ACTIVE
             ]);
-        } else {
-            // TODO: Alert user there was an error.
 
+            $this->broadcastToUser();
+        } else {
             $this->site->update([
                 'installing_certificate_status' => null
             ]);
-        }
 
+            $this->broadcastToUser();
+
+            $this->server->alertError("Failed to install SSL certificate. View log output for more details.", $process->getErrorOutput());
+        }
+    }
+
+    public function broadcastToUser()
+    {
         $this->server->user->notify(new SiteUpdated($this->site->fresh()));
     }
 }

@@ -4,32 +4,46 @@ namespace App\Notifications\Servers;
 
 use App\Server;
 use Illuminate\Bus\Queueable;
-use App\Http\Resources\ServerResource;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class ServerIsReady extends Notification implements ShouldQueue
+class AlertError extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * The server which is ready
-     *
+     * The server to alert
+     * 
      * @var \App\Server
      */
     public $server;
+
+    /**
+     * The alert message
+     * 
+     * @var string
+     */
+    public $message;
+
+    /**
+     * The output from command.
+     * 
+     * @var string
+     */
+    public $output;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Server $server)
+    public function __construct(Server $server, string $message, string $output = null)
     {
+        $this->output = $output;
         $this->server = $server;
-
-        $this->onConnection('redis');
+        $this->message = $message;
 
         $this->onQueue('notifications');
     }
@@ -42,19 +56,30 @@ class ServerIsReady extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
-     * Get the broadcastable representation of the notification.
+     * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return BroadcastMessage
+     * @return array
      */
+    public function toDatabase($notifiable)
+    {
+        return [
+            'message' => $this->message,
+            'output' => $this->output
+        ];
+    }
+
     public function toBroadcast($notifiable)
     {
         return (new BroadcastMessage([
-            'server' => (new ServerResource($this->server))->resolve()
+            'data' => [
+                'message' => $this->message,
+                'output' => $this->output
+            ]
         ]))
             ->onConnection('redis')
             ->onQueue('broadcasts');

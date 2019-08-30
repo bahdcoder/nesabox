@@ -3,6 +3,7 @@
 namespace App;
 
 use GuzzleHttp\Client;
+use App\Notifications\Servers\AlertError;
 
 class Server extends Model
 {
@@ -193,5 +194,19 @@ class Server extends Model
         $domain = config('services.digital-ocean.metrics-domain');
 
         return "{$subdomain}.{$domain}";
+    }
+
+    /**
+     * This method notifies the owner of the server with the alert.
+     * TODO: When teams are supported, we'll notify all teammates that share this server.
+     * 
+     * @param string $message
+     * @param string $output
+     * 
+     * @return null
+     */
+    public function alertError($message, $output = null)
+    {
+        $this->user->notify(new AlertError($this, $message, $output));
     }
 }

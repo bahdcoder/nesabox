@@ -1,5 +1,7 @@
 <?php
 
+use App\Server;
+use App\User;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;

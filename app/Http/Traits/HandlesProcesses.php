@@ -363,11 +363,8 @@ trait HandlesProcesses
 
         $arguments = "{$site->name}";
 
-        return $this->execProcessAsync(
-            $this->sshScript($server, $scriptName, $arguments),
-            function ($data) {
-                echo '          ' . $data;
-            }
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments)
         );
     }
 

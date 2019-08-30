@@ -60,7 +60,9 @@ class UserResource extends JsonResource
                     return $this->defineCredential($credential);
                 })
             ],
-            'access_token' => $this->createToken('Personal')->accessToken
+            'access_token' => $this->when(request()->is('login'), function () {
+                return $this->createToken('Personal')->accessToken;
+            })
         ];
     }
 }

@@ -20,11 +20,11 @@ use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\NginxController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\Pm2Controller;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
-use App\Notifications\Servers\ServerIsReady;
 use App\Http\Controllers\Servers\MonitoringController;
 use App\Http\Controllers\Servers\UfwController;
 use App\Server;
@@ -46,6 +46,16 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('settings/server-providers', [
         ServerProvidersController::class,
         'store'
+    ]);
+
+    Route::get('notifications', [
+        NotificationsController::class,
+        'index'
+    ]);
+
+    Route::post('notifications/{notification}', [
+        NotificationsController::class,
+        'markAsRead'
     ]);
 
     Route::get('entities/search', [SearchController::class, 'index']);
