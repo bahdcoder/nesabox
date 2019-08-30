@@ -122,6 +122,8 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
 
+    Route::get('servers/{server}/sites/{site}', [SitesController::class, 'show']);
+
     Route::put('servers/{server}/sites/{site}', [
         SitesController::class,
         'update'

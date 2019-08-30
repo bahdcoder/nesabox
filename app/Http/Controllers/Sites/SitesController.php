@@ -8,14 +8,22 @@ use App\Rules\Subdomain;
 use App\Jobs\Sites\AddSite;
 use Illuminate\Http\Request;
 use App\Jobs\Sites\UpdateSiteSlug;
+use App\Scripts\Sites\DeleteSite;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Sites\CreateSiteRequest;
+use App\Http\Resources\SiteResource;
 use App\Jobs\Sites\DeleteSite as AppDeleteSite;
-use App\Scripts\Sites\DeleteSite;
 
 class SitesController extends Controller
 {
+    public function show(Server $server, Site $site)
+    {
+        $this->authorize($server, 'view');
+        
+        return new SiteResource($site);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
