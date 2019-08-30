@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Sites;
 
+use App\Notifications\Servers\ServerIsReady;
 use App\Site;
 use App\Server;
 use Illuminate\Bus\Queueable;
@@ -58,6 +59,8 @@ class DeleteSite implements ShouldQueue
             $this->site->update([
                 'deleting_site' => false
             ]);
+
+            $this->server->user->notify(new ServerIsReady($this->server));
             
             $this->server->alertError("Failed to delete site {$this->site->name}. View log for more details.", $process->getErrorOutput());
         }
