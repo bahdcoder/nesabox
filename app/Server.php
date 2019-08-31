@@ -3,7 +3,7 @@
 namespace App;
 
 use GuzzleHttp\Client;
-use App\Notifications\Servers\AlertError;
+use App\Notifications\Servers\Alert;
 
 class Server extends Model
 {
@@ -199,14 +199,14 @@ class Server extends Model
     /**
      * This method notifies the owner of the server with the alert.
      * TODO: When teams are supported, we'll notify all teammates that share this server.
-     * 
+     *
      * @param string $message
      * @param string $output
-     * 
+     *
      * @return null
      */
-    public function alertError($message, $output = null)
+    public function alert($message, $output = null, $type = 'error')
     {
-        $this->user->notify(new AlertError($this, $message, $output));
+        $this->user->notify(new Alert($this, $message, $output, $type));
     }
 }

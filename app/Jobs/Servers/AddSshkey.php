@@ -19,7 +19,8 @@ class AddSshkey implements ShouldQueue
         InteractsWithQueue,
         Queueable,
         SerializesModels,
-        HandlesProcesses;
+        HandlesProcesses,
+        BroadcastServer;
 
     /**
      * The server to add ssh key to
@@ -60,14 +61,15 @@ class AddSshkey implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->server->user->notify(new ServerIsReady($this->server));
+            $this->broadcastServerUpdated();
+        } else {
+            $message = "Failed adding ssh key {$this->key->name} on server {$this->server->name}.";
+
+            $this->key->delete();
+
+            $this->broadcastServerUpdated();
+
+            $this->alertServer($message, $process->getErrorOutput());
         }
-    }
-
-    public function failed($e)
-    {
-        // TODO: Add server error saying key was deleted.
-
-        $this->key->delete();
     }
 }

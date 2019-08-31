@@ -13,4 +13,9 @@ class DatabaseUser extends Model
     {
         return $this->hasMany(Database::class);
     }
+
+    public function server()
+    {
+        return $this->belongsTo(Server::class);
+    }
 }

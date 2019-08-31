@@ -15,7 +15,7 @@ class NotificationsController extends Controller
     public function markAsRead(DatabaseNotification $notification)
     {
         $notification->markAsRead();
-        
+
         return response()->json([]);
     }
 }

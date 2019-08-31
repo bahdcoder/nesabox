@@ -14,7 +14,11 @@ use App\Scripts\Server\AddFirewallRule as AppAddFirewallRule;
 
 class AddFirewallRule implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     public $server;
 
@@ -46,12 +50,16 @@ class AddFirewallRule implements ShouldQueue
             $this->rule->update([
                 'status' => STATUS_ACTIVE
             ]);
-        } else {
-            // TODO: Alert the frontend
-            echo $process->getErrorOutput();
-            $this->rule->delete();
-        }
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+            $this->broadcastServerUpdated();
+        } else {
+            $message = "Failed to add firewall rule {$this->rule->name} on server {$this->server->name}.";
+
+            $this->rule->delete();
+
+            $this->broadcastServerUpdated();
+
+            $this->alertServer($message, $process->getErrorOutput());
+        }
     }
 }

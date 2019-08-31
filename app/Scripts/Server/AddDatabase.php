@@ -26,27 +26,14 @@ class AddDatabase extends Base
     public $database;
 
     /**
-     *
-     * The database user
-     *
-     * @var \App\DatabaseUser
-     *
-     */
-    public $databaseUser;
-
-    /**
      * Initialize this class
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Database $database,
-        DatabaseUser $databaseUser = null
-    ) {
+    public function __construct(Server $server, Database $database)
+    {
         $this->server = $server;
         $this->database = $database;
-        $this->databaseUser = $databaseUser;
     }
 
     /**
@@ -79,12 +66,8 @@ EOD;
 
     public function generateMysqlPermissionsScript()
     {
-        if (!$this->databaseUser) {
-            return '';
-        }
-
         return <<<EOD
-mysql -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'localhost'"
+mysql -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->database->databaseUser->name}'@'localhost'"
 
 # Flush privileges
 mysql -e "FLUSH PRIVILEGES"    
@@ -93,12 +76,16 @@ EOD;
 
     public function generateMysqlCreateUserScript()
     {
-        if (!$this->databaseUser) {
+        $user = DatabaseUser::where('name', SSH_USER)
+            ->where('server_id', $this->database->server->id)
+            ->first();
+
+        if ($user->id === $this->database->database_user_id) {
             return '';
         }
 
         return <<<EOD
-mysql -e "CREATE USER '{$this->databaseUser->name}'@'localhost' IDENTIFIED BY '{$this->databaseUser->password}';"     
+mysql -e "CREATE USER '{$this->database->databaseUser->name}'@'localhost' IDENTIFIED BY '{$this->database->databaseUser->password}';"     
 EOD;
     }
 

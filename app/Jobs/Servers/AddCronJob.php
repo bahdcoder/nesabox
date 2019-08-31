@@ -14,7 +14,11 @@ use App\Scripts\Server\AddCronJob as AppAddCronJob;
 
 class AddCronJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     public $server;
 
@@ -44,11 +48,17 @@ class AddCronJob implements ShouldQueue
             $this->cronJob->update([
                 'status' => STATUS_ACTIVE
             ]);
-        } else {
-            // TODO: Alert user of failure.
-            $this->cronJob->delete();
-        }
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+            $this->broadcastServerUpdated();
+        } else {
+            $this->cronJob->delete();
+
+            $this->broadcastServerUpdated();
+
+            $this->alertServer(
+                "Failed adding cron job on server {$this->server->name}. Please view server logs.",
+                $process->getErrorOutput()
+            );
+        }
     }
 }

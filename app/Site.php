@@ -12,7 +12,8 @@ class Site extends Model
      * @var array
      */
     protected $casts = [
-        'environment' => 'array'
+        'environment' => 'array',
+        'push_to_deploy' => 'boolean'
     ];
 
     /**

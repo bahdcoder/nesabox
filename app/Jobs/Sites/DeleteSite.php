@@ -55,14 +55,16 @@ class DeleteSite implements ShouldQueue
         if ($process->isSuccessful()) {
             $this->site->delete();
         } else {
-            
             $this->site->update([
                 'deleting_site' => false
             ]);
 
             $this->server->user->notify(new ServerIsReady($this->server));
-            
-            $this->server->alertError("Failed to delete site {$this->site->name}. View log for more details.", $process->getErrorOutput());
+
+            $this->server->alert(
+                "Failed to delete site {$this->site->name}. View log for more details.",
+                $process->getErrorOutput()
+            );
         }
     }
 }

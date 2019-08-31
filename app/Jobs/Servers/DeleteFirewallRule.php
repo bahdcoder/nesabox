@@ -52,6 +52,16 @@ class DeleteFirewallRule implements ShouldQueue
             $this->rule->update([
                 'status' => STATUS_ACTIVE
             ]);
+
+            $message = "Failed deleting firewall rule {$this->rule->name} on server {$this->server->name}.";
+
+            $this->rule->update([
+                'status' => STATUS_ACTIVE
+            ]);
+
+            $this->broadcastServerUpdated();
+
+            $this->alertServer($message, $process->getErrorOutput());
         }
 
         $this->server->user->notify(new ServerIsReady($this->server));

@@ -51,7 +51,7 @@ trait InteractsWithGithub
      *
      * @return object
      */
-    public function addPushWebhook(Site $site, User $user)
+    public function addGithubPushWebhook(Site $site, User $user)
     {
         return json_decode(
             (string) github_api()
@@ -83,7 +83,7 @@ trait InteractsWithGithub
     public function deleteGithubPushWebhook(Site $site)
     {
         return github_api()->delete(
-            "/repos/{$site->repository}/hooks/{$site->quick_deploy_hook_id}"
+            "/repos/{$site->repository}/hooks/{$site->push_to_deploy_hook_id}"
         );
     }
 }

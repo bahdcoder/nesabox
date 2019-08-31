@@ -42,13 +42,18 @@ class DeleteCronJob implements ShouldQueue
 
         if ($process->isSuccessful()) {
             $this->cronJob->delete();
+
+            $this->broadcastServerUpdated();
         } else {
-            // TODO: Alert user of why cron job deletion failed
+            $message = "Failed deleting cron job {$this->cronJob->command} on server {$this->server->name}.";
+
             $this->cronJob->update([
                 'status' => STATUS_ACTIVE
             ]);
-        }
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+            $this->broadcastServerUpdated();
+
+            $this->alertServer($message, $process->getErrorOutput());
+        }
     }
 }

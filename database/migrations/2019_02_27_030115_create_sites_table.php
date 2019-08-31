@@ -25,10 +25,11 @@ class CreateSitesTable extends Migration
             $table->string('repository')->nullable();
             $table->string('slack_channel')->nullable();
             $table->boolean('deploying')->default(false);
-            $table->boolean('quick_deploy')->default(false);
             $table->string('repository_status')->nullable();
             $table->string('node_version')->default('node');
+            $table->boolean('push_to_deploy')->default(false);
             $table->string('repository_provider')->nullable();
+            $table->string('push_to_deploy_hook_id')->nullable();
             $table->string('repository_branch')->default('master');
             $table->string('installing_ghost_status')->nullable();
             $table->boolean('wild_card_subdomains')->default(false);

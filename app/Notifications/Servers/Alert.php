@@ -9,38 +9,51 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class AlertError extends Notification implements ShouldQueue
+class Alert extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * The server to alert
-     * 
+     *
      * @var \App\Server
      */
     public $server;
 
     /**
      * The alert message
-     * 
+     *
      * @var string
      */
     public $message;
 
     /**
      * The output from command.
-     * 
+     *
      * @var string
      */
     public $output;
+
+    /**
+     * The type of alert.
+     *
+     * Defaults to error.
+     *
+     * @var string
+     */
+    public $type;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Server $server, string $message, string $output = null)
-    {
+    public function __construct(
+        Server $server,
+        string $message,
+        string $output = null,
+        string $type = 'error'
+    ) {
         $this->output = $output;
         $this->server = $server;
         $this->message = $message;

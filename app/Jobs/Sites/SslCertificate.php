@@ -67,7 +67,10 @@ class SslCertificate implements ShouldQueue
 
             $this->broadcastToUser();
 
-            $this->server->alertError("Failed to install SSL certificate. View log output for more details.", $process->getErrorOutput());
+            $this->server->alert(
+                'Failed to install SSL certificate. View log output for more details.',
+                $process->getErrorOutput()
+            );
         }
     }
 

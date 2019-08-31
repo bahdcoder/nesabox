@@ -48,17 +48,22 @@ class DeleteDaemon implements ShouldQueue
      */
     public function handle()
     {
-        // $process = $process = (new DeleteDaemon($server, $daemon))->run();
         $process = (new AppDeleteDaemon($this->server, $this->daemon))->run();
 
         if ($process->isSuccessful()) {
             $this->daemon->delete();
+
+            $this->broadcastServerUpdated();
         } else {
+            $message = "Failed deleting daemon {$this->daemon->command} on server {$this->server->name}.";
+
             $this->daemon([
                 'status' => STATUS_ACTIVE
             ]);
-        }
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+            $this->broadcastServerUpdated();
+
+            $this->alertServer($message, $process->getErrorOutput());
+        }
     }
 }

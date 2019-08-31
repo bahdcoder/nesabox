@@ -49,6 +49,7 @@ class CreateDatabaseRequest extends FormRequest
                     );
                 })
             ],
+            'database_user_id' => 'required',
             'password' => ['required_with:user'],
             'type' => 'required|in:' . implode(',', $databases)
         ];

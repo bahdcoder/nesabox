@@ -27,6 +27,7 @@ use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Http\Controllers\Servers\MonitoringController;
 use App\Http\Controllers\Servers\UfwController;
+use App\Http\Controllers\Sites\GithubWebhookController;
 use App\Server;
 use App\Http\Controllers\Sites\Pm2ProcessController;
 use App\Http\Controllers\Sites\SslCertificateController;
@@ -48,10 +49,7 @@ Route::middleware(['auth:api'])->group(function () {
         'store'
     ]);
 
-    Route::get('notifications', [
-        NotificationsController::class,
-        'index'
-    ]);
+    Route::get('notifications', [NotificationsController::class, 'index']);
 
     Route::post('notifications/{notification}', [
         NotificationsController::class,
@@ -122,7 +120,10 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::post('servers/{server}/sites', [SitesController::class, 'store']);
 
-    Route::get('servers/{server}/sites/{site}', [SitesController::class, 'show']);
+    Route::get('servers/{server}/sites/{site}', [
+        SitesController::class,
+        'show'
+    ]);
 
     Route::put('servers/{server}/sites/{site}', [
         SitesController::class,
@@ -290,6 +291,16 @@ Route::middleware(['guest', 'api-token'])->group(function () {
         InitializationCallbackController::class,
         'callback'
     ])->name('servers.initialization-callback');
+
+    Route::post(
+        'servers/{server}/sites/{site}',
+        '\App\Http\Controllers\Sites\PushToDeployController'
+    );
+
+    Route::get(
+        'sites/{site}/github-webhooks',
+        '\App\Http\Controllers\Sites\GithubWebhookController'
+    );
 });
 
 // $this->post('login', 'Auth\LoginController@login');

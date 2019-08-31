@@ -48,15 +48,18 @@ class AddDaemon implements ShouldQueue
             $this->daemon->update([
                 'status' => STATUS_ACTIVE
             ]);
+
+            $this->daemon->server->user->notify(
+                new ServerIsReady($this->daemon->server)
+            );
+        } else {
+            $this->daemon->server->user->notify(
+                new ServerIsReady($this->daemon->server)
+            );
+
+            $this->alertError(
+                "Failed adding daemon on server {$this->daemon->server->name}"
+            );
         }
-
-        $this->daemon->server->user->notify(
-            new ServerIsReady($this->daemon->server)
-        );
-    }
-
-    public function failed($e)
-    {
-        dd($e);
     }
 }

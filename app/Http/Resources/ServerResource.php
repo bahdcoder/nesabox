@@ -56,15 +56,25 @@ class ServerResource extends JsonResource
             'nesa_key' => $this->sshkeys()
                 ->where('is_app_key', true)
                 ->first()->key,
-            'sites' => $this->resource->sites()->select(['id', 'name', 'app_type', 'status', 'repository_provider'])->get()->map(function ($site) {
-                return [
-                    'id' => $site->id,
-                    'name' => $site->name,
-                    'status' => $site->status,
-                    'app_type' => $site->app_type ?? 'None',
-                    'repository_provider' => $site->repository_provider
-                ];
-            }),
+            'sites' => $this->resource
+                ->sites()
+                ->select([
+                    'id',
+                    'name',
+                    'app_type',
+                    'status',
+                    'repository_provider'
+                ])
+                ->get()
+                ->map(function ($site) {
+                    return [
+                        'id' => $site->id,
+                        'name' => $site->name,
+                        'status' => $site->status,
+                        'app_type' => $site->app_type ?? 'None',
+                        'repository_provider' => $site->repository_provider
+                    ];
+                }),
             'sshkeys' => SshkeyResource::collection($this->personalSshkeys),
             'mongodb_databases' => DatabaseResource::collection(
                 $this->mongodbDatabases

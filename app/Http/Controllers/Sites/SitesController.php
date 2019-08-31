@@ -20,7 +20,7 @@ class SitesController extends Controller
     public function show(Server $server, Site $site)
     {
         $this->authorize($server, 'view');
-        
+
         return new SiteResource($site);
     }
 

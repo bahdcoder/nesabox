@@ -61,10 +61,6 @@ class InstallMonitoring implements ShouldQueue
 
     public function handleFailed($error = null)
     {
-        if ($error) {
-            echo $error;
-        }
-
         $this->server->update([
             'server_monitoring_status' => null,
             'server_monitoring_username' => null,
@@ -74,7 +70,6 @@ class InstallMonitoring implements ShouldQueue
 
     public function failed($e)
     {
-        echo $e;
         $this->handleFailed();
     }
 }

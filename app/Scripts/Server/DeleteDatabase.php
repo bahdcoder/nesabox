@@ -61,12 +61,12 @@ EOD;
 
     public function generateMysqlDeleteUserScript()
     {
-        if (!request()->query('delete_user')) {
+        if ($this->database->databaseUser->status !== STATUS_DELETING) {
             return '';
         }
 
         return <<<EOD
-mysql -e "DROP USER '{$this->database->databaseUser->name}'@'localhost'"     
+mysql -e "DROP USER '{$this->database->databaseUser->name}'@'localhost'";
 EOD;
     }
 

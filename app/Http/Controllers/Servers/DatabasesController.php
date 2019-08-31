@@ -9,6 +9,7 @@ use App\Jobs\Servers\AddDatabase;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\CreateDatabaseRequest;
+use App\Jobs\Servers\DeleteDatabase;
 
 class DatabasesController extends Controller
 {
@@ -27,6 +28,8 @@ class DatabasesController extends Controller
                     )
                 )
             );
+        } else {
+            $databaseUser = DatabaseUser::findOrFail($request->database_user_id);
         }
 
         $database = Database::create([
@@ -34,14 +37,10 @@ class DatabasesController extends Controller
             'name' => $request->name,
             'server_id' => $server->id,
             'status' => STATUS_INSTALLING,
-            'database_user_id' => $databaseUser
-                ? $databaseUser->id
-                : DatabaseUser::where('name', SSH_USER)
-                    ->where('server_id', $server->id)
-                    ->first()->id
+            'database_user_id' => $databaseUser->id
         ]);
 
-        AddDatabase::dispatch($server, $database, $databaseUser);
+        AddDatabase::dispatch($server, $database);
 
         return new ServerResource($server->fresh());
     }
@@ -51,6 +50,16 @@ class DatabasesController extends Controller
         $database->update([
             'status' => STATUS_DELETING
         ]);
+
+        if (request()->query('delete_user')) {
+            if ($database->databaseUser->name !== SSH_USER ) {
+                $database->databaseUser->update([
+                    'status' => STATUS_DELETING
+                ]);
+            }
+        }
+
+        DeleteDatabase::dispatch($server, $database);
 
         return new ServerResource($server);
     }
