@@ -113,6 +113,11 @@ Route::middleware(['auth:api'])->group(function () {
         'store'
     ]);
 
+    Route::get('servers/{server}/databases/{databaseType}', [
+        DatabasesController::class,
+        'index'
+    ]);
+
     Route::delete('servers/{server}/databases/{database}', [
         DatabasesController::class,
         'destroy'

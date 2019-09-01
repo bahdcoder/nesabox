@@ -42,6 +42,9 @@ class DeleteDatabase implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppDeleteDatabase($this->server, $this->database))->run();
+        $process = (new AppDeleteDatabase(
+            $this->server,
+            $this->database
+        ))->run();
     }
 }

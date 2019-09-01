@@ -108,7 +108,11 @@ class Server extends Model
      */
     public function databaseUsers()
     {
-        return $this->hasMany(DatabaseUser::class);
+        return $this->hasMany(DatabaseUser::class)->where(
+            'status',
+            '!=',
+            STATUS_DELETING
+        );
     }
 
     public function mongoDbDatabaseUsers()
@@ -123,7 +127,11 @@ class Server extends Model
 
     public function databaseInstances()
     {
-        return $this->hasMany(Database::class);
+        return $this->hasMany(Database::class)->where(
+            'status',
+            '!=',
+            STATUS_DELETING
+        );
     }
 
     public function firewallRules()
@@ -131,7 +139,7 @@ class Server extends Model
         return $this->hasMany(FirewallRule::class)->where(
             'status',
             '!=',
-            'deleting'
+            STATUS_DELETING
         );
     }
 
@@ -147,12 +155,44 @@ class Server extends Model
 
     public function mongodbDatabases()
     {
-        return $this->databaseInstances()->where('type', 'mongodb');
+        return $this->databaseInstances()->where('type', MONGO_DB);
     }
 
     public function mysqlDatabases()
     {
-        return $this->databaseInstances()->where('type', 'mysql');
+        return $this->databaseInstances()->where('type', MYSQL_DB);
+    }
+
+    public function mysql8Databases()
+    {
+        return $this->databaseInstances()->where('type', MYSQL8_DB);
+    }
+
+    public function mysql8DatabaseUsers()
+    {
+        return $this->databaseUsers()->where('type', MYSQL8_DB);
+    }
+
+    public function mariadbDatabases()
+    {
+        return $this->databaseInstances()->where('type', MARIA_DB);
+    }
+
+    public function mariadbDatabaseUsers()
+    {
+        return $this->databaseUsers()->where('type', MARIA_DB);
+    }
+
+    public function postgresdbDatabases()
+    {
+        return $this->databaseInstances()
+            ->where('type', POSTGRES_DB)
+            ->where('status', '!=', STATUS_DELETING);
+    }
+
+    public function postgresdbDatabaseUsers()
+    {
+        return $this->databaseUsers()->where('type', POSTGRES_DB);
     }
 
     public function getLogWatcherSiteDomain()

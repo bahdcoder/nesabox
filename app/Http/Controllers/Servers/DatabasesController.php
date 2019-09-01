@@ -9,10 +9,57 @@ use App\Jobs\Servers\AddDatabase;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\CreateDatabaseRequest;
+use App\Http\Resources\DatabaseResource;
+use App\Http\Resources\DatabaseUserResource;
 use App\Jobs\Servers\DeleteDatabase;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class DatabasesController extends Controller
 {
+    public function index(Server $server, string $databaseType)
+    {
+        switch ($databaseType) {
+            case MYSQL8_DB:
+                return response()->json([
+                    'databases' => DatabaseResource::collection(
+                        $server->mysql8Databases
+                    ),
+                    'database_users' => DatabaseUserResource::collection(
+                        $server->mysql8DatabaseUsers
+                    )
+                ]);
+            case MONGO_DB:
+                return response()->json([
+                    'databases' => DatabaseResource::collection(
+                        $server->mongodbDatabases
+                    ),
+                    'database_users' => DatabaseUserResource::collection(
+                        $server->mongoDbDatabaseUsers
+                    )
+                ]);
+            case POSTGRES_DB:
+                return response()->json([
+                    'databases' => DatabaseResource::collection(
+                        $server->postgresdbDatabases
+                    ),
+                    'database_users' => DatabaseUserResource::collection(
+                        $server->postgresdbDatabaseUsers
+                    )
+                ]);
+            case MYSQL_DB:
+                return response()->json([
+                    'databases' => DatabaseResource::collection(
+                        $server->mysqlDatabases
+                    ),
+                    'database_users' => DatabaseUserResource::collection(
+                        $server->mysqlDatabaseUsers
+                    )
+                ]);
+            default:
+                return response()->json(__('Unsupported database.'), 400);
+                break;
+        }
+    }
     public function store(CreateDatabaseRequest $request, Server $server)
     {
         $databaseUser = null;
@@ -29,7 +76,9 @@ class DatabasesController extends Controller
                 )
             );
         } else {
-            $databaseUser = DatabaseUser::findOrFail($request->database_user_id);
+            $databaseUser = DatabaseUser::findOrFail(
+                $request->database_user_id
+            );
         }
 
         $database = Database::create([
@@ -52,7 +101,7 @@ class DatabasesController extends Controller
         ]);
 
         if (request()->query('delete_user')) {
-            if ($database->databaseUser->name !== SSH_USER ) {
+            if ($database->databaseUser->name !== SSH_USER) {
                 $database->databaseUser->update([
                     'status' => STATUS_DELETING
                 ]);

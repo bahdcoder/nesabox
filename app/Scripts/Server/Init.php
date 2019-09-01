@@ -2,6 +2,8 @@
 
 namespace App\Scripts\Server;
 
+use App\Database;
+use App\Notifications\Servers\Alert;
 use App\Server;
 use App\Scripts\Base as BaseScript;
 
@@ -42,6 +44,8 @@ class Init extends BaseScript
 
         $metricsPort = config('nesa.metrics_port');
 
+        $sudoPassword = str_random(32);
+
         return <<<EOD
 #!/bin/sh
 
@@ -51,11 +55,14 @@ SUDO_PASSWORD="{$this->server->sudo_password}"
 SWAP_SIZE="1G"
 export DEBIAN_FRONTEND=noninteractive
 
+sudo sed -i "s/#precedence ::ffff:0:0\/96  100/precedence ::ffff:0:0\/96  100/" /etc/gai.conf
 # Set The Hostname If Necessary (on linode servers for example)
 
 echo "{$this->server->name}" > /etc/hostname
 sed -i 's/127\.0\.0\.1.*localhost/127.0.0.1     {$this->server->name}.localdomain {$this->server->name} localhost/' /etc/hosts
 hostname {$this->server->name}
+
+ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
 apt-get update
 apt-get upgrade -y
@@ -109,7 +116,7 @@ chsh -s /bin/bash {$user}
 cp /root/.profile /home/{$user}/.profile
 cp /root/.bashrc /home/{$user}/.bashrc
 
-PASSWORD=$(mkpasswd \$SUDO_PASSWORD)
+PASSWORD=$(mkpasswd {$sudoPassword})
 usermod --password \$PASSWORD {$user}
 
 usermod -a -G www-data {$user}
@@ -177,7 +184,7 @@ else
     echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.conf
 fi
 
-# Make sure supervisor autostarts
+# supervisor autostarts config
 systemctl enable supervisor.service
 service supervisor start
 
@@ -215,6 +222,22 @@ sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf
 service redis-server restart
 systemctl enable redis-server
 
+# Setup beanstalkd
+apt-get install -y --force-yes beanstalkd
+sed -i "s/BEANSTALKD_LISTEN_ADDR.*/BEANSTALKD_LISTEN_ADDR=0.0.0.0/" /etc/default/beanstalkd
+
+if grep START= /etc/default/beanstalkd; then
+    sed -i 's/#START=yes/START=yes/' /etc/default/beanstalkd
+else
+    echo 'START=yes' >> /etc/default/beanstalkd
+fi
+
+service beanstalkd start
+sleep 6
+service beanstalkd restart
+
+systemctl enable beanstalkd
+
 # Install acme.sh for issuing let'sencrypt certificates
 cd ~
 git clone https://github.com/Neilpang/acme.sh.git
@@ -244,13 +267,11 @@ EOF
 {$this->getDatabasesInstallationScripts()}
 
 # Install netdata
-{$this->installNetData()}
 
 # Install latest versions of node and pm2
 {$this->installLatestNodeAndPm2()}
 
 # Setup the server monitoring script
-{$this->setupServerMonitoringScript()}
 
 generate_post_data()
 {
@@ -274,6 +295,7 @@ EOD;
         $user = SSH_USER;
         return <<<EOD
 su {$user} <<EOF
+cd ~
 n lts
 npm i -g pm2
 npm i -g yarn
@@ -344,189 +366,6 @@ cat >> /etc/netdata/python.d/mongodb.conf << EOF
         user   : '{$database_user}'
         pass   : '{$database_pass}'
 EOF
-EOD;
-    }
-
-    public function installNetData()
-    {
-        return <<<EOD
-curl -Ss 'https://raw.githubusercontent.com/netdata/netdata-demo-site/master/install-required-packages.sh' >/tmp/kickstart.sh && bash /tmp/kickstart.sh -i netdata-all --non-interactive
-
-# clone the netdata repository and run netdata installer
-
-git clone https://github.com/netdata/netdata.git netdata-temp-folder --depth=100
-
-# Execute the netdata install script
-cd netdata-temp-folder
-
-./netdata-installer.sh --dont-wait
-
-cd ~
-
-# Download fresh netdata.conf file
-curl -o /etc/netdata/netdata.conf http://localhost:19999/netdata.conf
-
-
-# Enable python.d plugins
-cat >> /etc/netdata/python.d.conf << EOF
-# netdata python.d.plugin configuration
-#
-# This file is in YaML format.
-# Generally the format is:
-#
-# name: value
-#
-
-# Enable / disable the whole python.d.plugin (all its modules)
-enabled: yes
-
-# ----------------------------------------------------------------------
-# Enable / Disable python.d.plugin modules
-default_run: yes
-#
-# If "default_run" = "yes" the default for all modules is enabled (yes).
-# Setting any of these to "no" will disable it.
-#
-# If "default_run" = "no" the default for all modules is disabled (no).
-# Setting any of these to "yes" will enable it.
-
-# Enable / Disable explicit garbage collection (full collection run). Default is enabled.
-gc_run: yes
-
-# Garbage collection interval in seconds. Default is 300.
-gc_interval: 300
-
-# apache: yes
-
-# apache_cache has been replaced by web_log
-# adaptec_raid: yes
-apache_cache: no
-# beanstalk: yes
-# bind_rndc: yes
-# boinc: yes
-# ceph: yes
-chrony: no
-# couchdb: yes
-# dns_query_time: yes
-# dnsdist: yes
-# dockerd: yes
-# dovecot: yes
-# elasticsearch: yes
-# energid: yes
-
-# this is just an example
-example: no
-
-# exim: yes
-# fail2ban: yes
-# freeradius: yes
-go_expvar: no
-
-# gunicorn_log has been replaced by web_log
-gunicorn_log: no
-# haproxy: yes
-# hddtemp: yes
-# httpcheck: yes
-# icecast: yes
-# ipfs: yes
-# isc_dhcpd: yes
-# litespeed: yes
-logind: no
-# megacli: yes
-# memcached: yes
-mongodb: yes
-# monit: yes
-mysql: yes
-nginx: yes
-# nginx_plus: yes
-# nvidia_smi: yes
-
-# nginx_log has been replaced by web_log
-nginx_log: no
-# nsd: yes
-# ntpd: yes
-# openldap: yes
-# oracledb: yes
-# ovpn_status_log: yes
-# phpfpm: yes
-# portcheck: yes
-# postfix: yes
-# postgres: yes
-# powerdns: yes
-# proxysql: yes
-# puppet: yes
-# rabbitmq: yes
-redis: yes
-# rethinkdbs: yes
-# retroshare: yes
-# riakkv: yes
-# samba: yes
-# sensors: yes
-# smartd_log: yes
-# spigotmc: yes
-# springboot: yes
-# squid: yes
-# traefik: yes
-# tomcat: yes
-# tor: yes
-unbound: no
-# uwsgi: yes
-# varnish: yes
-# w1sensor: yes
-# web_log: yes
-EOF
-
-cat >> /etc/nginx/sites-available/stub-status.conf << EOF
-# -----------------------------------------------------------------------------
-# | Stub module provides access to basic status information. (Do not remove)  |
-# -----------------------------------------------------------------------------
-
-server {
-     listen 80 default_server;
-     listen [::]:80 default_server;
-     location /stub_status {
-        stub_status;
-        allow 127.0.0.1;
-        deny all;
-    }
-}
-EOF
-
-cat >> /etc/netdata/python.d/nginx.conf << EOF
-localhost:
-  name : 'local'
-  url  : 'http://127.0.0.1/stub_status'
-EOF
-
-{$this->netDataConfigMysql()}
-
-{$this->netDataConfigMongodb()}
-
-# Add recommended configuration for netdata
-
-cat >> /etc/sysctl.conf << EOF
-vm.dirty_expire_centisecs=60000
-vm.dirty_background_ratio=80
-vm.dirty_ratio=90
-EOF
-
-# Increase max open files limit
-mkdir -p /etc/systemd/system/netdata.service.d
-cat >> /etc/systemd/system/netdata.service.d/limits.conf << EOF
-[Service]
-LimitNOFILE=30000
-EOF
-
-# Reload system daemon
-systemctl daemon-reload
-
-# Restart netdata
-systemctl restart netdata
-
-# Cleanup
-
-cd ~
-rm -r netdata-temp-folder
 EOD;
     }
 
@@ -632,11 +471,216 @@ EOD;
             ->first();
 
         return <<<EOD
-cat > /root/.ssh/authorized_keys << EOF
+cat >> /root/.ssh/authorized_keys << EOF
 # Nesabox key
 
 {$sshKey->key}
 EOF
+EOD;
+    }
+
+    public function installMysql()
+    {
+        $database = $this->server->mysqlDatabases()->first();
+
+        $databaseUser = $database->databaseUsers()->first();
+
+        $rootPassword = str_random(32);
+
+        $this->server->user->notify(
+            new Alert(
+                $this->server,
+                "Mysql 5.7 root password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
+                null,
+                'info-delete'
+            )
+        );
+
+        return <<<EOD
+\n
+export DEBIAN_FRONTEND=noninteractive
+debconf-set-selections <<< "mysql-community-server mysql-community-server/data-dir select ''"
+debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password ${rootPassword}"
+debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password ${rootPassword}"
+apt-get install -y mysql-server
+sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/mysql.conf.d/mysqld.cnf
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'{$this->server->ip_address}' IDENTIFIED BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{$rootPassword}';"
+
+USER="{$databaseUser->name}"
+MYSQL_ROOT_PASSWORD="{$rootPassword}"
+
+service mysql restart
+
+sleep 2
+
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'%' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
+
+service mysql restart
+
+sleep 2
+
+mysql --user="{$databaseUser->name}" --password="{$databaseUser->password}" -e "CREATE DATABASE {$database->name}";
+EOD;
+    }
+
+    public function installMysql8()
+    {
+        $database = $this->server->mysql8Databases()->first();
+
+        $databaseUser = $database->databaseUsers()->first();
+
+        $rootPassword = str_random(32);
+
+        $this->server->user->notify(
+            new Alert(
+                $this->server,
+                "Mysql 8 root password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
+                null,
+                'info-delete'
+            )
+        );
+
+        return <<<EOD
+\n
+export DEBIAN_FRONTEND=noninteractive
+wget -c https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+dpkg --install mysql-apt-config_0.8.12-1_all.deb
+debconf-set-selections <<< "mysql-community-server mysql-community-server/data-dir select ''"
+debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password {$rootPassword}"
+debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password {$rootPassword}"
+apt-get update
+apt-get install -y mysql-server
+echo "default_password_lifetime = 0" >> /etc/mysql/mysql.conf.d/mysqld.cnf
+sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/mysql.conf.d/mysqld.cnf
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER 'root'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'{$this->server->ip_address}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
+service mysql restart
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'%' IDENTIFIED WITH mysql_native_password BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'{$this->server->ip_address}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'%' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$databaseUser->name} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"           
+EOD;
+    }
+
+    public function installMongodb()
+    {
+        // for mongodb, first we'll create a root user
+        // then we'll create a default nesa user (with password) in a default nesa database
+
+        $rootUser = 'admin';
+
+        $rootPassword = str_random(32);
+
+        $database = $this->server->mongodbDatabases()->first();
+
+        $databaseUser = $database->databaseUsers()->first();
+
+        $this->server->user->notify(
+            new Alert(
+                $this->server,
+                "MongoDB v4.2 admin password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
+                null,
+                'info-delete'
+            )
+        );
+
+        return <<<EOD
+\n
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+
+sudo apt-get update
+sudo apt-get install -y mongodb-org=4.2.0 mongodb-org-server=4.2.0 mongodb-org-shell=4.2.0 mongodb-org-mongos=4.2.0 mongodb-org-tools=4.2.0
+sudo service mongod start
+
+sleep 3
+# Create mongo admin user
+mongo admin --eval 'db.createUser ({user: "{$rootUser}",pwd: "{$rootPassword}",roles: [{ role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]})'
+
+replace-in-file '#security:' '' /etc/mongod.conf
+cat >> /etc/mongod.conf << EOF
+security:
+    authorization: "enabled"
+EOF
+
+systemctl restart mongod
+
+sleep 3
+
+# Create the default nesa database, with the default nesa user in it
+mongo {$database->name} --eval 'db.createUser({ user: "{$databaseUser->name}", pwd: "{$databaseUser->password}", roles: ["dbOwner"] })' -u {$rootUser} -p {$rootPassword} --authenticationDatabase admin
+
+EOD;
+    }
+
+    public function installPostgres()
+    {
+        $database = $this->server->postgresdbDatabases()->first();
+
+        $databaseUser = $database->databaseUsers()->first();
+
+        return <<<EOD
+\n
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+sudo apt-get update
+sudo apt-get install -y --force-yes postgresql postgresql-contrib
+
+# Postgres configs
+sudo sed -i "s/localtime/UTC/" /etc/postgresql/11/main/postgresql.conf
+sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/11/main/postgresql.conf
+echo "host    all             all             0.0.0.0/0               md5" | tee -a /etc/postgresql/11/main/pg_hba.conf
+sudo -u postgres psql -c "CREATE ROLE {$databaseUser->name} LOGIN PASSWORD '{$databaseUser->password}' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
+service postgresql restart
+sudo -u postgres /usr/bin/createdb --echo --owner={$databaseUser->name} {$database->name}
+service postgresql restart
+EOD;
+    }
+
+    public function installMariadb()
+    {
+        $database = $this->server->mariadbDatabases()->first();
+
+        $databaseUser = $database->databaseUsers()->first();
+
+        $rootPassword = str_random(32);
+
+        $this->server->user->notify(
+            new Alert(
+                $this->server,
+                "MariaDB v10.13 root password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
+                null,
+                'info-delete'
+            )
+        );
+
+        return <<<EOD
+\n
+export DEBIAN_FRONTEND=noninteractive
+debconf-set-selections <<< "mariadb-server-10.3 mysql-server/data-dir select ''"
+debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password password {$rootPassword}"
+debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password_again password {$rootPassword}"
+apt-get install -y mariadb-server-10.3
+sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/my.cnf
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{$databaseUser->password}';"
+service mysql restart
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '$databaseUser->name'@'%' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
+echo "" >> /etc/mysql/my.cnf
+echo "[mysqld]" >> /etc/mysql/my.cnf
+echo "character-set-server = utf8" >> /etc/mysql/my.cnf
+mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$databaseUser->name};"
 EOD;
     }
 
@@ -648,58 +692,22 @@ EOD;
     public function getDatabasesInstallationScripts()
     {
         $script = '';
-        foreach ($this->server->databaseInstances as $database):
-            switch ($database->type):
+        foreach ($this->server->databases as $databaseType):
+            switch ($databaseType):
                 case MYSQL_DB:
-                    $script .= <<<EOD
-\n
-apt-get install -y mysql-server
-USER="{$database->databaseUser->name}"
-MYSQL_ROOT_PASSWORD="{$database->databaseUser->password}"
-mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO root@'localhost' IDENTIFIED BY '\$MYSQL_ROOT_PASSWORD';"
-mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '\$MYSQL_ROOT_PASSWORD';"
-service mysql restart
-mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "CREATE USER '\$USER'@'localhost' IDENTIFIED BY '\$MYSQL_ROOT_PASSWORD';"
-mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO '\$USER'@'localhost' IDENTIFIED BY '\$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;"
-mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "GRANT ALL ON *.* TO '\$USER'@'%' IDENTIFIED BY '\$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;"
-mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
-mysql --user="root" --password="\$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE {$database->name}";
-EOD;
+                    $script .= $this->installMysql();
                     break;
                 case MONGO_DB:
-                    $script .= <<<EOD
-\n
-wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
-echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
-
-sudo apt-get update
-sudo apt-get install -y mongodb-org
-sudo service mongod start
-
-systemctl restart mongod
-systemctl status mongod
-
-cat > app.js << EOF
-db.createUser ({
-    user: "{$database->databaseUser->name}",
-    pwd: "{$database->databaseUser->password}",
-    roles: [{ role: 'root', db: 'admin' }, { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]}
-)
-printjson(db.getUsers())
-EOF
-
-mongo admin app.js
-
-rm app.js
-
-cat >> /etc/mongod.conf << EOF
-security:
-  authorization: "enabled"
-EOF
-systemctl restart mongod
-EOD;
+                    $script .= $this->installMongodb();
                     break;
-                default:
+                case POSTGRES_DB:
+                    $script .= $this->installPostgres();
+                    break;
+                case MYSQL8_DB:
+                    $script .= $this->installMysql8();
+                    break;
+                case MARIA_DB:
+                    $script .= $this->installMariadb();
                     break;
             endswitch;
         endforeach;

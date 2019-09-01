@@ -257,21 +257,21 @@ class CreateServersController extends Controller
     public function createServerDatabases(Server $server)
     {
         foreach ($server->databases as $database):
-            $server
-                ->databaseUsers()
-                ->create([
-                    'name' => SSH_USER,
-                    'type' => $database,
-                    'password' => str_random(12),
-                    'status' => STATUS_ACTIVE
-                ])
-                ->databases()
-                ->create([
-                    'name' => SSH_USER,
-                    'type' => $database,
-                    'status' => STATUS_ACTIVE,
-                    'server_id' => $server->id
-                ]);
+            $databaseUser = $server->databaseUsers()->create([
+                'name' => SSH_USER,
+                'type' => $database,
+                'password' => str_random(24),
+                'status' => STATUS_ACTIVE
+            ]);
+
+            $database = $server->databaseInstances()->create([
+                'name' => SSH_USER,
+                'type' => $database,
+                'status' => STATUS_ACTIVE,
+                'server_id' => $server->id
+            ]);
+
+            $databaseUser->databases()->attach($database->id);
         endforeach;
     }
 }

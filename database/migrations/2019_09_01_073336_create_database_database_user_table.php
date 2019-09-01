@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDatabasesTable extends Migration
+class CreateDatabaseDatabaseUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateDatabasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('databases', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->uuid('server_id');
-            $table->string('name')->nullable();
-            $table->string('type')->default('mysql');
-            $table->string('status')->default('installing');
+        Schema::create('database_database_user', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->uuid('database_id');
+            $table->uuid('database_user_id');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateDatabasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('databases');
+        Schema::dropIfExists('database_database_user');
     }
 }

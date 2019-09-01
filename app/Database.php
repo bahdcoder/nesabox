@@ -7,11 +7,11 @@ class Database extends Model
     /**
      * A database belongs to a database user
      *
-     * @return \Illuminate\Database\Eloquent\BelongsTo
+     * @return \Illuminate\Database\Eloquent\BelongsToMany
      */
-    public function databaseUser()
+    public function databaseUsers()
     {
-        return $this->belongsTo(DatabaseUser::class);
+        return $this->belongsToMany(DatabaseUser::class);
     }
 
     public function server()

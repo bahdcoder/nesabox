@@ -54,6 +54,7 @@ class Alert extends Notification implements ShouldQueue
         string $output = null,
         string $type = 'error'
     ) {
+        $this->type = $type;
         $this->output = $output;
         $this->server = $server;
         $this->message = $message;
@@ -82,7 +83,8 @@ class Alert extends Notification implements ShouldQueue
     {
         return [
             'message' => $this->message,
-            'output' => $this->output
+            'output' => $this->output,
+            'type' => $this->type
         ];
     }
 
@@ -91,7 +93,8 @@ class Alert extends Notification implements ShouldQueue
         return (new BroadcastMessage([
             'data' => [
                 'message' => $this->message,
-                'output' => $this->output
+                'output' => $this->output,
+                'type' => $this->type
             ]
         ]))
             ->onConnection('redis')

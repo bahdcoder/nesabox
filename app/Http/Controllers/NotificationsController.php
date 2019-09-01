@@ -16,6 +16,10 @@ class NotificationsController extends Controller
     {
         $notification->markAsRead();
 
+        if ($notification->data['type'] === 'info-delete') {
+            $notification->delete();
+        }
+
         return response()->json([]);
     }
 }
