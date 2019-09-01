@@ -44,12 +44,6 @@ class ServerResource extends JsonResource
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
             'daemons' => DaemonsResource::collection($this->daemons),
-            'mysql_database_users' => DatabaseUserResource::collection(
-                $this->mysqlDatabaseUsers
-            ),
-            'mongodb_database_users' => DatabaseUserResource::collection(
-                $this->mongoDbDatabaseUsers
-            ),
             'firewall_rules' => FirewallRuleResource::collection(
                 $this->resource->firewallRules
             ),
@@ -76,12 +70,6 @@ class ServerResource extends JsonResource
                     ];
                 }),
             'sshkeys' => SshkeyResource::collection($this->personalSshkeys),
-            'mongodb_databases' => DatabaseResource::collection(
-                $this->mongodbDatabases
-            ),
-            'mysql_databases' => DatabaseResource::collection(
-                $this->mysqlDatabases
-            ),
             $this->mergeWhen($this->provider === CUSTOM_PROVIDER, [
                 'deploy_script' => $deploy_script_route,
                 'deploy_command' => "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh"

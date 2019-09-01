@@ -28,6 +28,12 @@ class CreateServersTable extends Migration
             $table->string('identifier')->nullable();
             $table->string('status')->default('new');
             $table->string('credential_id')->nullable();
+
+            $table->string('mysql_root_password')->nullable();
+            $table->string('mysql8_root_password')->nullable();
+            $table->string('mariadb_root_password')->nullable();
+            $table->string('mongodb_admin_password')->nullable();
+
             $table->json('ssh_key_added_to_source_provider')->nullable();
             $table->timestamps();
         });

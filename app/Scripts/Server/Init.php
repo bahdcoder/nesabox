@@ -485,16 +485,7 @@ EOD;
 
         $databaseUser = $database->databaseUsers()->first();
 
-        $rootPassword = str_random(32);
-
-        $this->server->user->notify(
-            new Alert(
-                $this->server,
-                "Mysql 5.7 root password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
-                null,
-                'info-delete'
-            )
-        );
+        $rootPassword = $this->server->mysql_root_password;
 
         return <<<EOD
 \n
@@ -533,16 +524,7 @@ EOD;
 
         $databaseUser = $database->databaseUsers()->first();
 
-        $rootPassword = str_random(32);
-
-        $this->server->user->notify(
-            new Alert(
-                $this->server,
-                "Mysql 8 root password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
-                null,
-                'info-delete'
-            )
-        );
+        $rootPassword = $this->server->mysql8_root_password;
 
         return <<<EOD
 \n
@@ -577,20 +559,11 @@ EOD;
 
         $rootUser = 'admin';
 
-        $rootPassword = str_random(32);
+        $rootPassword = $this->server->mongodb_admin_password;
 
         $database = $this->server->mongodbDatabases()->first();
 
         $databaseUser = $database->databaseUsers()->first();
-
-        $this->server->user->notify(
-            new Alert(
-                $this->server,
-                "MongoDB v4.2 admin password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
-                null,
-                'info-delete'
-            )
-        );
 
         return <<<EOD
 \n
@@ -603,9 +576,10 @@ sudo service mongod start
 
 sleep 3
 # Create mongo admin user
-mongo admin --eval 'db.createUser ({user: "{$rootUser}",pwd: "{$rootPassword}",roles: [{ role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]})'
+mongo admin --eval 'db.createUser ({user: "{$rootUser}",pwd: "{$rootPassword}",roles: [{ role: "userAdminAnyDatabase", db: "admin" }, { role: "root", db: "admin" }, "readWriteAnyDatabase" ]})'
 
 replace-in-file '#security:' '' /etc/mongod.conf
+replace-in-file '127.0.0.1' '0.0.0.0' /etc/mongod.conf
 cat >> /etc/mongod.conf << EOF
 security:
     authorization: "enabled"
@@ -651,16 +625,7 @@ EOD;
 
         $databaseUser = $database->databaseUsers()->first();
 
-        $rootPassword = str_random(32);
-
-        $this->server->user->notify(
-            new Alert(
-                $this->server,
-                "MariaDB v10.13 root password on server {$this->server->name}: {$rootPassword} . This will be deleted once you close this notification. Keep it safe.",
-                null,
-                'info-delete'
-            )
-        );
+        $rootPassword = $this->server->mariadb_root_password;
 
         return <<<EOD
 \n

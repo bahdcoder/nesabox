@@ -18,6 +18,11 @@ class DatabaseResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             // 'user' => $this->databaseUser->name,
+            $this->mergeWhen($this->type === MONGO_DB, [
+                'database_users' => DatabaseUserResource::collection(
+                    $this->databaseUsers
+                )
+            ]),
             'is_ready' => $this->status === STATUS_ACTIVE
         ];
     }

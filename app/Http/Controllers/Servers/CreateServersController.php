@@ -10,6 +10,7 @@ use App\Exceptions\FailedCreatingServer;
 use App\Jobs\Servers\CreateServerARecord;
 use GuzzleHttp\Exception\GuzzleException;
 use App\Http\Requests\Servers\CreateServerRequest;
+use App\Notifications\Servers\Alert;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CreateServersController extends Controller
@@ -257,6 +258,74 @@ class CreateServersController extends Controller
     public function createServerDatabases(Server $server)
     {
         foreach ($server->databases as $database):
+            if ($database === MONGO_DB) {
+                $rootPassword = str_random(32);
+
+                $server->update([
+                    'mongodb_admin_password' => $rootPassword
+                ]);
+
+                $server->user->notify(
+                    new Alert(
+                        $server,
+                        "MongoDB v4.2 admin password on server {$server->name}: {$rootPassword} . Keep it safe.",
+                        null,
+                        'info-delete'
+                    )
+                );
+            }
+
+            if ($database === MYSQL8_DB) {
+                $rootPassword = str_random(32);
+
+                $server->update([
+                    'mysql8_root_password' => $rootPassword
+                ]);
+
+                $server->user->notify(
+                    new Alert(
+                        $server,
+                        "Mysql 8 root password on server {$server->name}: {$rootPassword} . Keep it safe.",
+                        null,
+                        'info-delete'
+                    )
+                );
+            }
+
+            if ($database === MARIA_DB) {
+                $rootPassword = str_random(32);
+
+                $server->user->notify(
+                    new Alert(
+                        $server,
+                        "MariaDB v10.13 root password on server {$server->name}: {$rootPassword} . Keep it safe.",
+                        null,
+                        'info-delete'
+                    )
+                );
+
+                $server->update([
+                    'mariadb_root_password' => $rootPassword
+                ]);
+            }
+
+            if ($database === MYSQL_DB) {
+                $rootPassword = str_random(32);
+
+                $server->update([
+                    'mysql_root_password' => $rootPassword
+                ]);
+
+                $server->user->notify(
+                    new Alert(
+                        $server,
+                        "Mysql 5.7 root password on server {$server->name}: {$rootPassword} . Keep it safe.",
+                        null,
+                        'info-delete'
+                    )
+                );
+            }
+
             $databaseUser = $server->databaseUsers()->create([
                 'name' => SSH_USER,
                 'type' => $database,

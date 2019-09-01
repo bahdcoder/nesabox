@@ -7,12 +7,11 @@ use App\Database;
 use App\DatabaseUser;
 use App\Jobs\Servers\AddDatabase;
 use App\Http\Controllers\Controller;
+use App\Jobs\Servers\DeleteDatabase;
 use App\Http\Resources\ServerResource;
-use App\Http\Requests\Servers\CreateDatabaseRequest;
 use App\Http\Resources\DatabaseResource;
 use App\Http\Resources\DatabaseUserResource;
-use App\Jobs\Servers\DeleteDatabase;
-use Symfony\Component\VarDumper\Cloner\Data;
+use App\Http\Requests\Servers\CreateDatabaseRequest;
 
 class DatabasesController extends Controller
 {
@@ -33,9 +32,7 @@ class DatabasesController extends Controller
                     'databases' => DatabaseResource::collection(
                         $server->mongodbDatabases
                     ),
-                    'database_users' => DatabaseUserResource::collection(
-                        $server->mongoDbDatabaseUsers
-                    )
+                    'database_users' => []
                 ]);
             case POSTGRES_DB:
                 return response()->json([
@@ -53,6 +50,15 @@ class DatabasesController extends Controller
                     ),
                     'database_users' => DatabaseUserResource::collection(
                         $server->mysqlDatabaseUsers
+                    )
+                ]);
+            case MARIA_DB:
+                return response()->json([
+                    'databases' => DatabaseResource::collection(
+                        $server->mariadbDatabases
+                    ),
+                    'database_users' => DatabaseUserResource::collection(
+                        $server->mariadbDatabaseUsers
                     )
                 ]);
             default:
