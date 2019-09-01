@@ -4,14 +4,39 @@ namespace App\Http\Controllers\Servers;
 
 use App\Server;
 use App\Database;
+use App\DatabaseUser;
 use App\Http\Controllers\Controller;
 use App\Jobs\Servers\AddMongodbUser;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Servers\AddMongodbUserRequest;
 use App\Http\Requests\Servers\AddMongodbDatabaseRequest;
+use App\Jobs\Servers\DeleteMongodbDatabase;
+use App\Jobs\Servers\DeleteMongodbDatabaseUser;
 
 class MongodbController extends Controller
 {
+    public function deleteUsers(Server $server, Database $database, DatabaseUser $databaseUser)
+    {
+        $databaseUser->update([
+            'status' => STATUS_DELETING
+        ]);
+
+        DeleteMongodbDatabaseUser::dispatch($server, $database, $databaseUser);
+
+        return response()->json([]);
+    }
+
+    public function deleteDatabases(Server $server, Database $database)
+    {
+        $database->update([
+            'status' => STATUS_DELETING
+        ]);
+
+        DeleteMongodbDatabase::dispatch($server, $database);
+
+        return response()->json([]);
+    }
+
     public function databases(
         AddMongodbDatabaseRequest $request,
         Server $server

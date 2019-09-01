@@ -55,6 +55,16 @@ Route::middleware(['auth:api'])->group(function () {
         'users'
     ]);
 
+    Route::delete('servers/{server}/databases/{database}/mongodb/delete-databases', [
+        MongodbController::class,
+        'deleteDatabases'
+    ]);
+
+    Route::delete('servers/{server}/databases/{database}/mongodb/delete-users/{databaseUser}', [
+        MongodbController::class,
+        'deleteUsers'
+    ]);
+
     Route::post('servers/{server}/databases/mongodb/add', [
         MongodbController::class,
         'databases'
