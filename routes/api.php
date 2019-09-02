@@ -23,6 +23,7 @@ use App\Http\Controllers\NginxController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\Pm2Controller;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\Servers\DatabaseUserController;
 use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Http\Controllers\Servers\MongodbController;
@@ -137,6 +138,16 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('servers/{server}/databases/{databaseType}', [
         DatabasesController::class,
         'index'
+    ]);
+
+    Route::post('servers/{server}/database-users', [
+        DatabaseUserController::class,
+        'store'
+    ]);
+
+    Route::delete('servers/{server}/database-users/{databaseUser}', [
+        DatabaseUserController::class,
+        'destroy'
     ]);
 
     Route::delete('servers/{server}/databases/{database}', [

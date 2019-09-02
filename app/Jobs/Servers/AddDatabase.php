@@ -4,7 +4,6 @@ namespace App\Jobs\Servers;
 
 use App\Server;
 use App\Database;
-use App\DatabaseUser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -25,6 +24,10 @@ class AddDatabase implements ShouldQueue
 
     public $database;
 
+    /**
+     * 
+     * @var \App\DatabaseUser|null
+     */
     public $databaseUser;
 
     /**
@@ -35,7 +38,7 @@ class AddDatabase implements ShouldQueue
     public function __construct(
         Server $server,
         Database $database,
-        DatabaseUser $databaseUser = null
+        $databaseUser = null
     ) {
         $this->server = $server;
 
@@ -64,7 +67,7 @@ class AddDatabase implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            if ($this->databaseUser) {
+            if ((bool)$this->databaseUser) {
                 $this->databaseUser->update([
                     'status' => STATUS_ACTIVE
                 ]);
@@ -76,7 +79,7 @@ class AddDatabase implements ShouldQueue
 
             $this->database->delete();
 
-            if ($this->databaseUser) {
+            if ((bool)$this->databaseUser) {
                 $this->databaseUser->delete();
             }
 

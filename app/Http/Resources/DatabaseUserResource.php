@@ -21,6 +21,9 @@ class DatabaseUserResource extends JsonResource
             $this->mergeWhen($this->type === MONGO_DB, [
                 'readonly' => (bool) $this->read_only
             ]),
+            $this->mergeWhen($this->type !== MONGO_DB, [
+                'databases' => DatabaseResource::collection($this->databases)
+            ]),
             'is_ready' => $this->status === STATUS_ACTIVE
         ];
     }

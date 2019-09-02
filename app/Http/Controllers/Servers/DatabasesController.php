@@ -90,7 +90,7 @@ class DatabasesController extends Controller
             $database->databaseUsers()->attach($databaseUser->id);
         }
 
-        AddDatabase::dispatch($server, $database);
+        AddDatabase::dispatch($server, $database, $databaseUser);
 
         return new ServerResource($server->fresh());
     }
