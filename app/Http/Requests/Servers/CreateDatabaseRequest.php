@@ -25,7 +25,7 @@ class CreateDatabaseRequest extends FormRequest
      */
     public function rules()
     {
-        $databases = [MYSQL_DB, MYSQL8_DB, MARIA_DB, POSTGRES_DB, MONGO_DB];
+        $databases = [MYSQL_DB, MYSQL8_DB, MARIA_DB];
 
         return [
             'name' => [
@@ -43,13 +43,11 @@ class CreateDatabaseRequest extends FormRequest
                 Rule::unique('database_users', 'name')->where(function (
                     $query
                 ) {
-                    return $query->where(
-                        'server_id',
-                        $this->route('server')->id
-                    );
+                    return $query
+                        ->where('server_id', $this->route('server')->id)
+                        ->where('type', $this->getContentType);
                 })
             ],
-            'database_user_id' => 'required',
             'password' => ['required_with:user'],
             'type' => 'required|in:' . implode(',', $databases)
         ];

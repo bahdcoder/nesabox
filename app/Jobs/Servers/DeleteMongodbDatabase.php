@@ -13,7 +13,11 @@ use App\Scripts\Server\DeleteMongodbDatabase as AppDeleteMongodbDatabase;
 
 class DeleteMongodbDatabase implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, BroadcastServer;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     public $server;
 
@@ -39,7 +43,10 @@ class DeleteMongodbDatabase implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppDeleteMongodbDatabase($this->server, $this->database))->run();
+        $process = (new AppDeleteMongodbDatabase(
+            $this->server,
+            $this->database
+        ))->run();
 
         if ($process->isSuccessful()) {
             $this->database->databaseUsers()->detach();
@@ -51,7 +58,10 @@ class DeleteMongodbDatabase implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->alertServer("Failed deleting Mongodb v4.2 database {$this->database->name}.", $process->getOutput());
+            $this->alertServer(
+                "Failed deleting Mongodb v4.2 database {$this->database->name}.",
+                $process->getOutput()
+            );
         }
     }
 }

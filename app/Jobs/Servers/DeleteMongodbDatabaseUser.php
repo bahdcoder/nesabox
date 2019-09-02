@@ -15,7 +15,11 @@ use App\Scripts\Server\DeleteMongodbDatabaseUser as AppDeleteMongodbDatabaseUser
 
 class DeleteMongodbDatabaseUser implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, BroadcastServer;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     public $server;
 
@@ -27,8 +31,11 @@ class DeleteMongodbDatabaseUser implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Server $server, Database $database, DatabaseUser $databaseUser)
-    {
+    public function __construct(
+        Server $server,
+        Database $database,
+        DatabaseUser $databaseUser
+    ) {
         $this->server = $server;
         $this->database = $database;
         $this->databaseUser = $databaseUser;
@@ -43,7 +50,11 @@ class DeleteMongodbDatabaseUser implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppDeleteMongodbDatabaseUser($this->server, $this->database, $this->databaseUser))->run();
+        $process = (new AppDeleteMongodbDatabaseUser(
+            $this->server,
+            $this->database,
+            $this->databaseUser
+        ))->run();
 
         if ($process->isSuccessful()) {
             $this->databaseUser->delete();
@@ -54,7 +65,10 @@ class DeleteMongodbDatabaseUser implements ShouldQueue
 
             $this->server->user->notify(new DatabasesUpdated($this->server));
 
-            $this->alertServer("Failed deleting user {$this->databaseUser->name} from database {$this->database->name} on server : {$this->server->name}", $process->getOutput());
+            $this->alertServer(
+                "Failed deleting user {$this->databaseUser->name} from database {$this->database->name} on server : {$this->server->name}",
+                $process->getOutput()
+            );
         }
     }
 }

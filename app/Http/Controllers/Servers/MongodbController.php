@@ -15,8 +15,11 @@ use App\Jobs\Servers\DeleteMongodbDatabaseUser;
 
 class MongodbController extends Controller
 {
-    public function deleteUsers(Server $server, Database $database, DatabaseUser $databaseUser)
-    {
+    public function deleteUsers(
+        Server $server,
+        Database $database,
+        DatabaseUser $databaseUser
+    ) {
         $databaseUser->update([
             'status' => STATUS_DELETING
         ]);

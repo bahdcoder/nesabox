@@ -15,8 +15,11 @@ class DeleteMongodbDatabaseUser extends Base
 
     public $databaseUser;
 
-    public function __construct(Server $server, Database $database, DatabaseUser $databaseUser)
-    {
+    public function __construct(
+        Server $server,
+        Database $database,
+        DatabaseUser $databaseUser
+    ) {
         $this->server = $server;
         $this->database = $database;
         $this->databaseUser = $databaseUser;

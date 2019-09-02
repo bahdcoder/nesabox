@@ -68,32 +68,27 @@ class DatabasesController extends Controller
     }
     public function store(CreateDatabaseRequest $request, Server $server)
     {
-        $databaseUser = null;
-
         if ($request->user && $request->password) {
-            $databaseUser = $server->databaseUsers()->create(
-                array_merge(
-                    $request->only(
-                        ['name', 'password', 'type'],
-                        [
-                            'status' => STATUS_INSTALLING
-                        ]
-                    )
-                )
-            );
+            $databaseUser = $server->databaseUsers()->create([
+                'name' => $request->user,
+                'type' => $request->type,
+                'status' => STATUS_INSTALLING,
+                'password' => $request->password
+            ]);
         } else {
-            $databaseUser = DatabaseUser::findOrFail(
-                $request->database_user_id
-            );
+            $databaseUser = null;
         }
 
         $database = Database::create([
             'type' => $request->type,
             'name' => $request->name,
             'server_id' => $server->id,
-            'status' => STATUS_INSTALLING,
-            'database_user_id' => $databaseUser->id
+            'status' => STATUS_INSTALLING
         ]);
+
+        if ($databaseUser) {
+            $database->databaseUsers()->attach($databaseUser->id);
+        }
 
         AddDatabase::dispatch($server, $database);
 

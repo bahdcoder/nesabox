@@ -5,12 +5,12 @@ namespace App\Jobs\Servers;
 use App\Server;
 use App\Database;
 use App\DatabaseUser;
-use App\Notifications\Servers\ServerIsReady;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Notifications\Servers\DatabasesUpdated;
 use App\Scripts\Server\AddDatabase as AddDatabaseScript;
 
 class AddDatabase implements ShouldQueue
@@ -25,16 +25,23 @@ class AddDatabase implements ShouldQueue
 
     public $database;
 
+    public $databaseUser;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Server $server, Database $database)
-    {
+    public function __construct(
+        Server $server,
+        Database $database,
+        DatabaseUser $databaseUser = null
+    ) {
         $this->server = $server;
 
         $this->database = $database;
+
+        $this->databaseUser = $databaseUser;
 
         $this->onQueue('databases');
     }
@@ -48,7 +55,8 @@ class AddDatabase implements ShouldQueue
     {
         $process = (new AddDatabaseScript(
             $this->server,
-            $this->database
+            $this->database,
+            $this->databaseUser
         ))->run();
 
         if ($process->isSuccessful()) {
@@ -56,27 +64,23 @@ class AddDatabase implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            if ($this->database->databaseUser !== STATUS_ACTIVE) {
-                $this->database->databaseUser->update([
+            if ($this->databaseUser) {
+                $this->databaseUser->update([
                     'status' => STATUS_ACTIVE
                 ]);
             }
 
-            $this->broadcastServerUpdated();
+            $this->server->user->notify(new DatabasesUpdated($this->server));
         } else {
             $message = "Failed adding database {$this->database->name} on server {$this->server->name}.";
 
             $this->database->delete();
 
-            $user = DatabaseUser::where('name', SSH_USER)
-                ->where('server_id', $this->server->id)
-                ->first();
-
-            if ($this->database->database_user_id !== $user->id) {
-                $this->database->databaseUser->delete();
+            if ($this->databaseUser) {
+                $this->databaseUser->delete();
             }
 
-            $this->broadcastServerUpdated();
+            $this->server->user->notify(new DatabasesUpdated($this->server));
 
             $this->alertServer($message, $process->getErrorOutput());
         }

@@ -548,7 +548,7 @@ mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'{$this->server->ip_address}' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'%' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
-mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$databaseUser->name} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"           
+mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$database->name} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"           
 EOD;
     }
 
@@ -630,6 +630,9 @@ EOD;
         return <<<EOD
 \n
 export DEBIAN_FRONTEND=noninteractive
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+sudo add-apt-repository 'deb [arch=amd64,i386] http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu xenial main'
+apt-get update
 debconf-set-selections <<< "mariadb-server-10.3 mysql-server/data-dir select ''"
 debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password password {$rootPassword}"
 debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password_again password {$rootPassword}"
@@ -645,7 +648,7 @@ mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 echo "" >> /etc/mysql/my.cnf
 echo "[mysqld]" >> /etc/mysql/my.cnf
 echo "character-set-server = utf8" >> /etc/mysql/my.cnf
-mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$databaseUser->name};"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$database->name};"
 EOD;
     }
 

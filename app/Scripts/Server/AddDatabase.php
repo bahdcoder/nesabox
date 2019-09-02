@@ -25,15 +25,21 @@ class AddDatabase extends Base
      */
     public $database;
 
+    public $databaseUser;
+
     /**
      * Initialize this class
      *
      * @return void
      */
-    public function __construct(Server $server, Database $database)
-    {
+    public function __construct(
+        Server $server,
+        Database $database,
+        DatabaseUser $databaseUser = null
+    ) {
         $this->server = $server;
         $this->database = $database;
+        $this->databaseUser = $databaseUser;
     }
 
     /**
@@ -44,59 +50,46 @@ class AddDatabase extends Base
     public function generate()
     {
         switch ($this->database->type) {
-            case MYSQL_DB:
-                return $this->generateMysqlScript();
-            case MONGO_DB:
-                return $this->generateMongodbScript();
+            case MARIA_DB:
+                return $this->generateMariadbScript();
             default:
                 return '';
         }
     }
 
-    public function generateMongodbScript()
+    public function generateMariadbAddUserScript()
     {
-        $nesaUser = \App\DatabaseUser::where('server_id', $this->server->id)
-            ->where('name', SSH_USER)
-            ->first();
-
-        return <<<EOD
-mongo --eval "db.getSiblingDB('admin').createUser({ user: '{$this->databaseUser->name}', pwd: '{$this->databaseUser->password}', roles: ['dbOwner']})" -u {$nesaUser->name} -p {$nesaUser->password} --authenticationDatabase admin
-EOD;
-    }
-
-    public function generateMysqlPermissionsScript()
-    {
-        return <<<EOD
-mysql -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->database->databaseUser->name}'@'localhost'"
-
-# Flush privileges
-mysql -e "FLUSH PRIVILEGES"    
-EOD;
-    }
-
-    public function generateMysqlCreateUserScript()
-    {
-        $user = DatabaseUser::where('name', SSH_USER)
-            ->where('server_id', $this->database->server->id)
-            ->first();
-
-        if ($user->id === $this->database->database_user_id) {
+        if (!$this->databaseUser) {
             return '';
         }
 
         return <<<EOD
-mysql -e "CREATE USER '{$this->database->databaseUser->name}'@'localhost' IDENTIFIED BY '{$this->database->databaseUser->password}';"     
+mysql --user="root" --password="{$this->server->mariadb_root_password}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
 EOD;
     }
 
-    public function generateMysqlScript()
+    public function generateMariadbPermissionsScript()
     {
+        $rootPassword = $this->server->mariadb_root_password;
+
+        if ($this->databaseUser) {
+            return <<<EOD
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'localhost'"
+EOD;
+        }
+
+        return '';
+    }
+
+    public function generateMariadbScript()
+    {
+        $rootPassword = $this->server->mariadb_root_password;
+
         return <<<EOD
-{$this->generateMysqlCreateUserScript()}
-
-mysql -e "CREATE DATABASE {$this->database->name}";
-
-{$this->generateMysqlPermissionsScript()}
+{$this->generateMariadbAddUserScript()}
+mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE IF NOT EXISTS {$this->database->name};"
+{$this->generateMariadbPermissionsScript()}
+mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;" 
 EOD;
     }
 }
