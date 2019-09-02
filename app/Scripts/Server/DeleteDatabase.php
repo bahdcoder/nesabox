@@ -43,38 +43,19 @@ class DeleteDatabase extends Base
     public function generate()
     {
         switch ($this->database->type) {
-            case MYSQL_DB:
-                return $this->generateMysqlScript();
-            case MONGO_DB:
-                return $this->generateMongodbScript();
+            case MARIA_DB:
+                return $this->generateMariadbScript();
             default:
                 return '';
         }
     }
 
-    public function generateMongodbScript()
+    public function generateMariadbScript()
     {
-        return <<<EOD
-
-EOD;
-    }
-
-    public function generateMysqlDeleteUserScript()
-    {
-        if ($this->database->databaseUser->status !== STATUS_DELETING) {
-            return '';
-        }
+        $rootPassword = $this->server->mariadb_root_password;
 
         return <<<EOD
-mysql -e "DROP USER '{$this->database->databaseUser->name}'@'localhost'";
-EOD;
-    }
-
-    public function generateMysqlScript()
-    {
-        return <<<EOD
-mysql -e "DROP DATABASE IF EXISTS {$this->database->name}";
-{$this->generateMysqlDeleteUserScript()}
+mysql --user="root" --password="{$rootPassword}" -e "DROP DATABASE IF EXISTS {$this->database->name}";
 EOD;
     }
 }

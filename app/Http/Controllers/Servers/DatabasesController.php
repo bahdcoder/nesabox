@@ -101,14 +101,6 @@ class DatabasesController extends Controller
             'status' => STATUS_DELETING
         ]);
 
-        if (request()->query('delete_user')) {
-            if ($database->databaseUser->name !== SSH_USER) {
-                $database->databaseUser->update([
-                    'status' => STATUS_DELETING
-                ]);
-            }
-        }
-
         DeleteDatabase::dispatch($server, $database);
 
         return new ServerResource($server);
