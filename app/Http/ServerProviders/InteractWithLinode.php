@@ -4,7 +4,6 @@ namespace App\Http\ServerProviders;
 
 use App\Server;
 use Bahdcoder\Linode\Linode;
-use App\Scripts\Server\Init;
 use GuzzleHttp\Exception\GuzzleException;
 
 trait InteractWithLinode
@@ -27,6 +26,21 @@ trait InteractWithLinode
         }
     }
 
+        /**
+     * Generate the user data for init server
+     *
+     * @return string
+     */
+    public function getUserData(Server $server)
+    {
+        $deploy_script_route = route('servers.custom-deploy-script', [
+            $server->id,
+            'api_token' => $server->user->api_token
+        ]);;
+
+        return "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh";
+    }
+
     /**
      * Get stack script for linode
      *
@@ -40,7 +54,7 @@ trait InteractWithLinode
                 ->create(
                     SSH_USER . ' Stackscript',
                     ['linode/ubuntu18.04'],
-                    ""
+                    $this->getUserData($server)
                 )->id;
         } catch (GuzzleException $e) {
             return false;
