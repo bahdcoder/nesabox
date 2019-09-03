@@ -31,7 +31,7 @@ trait InteractWithLinode
      *
      * @return string
      */
-    public function getUserData(Server $server)
+    public function getLinodeUserData(Server $server)
     {
         $deploy_script_route = route('servers.custom-deploy-script', [
             $server->id,
@@ -54,7 +54,7 @@ trait InteractWithLinode
                 ->create(
                     SSH_USER . ' Stackscript',
                     ['linode/ubuntu18.04'],
-                    $this->getUserData($server)
+                    $this->getLinodeUserData($server)
                 )->id;
         } catch (GuzzleException $e) {
             return false;
