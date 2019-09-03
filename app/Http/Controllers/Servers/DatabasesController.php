@@ -81,9 +81,9 @@ class DatabasesController extends Controller
 
         $database = Database::create([
             'type' => $request->type,
-            'name' => $request->name,
+            'name' => str_replace('-', '_', $request->name),
             'server_id' => $server->id,
-            'status' => STATUS_INSTALLING
+            'status' => STATUS_INSTALLING,
         ]);
 
         if ($databaseUser) {

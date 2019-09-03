@@ -35,6 +35,21 @@ class DeleteDatabaseUser extends Base
         $this->databaseUser = $databaseUser;
     }
 
+    public function getRootPassword()
+    {
+        if ($this->databaseUser->type === MYSQL8_DB) {
+            return $this->server->mysql8_root_password;
+        }
+
+        if ($this->databaseUser->type === MYSQL_DB) {
+            return $this->server->mysql_root_password;
+        }
+
+        if ($this->databaseUser->type === MARIA_DB) {
+            return $this->server->mariadb_root_password;
+        }
+    }
+
     /**
      * Generate the add database script
      *
@@ -42,18 +57,27 @@ class DeleteDatabaseUser extends Base
      */
     public function generate()
     {
+        $rootPassword = $this->getRootPassword();
+
         switch ($this->databaseUser->type) {
             case MARIA_DB:
-                return $this->generateMariadbScript();
+                return $this->generateMariadbScript($rootPassword);
+            case MYSQL8_DB:
+                return $this->generateMysql8Script($rootPassword);
             default:
                 return '';
         }
     }
 
-    public function generateMariadbScript()
-    {
-        $rootPassword = $this->server->mariadb_root_password;
+    public function generateMysql8Script($rootPassword) {
+        return <<<EOD
+mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'{$this->server->ip_address}';";
+mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'%';";
+EOD;
+    }
 
+    public function generateMariadbScript($rootPassword)
+    {
         return <<<EOD
 mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'{$this->server->ip_address}';";
 EOD;

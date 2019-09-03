@@ -52,12 +52,6 @@ class Init extends BaseScript
 # Define script variables
 USER="{$user}"
 IP_ADDRESS=\$(curl ifconfig.co)
-echo \$IP_ADDRESS
-echo \$IP_ADDRESS
-echo \$IP_ADDRESS
-echo \$IP_ADDRESS
-echo \$IP_ADDRESS
-echo \$IP_ADDRESS
 SUDO_PASSWORD="{$this->server->sudo_password}"
 SWAP_SIZE="1G"
 export DEBIAN_FRONTEND=noninteractive

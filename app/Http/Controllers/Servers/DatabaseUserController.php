@@ -15,20 +15,23 @@ class DatabaseUserController extends Controller
 {
     public function store(AddDatabaseUserRequest $request, Server $server)
     {
+        if ($request->databases):
+            foreach ($request->databases as $databaseId):
+                Database::where('id', $databaseId)->where('type', $request->type)->firstOrFail();
+            endforeach;
+
+        endif;
+        
         $user = $server->databaseUsers()->create([
             'status' => STATUS_INSTALLING,
             'type' => $request->type,
             'name' => $request->name,
             'password' => $request->password
         ]);
-
-        if ($request->databases):
-            foreach ($request->databases as $databaseId):
-                Database::where('id', $databaseId)->where('type', $request->type)->firstOrFail();
-            endforeach;
-
+            
+        if ($request->databases) {
             $user->databases()->attach($request->databases);
-        endif;
+        }
 
         AddDatabaseUser::dispatch($server, $user);
 

@@ -35,6 +35,21 @@ class DeleteDatabase extends Base
         $this->database = $database;
     }
 
+    public function getRootPassword()
+    {
+        if ($this->database->type === MYSQL8_DB) {
+            return $this->server->mysql8_root_password;
+        }
+
+        if ($this->database->type === MYSQL_DB) {
+            return $this->server->mysql_root_password;
+        }
+
+        if ($this->database->type === MARIA_DB) {
+            return $this->server->mariadb_root_password;
+        }
+    }
+
     /**
      * Generate the add database script
      *
@@ -42,20 +57,22 @@ class DeleteDatabase extends Base
      */
     public function generate()
     {
+        $rootPassword = $this->getRootPassword();
+
         switch ($this->database->type) {
             case MARIA_DB:
-                return $this->generateMariadbScript();
+                return $this->generateMariadbScript($rootPassword);
+            case MYSQL8_DB:
+                return $this->generateMariadbScript($rootPassword);
             default:
                 return '';
         }
     }
 
-    public function generateMariadbScript()
+    public function generateMariadbScript($rootPassword)
     {
-        $rootPassword = $this->server->mariadb_root_password;
-
         return <<<EOD
-mysql --user="root" --password="{$rootPassword}" -e "DROP DATABASE IF EXISTS {$this->database->name}";
+mysql --user="root" --password="{$rootPassword}" -e "DROP DATABASE {$this->database->name}";
 EOD;
     }
 }
