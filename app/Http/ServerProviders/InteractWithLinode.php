@@ -40,7 +40,7 @@ trait InteractWithLinode
                 ->create(
                     SSH_USER . ' Stackscript',
                     ['linode/ubuntu18.04'],
-                    (new Init($server))->generate()
+                    ""
                 )->id;
         } catch (GuzzleException $e) {
             return false;

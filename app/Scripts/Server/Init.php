@@ -51,6 +51,13 @@ class Init extends BaseScript
 
 # Define script variables
 USER="{$user}"
+IP_ADDRESS=\$(curl ifconfig.co)
+echo \$IP_ADDRESS
+echo \$IP_ADDRESS
+echo \$IP_ADDRESS
+echo \$IP_ADDRESS
+echo \$IP_ADDRESS
+echo \$IP_ADDRESS
 SUDO_PASSWORD="{$this->server->sudo_password}"
 SWAP_SIZE="1G"
 export DEBIAN_FRONTEND=noninteractive
@@ -495,7 +502,7 @@ debconf-set-selections <<< "mysql-community-server mysql-community-server/root-p
 debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password ${rootPassword}"
 apt-get install -y mysql-server
 sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/mysql.conf.d/mysqld.cnf
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'{$this->server->ip_address}' IDENTIFIED BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'{\$IP_ADDRESS}' IDENTIFIED BY '{$rootPassword}';"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{$rootPassword}';"
 
 USER="{$databaseUser->name}"
@@ -505,8 +512,8 @@ service mysql restart
 
 sleep 2
 
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'%' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 
@@ -538,14 +545,14 @@ apt-get update
 apt-get install -y mysql-server
 echo "default_password_lifetime = 0" >> /etc/mysql/mysql.conf.d/mysqld.cnf
 sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/mysql.conf.d/mysqld.cnf
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER 'root'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER 'root'@'\$IP_ADDRESS' IDENTIFIED WITH mysql_native_password BY '{$rootPassword}';"
 mysql --user="root" --password="{$rootPassword}" -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '{$rootPassword}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'{$this->server->ip_address}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'\$IP_ADDRESS' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
 service mysql restart
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED WITH mysql_native_password BY '{$databaseUser->password}';"
 mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'%' IDENTIFIED WITH mysql_native_password BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'{$this->server->ip_address}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'\$IP_ADDRESS' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'%' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$database->name} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"           
@@ -638,11 +645,11 @@ debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password passw
 debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password_again password {$rootPassword}"
 apt-get install -y mariadb-server-10.3
 sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/my.cnf
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}';"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{$databaseUser->password}';"
 service mysql restart
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '$databaseUser->name'@'%' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 echo "" >> /etc/mysql/my.cnf

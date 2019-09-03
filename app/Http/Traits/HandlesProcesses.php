@@ -281,7 +281,7 @@ trait HandlesProcesses
      */
     public function getUserData(Server $server)
     {
-        return (new Init($server))->generate();
+        return "{}";
     }
 
     /**
