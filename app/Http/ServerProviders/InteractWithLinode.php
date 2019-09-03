@@ -36,7 +36,7 @@ trait InteractWithLinode
         $deploy_script_route = route('servers.custom-deploy-script', [
             $server->id,
             'api_token' => $server->user->api_token
-        ]);;
+        ]);
 
         return "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh";
     }
