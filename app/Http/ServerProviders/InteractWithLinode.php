@@ -38,7 +38,11 @@ trait InteractWithLinode
             'api_token' => $server->user->api_token
         ]);
 
-        return "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh";
+        return <<<EOD
+#!/bin/bash
+
+curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh
+EOD;
     }
 
     /**
@@ -48,17 +52,13 @@ trait InteractWithLinode
      */
     public function getStackScriptForLinode(Server $server, $credential)
     {
-        try {
-            return $this->getLinodeConnectionInstance($credential->accessToken)
+        return $this->getLinodeConnectionInstance($credential->accessToken)
                 ->stackScript()
                 ->create(
                     SSH_USER . ' Stackscript',
                     ['linode/ubuntu18.04'],
                     $this->getLinodeUserData($server)
                 )->id;
-        } catch (GuzzleException $e) {
-            return false;
-        }
     }
 
     /**
