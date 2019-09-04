@@ -14,7 +14,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class DeleteDatabaseUser implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, BroadcastServer;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     public $server;
 
@@ -38,7 +42,10 @@ class DeleteDatabaseUser implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppDeleteDatabaseUser($this->server, $this->databaseUser))->run();
+        $process = (new AppDeleteDatabaseUser(
+            $this->server,
+            $this->databaseUser
+        ))->run();
 
         if ($process->isSuccessful()) {
             $this->databaseUser->delete();
@@ -47,9 +54,12 @@ class DeleteDatabaseUser implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->alertServer("Failed to delete database user {$this->databaseUser->name} on server {$this->server->name}.", $process->getErrorOutput());
+            $this->alertServer(
+                "Failed to delete database user {$this->databaseUser->name} on server {$this->server->name}.",
+                $process->getErrorOutput()
+            );
 
-           $this->server->user->notify(new DatabasesUpdated($this->server));
+            $this->server->user->notify(new DatabasesUpdated($this->server));
         }
     }
 }

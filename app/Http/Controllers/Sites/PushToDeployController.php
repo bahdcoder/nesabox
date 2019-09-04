@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Sites;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Server;
 use App\Site;
+use App\Server;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\SiteResource;
 
 class PushToDeployController extends Controller
 {
@@ -15,7 +15,7 @@ class PushToDeployController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Server $server, Site $site, Request $request)
+    public function __invoke(Server $server, Site $site)
     {
         $this->authorize('view', $server);
 
@@ -41,7 +41,7 @@ class PushToDeployController extends Controller
                 break;
         endswitch;
 
-        return response()->json([]);
+        return new SiteResource($site->fresh());
     }
 
     public function disable(Site $site)
@@ -58,6 +58,6 @@ class PushToDeployController extends Controller
             'push_to_deploy_hook_id' => null
         ]);
 
-        return response()->json([]);
+        return new SiteResource($site->fresh());
     }
 }

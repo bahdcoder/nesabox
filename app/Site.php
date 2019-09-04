@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\Sites\Deploy as AppDeploy;
 use App\Scripts\Site\Deploy;
 
 class Site extends Model
@@ -96,5 +97,37 @@ class Site extends Model
         $domain = config('services.digital-ocean.app-domain');
 
         return "{$subdomain}.{$domain}";
+    }
+
+    public function triggerDeployment()
+    {
+        $this->update([
+            'deploying' => true
+        ]);
+
+        AppDeploy::dispatch(
+            $this->server,
+            $this,
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($this)
+                ->withProperty('log', '')
+                ->withProperty('status', 'pending')
+                ->log('Deployment')
+        );
+    }
+
+    /**
+     * Roll job slug
+     *
+     *
+     */
+    public function rollSlug()
+    {
+        do {
+            $this->slug = str_random(8);
+        } while ($this->where('slug', $this->slug)->exists());
+
+        $this->save();
     }
 }

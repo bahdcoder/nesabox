@@ -24,6 +24,7 @@ class GhostController extends Controller
         $this->authorize('view', $server);
 
         $site->update([
+            'logs' => null,
             'app_type' => 'ghost',
             'installing_ghost_status' => STATUS_INSTALLING
         ]);
@@ -32,16 +33,18 @@ class GhostController extends Controller
         $databaseUser = DatabaseUser::create([
             'type' => MYSQL_DB,
             'server_id' => $server->id,
-            'password' => str_random(12),
-            'name' => str_random(12)
+            'password' => str_random(16),
+            'name' => str_random(16)
         ]);
 
         $database = $databaseUser->databases()->create([
             'type' => MYSQL_DB,
             'server_id' => $server->id,
-            'name' => str_random(12),
+            'name' => str_random(16),
             'status' => STATUS_ACTIVE
         ]);
+
+        $databaseUser->databases()->attach($database->id);
 
         InstallGhost::dispatch($server, $site, $databaseUser, $database);
 

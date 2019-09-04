@@ -27,10 +27,10 @@ class DeleteMongodbDatabaseUser extends Base
 
     public function generate()
     {
-        $rootUser = 'admin';
+        $user = SSH_USER;
 
         return <<<EOD
-mongo {$this->database->name} --eval 'db.dropUser("{$this->databaseUser->name}")' -u {$rootUser} -p {$this->server->mongodb_admin_password} --authenticationDatabase admin
+mongo {$this->database->name} --eval 'db.dropUser("{$this->databaseUser->name}")' -u {$user} -p {$this->server->mongodb_admin_password} --authenticationDatabase admin
 EOD;
     }
 }

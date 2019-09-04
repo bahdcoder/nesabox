@@ -49,12 +49,12 @@ class AddMongodbUser extends Base
      */
     public function generate()
     {
-        $rootUser = 'admin';
+        $user = SSH_USER;
 
         $role = (bool) $this->databaseUser->read_only ? 'read' : 'readWrite';
 
         return <<<EOD
-mongo {$this->database->name} --eval 'db.createUser({ user: "{$this->databaseUser->name}", pwd: "{$this->databaseUser->password}", roles: [{ "role": "{$role}", "db": "{$this->database->name}" }] })' -u {$rootUser} -p {$this->server->mongodb_admin_password} --authenticationDatabase admin
+mongo {$this->database->name} --eval 'db.createUser({ user: "{$this->databaseUser->name}", pwd: "{$this->databaseUser->password}", roles: [{ "role": "{$role}", "db": "{$this->database->name}" }] })' -u {$user} -p {$this->server->mongodb_admin_password} --authenticationDatabase admin
 EOD;
     }
 }

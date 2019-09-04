@@ -16,6 +16,8 @@ class Base
      */
     public $sshUser = 'root';
 
+    public $defaultUser = SSH_USER;
+
     /**
      *
      * Exit on first error

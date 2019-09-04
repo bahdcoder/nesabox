@@ -25,7 +25,7 @@ class AddDatabase implements ShouldQueue
     public $database;
 
     /**
-     * 
+     *
      * @var \App\DatabaseUser|null
      */
     public $databaseUser;
@@ -67,7 +67,7 @@ class AddDatabase implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            if ((bool)$this->databaseUser) {
+            if ((bool) $this->databaseUser) {
                 $this->databaseUser->update([
                     'status' => STATUS_ACTIVE
                 ]);
@@ -79,7 +79,7 @@ class AddDatabase implements ShouldQueue
 
             $this->database->delete();
 
-            if ((bool)$this->databaseUser) {
+            if ((bool) $this->databaseUser) {
                 $this->databaseUser->delete();
             }
 

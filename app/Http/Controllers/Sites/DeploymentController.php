@@ -29,30 +29,18 @@ class DeploymentController extends Controller
         }
 
         if ($site->deploying) {
-            return new SiteResource($site->fresh());
+            return response()->json([
+                'message' => 'Site is already deploying.'
+            ]);
         }
 
-        $this->triggerDeployment($site->server, $site);
+        $site->triggerDeployment();
 
         $user->notify(new SiteUpdated($site));
 
-        return new SiteResource($site->fresh());
-    }
-
-    public function triggerDeployment(Server $server, Site $site)
-    {
-        $deployment = activity()
-            ->causedBy(auth()->user())
-            ->performedOn($site)
-            ->withProperty('log', '')
-            ->withProperty('status', 'pending')
-            ->log('Deployment');
-
-        $site->update([
-            'deploying' => true
+        return response()->json([
+            'message' => 'Deployment queued.'
         ]);
-
-        Deploy::dispatch($server, $site, $deployment);
     }
 
     public function deploy(Server $server, Site $site)
@@ -63,7 +51,7 @@ class DeploymentController extends Controller
             return new SiteResource($site->fresh());
         }
 
-        $this->triggerDeployment($server, $site);
+        $site->triggerDeployment();
 
         return new SiteResource($site->fresh());
     }

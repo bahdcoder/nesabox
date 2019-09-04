@@ -64,6 +64,8 @@ class DeleteDatabase extends Base
                 return $this->generateMariadbScript($rootPassword);
             case MYSQL8_DB:
                 return $this->generateMariadbScript($rootPassword);
+            case MYSQL_DB:
+                return $this->generateMariadbScript($rootPassword);
             default:
                 return '';
         }

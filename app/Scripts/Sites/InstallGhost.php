@@ -65,11 +65,23 @@ class InstallGhost extends Base
     {
         $user = SSH_USER;
 
-        return <<<EOD
-# Create site folder
-mkdir /home/{$user}/{$this->site->name}
+        $rootPassword = $this->server->mysql_root_password;
 
-# Change folder owner to espectra
+        return <<<EOD
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'%' IDENTIFIED BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE DATABASE IF NOT EXISTS {$this->database->name};"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'%' IDENTIFIED BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
+# Create site folder if not exists. Clean it out if it does exist.
+if [ -d "/home/{$user}/{$this->site->name}" ]; then
+    rm -rf /home/{$user}/{$this->site->name}
+fi
+
+mkdir -p /home/{$user}/{$this->site->name}
+
+# Change folder owner to nesa
 # chown {$user}:{$user} /home/{$user}/{$this->site->name}
 
 # Change folder permissions

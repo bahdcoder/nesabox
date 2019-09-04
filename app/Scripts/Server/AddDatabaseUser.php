@@ -16,7 +16,7 @@ class AddDatabaseUser extends Base
     public $server;
 
     /**
-     * 
+     *
      * @var \App\DatabaseUser
      */
     public $databaseUser;
@@ -26,10 +26,8 @@ class AddDatabaseUser extends Base
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        DatabaseUser $databaseUser
-    ) {
+    public function __construct(Server $server, DatabaseUser $databaseUser)
+    {
         $this->server = $server;
         $this->databaseUser = $databaseUser;
     }
@@ -48,6 +46,8 @@ class AddDatabaseUser extends Base
                 return $this->generateMariadbScript($rootPassword);
             case MYSQL8_DB:
                 return $this->generateMysql8Script($rootPassword);
+            case MYSQL_DB:
+                return $this->generateMariadbScript($rootPassword);
             default:
                 return '';
         }
@@ -56,7 +56,7 @@ class AddDatabaseUser extends Base
     public function generateMariadbAddUserScript($rootPassword)
     {
         return <<<EOD
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
 EOD;
     }
 
@@ -64,10 +64,10 @@ EOD;
     {
         $script = '';
 
-        foreach($this->databaseUser->databases as $database):
+        foreach ($this->databaseUser->databases as $database):
             $script .= <<<EOD
 \n
-            mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
+            mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
 EOD;
         endforeach;
 
@@ -79,7 +79,7 @@ EOD;
         return <<<EOD
 {$this->generateMariadbAddUserScript($rootPassword)}
 {$this->generateMariadbPermissionsScript($rootPassword)}
-mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 EOD;
     }
 
@@ -96,17 +96,21 @@ EOD;
         if ($this->databaseUser->type === MARIA_DB) {
             return $this->server->mariadb_root_password;
         }
+
+        if ($this->databaseUser->type === POSTGRES_DB) {
+            return $this->server->postgres_root_password;
+        }
     }
 
     public function generateMysql8PermissionsScript($rootPassword)
     {
         $script = '';
 
-        foreach($this->databaseUser->databases as $database):
+        foreach ($this->databaseUser->databases as $database):
             $script .= <<<EOD
 \n
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' WITH GRANT OPTION;"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'%' WITH GRANT OPTION;"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' WITH GRANT OPTION;"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'%' WITH GRANT OPTION;"
 EOD;
         endforeach;
 
@@ -116,16 +120,17 @@ EOD;
     public function generateMysql8AddUserScript($rootPassword)
     {
         return <<<EOD
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'%' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'%' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
 EOD;
     }
 
-    public function generateMysql8Script($rootPassword) {
+    public function generateMysql8Script($rootPassword)
+    {
         return <<<EOD
 {$this->generateMysql8AddUserScript($rootPassword)}
 {$this->generateMysql8PermissionsScript($rootPassword)}
-mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 EOD;
     }
 }

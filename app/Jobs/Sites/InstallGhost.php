@@ -7,6 +7,7 @@ use Exception;
 use App\Server;
 use App\Database;
 use App\DatabaseUser;
+use App\Jobs\Servers\BroadcastServer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -19,7 +20,11 @@ use App\Scripts\Server\AddDatabase;
 
 class InstallGhost implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     /**
      * The number of times the job may be attempted.
@@ -87,12 +92,6 @@ class InstallGhost implements ShouldQueue
      */
     public function handle()
     {
-        (new AddDatabase(
-            $this->server,
-            $this->database,
-            $this->databaseUser
-        ))->run();
-
         $process = (new InstallGhostScript(
             $this->server,
             $this->site,
@@ -101,6 +100,7 @@ class InstallGhost implements ShouldQueue
         ))
             ->as(SSH_USER)
             ->run(function ($log) {
+                echo $log;
                 $this->site->update([
                     'logs' => $this->site->logs . $log
                 ]);
@@ -123,7 +123,11 @@ class InstallGhost implements ShouldQueue
 
             $this->server->user->notify(new SiteUpdated($this->site->fresh()));
         } else {
-            echo $process->getErrorOutput();
+            $this->alertServer(
+                "Failed installing ghost blog on server {$this->server->name}.",
+                $this->site->fresh()->log
+            );
+
             $this->handleFailed();
         }
     }
@@ -131,7 +135,6 @@ class InstallGhost implements ShouldQueue
     public function handleFailed()
     {
         $this->site->update([
-            'logs' => null,
             'app_type' => null,
             'installing_ghost_status' => null
         ]);

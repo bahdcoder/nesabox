@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Servers;
 
-use Illuminate\Validation\Rule; 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddDatabaseUserRequest extends FormRequest
@@ -27,12 +27,15 @@ class AddDatabaseUserRequest extends FormRequest
         $databases = [MYSQL_DB, MYSQL8_DB, MARIA_DB];
 
         return [
-            'name' => ['required', 'alpha_dash', Rule::unique('database_users')->where(function ($query) {
-                return $query->where(
-                    'server_id',
-                    $this->route('server')->id
-                )->where('type', $this->type);
-            })],
+            'name' => [
+                'required',
+                'alpha_dash',
+                Rule::unique('database_users')->where(function ($query) {
+                    return $query
+                        ->where('server_id', $this->route('server')->id)
+                        ->where('type', $this->type);
+                })
+            ],
             'password' => 'required|min:8',
             'type' => 'required|in:' . implode(',', $databases)
         ];

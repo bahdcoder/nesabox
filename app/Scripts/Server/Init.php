@@ -272,6 +272,10 @@ EOF
 # Install latest versions of node and pm2
 {$this->installLatestNodeAndPm2()}
 
+# Configure git with user details.
+git config --global user.email "{$this->server->user->email}"
+git config --global user.name "{$this->server->user->name}"
+
 # Setup the server monitoring script
 
 generate_post_data()
@@ -482,12 +486,9 @@ EOD;
 
     public function installMysql()
     {
-        $database = $this->server->mysqlDatabases()->first();
-
-        $databaseUser = $database->databaseUsers()->first();
+        $user = SSH_USER;
 
         $rootPassword = $this->server->mysql_root_password;
-
         return <<<EOD
 \n
 export DEBIAN_FRONTEND=noninteractive
@@ -495,35 +496,23 @@ debconf-set-selections <<< "mysql-community-server mysql-community-server/data-d
 debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password ${rootPassword}"
 debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password ${rootPassword}"
 apt-get install -y mysql-server
+echo "default_password_lifetime = 0" >> /etc/mysql/mysql.conf.d/mysqld.cnf
 sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/mysql.conf.d/mysqld.cnf
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'{\$IP_ADDRESS}' IDENTIFIED BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'\$IP_ADDRESS' IDENTIFIED BY '{$rootPassword}';"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{$rootPassword}';"
-
-USER="{$databaseUser->name}"
-MYSQL_ROOT_PASSWORD="{$rootPassword}"
-
 service mysql restart
-
-sleep 2
-
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'%' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$user}'@'\$IP_ADDRESS' IDENTIFIED BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$user}'@'\$IP_ADDRESS' IDENTIFIED BY '{$rootPassword}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$user}'@'%' IDENTIFIED BY '{$rootPassword}' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 
 service mysql restart
-
-sleep 2
-
-mysql --user="{$databaseUser->name}" --password="{$databaseUser->password}" -e "CREATE DATABASE {$database->name}";
 EOD;
     }
 
     public function installMysql8()
     {
-        $database = $this->server->mysql8Databases()->first();
-
-        $databaseUser = $database->databaseUsers()->first();
+        $user = SSH_USER;
 
         $rootPassword = $this->server->mysql8_root_password;
 
@@ -544,12 +533,11 @@ mysql --user="root" --password="{$rootPassword}" -e "CREATE USER 'root'@'%' IDEN
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'\$IP_ADDRESS' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;"
 service mysql restart
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED WITH mysql_native_password BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'%' IDENTIFIED WITH mysql_native_password BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'\$IP_ADDRESS' WITH GRANT OPTION;"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$databaseUser->name}'@'%' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$user}'@'\$IP_ADDRESS' IDENTIFIED WITH mysql_native_password BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$user}'@'%' IDENTIFIED WITH mysql_native_password BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$user}'@'\$IP_ADDRESS' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '{$user}'@'%' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
-mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$database->name} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"           
 EOD;
     }
 
@@ -560,12 +548,9 @@ EOD;
 
         $rootUser = 'admin';
 
+        $user = 'nesa';
+
         $rootPassword = $this->server->mongodb_admin_password;
-
-        $database = $this->server->mongodbDatabases()->first();
-
-        $databaseUser = $database->databaseUsers()->first();
-
         return <<<EOD
 \n
 wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
@@ -590,17 +575,16 @@ systemctl restart mongod
 
 sleep 3
 
-# Create the default nesa database, with the default nesa user in it
-mongo {$database->name} --eval 'db.createUser({ user: "{$databaseUser->name}", pwd: "{$databaseUser->password}", roles: ["dbOwner"] })' -u {$rootUser} -p {$rootPassword} --authenticationDatabase admin
-
+# Create the nesa user we'll use for database / user creation
+mongo admin --eval 'db.createUser({ user: "{$user}", pwd: "{$rootPassword}", roles: [{ role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase"] })' -u {$rootUser} -p {$rootPassword} --authenticationDatabase admin
 EOD;
     }
 
     public function installPostgres()
     {
-        $database = $this->server->postgresdbDatabases()->first();
+        $user = SSH_USER;
 
-        $databaseUser = $database->databaseUsers()->first();
+        $rootPassword = $this->server->postgres_root_password;
 
         return <<<EOD
 \n
@@ -613,19 +597,14 @@ sudo apt-get install -y --force-yes postgresql postgresql-contrib
 sudo sed -i "s/localtime/UTC/" /etc/postgresql/11/main/postgresql.conf
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/11/main/postgresql.conf
 echo "host    all             all             0.0.0.0/0               md5" | tee -a /etc/postgresql/11/main/pg_hba.conf
-sudo -u postgres psql -c "CREATE ROLE {$databaseUser->name} LOGIN PASSWORD '{$databaseUser->password}' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
-service postgresql restart
-sudo -u postgres /usr/bin/createdb --echo --owner={$databaseUser->name} {$database->name}
+sudo -u postgres psql -c "CREATE ROLE {$user} LOGIN PASSWORD '{$rootPassword}' SUPERUSER INHERIT CREATEDB CREATEROLE NOREPLICATION;"
 service postgresql restart
 EOD;
     }
 
     public function installMariadb()
     {
-        $database = $this->server->mariadbDatabases()->first();
-
-        $databaseUser = $database->databaseUsers()->first();
-
+        $user = SSH_USER;
         $rootPassword = $this->server->mariadb_root_password;
 
         return <<<EOD
@@ -639,17 +618,16 @@ debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password passw
 debconf-set-selections <<< "mariadb-server-10.3 mysql-server/root_password_again password {$rootPassword}"
 apt-get install -y mariadb-server-10.3
 sed -i '/^bind-address/s/bind-address.*=.*/bind-address = */' /etc/mysql/my.cnf
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{$databaseUser->password}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'\$IP_ADDRESS' IDENTIFIED BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{$rootPassword}';"
 service mysql restart
-mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}';"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$databaseUser->name}'@'\$IP_ADDRESS' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
-mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '$databaseUser->name'@'%' IDENTIFIED BY '{$databaseUser->password}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "CREATE USER '{$user}'@'\$IP_ADDRESS' IDENTIFIED BY '{$rootPassword}';"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '{$user}'@'\$IP_ADDRESS' IDENTIFIED BY '{$rootPassword}' WITH GRANT OPTION;"
+mysql --user="root" --password="{$rootPassword}" -e "GRANT ALL ON *.* TO '$user'@'%' IDENTIFIED BY '{$rootPassword}' WITH GRANT OPTION;"
 mysql --user="root" --password="{$rootPassword}" -e "FLUSH PRIVILEGES;"
 echo "" >> /etc/mysql/my.cnf
 echo "[mysqld]" >> /etc/mysql/my.cnf
 echo "character-set-server = utf8" >> /etc/mysql/my.cnf
-mysql --user="root" --password="{$rootPassword}" -e "CREATE DATABASE {$database->name};"
 EOD;
     }
 

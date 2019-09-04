@@ -247,26 +247,6 @@ Route::middleware(['auth:api'])->group(function () {
         'deploy'
     ]);
 
-    Route::post('servers/{server}/install-monitoring', [
-        MonitoringController::class,
-        'store'
-    ]);
-
-    Route::get('servers/{server}/metrics', [
-        MonitoringController::class,
-        'index'
-    ]);
-
-    Route::post('servers/{server}/sites/{site}/pm2-processes', [
-        Pm2ProcessController::class,
-        'store'
-    ]);
-
-    Route::delete('servers/{server}/sites/{site}/pm2-processes/{pm2-process}', [
-        Pm2ProcessController::class,
-        'destroy'
-    ]);
-
     Route::get('servers/{server}/sites/{site}/ecosystem-file', [
         Pm2Controller::class,
         'show'
@@ -301,6 +281,11 @@ Route::middleware(['auth:api'])->group(function () {
         SslCertificateController::class,
         'letsEncrypt'
     ]);
+
+    Route::post(
+        'servers/{server}/sites/{site}/push-to-deploy',
+        '\App\Http\Controllers\Sites\PushToDeployController'
+    );
 });
 
 Route::get('get-update-nginx-config/{hash}', [
@@ -330,11 +315,6 @@ Route::middleware(['guest', 'api-token'])->group(function () {
     ])->name('servers.initialization-callback');
 
     Route::post(
-        'servers/{server}/sites/{site}',
-        '\App\Http\Controllers\Sites\PushToDeployController'
-    );
-
-    Route::get(
         'sites/{site}/github-webhooks',
         '\App\Http\Controllers\Sites\GithubWebhookController'
     );

@@ -326,21 +326,13 @@ class CreateServersController extends Controller
                 );
             }
 
-            $databaseUser = $server->databaseUsers()->create([
-                'name' => SSH_USER,
-                'type' => $database,
-                'password' => str_random(24),
-                'status' => STATUS_ACTIVE
-            ]);
+            if ($database === POSTGRES_DB) {
+                $rootPassword = str_random(32);
 
-            $database = $server->databaseInstances()->create([
-                'name' => SSH_USER,
-                'type' => $database,
-                'status' => STATUS_ACTIVE,
-                'server_id' => $server->id
-            ]);
-
-            $databaseUser->databases()->attach($database->id);
+                $server->update([
+                    'postgres_root_password' => $rootPassword
+                ]);
+            }
         endforeach;
     }
 }

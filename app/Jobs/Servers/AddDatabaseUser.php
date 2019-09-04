@@ -38,7 +38,10 @@ class AddDatabaseUser implements ShouldQueue
      */
     public function handle()
     {
-        $process = (new AppAddDatabaseUser($this->server, $this->databaseUser))->run();
+        $process = (new AppAddDatabaseUser(
+            $this->server,
+            $this->databaseUser
+        ))->run();
 
         if ($process->isSuccessful()) {
             $this->databaseUser->update([

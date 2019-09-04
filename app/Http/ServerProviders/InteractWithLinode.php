@@ -26,7 +26,7 @@ trait InteractWithLinode
         }
     }
 
-        /**
+    /**
      * Generate the user data for init server
      *
      * @return string
@@ -53,12 +53,12 @@ EOD;
     public function getStackScriptForLinode(Server $server, $credential)
     {
         return $this->getLinodeConnectionInstance($credential->accessToken)
-                ->stackScript()
-                ->create(
-                    SSH_USER . ' Stackscript',
-                    ['linode/ubuntu18.04'],
-                    $this->getLinodeUserData($server)
-                )->id;
+            ->stackScript()
+            ->create(
+                SSH_USER . ' Stackscript',
+                ['linode/ubuntu18.04'],
+                $this->getLinodeUserData($server)
+            )->id;
     }
 
     /**

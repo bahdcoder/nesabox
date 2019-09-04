@@ -64,12 +64,15 @@ class DeleteDatabaseUser extends Base
                 return $this->generateMariadbScript($rootPassword);
             case MYSQL8_DB:
                 return $this->generateMysql8Script($rootPassword);
+            case MYSQL_DB:
+                return $this->generateMariadbScript($rootPassword);
             default:
                 return '';
         }
     }
 
-    public function generateMysql8Script($rootPassword) {
+    public function generateMysql8Script($rootPassword)
+    {
         return <<<EOD
 mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'{$this->server->ip_address}';";
 mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'%';";
@@ -80,6 +83,7 @@ EOD;
     {
         return <<<EOD
 mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'{$this->server->ip_address}';";
+mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'%';";
 EOD;
     }
 }
