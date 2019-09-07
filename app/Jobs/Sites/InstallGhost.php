@@ -11,12 +11,10 @@ use App\Jobs\Servers\BroadcastServer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\Sites\SiteUpdated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Sites\InstallGhost as InstallGhostScript;
-use App\Notifications\Sites\SiteUpdated;
-use App\Scripts\Server\AddDatabase;
 
 class InstallGhost implements ShouldQueue
 {

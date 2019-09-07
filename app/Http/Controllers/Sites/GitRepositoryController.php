@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Jobs\Sites\InstallGitRepository;
 use App\Http\Requests\Sites\InstallRepositoryRequest;
+use App\Http\Resources\SiteResource;
 
 class GitRepositoryController extends Controller
 {
@@ -41,6 +42,6 @@ EOD;
 
         InstallGitRepository::dispatch($server, $site->fresh());
 
-        return new ServerResource($server);
+        return new SiteResource($site->fresh());
     }
 }

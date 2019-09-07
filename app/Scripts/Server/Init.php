@@ -243,7 +243,7 @@ systemctl enable beanstalkd
 cd ~
 git clone https://github.com/Neilpang/acme.sh.git
 cd ./acme.sh
-./acme.sh --install
+bash ./acme.sh --install
 cd ~
 rm -rf acme.sh
 

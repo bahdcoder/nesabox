@@ -26,6 +26,8 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $token = request()->bearerToken();
+
         return [
             'name' => $this->name,
             'email' => $this->email,
@@ -60,12 +62,9 @@ class UserResource extends JsonResource
                     return $this->defineCredential($credential);
                 })
             ],
-            'access_token' => $this->when(
-                request()->is('login') || request()->is('register'),
-                function () {
-                    return $this->createToken('Personal')->accessToken;
-                }
-            )
+            'access_token' => $token
+                ? $token
+                : $this->createToken('Personal')->accessToken
         ];
     }
 }

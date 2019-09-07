@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Servers;
 
+use App\Exceptions\CredentialsExpiredException;
 use App\Server;
 use App\Jobs\Servers\Initialize;
 use App\Http\Controllers\Controller;
@@ -35,6 +36,8 @@ class CreateServersController extends Controller
                 $server = $this->createLinodeServer($request);
                 break;
         endswitch;
+
+        $this->createServerDatabases($server);
 
         if (!$server) {
             return response()->json(
@@ -106,8 +109,6 @@ class CreateServersController extends Controller
         });
 
         $server->rollServerSlug();
-
-        $this->createServerDatabases($server);
 
         return $server;
     }
@@ -245,8 +246,20 @@ class CreateServersController extends Controller
             // TODO: Delete the newly created ssh key from digital ocean
 
             return $server;
-        } catch (GuzzleException | ProcessFailedException $e) {
-            throw new FailedCreatingServer($server, $e);
+        } catch (ProcessFailedException $e) {
+            $server->delete();
+
+            abort(
+                400,
+                "Failed creating server. This is most likely an error from our servers. Please shoot us a mail immediately and we'll resolve this for you."
+            );
+        } catch (GuzzleException $e) {
+            $server->delete();
+
+            abort(
+                400,
+                "We couldn't create your server. This is most likely because your credentials have expired or do not have write access. Please update your credentials and try again."
+            );
         }
     }
 

@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
 use App\Http\Controllers\Sites\SitesController;
@@ -286,6 +288,8 @@ Route::middleware(['auth:api'])->group(function () {
         'servers/{server}/sites/{site}/push-to-deploy',
         '\App\Http\Controllers\Sites\PushToDeployController'
     );
+
+    Route::delete('logout', [LogoutController::class, 'delete']);
 });
 
 Route::get('get-update-nginx-config/{hash}', [
@@ -317,7 +321,7 @@ Route::middleware(['guest', 'api-token'])->group(function () {
     Route::post(
         'sites/{site}/github-webhooks',
         '\App\Http\Controllers\Sites\GithubWebhookController'
-    );
+    )->name('github-webhooks');
 });
 
 // $this->post('login', 'Auth\LoginController@login');

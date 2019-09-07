@@ -61,7 +61,7 @@ trait InteractsWithGithub
                         'events' => ['push'],
                         'config' => [
                             'content_type' => 'json',
-                            'url' => route('sites.trigger-deployment', [
+                            'url' => route('github-webhooks', [
                                 $site->id,
                                 'api_token' => $user->api_token
                             ]),

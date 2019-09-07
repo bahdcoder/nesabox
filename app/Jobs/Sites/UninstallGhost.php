@@ -8,9 +8,9 @@ use App\Server;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\Sites\SiteUpdated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Sites\UninstallGhost as UninstallGhostScript;
 
 class UninstallGhost implements ShouldQueue
@@ -74,7 +74,7 @@ class UninstallGhost implements ShouldQueue
                 'app_type' => null
             ]);
 
-            $this->server->user->notify(new ServerIsReady($this->server));
+            $this->server->user->notify(new SiteUpdated($this->server));
         } else {
             // $this->handleFailed();
         }

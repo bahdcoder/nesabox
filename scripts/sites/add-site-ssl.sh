@@ -4,6 +4,17 @@ set -e
 
 mkdir -p /etc/nginx/ssl/$SITE_NAME
 
+if [ -f "/root/.acme.sh/acme.sh" ]; then
+    echo "Acme.sh installed."
+else 
+    cd ~
+    git clone https://github.com/Neilpang/acme.sh.git
+    cd ./acme.sh
+    bash ./acme.sh --install
+    cd ~
+    rm -rf acme.sh
+fi
+
 # We'll obtain the certificate and copy it to the nginx folder
 /root/.acme.sh/acme.sh --issue --nginx -d $SITE_NAME --cert-file /etc/nginx/ssl/$SITE_NAME/server.cer --key-file /etc/nginx/ssl/$SITE_NAME/server.key
 

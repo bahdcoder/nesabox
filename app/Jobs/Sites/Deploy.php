@@ -6,16 +6,21 @@ use App\Site;
 use App\Server;
 use App\Activity;
 use Illuminate\Bus\Queueable;
+use App\Scripts\Sites\DeployGitSite;
+use App\Jobs\Servers\BroadcastServer;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use App\Scripts\Sites\DeployGitSite;
 use App\Notifications\Sites\SiteUpdated;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Deploy implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     /**
      * The number of times the job may be attempted.
@@ -107,6 +112,12 @@ class Deploy implements ShouldQueue
             $this->deployment->update([
                 'properties->status' => 'failed'
             ]);
+
+            $this->alertServer(
+                "Deployment failed on site {$this->site->name}",
+                $this->deployment->fresh()->properties['log'],
+                'deployment-failed'
+            );
         }
 
         $this->server->user->notify(new SiteUpdated($this->site->fresh()));

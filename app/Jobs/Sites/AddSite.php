@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use App\Http\Traits\HandlesProcesses;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\Sites\SiteUpdated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
@@ -72,6 +73,7 @@ class AddSite implements ShouldQueue
             'status' => STATUS_ACTIVE
         ]);
 
+        $this->server->user->notify(new SiteUpdated($this->site));
         $this->server->user->notify(new ServerIsReady($this->server));
     }
 
