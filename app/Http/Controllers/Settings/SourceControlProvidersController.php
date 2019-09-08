@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Settings;
 use Socialite;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Log;
 
 class SourceControlProvidersController extends Controller
 {

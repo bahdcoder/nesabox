@@ -34,6 +34,7 @@ class UserResource extends JsonResource
             'id' => $this->resource->id,
             'api_token' => $this->api_token,
             'photo_url' => $this->photo_url,
+            'auth_provider' => $this->auth_provider,
             'sshkeys' => SshkeyResource::collection($this->sshkeys),
             'source_control' => [
                 'github' => (bool) $this->source_control['github'],

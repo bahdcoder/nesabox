@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
 use App\Http\Controllers\Sites\SitesController;
@@ -46,6 +47,16 @@ use App\Http\Controllers\Sites\SslCertificateController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('settings/source-control/{provider}', [
+    SourceControlProvidersController::class,
+    'getRedirectUrl'
+]);
+
+Route::post('auth/{provider}/callback', [
+    SocialiteController::class,
+    'handleProviderCallback'
+]);
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('settings/server-providers', [
@@ -103,11 +114,6 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::get('aws/vpc', [AwsController::class, 'vpc']);
     Route::get('digital-ocean/sizes', [DigitalOceanController::class, 'sizes']);
-
-    Route::get('settings/source-control/{provider}', [
-        SourceControlProvidersController::class,
-        'getRedirectUrl'
-    ]);
 
     Route::get('settings/source-control/{provider}/callback', [
         SourceControlProvidersController::class,
@@ -330,7 +336,7 @@ Route::middleware(['guest', 'api-token'])->group(function () {
 // $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 // $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 // $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
-Auth::routes();
+// Auth::routes();
 
 Route::get('/nesa-metrics/package.json', [
     FileController::class,
