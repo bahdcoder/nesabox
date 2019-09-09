@@ -19,8 +19,8 @@
     "port": "6001",
     "protocol": "https",
     "socketio": {},
-    "sslCertPath": "/etc/nginx/ssl/api.nesabox.com/603987/server.crt",
-    "sslKeyPath": "/etc/nginx/ssl/api.nesabox.com/603987/server.key",
+    "sslCertPath": "/etc/nginx/ssl/api.nesabox.com/619022/server.crt",
+    "sslKeyPath": "/etc/nginx/ssl/api.nesabox.com/619022/server.key",
     "sslCertChainPath": "",
     "sslPassphrase": "",
     "subscribers": {

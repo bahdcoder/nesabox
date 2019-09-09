@@ -148,7 +148,8 @@ return [
                     'deletions',
                     'firewall_rules',
                     'databases',
-                    'cron_jobs'
+                    'cron_jobs',
+                    'mails'
                 ],
                 'balance' => 'simple',
                 'processes' => 12,
@@ -166,7 +167,8 @@ return [
                     'deletions',
                     'firewall_rules',
                     'databases',
-                    'cron_jobs'
+                    'cron_jobs',
+                    'mails'
                 ],
                 'balance' => 'simple',
                 'processes' => 12,
