@@ -48,13 +48,6 @@ use App\Http\Controllers\Sites\SslCertificateController;
 |
 */
 
-Route::get('mail', function () {
-    $server = App\Server::first();
-
-    return (new App\Notifications\Servers\ServerProvisioned($server))
-                ->toMail($server->user);
-});
-
 Route::get('settings/source-control/{provider}', [
     SourceControlProvidersController::class,
     'getRedirectUrl'
