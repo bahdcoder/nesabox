@@ -25,7 +25,7 @@ class SocialiteController extends Controller
         $user = User::where('email', $userDetails->email)->first();
 
         // TODO: remove when we're out of BETA
-        if (! in_array($user->email, [
+        if (! in_array($userDetails->email, [
             'bahdcoder@gmail.com'
         ])) {
             return response()->json([
