@@ -1,5 +1,5 @@
 {
-    "authHost": "http://nesabox-api.ping",
+    "authHost": "http://nesabox.box",
     "authEndpoint": "/broadcasting/auth",
     "clients": [
         {

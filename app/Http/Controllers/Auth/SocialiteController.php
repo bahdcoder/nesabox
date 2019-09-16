@@ -24,6 +24,15 @@ class SocialiteController extends Controller
         // Find a matching user from our database
         $user = User::where('email', $userDetails->email)->first();
 
+        // TODO: remove when we're out of BETA
+        if (! in_array($user->email, [
+            'bahdcoder@gmail.com'
+        ])) {
+            return response()->json([
+                'message' => 'We are still in beta, and it is still invite only. Please visit nesabox.com to get notified when we launch.'
+            ], 400);
+        }
+
         if (! $user) {
             $user = User::create([
                 'name' => $userDetails->name,
