@@ -27,6 +27,7 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\Pm2Controller;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Servers\DatabaseUserController;
+use App\Http\Controllers\Servers\DeleteServerController;
 use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Http\Controllers\Servers\MongodbController;
@@ -62,6 +63,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('settings/server-providers', [
         ServerProvidersController::class,
         'store'
+    ]);
+
+    Route::delete('servers/{server}', [
+        DeleteServerController::class,
+        'destroy'
     ]);
 
     Route::post('servers/{server}/databases/{database}/mongodb/add-users', [
