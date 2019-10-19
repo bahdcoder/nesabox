@@ -28,7 +28,8 @@
         "pusher/pusher-php-server": "~4.0",
         "spatie/laravel-activitylog": "^3.7",
         "spatie/laravel-cors": "^1.5",
-        "thomaswelton/laravel-gravatar": "^1.1"
+        "thomaswelton/laravel-gravatar": "^1.1",
+        "laravel/nova": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -91,6 +92,10 @@
         {
             "type": "path",
             "url": "./linode"
+        },
+        {
+            "type": "path",
+            "url": "./nova"
         }
     ]
 }
