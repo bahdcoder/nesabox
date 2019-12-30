@@ -23,7 +23,8 @@ class SshkeysController extends Controller
             ->create([
                 'name' => $request->name,
                 'key' => $request->key,
-                'is_profile_key' => true
+                'is_profile_key' => true,
+                'status' => STATUS_ACTIVE
             ]);
 
         return new UserResource(

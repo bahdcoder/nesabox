@@ -44,7 +44,7 @@ class Init extends BaseScript
 
         $metricsPort = config('nesa.metrics_port');
 
-        $sudoPassword = str_random(32);
+        $sudoPassword = $this->server->sudo_password;
 
         return <<<EOD
 #!/bin/sh
@@ -160,7 +160,7 @@ ssh-keygen -A
 service ssh restart
 
 # Geenerate ssh key
-ssh-keygen -f /home/{$user}/.ssh/{$user} -t rsa -b 4096 -P '' -C root@{$this->server->name}
+ssh-keygen -o -a 100 -t ed25519 -P '' -f /home/{$user}/.ssh/{$user} -C {$this->server->name}
 chown nesa -R /home/{$user}/.ssh
 
 # Enable default ufw ports
@@ -475,11 +475,24 @@ EOD;
             ->where('is_app_key', true)
             ->first();
 
+        $userKeys = '';
+
+        foreach($this->server->user->sshkeys as $key) {
+            $userKeys .= <<<EOD
+\n
+# {$key->name} key
+
+{$key->key}
+EOD;
+        }
+
         return <<<EOD
 cat >> /root/.ssh/authorized_keys << EOF
 # Nesabox key
 
 {$sshKey->key}
+
+{$userKeys}
 EOF
 EOD;
     }

@@ -50,10 +50,10 @@ trait HandlesSshKeys
     public function generateSshKeyForServer(Server $server)
     {
         $slug = $server->slug;
-        $app = config('app.host');
+        $app = config('app.name');
 
         $process = $this->execProcess(
-            "ssh-keygen -f ~/.ssh/{$slug} -t rsa -b 4096 -P '' -C worker@{$app}"
+            "ssh-keygen -o -a 100 -t ed25519 -P '' -f ~/.ssh/{$slug} -C {$app}"
         );
 
         if (!$process->isSuccessful()) {

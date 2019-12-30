@@ -34,7 +34,7 @@ class GenerateSshkey extends Base
         $user = SSH_USER;
 
         return <<<EOD
-ssh-keygen -f /home/{$user}/.ssh/{$user} -t rsa -b 4096 -P '' -C root@{$this->server->name}
+ssh-keygen -o -a 100 -t ed25519 -P '' -f /home/{$user}/.ssh/{$user} -C {$this->server->name}
 
 chown nesa -R /home/{$user}/.ssh
  
