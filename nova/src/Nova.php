@@ -170,7 +170,7 @@ class Nova
     {
         Route::aliasMiddleware('nova.guest', RedirectIfAuthenticated::class);
 
-        return new PendingRouteRegistration;
+        return new PendingRouteRegistration();
     }
 
     /**
@@ -192,16 +192,24 @@ class Nova
      */
     public static function resourceInformation(Request $request)
     {
-        return collect(static::$resources)->map(function ($resource) use ($request) {
-            return array_merge([
-                'uriKey' => $resource::uriKey(),
-                'label' => $resource::label(),
-                'singularLabel' => $resource::singularLabel(),
-                'authorizedToCreate' => $resource::authorizedToCreate($request),
-                'searchable' => $resource::searchable(),
-                'perPageOptions' => $resource::perPageOptions(),
-            ], $resource::additionalInformation($request));
-        })->values()->all();
+        return collect(static::$resources)
+            ->map(function ($resource) use ($request) {
+                return array_merge(
+                    [
+                        'uriKey' => $resource::uriKey(),
+                        'label' => $resource::label(),
+                        'singularLabel' => $resource::singularLabel(),
+                        'authorizedToCreate' => $resource::authorizedToCreate(
+                            $request
+                        ),
+                        'searchable' => $resource::searchable(),
+                        'perPageOptions' => $resource::perPageOptions()
+                    ],
+                    $resource::additionalInformation($request)
+                );
+            })
+            ->values()
+            ->all();
     }
 
     /**
@@ -212,10 +220,12 @@ class Nova
      */
     public static function availableResources(Request $request)
     {
-        return collect(static::$resources)->filter(function ($resource) use ($request) {
-            return $resource::authorizedToViewAny($request) &&
-                   $resource::availableForNavigation($request);
-        })->all();
+        return collect(static::$resources)
+            ->filter(function ($resource) use ($request) {
+                return $resource::authorizedToViewAny($request) &&
+                    $resource::availableForNavigation($request);
+            })
+            ->all();
     }
 
     /**
@@ -226,10 +236,11 @@ class Nova
      */
     public static function globallySearchableResources(Request $request)
     {
-        return collect(static::availableResources($request))
-                    ->filter(function ($resource) {
-                        return $resource::$globallySearchable;
-                    });
+        return collect(static::availableResources($request))->filter(function (
+            $resource
+        ) {
+            return $resource::$globallySearchable;
+        });
     }
 
     /**
@@ -242,7 +253,7 @@ class Nova
     {
         static::$resources = array_merge(static::$resources, $resources);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -254,9 +265,11 @@ class Nova
     public static function groups(Request $request)
     {
         return collect(static::availableResources($request))
-                    ->map(function ($item, $key) {
-                        return $item::group();
-                    })->unique()->values();
+            ->map(function ($item, $key) {
+                return $item::group();
+            })
+            ->unique()
+            ->values();
     }
 
     /**
@@ -268,9 +281,11 @@ class Nova
     public static function groupedResources(Request $request)
     {
         return collect(static::availableResources($request))
-                    ->groupBy(function ($item, $key) {
-                        return $item::group();
-                    })->sortKeys()->all();
+            ->groupBy(function ($item, $key) {
+                return $item::group();
+            })
+            ->sortKeys()
+            ->all();
     }
 
     /**
@@ -285,21 +300,30 @@ class Nova
 
         $resources = [];
 
-        foreach ((new Finder)->in($directory)->files() as $resource) {
-            $resource = $namespace.str_replace(
-                ['/', '.php'],
-                ['\\', ''],
-                Str::after($resource->getPathname(), app_path().DIRECTORY_SEPARATOR)
-            );
+        foreach ((new Finder())->in($directory)->files() as $resource) {
+            $resource =
+                $namespace .
+                str_replace(
+                    ['/', '.php'],
+                    ['\\', ''],
+                    Str::after(
+                        $resource->getPathname(),
+                        app_path() . DIRECTORY_SEPARATOR
+                    )
+                );
 
-            if (is_subclass_of($resource, Resource::class) &&
-                ! (new ReflectionClass($resource))->isAbstract()) {
+            if (
+                is_subclass_of($resource, Resource::class) &&
+                !(new ReflectionClass($resource))->isAbstract()
+            ) {
                 $resources[] = $resource;
             }
         }
 
         static::resources(
-            collect($resources)->sort()->all()
+            collect($resources)
+                ->sort()
+                ->all()
         );
     }
 
@@ -345,7 +369,9 @@ class Nova
             return static::$resourcesByModel[$class];
         }
 
-        $resource = collect(static::$resources)->first(function ($value) use ($class) {
+        $resource = collect(static::$resources)->first(function ($value) use (
+            $class
+        ) {
             return $value::$model === $class;
         });
 
@@ -386,7 +412,7 @@ class Nova
      */
     public static function createUser($command)
     {
-        if (! static::$createUserCallback) {
+        if (!static::$createUserCallback) {
             static::createUserUsing();
         }
 
@@ -403,20 +429,23 @@ class Nova
      * @param  \Closure  $createUserCallback
      * @return static
      */
-    public static function createUserUsing($createUserCommandCallback = null, $createUserCallback = null)
-    {
-        if (! $createUserCallback) {
+    public static function createUserUsing(
+        $createUserCommandCallback = null,
+        $createUserCallback = null
+    ) {
+        if (!$createUserCallback) {
             $createUserCallback = $createUserCommandCallback;
             $createUserCommandCallback = null;
         }
 
-        static::$createUserCommandCallback = $createUserCommandCallback ??
-                  static::defaultCreateUserCommandCallback();
+        static::$createUserCommandCallback =
+            $createUserCommandCallback ??
+            static::defaultCreateUserCommandCallback();
 
-        static::$createUserCallback = $createUserCallback ??
-                  static::defaultCreateUserCallback();
+        static::$createUserCallback =
+            $createUserCallback ?? static::defaultCreateUserCallback();
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -430,7 +459,7 @@ class Nova
             return [
                 $command->ask('Name'),
                 $command->ask('Email Address'),
-                $command->secret('Password'),
+                $command->secret('Password')
             ];
         };
     }
@@ -449,11 +478,13 @@ class Nova
 
             $model = config("auth.providers.{$provider}.model");
 
-            return tap((new $model)->forceFill([
-                'name' => $name,
-                'email' => $email,
-                'password' => Hash::make($password),
-            ]))->save();
+            return tap(
+                (new $model())->forceFill([
+                    'name' => $name,
+                    'email' => $email,
+                    'password' => Hash::make($password)
+                ])
+            )->save();
         };
     }
 
@@ -467,7 +498,7 @@ class Nova
     {
         static::$userTimezoneCallback = $userTimezoneCallback;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -491,12 +522,9 @@ class Nova
      */
     public static function tools(array $tools)
     {
-        static::$tools = array_merge(
-            static::$tools,
-            $tools
-        );
+        static::$tools = array_merge(static::$tools, $tools);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -528,7 +556,9 @@ class Nova
      */
     public static function availableTools(Request $request)
     {
-        return collect(static::$tools)->filter->authorize($request)->all();
+        return collect(static::$tools)
+            ->filter->authorize($request)
+            ->all();
     }
 
     /**
@@ -539,12 +569,9 @@ class Nova
      */
     public static function cards(array $cards)
     {
-        static::$cards = array_merge(
-            static::$cards,
-            $cards
-        );
+        static::$cards = array_merge(static::$cards, $cards);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -565,7 +592,9 @@ class Nova
      */
     public static function availableCards(Request $request)
     {
-        return collect(static::$cards)->filter->authorize($request)->all();
+        return collect(static::$cards)
+            ->filter->authorize($request)
+            ->all();
     }
 
     /**
@@ -577,7 +606,7 @@ class Nova
     {
         static::$defaultDashboardCards = static::$cards;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -588,7 +617,9 @@ class Nova
      */
     public static function availableDashboards(Request $request)
     {
-        return collect(static::$dashboards)->filter->authorize($request)->all();
+        return collect(static::$dashboards)
+            ->filter->authorize($request)
+            ->all();
     }
 
     /**
@@ -601,7 +632,7 @@ class Nova
     {
         static::$dashboards = array_merge(static::$dashboards, $dashboards);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -613,14 +644,13 @@ class Nova
     public static function allAvailableDashboardCards(NovaRequest $request)
     {
         return collect(static::$dashboards)
-            ->filter
-            ->authorize($request)
+            ->filter->authorize($request)
             ->flatMap(function ($dashboard) {
                 return $dashboard->cards();
-            })->merge(static::$cards)
+            })
+            ->merge(static::$cards)
             ->unique()
-            ->filter
-            ->authorize($request)
+            ->filter->authorize($request)
             ->values();
     }
 
@@ -631,13 +661,20 @@ class Nova
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return \Illuminate\Support\Collection
      */
-    public static function availableDashboardCardsForDashboard($dashboard, NovaRequest $request)
-    {
-        return collect(static::$dashboards)->filter->authorize($request)->filter(function ($dash) use ($dashboard) {
-            return $dash->uriKey() === $dashboard;
-        })->flatMap(function ($dashboard) {
-            return $dashboard->cards();
-        })->filter->authorize($request)->values();
+    public static function availableDashboardCardsForDashboard(
+        $dashboard,
+        NovaRequest $request
+    ) {
+        return collect(static::$dashboards)
+            ->filter->authorize($request)
+            ->filter(function ($dash) use ($dashboard) {
+                return $dash->uriKey() === $dashboard;
+            })
+            ->flatMap(function ($dashboard) {
+                return $dashboard->cards();
+            })
+            ->filter->authorize($request)
+            ->values();
     }
 
     /**
@@ -703,7 +740,7 @@ class Nova
     {
         static::$scripts[$name] = $path;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -716,7 +753,7 @@ class Nova
     {
         static::$scripts[md5($path)] = $path;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -730,7 +767,7 @@ class Nova
     {
         static::$styles[$name] = $path;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -753,16 +790,19 @@ class Nova
     public static function translations($translations)
     {
         if (is_string($translations)) {
-            if (! is_readable($translations)) {
-                return new static;
+            if (!is_readable($translations)) {
+                return new static();
             }
 
             $translations = json_decode(file_get_contents($translations), true);
         }
 
-        static::$translations = array_merge(static::$translations, $translations);
+        static::$translations = array_merge(
+            static::$translations,
+            $translations
+        );
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -783,9 +823,11 @@ class Nova
      */
     public static function jsonVariables(Request $request)
     {
-        return collect(static::$jsonVariables)->map(function ($variable) use ($request) {
-            return is_callable($variable) ? $variable($request) : $variable;
-        })->all();
+        return collect(static::$jsonVariables)
+            ->map(function ($variable) use ($request) {
+                return is_callable($variable) ? $variable($request) : $variable;
+            })
+            ->all();
     }
 
     /**
@@ -799,13 +841,16 @@ class Nova
         if (empty(static::$jsonVariables)) {
             static::$jsonVariables = [
                 'base' => static::path(),
-                'userId' => Auth::id() ?? null,
+                'userId' => Auth::id() ?? null
             ];
         }
 
-        static::$jsonVariables = array_merge(static::$jsonVariables, $variables);
+        static::$jsonVariables = array_merge(
+            static::$jsonVariables,
+            $variables
+        );
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -817,7 +862,7 @@ class Nova
     {
         static::$runsMigrations = false;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -844,8 +889,10 @@ class Nova
      */
     public static function __callStatic($method, $parameters)
     {
-        if (! property_exists(get_called_class(), $method)) {
-            throw new BadMethodCallException("Method {$method} does not exist.");
+        if (!property_exists(get_called_class(), $method)) {
+            throw new BadMethodCallException(
+                "Method {$method} does not exist."
+            );
         }
 
         return static::${$method};

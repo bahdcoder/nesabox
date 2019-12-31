@@ -96,19 +96,31 @@ abstract class Partition extends Metric
      */
     protected function aggregate($request, $model, $function, $column, $groupBy)
     {
-        $query = $model instanceof Builder ? $model : (new $model)->newQuery();
+        $query =
+            $model instanceof Builder ? $model : (new $model())->newQuery();
 
-        $wrappedColumn = $query->getQuery()->getGrammar()->wrap(
-            $column = $column ?? $query->getModel()->getQualifiedKeyName()
+        $wrappedColumn = $query
+            ->getQuery()
+            ->getGrammar()
+            ->wrap(
+                $column = $column ?? $query->getModel()->getQualifiedKeyName()
+            );
+
+        $results = $query
+            ->select(
+                $groupBy,
+                DB::raw("{$function}({$wrappedColumn}) as aggregate")
+            )
+            ->groupBy($groupBy)
+            ->get();
+
+        return $this->result(
+            $results
+                ->mapWithKeys(function ($result) use ($groupBy) {
+                    return $this->formatAggregateResult($result, $groupBy);
+                })
+                ->all()
         );
-
-        $results = $query->select(
-            $groupBy, DB::raw("{$function}({$wrappedColumn}) as aggregate")
-        )->groupBy($groupBy)->get();
-
-        return $this->result($results->mapWithKeys(function ($result) use ($groupBy) {
-            return $this->formatAggregateResult($result, $groupBy);
-        })->all());
     }
 
     /**

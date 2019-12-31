@@ -31,8 +31,12 @@ class ResourceForceDeleteController extends Controller
                 $model->forceDelete();
 
                 DB::table('action_events')->insert(
-                    ActionEvent::forResourceDelete($request->user(), collect([$model]))
-                                ->map->getAttributes()->all()
+                    ActionEvent::forResourceDelete(
+                        $request->user(),
+                        collect([$model])
+                    )
+                        ->map->getAttributes()
+                        ->all()
                 );
             });
         });

@@ -33,59 +33,106 @@ class FieldCommand extends Command
      */
     public function handle()
     {
-        if (! $this->hasValidNameArgument()) {
+        if (!$this->hasValidNameArgument()) {
             return;
         }
 
-        (new Filesystem)->copyDirectory(
-            __DIR__.'/field-stubs',
+        (new Filesystem())->copyDirectory(
+            __DIR__ . '/field-stubs',
             $this->fieldPath()
         );
 
         // Field.js replacements...
-        $this->replace('{{ component }}', $this->fieldName(), $this->fieldPath().'/resources/js/field.js');
+        $this->replace(
+            '{{ component }}',
+            $this->fieldName(),
+            $this->fieldPath() . '/resources/js/field.js'
+        );
 
         // Field.php replacements...
-        $this->replace('{{ namespace }}', $this->fieldNamespace(), $this->fieldPath().'/src/Field.stub');
-        $this->replace('{{ class }}', $this->fieldClass(), $this->fieldPath().'/src/Field.stub');
-        $this->replace('{{ component }}', $this->fieldName(), $this->fieldPath().'/src/Field.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->fieldNamespace(),
+            $this->fieldPath() . '/src/Field.stub'
+        );
+        $this->replace(
+            '{{ class }}',
+            $this->fieldClass(),
+            $this->fieldPath() . '/src/Field.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->fieldName(),
+            $this->fieldPath() . '/src/Field.stub'
+        );
 
-        (new Filesystem)->move(
-            $this->fieldPath().'/src/Field.stub',
-            $this->fieldPath().'/src/'.$this->fieldClass().'.php'
+        (new Filesystem())->move(
+            $this->fieldPath() . '/src/Field.stub',
+            $this->fieldPath() . '/src/' . $this->fieldClass() . '.php'
         );
 
         // FieldServiceProvider.php replacements...
-        $this->replace('{{ namespace }}', $this->fieldNamespace(), $this->fieldPath().'/src/FieldServiceProvider.stub');
-        $this->replace('{{ component }}', $this->fieldName(), $this->fieldPath().'/src/FieldServiceProvider.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->fieldNamespace(),
+            $this->fieldPath() . '/src/FieldServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->fieldName(),
+            $this->fieldPath() . '/src/FieldServiceProvider.stub'
+        );
 
-        (new Filesystem)->move(
-            $this->fieldPath().'/src/FieldServiceProvider.stub',
-            $this->fieldPath().'/src/FieldServiceProvider.php'
+        (new Filesystem())->move(
+            $this->fieldPath() . '/src/FieldServiceProvider.stub',
+            $this->fieldPath() . '/src/FieldServiceProvider.php'
         );
 
         // Field composer.json replacements...
-        $this->replace('{{ name }}', $this->argument('name'), $this->fieldPath().'/composer.json');
-        $this->replace('{{ escapedNamespace }}', $this->escapedFieldNamespace(), $this->fieldPath().'/composer.json');
+        $this->replace(
+            '{{ name }}',
+            $this->argument('name'),
+            $this->fieldPath() . '/composer.json'
+        );
+        $this->replace(
+            '{{ escapedNamespace }}',
+            $this->escapedFieldNamespace(),
+            $this->fieldPath() . '/composer.json'
+        );
 
         // Register the field...
         $this->addFieldRepositoryToRootComposer();
         $this->addFieldPackageToRootComposer();
         $this->addScriptsToNpmPackage();
 
-        if ($this->confirm("Would you like to install the field's NPM dependencies?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to install the field's NPM dependencies?",
+                true
+            )
+        ) {
             $this->installNpmDependencies();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm("Would you like to compile the field's assets?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to compile the field's assets?",
+                true
+            )
+        ) {
             $this->compile();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm('Would you like to update your Composer packages?', true)) {
+        if (
+            $this->confirm(
+                'Would you like to update your Composer packages?',
+                true
+            )
+        ) {
             $this->composerUpdate();
         }
     }
@@ -97,11 +144,14 @@ class FieldCommand extends Command
      */
     protected function addFieldRepositoryToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['repositories'][] = [
             'type' => 'path',
-            'url' => './'.$this->relativeFieldPath(),
+            'url' => './' . $this->relativeFieldPath()
         ];
 
         file_put_contents(
@@ -117,7 +167,10 @@ class FieldCommand extends Command
      */
     protected function addFieldPackageToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['require'][$this->argument('name')] = '*';
 
@@ -134,10 +187,15 @@ class FieldCommand extends Command
      */
     protected function addScriptsToNpmPackage()
     {
-        $package = json_decode(file_get_contents(base_path('package.json')), true);
+        $package = json_decode(
+            file_get_contents(base_path('package.json')),
+            true
+        );
 
-        $package['scripts']['build-'.$this->fieldName()] = 'cd '.$this->relativeFieldPath().' && npm run dev';
-        $package['scripts']['build-'.$this->fieldName().'-prod'] = 'cd '.$this->relativeFieldPath().' && npm run prod';
+        $package['scripts']['build-' . $this->fieldName()] =
+            'cd ' . $this->relativeFieldPath() . ' && npm run dev';
+        $package['scripts']['build-' . $this->fieldName() . '-prod'] =
+            'cd ' . $this->relativeFieldPath() . ' && npm run prod';
 
         file_put_contents(
             base_path('package.json'),
@@ -152,7 +210,10 @@ class FieldCommand extends Command
      */
     protected function installNpmDependencies()
     {
-        $this->executeCommand('npm set progress=false && npm install', $this->fieldPath());
+        $this->executeCommand(
+            'npm set progress=false && npm install',
+            $this->fieldPath()
+        );
     }
 
     /**
@@ -186,7 +247,11 @@ class FieldCommand extends Command
     {
         $process = (new Process($command, $path))->setTimeout(null);
 
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+        if (
+            '\\' !== DIRECTORY_SEPARATOR &&
+            file_exists('/dev/tty') &&
+            is_readable('/dev/tty')
+        ) {
             $process->setTty(true);
         }
 
@@ -205,7 +270,10 @@ class FieldCommand extends Command
      */
     protected function replace($search, $replace, $path)
     {
-        file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
+        file_put_contents(
+            $path,
+            str_replace($search, $replace, file_get_contents($path))
+        );
     }
 
     /**
@@ -215,7 +283,7 @@ class FieldCommand extends Command
      */
     protected function fieldPath()
     {
-        return base_path('nova-components/'.$this->fieldClass());
+        return base_path('nova-components/' . $this->fieldClass());
     }
 
     /**
@@ -225,7 +293,7 @@ class FieldCommand extends Command
      */
     protected function relativeFieldPath()
     {
-        return 'nova-components/'.$this->fieldClass();
+        return 'nova-components/' . $this->fieldClass();
     }
 
     /**
@@ -235,7 +303,7 @@ class FieldCommand extends Command
      */
     protected function fieldNamespace()
     {
-        return Str::studly($this->fieldVendor()).'\\'.$this->fieldClass();
+        return Str::studly($this->fieldVendor()) . '\\' . $this->fieldClass();
     }
 
     /**

@@ -53,9 +53,17 @@ class GlobalSearch
                     'title' => $instance->title(),
                     'subTitle' => $instance->subtitle(),
                     'resourceId' => $model->getKey(),
-                    'url' => url(Nova::path().'/resources/'.$resource::uriKey().'/'.$model->getKey()),
+                    'url' => url(
+                        Nova::path() .
+                            '/resources/' .
+                            $resource::uriKey() .
+                            '/' .
+                            $model->getKey()
+                    ),
                     'avatar' => $instance->resolveAvatarUrl($this->request),
-                    'rounded' => $instance->resolveIfAvatarShouldBeRounded($this->request),
+                    'rounded' => $instance->resolveIfAvatarShouldBeRounded(
+                        $this->request
+                    )
                 ];
             }
         }
@@ -74,7 +82,8 @@ class GlobalSearch
 
         foreach ($this->resources as $resource) {
             $query = $resource::buildIndexQuery(
-                $this->request, $resource::newModel()->newQuery(),
+                $this->request,
+                $resource::newModel()->newQuery(),
                 $this->request->search
             );
 
@@ -83,6 +92,8 @@ class GlobalSearch
             }
         }
 
-        return collect($results)->sortKeys()->all();
+        return collect($results)
+            ->sortKeys()
+            ->all();
     }
 }

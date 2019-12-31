@@ -45,11 +45,12 @@ class ServerProvisioned extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->subject('Server provisioned : ' . $this->server->name)
-                    ->markdown('mail.servers.provisioned', [
-                        'server' => $this->server,
-                        'url' => config('app.client_url') . '/servers/' . $this->server->id
-                    ]);
+        return (new MailMessage())
+            ->subject('Server provisioned : ' . $this->server->name)
+            ->markdown('mail.servers.provisioned', [
+                'server' => $this->server,
+                'url' =>
+                    config('app.client_url') . '/servers/' . $this->server->id
+            ]);
     }
 }

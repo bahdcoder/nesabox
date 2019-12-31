@@ -47,8 +47,11 @@ class Code extends Field
 
         if ($this->json) {
             return is_array($value) || is_object($value)
-                    ? json_encode($value, $this->jsonOptions ?? JSON_PRETTY_PRINT)
-                    : json_encode(json_decode($value), $this->jsonOptions ?? JSON_PRETTY_PRINT);
+                ? json_encode($value, $this->jsonOptions ?? JSON_PRETTY_PRINT)
+                : json_encode(
+                    json_decode($value),
+                    $this->jsonOptions ?? JSON_PRETTY_PRINT
+                );
         }
 
         return $value;
@@ -63,12 +66,16 @@ class Code extends Field
      * @param  string  $attribute
      * @return void
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
-    {
+    protected function fillAttributeFromRequest(
+        NovaRequest $request,
+        $requestAttribute,
+        $model,
+        $attribute
+    ) {
         if ($request->exists($requestAttribute)) {
             $model->{$attribute} = $this->json
-                        ? json_decode($request[$requestAttribute], true)
-                        : $request[$requestAttribute];
+                ? json_decode($request[$requestAttribute], true)
+                : $request[$requestAttribute];
         }
     }
 
@@ -82,7 +89,8 @@ class Code extends Field
     {
         $this->json = true;
 
-        $this->jsonOptions = $options ?? JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE;
+        $this->jsonOptions =
+            $options ?? JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE;
 
         return $this->options(['mode' => 'application/json']);
     }
@@ -109,7 +117,7 @@ class Code extends Field
         $currentOptions = $this->meta['options'] ?? [];
 
         return $this->withMeta([
-            'options' => array_merge($currentOptions, $options),
+            'options' => array_merge($currentOptions, $options)
         ]);
     }
 }

@@ -47,13 +47,19 @@ class LensRequest extends NovaRequest
      */
     public function withOrdering($query)
     {
-        if (! $this->orderBy || ! $this->orderByDirection) {
+        if (!$this->orderBy || !$this->orderByDirection) {
             return $query;
         }
 
-        if ($this->lens()->resolveFields($this)->findFieldByAttribute($this->orderBy)) {
+        if (
+            $this->lens()
+                ->resolveFields($this)
+                ->findFieldByAttribute($this->orderBy)
+        ) {
             return $query->orderBy(
-                ($this->tableOrderPrefix ? $query->getModel()->getTable().'.' : '').$this->orderBy,
+                ($this->tableOrderPrefix
+                    ? $query->getModel()->getTable() . '.'
+                    : '') . $this->orderBy,
                 $this->orderByDirection === 'asc' ? 'asc' : 'desc'
             );
         }
@@ -97,7 +103,8 @@ class LensRequest extends NovaRequest
 
         return $models->map(function ($model) use ($resource, $lens) {
             return (new $resource($model))->serializeForIndex(
-                $this, (new $lens($model))->resolveFields($this)
+                $this,
+                (new $lens($model))->resolveFields($this)
             );
         });
     }

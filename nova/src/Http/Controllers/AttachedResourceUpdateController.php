@@ -20,7 +20,8 @@ class AttachedResourceUpdateController extends Controller
     public function handle(NovaRequest $request)
     {
         $this->validate(
-            $request, $model = $request->findModelOrFail(),
+            $request,
+            $model = $request->findModelOrFail(),
             $resource = $request->resource()
         );
 
@@ -34,9 +35,17 @@ class AttachedResourceUpdateController extends Controller
                 return response('', 409);
             }
 
-            [$pivot, $callbacks] = $resource::fillPivot($request, $model, $pivot);
+            [$pivot, $callbacks] = $resource::fillPivot(
+                $request,
+                $model,
+                $pivot
+            );
 
-            ActionEvent::forAttachedResourceUpdate($request, $model, $pivot)->save();
+            ActionEvent::forAttachedResourceUpdate(
+                $request,
+                $model,
+                $pivot
+            )->save();
 
             $pivot->save();
 
@@ -55,13 +64,16 @@ class AttachedResourceUpdateController extends Controller
     protected function validate(NovaRequest $request, $model, $resource)
     {
         $attribute = $resource::validationAttributeFor(
-            $request, $request->relatedResource
-        );
-
-        Validator::make($request->all(), $resource::updateRulesFor(
             $request,
             $request->relatedResource
-        ), [], [$request->relatedResource => $attribute])->validate();
+        );
+
+        Validator::make(
+            $request->all(),
+            $resource::updateRulesFor($request, $request->relatedResource),
+            [],
+            [$request->relatedResource => $attribute]
+        )->validate();
 
         $resource::validateForAttachmentUpdate($request);
     }
@@ -77,10 +89,11 @@ class AttachedResourceUpdateController extends Controller
     {
         $pivot = $model->{$request->viaRelationship}()->getPivotAccessor();
 
-        return $model->{$request->viaRelationship}()
-                    ->withoutGlobalScopes()
-                    ->lockForUpdate()
-                    ->findOrFail($request->relatedResourceId)->{$pivot};
+        return $model
+            ->{$request->viaRelationship}()
+            ->withoutGlobalScopes()
+            ->lockForUpdate()
+            ->findOrFail($request->relatedResourceId)->{$pivot};
     }
 
     /**
@@ -90,16 +103,20 @@ class AttachedResourceUpdateController extends Controller
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
-    protected function modelHasBeenUpdatedSinceRetrieval(NovaRequest $request, $model)
-    {
+    protected function modelHasBeenUpdatedSinceRetrieval(
+        NovaRequest $request,
+        $model
+    ) {
         $column = $model->getUpdatedAtColumn();
 
-        if (! $model->{$column}) {
+        if (!$model->{$column}) {
             return false;
         }
 
-        return $request->input('_retrieved_at') && $model->usesTimestamps() && $model->{$column}->gt(
-            Carbon::createFromTimestamp($request->input('_retrieved_at'))
-        );
+        return $request->input('_retrieved_at') &&
+            $model->usesTimestamps() &&
+            $model->{$column}->gt(
+                Carbon::createFromTimestamp($request->input('_retrieved_at'))
+            );
     }
 }

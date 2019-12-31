@@ -46,7 +46,7 @@ class ResourceCommand extends GeneratorCommand
         'search',
         'searches',
         'style',
-        'styles',
+        'styles'
     ];
 
     /**
@@ -59,7 +59,7 @@ class ResourceCommand extends GeneratorCommand
         parent::handle();
 
         $this->callSilent('nova:base-resource', [
-            'name' => 'Resource',
+            'name' => 'Resource'
         ]);
     }
 
@@ -74,22 +74,22 @@ class ResourceCommand extends GeneratorCommand
         $model = $this->option('model');
 
         if (is_null($model)) {
-            $model = $this->laravel->getNamespace().$this->argument('name');
-        } elseif (! Str::startsWith($model, [
-            $this->laravel->getNamespace(), '\\',
-        ])) {
-            $model = $this->laravel->getNamespace().$model;
+            $model = $this->laravel->getNamespace() . $this->argument('name');
+        } elseif (
+            !Str::startsWith($model, [$this->laravel->getNamespace(), '\\'])
+        ) {
+            $model = $this->laravel->getNamespace() . $model;
         }
 
         $resourceName = $this->argument('name');
 
         if (in_array(strtolower($resourceName), $this->protectedNames)) {
-            $this->warn("You *must* override the uriKey method for your {$resourceName} resource.");
+            $this->warn(
+                "You *must* override the uriKey method for your {$resourceName} resource."
+            );
         }
 
-        return str_replace(
-            'DummyFullModel', $model, parent::buildClass($name)
-        );
+        return str_replace('DummyFullModel', $model, parent::buildClass($name));
     }
 
     /**
@@ -99,7 +99,7 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/resource.stub';
+        return __DIR__ . '/stubs/resource.stub';
     }
 
     /**
@@ -110,7 +110,7 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova';
+        return $rootNamespace . '\Nova';
     }
 
     /**
@@ -121,7 +121,12 @@ class ResourceCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model class being represented.'],
+            [
+                'model',
+                'm',
+                InputOption::VALUE_REQUIRED,
+                'The model class being represented.'
+            ]
         ];
     }
 }

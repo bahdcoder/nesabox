@@ -17,8 +17,10 @@ class PostAverageTrend extends Trend
     public function calculate(Request $request)
     {
         return $this->average(
-            $request, Post::class,
-            $_SERVER['nova.postCountUnit'] ?? Trend::BY_MONTHS, 'word_count'
+            $request,
+            Post::class,
+            $_SERVER['nova.postCountUnit'] ?? Trend::BY_MONTHS,
+            'word_count'
         );
     }
 
@@ -31,7 +33,7 @@ class PostAverageTrend extends Trend
     {
         return $_SERVER['nova.postCountRanges'] ?? [
             6 => 'Last 6 Months',
-            12 => 'Last 12 Months',
+            12 => 'Last 12 Months'
         ];
     }
 

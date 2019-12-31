@@ -19,8 +19,11 @@ class Heading extends Field
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
         parent::__construct(null, $attribute, $resolveCallback);
 
         $this->withMeta(['value' => $name]);

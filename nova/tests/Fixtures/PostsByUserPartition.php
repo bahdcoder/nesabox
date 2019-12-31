@@ -15,9 +15,10 @@ class PostsByUserPartition extends Partition
      */
     public function calculate(Request $request)
     {
-        $query = (new Post)->addSelect('users.name')
-                        ->join('users', 'posts.user_id', '=', 'users.id')
-                        ->groupBy('users.name');
+        $query = (new Post())
+            ->addSelect('users.name')
+            ->join('users', 'posts.user_id', '=', 'users.id')
+            ->groupBy('users.name');
 
         return $this->count($request, $query, 'users.name');
     }

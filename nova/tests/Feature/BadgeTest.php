@@ -7,7 +7,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class BadgeTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -21,7 +21,10 @@ class BadgeTest extends IntegrationTest
         $result = $field->jsonSerialize();
 
         $this->assertEquals('danger', $result['value']);
-        $this->assertEquals('bg-danger-light text-danger-dark', $result['typeClass']);
+        $this->assertEquals(
+            'bg-danger-light text-danger-dark',
+            $result['typeClass']
+        );
         $this->assertEquals('danger', $result['label']);
     }
 
@@ -36,7 +39,10 @@ class BadgeTest extends IntegrationTest
         $result = $field->jsonSerialize();
 
         $this->assertEquals('info', $field->value);
-        $this->assertEquals('bg-info-light text-info-dark', $result['typeClass']);
+        $this->assertEquals(
+            'bg-info-light text-info-dark',
+            $result['typeClass']
+        );
         $this->assertEquals('info', $result['label']);
     }
 
@@ -44,7 +50,7 @@ class BadgeTest extends IntegrationTest
     {
         $field = Badge::make('Status')->map([
             'draft' => 'info',
-            'published' => 'success',
+            'published' => 'success'
         ]);
 
         $field->resolve((object) ['status' => 'published']);
@@ -52,7 +58,10 @@ class BadgeTest extends IntegrationTest
         $result = $field->jsonSerialize();
 
         $this->assertEquals('published', $field->value);
-        $this->assertEquals('bg-success-light text-success-dark', $result['typeClass']);
+        $this->assertEquals(
+            'bg-success-light text-success-dark',
+            $result['typeClass']
+        );
         $this->assertEquals('published', $result['label']);
     }
 
@@ -62,7 +71,7 @@ class BadgeTest extends IntegrationTest
             return 'draft';
         })->map([
             'draft' => 'warning',
-            'published' => 'success',
+            'published' => 'success'
         ]);
 
         $field->resolve((object) []);
@@ -70,7 +79,10 @@ class BadgeTest extends IntegrationTest
         $result = $field->jsonSerialize();
 
         $this->assertEquals('draft', $field->value);
-        $this->assertEquals('bg-warning-light text-warning-dark', $result['typeClass']);
+        $this->assertEquals(
+            'bg-warning-light text-warning-dark',
+            $result['typeClass']
+        );
         $this->assertEquals('draft', $result['label']);
     }
 
@@ -79,7 +91,7 @@ class BadgeTest extends IntegrationTest
         $field = Badge::make('Status', function () {
             return 'draft';
         })->types([
-            'draft' => 'custom class names',
+            'draft' => 'custom class names'
         ]);
 
         $field->resolve((object) []);
@@ -95,7 +107,7 @@ class BadgeTest extends IntegrationTest
         $field = Badge::make('Status', function () {
             return 'draft';
         })->types([
-            'draft' => ['custom', 'class', 'names'],
+            'draft' => ['custom', 'class', 'names']
         ]);
 
         $field->resolve((object) []);
@@ -111,7 +123,7 @@ class BadgeTest extends IntegrationTest
         $field = Badge::make('Status', function () {
             return 'success';
         })->addTypes([
-            'draft' => 'custom class names',
+            'draft' => 'custom class names'
         ]);
 
         $field->resolve((object) []);
@@ -119,7 +131,10 @@ class BadgeTest extends IntegrationTest
         $result = $field->jsonSerialize();
 
         $this->assertEquals('success', $field->value);
-        $this->assertEquals('bg-success-light text-success-dark', $result['typeClass']);
+        $this->assertEquals(
+            'bg-success-light text-success-dark',
+            $result['typeClass']
+        );
     }
 
     public function test_badge_built_in_type_can_be_overridden()
@@ -127,7 +142,7 @@ class BadgeTest extends IntegrationTest
         $field = Badge::make('Status', function () {
             return 'success';
         })->addTypes([
-            'success' => 'custom class names',
+            'success' => 'custom class names'
         ]);
 
         $field->resolve((object) []);
@@ -142,7 +157,7 @@ class BadgeTest extends IntegrationTest
     {
         $field = Badge::make('Status')->labels([
             'info' => 'Active',
-            'danger' => 'Refunded',
+            'danger' => 'Refunded'
         ]);
 
         $field->resolve((object) ['status' => 'danger']);
@@ -154,13 +169,15 @@ class BadgeTest extends IntegrationTest
 
     public function test_badge_with_custom_mapping_and_labels()
     {
-        $field = Badge::make('Status')->map([
-            true => 'success',
-            false => 'danger',
-        ])->labels([
-            true => 'Yes',
-            false => 'No',
-        ]);
+        $field = Badge::make('Status')
+            ->map([
+                true => 'success',
+                false => 'danger'
+            ])
+            ->labels([
+                true => 'Yes',
+                false => 'No'
+            ]);
 
         $field->resolve((object) ['status' => true]);
 
@@ -180,7 +197,7 @@ class BadgeTest extends IntegrationTest
         $field = Badge::make('Status', function () {
             return 'danger';
         })->label(function ($value) {
-            return 'Custom: '.$value;
+            return 'Custom: ' . $value;
         });
 
         $field->resolve((object) []);
@@ -188,7 +205,10 @@ class BadgeTest extends IntegrationTest
         $result = $field->jsonSerialize();
 
         $this->assertEquals('danger', $field->value);
-        $this->assertEquals('bg-danger-light text-danger-dark', $result['typeClass']);
+        $this->assertEquals(
+            'bg-danger-light text-danger-dark',
+            $result['typeClass']
+        );
         $this->assertEquals('Custom: danger', $result['label']);
     }
 }

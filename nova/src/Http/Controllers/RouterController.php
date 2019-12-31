@@ -15,7 +15,7 @@ class RouterController extends Controller
     public function show(Request $request)
     {
         return view('nova::router', [
-            'user' => $request->user(),
+            'user' => $request->user()
         ]);
     }
 }

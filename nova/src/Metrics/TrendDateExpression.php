@@ -63,7 +63,12 @@ abstract class TrendDateExpression extends Expression
     public function offset()
     {
         if ($this->timezone) {
-            return (new DateTime(Chronos::now()->format('Y-m-d H:i:s'), new DateTimeZone($this->timezone)))->getOffset() / 60 / 60;
+            return (new DateTime(
+                Chronos::now()->format('Y-m-d H:i:s'),
+                new DateTimeZone($this->timezone)
+            ))->getOffset() /
+                60 /
+                60;
         }
 
         return 0;
@@ -77,6 +82,9 @@ abstract class TrendDateExpression extends Expression
      */
     protected function wrap($value)
     {
-        return $this->query->getQuery()->getGrammar()->wrap($value);
+        return $this->query
+            ->getQuery()
+            ->getGrammar()
+            ->wrap($value);
     }
 }

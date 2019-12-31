@@ -8,7 +8,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class PartitionMetricControllerTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,11 +23,15 @@ class PartitionMetricControllerTest extends IntegrationTest
         $user->name = 'Taylor Otwell';
         $user->save();
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/posts/metrics/posts-by-user');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/posts/metrics/posts-by-user'
+        );
 
         $response->assertStatus(200);
-        $this->assertEquals(['Taylor Otwell' => 2], $response->original['value']->value);
+        $this->assertEquals(
+            ['Taylor Otwell' => 2],
+            $response->original['value']->value
+        );
     }
 
     public function test_average_results_can_be_retrieved()
@@ -46,10 +50,14 @@ class PartitionMetricControllerTest extends IntegrationTest
         $post->word_count = 200;
         $post->save();
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/posts/metrics/word-count-by-user');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/posts/metrics/word-count-by-user'
+        );
 
         $response->assertStatus(200);
-        $this->assertEquals([$user->id => 150], $response->original['value']->value);
+        $this->assertEquals(
+            [$user->id => 150],
+            $response->original['value']->value
+        );
     }
 }

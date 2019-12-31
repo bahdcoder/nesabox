@@ -20,14 +20,18 @@ class ResourceAttachController extends Controller
     public function handle(NovaRequest $request)
     {
         $this->validate(
-            $request, $model = $request->findModelOrFail(),
+            $request,
+            $model = $request->findModelOrFail(),
             $resource = $request->resource()
         );
 
         DB::transaction(function () use ($request, $resource, $model) {
             [$pivot, $callbacks] = $resource::fillPivot(
-                $request, $model, $this->initializePivot(
-                    $request, $model->{$request->viaRelationship}()
+                $request,
+                $model,
+                $this->initializePivot(
+                    $request,
+                    $model->{$request->viaRelationship}()
                 )
             );
 
@@ -50,13 +54,16 @@ class ResourceAttachController extends Controller
     protected function validate(NovaRequest $request, $model, $resource)
     {
         $attribute = $resource::validationAttributeFor(
-            $request, $request->relatedResource
-        );
-
-        Validator::make($request->all(), $resource::creationRulesFor(
             $request,
             $request->relatedResource
-        ), [], [$request->relatedResource => $attribute])->validate();
+        );
+
+        Validator::make(
+            $request->all(),
+            $resource::creationRulesFor($request, $request->relatedResource),
+            [],
+            [$request->relatedResource => $attribute]
+        )->validate();
 
         $resource::validateForAttachment($request);
     }
@@ -80,19 +87,25 @@ class ResourceAttachController extends Controller
             $parentKey = $request->findModelOrFail()->{$parentKeyName};
         }
 
-        if ($relatedKeyName !== ($request->newRelatedResource()::newModel())->getKeyName()) {
+        if (
+            $relatedKeyName !==
+            $request
+                ->newRelatedResource()
+                ::newModel()
+                ->getKeyName()
+        ) {
             $relatedKey = $request->findRelatedModelOrFail()->{$relatedKeyName};
         }
 
         ($pivot = $relationship->newPivot())->forceFill([
             $relationship->getForeignPivotKeyName() => $parentKey,
-            $relationship->getRelatedPivotKeyName() => $relatedKey,
+            $relationship->getRelatedPivotKeyName() => $relatedKey
         ]);
 
         if ($relationship->withTimestamps) {
             $pivot->forceFill([
-                $relationship->createdAt() => new DateTime,
-                $relationship->updatedAt() => new DateTime,
+                $relationship->createdAt() => new DateTime(),
+                $relationship->updatedAt() => new DateTime()
             ]);
         }
 

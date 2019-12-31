@@ -23,9 +23,13 @@ class Password extends Field
      * @param  string  $attribute
      * @return mixed
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
-    {
-        if (! empty($request[$requestAttribute])) {
+    protected function fillAttributeFromRequest(
+        NovaRequest $request,
+        $requestAttribute,
+        $model,
+        $attribute
+    ) {
+        if (!empty($request[$requestAttribute])) {
             $model->{$attribute} = Hash::make($request[$requestAttribute]);
         }
     }
@@ -37,9 +41,6 @@ class Password extends Field
      */
     public function jsonSerialize()
     {
-        return array_merge(
-            parent::jsonSerialize(),
-            ['value' => '']
-        );
+        return array_merge(parent::jsonSerialize(), ['value' => '']);
     }
 }

@@ -168,7 +168,8 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
         }
 
         return static::$softDeletes[static::$model] = in_array(
-            SoftDeletes::class, class_uses_recursive(static::newModel())
+            SoftDeletes::class,
+            class_uses_recursive(static::newModel())
         );
     }
 
@@ -179,7 +180,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function searchable()
     {
-        return ! empty(static::$search) || static::usesScout();
+        return !empty(static::$search) || static::usesScout();
     }
 
     /**
@@ -189,7 +190,10 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function usesScout()
     {
-        return in_array(Searchable::class, class_uses_recursive(static::newModel()));
+        return in_array(
+            Searchable::class,
+            class_uses_recursive(static::newModel())
+        );
     }
 
     /**
@@ -200,8 +204,8 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public static function searchableColumns()
     {
         return empty(static::$search)
-                    ? [static::newModel()->getKeyName()]
-                    : static::$search;
+            ? [static::newModel()->getKeyName()]
+            : static::$search;
     }
 
     /**
@@ -211,7 +215,9 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function label()
     {
-        return Str::plural(Str::title(Str::snake(class_basename(get_called_class()), ' ')));
+        return Str::plural(
+            Str::title(Str::snake(class_basename(get_called_class()), ' '))
+        );
     }
 
     /**
@@ -253,7 +259,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         $model = static::$model;
 
-        return new $model;
+        return new $model();
     }
 
     /**
@@ -296,9 +302,9 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     protected function filterAndAuthorize(NovaRequest $request, $values)
     {
-        return collect(
-            array_values($this->filter($values))
-        )->filter->authorize($request, $request->newResource())->values();
+        return collect(array_values($this->filter($values)))
+            ->filter->authorize($request, $request->newResource())
+            ->values();
     }
 
     /**
@@ -310,17 +316,28 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function serializeForIndex(NovaRequest $request, $fields = null)
     {
-        return array_merge($this->serializeWithId($fields ?: $this->indexFields($request)), [
-            'actions' => $this->availableActions($request),
-            'authorizedToView' => $this->authorizedToView($request),
-            'authorizedToCreate' => $this->authorizedToCreate($request),
-            'authorizedToUpdate' => $this->authorizedToUpdateForSerialization($request),
-            'authorizedToDelete' => $this->authorizedToDeleteForSerialization($request),
-            'authorizedToRestore' => static::softDeletes() && $this->authorizedToRestore($request),
-            'authorizedToForceDelete' => static::softDeletes() && $this->authorizedToForceDelete($request),
-            'softDeletes' => static::softDeletes(),
-            'softDeleted' => $this->isSoftDeleted(),
-        ]);
+        return array_merge(
+            $this->serializeWithId($fields ?: $this->indexFields($request)),
+            [
+                'actions' => $this->availableActions($request),
+                'authorizedToView' => $this->authorizedToView($request),
+                'authorizedToCreate' => $this->authorizedToCreate($request),
+                'authorizedToUpdate' => $this->authorizedToUpdateForSerialization(
+                    $request
+                ),
+                'authorizedToDelete' => $this->authorizedToDeleteForSerialization(
+                    $request
+                ),
+                'authorizedToRestore' =>
+                    static::softDeletes() &&
+                    $this->authorizedToRestore($request),
+                'authorizedToForceDelete' =>
+                    static::softDeletes() &&
+                    $this->authorizedToForceDelete($request),
+                'softDeletes' => static::softDeletes(),
+                'softDeleted' => $this->isSoftDeleted()
+            ]
+        );
     }
 
     /**
@@ -331,15 +348,22 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function serializeForDetail(NovaRequest $request)
     {
-        return array_merge($this->serializeWithId($this->detailFieldsWithinPanels($request)), [
-            'authorizedToCreate' => $this->authorizedToCreate($request),
-            'authorizedToUpdate' => $this->authorizedToUpdate($request),
-            'authorizedToDelete' => $this->authorizedToDelete($request),
-            'authorizedToRestore' => static::softDeletes() && $this->authorizedToRestore($request),
-            'authorizedToForceDelete' => static::softDeletes() && $this->authorizedToForceDelete($request),
-            'softDeletes' => static::softDeletes(),
-            'softDeleted' => $this->isSoftDeleted(),
-        ]);
+        return array_merge(
+            $this->serializeWithId($this->detailFieldsWithinPanels($request)),
+            [
+                'authorizedToCreate' => $this->authorizedToCreate($request),
+                'authorizedToUpdate' => $this->authorizedToUpdate($request),
+                'authorizedToDelete' => $this->authorizedToDelete($request),
+                'authorizedToRestore' =>
+                    static::softDeletes() &&
+                    $this->authorizedToRestore($request),
+                'authorizedToForceDelete' =>
+                    static::softDeletes() &&
+                    $this->authorizedToForceDelete($request),
+                'softDeletes' => static::softDeletes(),
+                'softDeleted' => $this->isSoftDeleted()
+            ]
+        );
     }
 
     /**
@@ -351,9 +375,9 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     protected function authorizedToUpdateForSerialization(NovaRequest $request)
     {
         if ($request->viaManyToMany()) {
-            return $request->findParentResourceOrFail()->authorizedToAttach(
-                $request, $this->model()
-            );
+            return $request
+                ->findParentResourceOrFail()
+                ->authorizedToAttach($request, $this->model());
         }
 
         return $this->authorizedToUpdate($request);
@@ -368,9 +392,13 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     protected function authorizedToDeleteForSerialization(NovaRequest $request)
     {
         if ($request->viaManyToMany()) {
-            return $request->findParentResourceOrFail()->authorizedToDetach(
-                $request, $this->model(), $request->viaRelationship
-            );
+            return $request
+                ->findParentResourceOrFail()
+                ->authorizedToDetach(
+                    $request,
+                    $this->model(),
+                    $request->viaRelationship
+                );
         }
 
         return $this->authorizedToDelete($request);
@@ -384,7 +412,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public function isSoftDeleted()
     {
         return static::softDeletes() &&
-               ! is_null($this->resource->{$this->resource->getDeletedAtColumn()});
+            !is_null($this->resource->{$this->resource->getDeletedAtColumn()});
     }
 
     /**
@@ -394,9 +422,9 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function jsonSerialize()
     {
-        $this->serializeWithId($this->resolveFields(
-            resolve(NovaRequest::class)
-        ));
+        $this->serializeWithId(
+            $this->resolveFields(resolve(NovaRequest::class))
+        );
     }
 
     /**
@@ -408,8 +436,10 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     protected function serializeWithId(Collection $fields)
     {
         return [
-            'id' => $fields->whereInstanceOf(ID::class)->first() ?: ID::forModel($this->resource),
-            'fields' => $fields->all(),
+            'id' =>
+                $fields->whereInstanceOf(ID::class)->first() ?:
+                ID::forModel($this->resource),
+            'fields' => $fields->all()
         ];
     }
 
@@ -422,7 +452,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function redirectAfterCreate(NovaRequest $request, $resource)
     {
-        return '/resources/'.static::uriKey().'/'.$resource->getKey();
+        return '/resources/' . static::uriKey() . '/' . $resource->getKey();
     }
 
     /**
@@ -434,6 +464,6 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function redirectAfterUpdate(NovaRequest $request, $resource)
     {
-        return '/resources/'.static::uriKey().'/'.$resource->getKey();
+        return '/resources/' . static::uriKey() . '/' . $resource->getKey();
     }
 }

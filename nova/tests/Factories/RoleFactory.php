@@ -13,8 +13,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Laravel\Nova\Tests\Fixtures\Role::class, function (Faker $faker) {
+$factory->define(Laravel\Nova\Tests\Fixtures\Role::class, function (
+    Faker $faker
+) {
     return [
-        'name' => $faker->name,
+        'name' => $faker->name
     ];
 });

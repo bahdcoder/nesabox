@@ -16,7 +16,8 @@ class DashboardMetricRequest extends NovaRequest
     {
         return $this->availableMetrics()->first(function ($metric) {
             return $this->metric === $metric->uriKey();
-        }) ?: abort(404);
+        }) ?:
+            abort(404);
     }
 
     /**
@@ -26,6 +27,8 @@ class DashboardMetricRequest extends NovaRequest
      */
     public function availableMetrics()
     {
-        return Nova::allAvailableDashboardCards($this)->whereInstanceOf(Metric::class);
+        return Nova::allAvailableDashboardCards($this)->whereInstanceOf(
+            Metric::class
+        );
     }
 }

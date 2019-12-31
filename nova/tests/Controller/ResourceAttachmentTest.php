@@ -11,7 +11,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceAttachmentTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,12 +23,14 @@ class ResourceAttachmentTest extends IntegrationTest
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
-                            'roles' => $role->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'roles',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/users/' . $user->id . '/attach/roles',
+            [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'roles'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -45,11 +47,14 @@ class ResourceAttachmentTest extends IntegrationTest
         $this->assertEquals($user->id, $actionEvent->target->id);
         $this->assertEmpty($actionEvent->original);
 
-        $this->assertSubset([
-            'user_id' => $user->id,
-            'role_id' => $role->id,
-            'admin' => 'Y',
-        ], $actionEvent->changes);
+        $this->assertSubset(
+            [
+                'user_id' => $user->id,
+                'role_id' => $role->id,
+                'admin' => 'Y'
+            ],
+            $actionEvent->changes
+        );
     }
 
     public function test_cant_set_pivot_fields_that_arent_authorized()
@@ -57,17 +62,22 @@ class ResourceAttachmentTest extends IntegrationTest
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
-                            'roles' => $role->id,
-                            'admin' => 'Y',
-                            'restricted' => 'No',
-                            'viaRelationship' => 'roles',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/users/' . $user->id . '/attach/roles',
+            [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'restricted' => 'No',
+                'viaRelationship' => 'roles'
+            ]
+        );
 
         $response->assertStatus(200);
 
-        $this->assertEquals('Yes', $user->fresh()->roles->first()->pivot->restricted);
+        $this->assertEquals(
+            'Yes',
+            $user->fresh()->roles->first()->pivot->restricted
+        );
     }
 
     public function test_can_attach_soft_deleted_resources()
@@ -76,17 +86,23 @@ class ResourceAttachmentTest extends IntegrationTest
         $role = factory(Role::class)->create();
         $user->delete();
 
-        $response = $this->withoutExceptionHandling()
-                        ->postJson('/nova-api/roles/'.$role->id.'/attach/users', [
-                            'users' => $user->id,
-                            'users_trashed' => 'true',
-                            'admin' => 'Y',
-                            'viaRelationship' => 'users',
-                        ]);
+        $response = $this->withoutExceptionHandling()->postJson(
+            '/nova-api/roles/' . $role->id . '/attach/users',
+            [
+                'users' => $user->id,
+                'users_trashed' => 'true',
+                'admin' => 'Y',
+                'viaRelationship' => 'users'
+            ]
+        );
 
         $response->assertStatus(200);
 
-        $users = $role->fresh()->users()->withTrashed()->get();
+        $users = $role
+            ->fresh()
+            ->users()
+            ->withTrashed()
+            ->get();
 
         $this->assertCount(1, $users);
         $this->assertEquals($user->id, $users->first()->id);
@@ -98,12 +114,14 @@ class ResourceAttachmentTest extends IntegrationTest
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
-                            'roles' => 100,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'roles',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/users/' . $user->id . '/attach/roles',
+            [
+                'roles' => 100,
+                'admin' => 'Y',
+                'viaRelationship' => 'roles'
+            ]
+        );
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['roles']);
@@ -119,12 +137,14 @@ class ResourceAttachmentTest extends IntegrationTest
 
         $role = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/roles/'.$role->id.'/attach/users', [
-                            'users' => $user3->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'users',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/roles/' . $role->id . '/attach/users',
+            [
+                'users' => $user3->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'users'
+            ]
+        );
 
         $response->assertStatus(422);
     }
@@ -168,22 +188,36 @@ class ResourceAttachmentTest extends IntegrationTest
 
         Gate::policy(User::class, UserPolicy::class);
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
-                            'roles' => $role->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'roles',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/users/' . $user->id . '/attach/roles',
+            [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'roles'
+            ]
+        );
 
         unset($_SERVER['nova.user.authorizable']);
         unset($_SERVER['nova.user.attachRole']);
         unset($_SERVER['nova.user.attachAnyRole']);
 
         $response->assertStatus(422);
-        $this->assertInstanceOf(User::class, $_SERVER['nova.user.attachRoleUser']);
-        $this->assertInstanceOf(Role::class, $_SERVER['nova.user.attachRoleRole']);
-        $this->assertEquals($user->id, $_SERVER['nova.user.attachRoleUser']->id);
-        $this->assertEquals($role->id, $_SERVER['nova.user.attachRoleRole']->id);
+        $this->assertInstanceOf(
+            User::class,
+            $_SERVER['nova.user.attachRoleUser']
+        );
+        $this->assertInstanceOf(
+            Role::class,
+            $_SERVER['nova.user.attachRoleRole']
+        );
+        $this->assertEquals(
+            $user->id,
+            $_SERVER['nova.user.attachRoleUser']->id
+        );
+        $this->assertEquals(
+            $role->id,
+            $_SERVER['nova.user.attachRoleRole']->id
+        );
 
         unset($_SERVER['nova.user.attachRoleUser']);
         unset($_SERVER['nova.user.attachRoleRole']);
@@ -195,12 +229,14 @@ class ResourceAttachmentTest extends IntegrationTest
         $role = factory(Role::class)->create();
         $user->roles()->attach($role);
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
-                            'roles' => $role->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'roles',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/users/' . $user->id . '/attach/roles',
+            [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'roles'
+            ]
+        );
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['roles']);
@@ -213,11 +249,13 @@ class ResourceAttachmentTest extends IntegrationTest
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
-                            'roles' => $role->id,
-                            'viaRelationship' => 'roles',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/users/' . $user->id . '/attach/roles',
+            [
+                'roles' => $role->id,
+                'viaRelationship' => 'roles'
+            ]
+        );
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['admin']);
@@ -228,15 +266,20 @@ class ResourceAttachmentTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        $response = $this->withExceptionHandling()
-            ->postJson('/nova-api/users/'.$user->id.'/attach/users', [
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/users/' . $user->id . '/attach/users',
+            [
                 'users' => $user2->id,
-                'viaRelationship' => 'relatedUsers',
-            ]);
+                'viaRelationship' => 'relatedUsers'
+            ]
+        );
 
         $response->assertStatus(200);
 
         $this->assertCount(1, $user->fresh()->relatedUsers);
-        $this->assertEquals($user2->id, $user->fresh()->relatedUsers->first()->id);
+        $this->assertEquals(
+            $user2->id,
+            $user->fresh()->relatedUsers->first()->id
+        );
     }
 }

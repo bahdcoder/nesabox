@@ -16,11 +16,19 @@ class LensActionRequest extends ActionRequest
      */
     public function toQuery()
     {
-        return tap($this->lens()->query(LensRequest::createFrom($this), $this->newQuery()), function ($query) {
-            if (! $query instanceof Builder) {
-                throw new LogicException('Lens must return an Eloquent query instance in order to apply actions.');
+        return tap(
+            $this->lens()->query(
+                LensRequest::createFrom($this),
+                $this->newQuery()
+            ),
+            function ($query) {
+                if (!$query instanceof Builder) {
+                    throw new LogicException(
+                        'Lens must return an Eloquent query instance in order to apply actions.'
+                    );
+                }
             }
-        });
+        );
     }
 
     /**
@@ -31,7 +39,7 @@ class LensActionRequest extends ActionRequest
     protected function resolveActions()
     {
         return $this->isPivotAction()
-                    ? $this->lens()->resolvePivotActions($this)
-                    : $this->lens()->resolveActions($this);
+            ? $this->lens()->resolvePivotActions($this)
+            : $this->lens()->resolveActions($this);
     }
 }

@@ -16,8 +16,8 @@ class AuthenticationException extends BaseAuthenticationException
     public function render($request)
     {
         return $request->expectsJson()
-                    ? response()->json(['message' => $this->getMessage()], 401)
-                    : redirect()->guest($this->location());
+            ? response()->json(['message' => $this->getMessage()], 401)
+            : redirect()->guest($this->location());
     }
 
     /**

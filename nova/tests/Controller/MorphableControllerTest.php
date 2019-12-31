@@ -7,7 +7,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class MorphableControllerTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -19,19 +19,25 @@ class MorphableControllerTest extends IntegrationTest
         $post = factory(Post::class)->create(['title' => 'a']);
         $post2 = factory(Post::class)->create(['title' => 'b']);
 
-        $response = $this->withExceptionHandling()
-                        ->getJson('/nova-api/comments/morphable/commentable?type=posts');
+        $response = $this->withExceptionHandling()->getJson(
+            '/nova-api/comments/morphable/commentable?type=posts'
+        );
 
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
-            'resources', 'softDeletes', 'withTrashed',
+            'resources',
+            'softDeletes',
+            'withTrashed'
         ]);
 
-        $this->assertEquals([
-            ['value' => 1, 'display' => $post->title],
-            ['value' => 2, 'display' => $post2->title],
-        ], $response->original['resources']->all());
+        $this->assertEquals(
+            [
+                ['value' => 1, 'display' => $post->title],
+                ['value' => 2, 'display' => $post2->title]
+            ],
+            $response->original['resources']->all()
+        );
 
         $this->assertFalse($response->original['softDeletes']);
         $this->assertFalse($response->original['withTrashed']);
@@ -42,18 +48,22 @@ class MorphableControllerTest extends IntegrationTest
         $post = factory(Post::class)->create(['title' => 'a']);
         $post2 = factory(Post::class)->create(['title' => 'b']);
 
-        $response = $this->withExceptionHandling()
-                        ->getJson('/nova-api/comments/morphable/commentable?type=posts&search=b');
+        $response = $this->withExceptionHandling()->getJson(
+            '/nova-api/comments/morphable/commentable?type=posts&search=b'
+        );
 
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
-            'resources', 'softDeletes', 'withTrashed',
+            'resources',
+            'softDeletes',
+            'withTrashed'
         ]);
 
-        $this->assertEquals([
-            ['value' => 2, 'display' => $post2->title],
-        ], $response->original['resources']->all());
+        $this->assertEquals(
+            [['value' => 2, 'display' => $post2->title]],
+            $response->original['resources']->all()
+        );
 
         $this->assertFalse($response->original['softDeletes']);
         $this->assertFalse($response->original['withTrashed']);
@@ -64,18 +74,22 @@ class MorphableControllerTest extends IntegrationTest
         $post = factory(Post::class)->create(['title' => 'a']);
         $post2 = factory(Post::class)->create(['title' => 'b']);
 
-        $response = $this->withExceptionHandling()
-                        ->getJson('/nova-api/comments/morphable/commentable?type=posts&current=2&first=true');
+        $response = $this->withExceptionHandling()->getJson(
+            '/nova-api/comments/morphable/commentable?type=posts&current=2&first=true'
+        );
 
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
-            'resources', 'softDeletes', 'withTrashed',
+            'resources',
+            'softDeletes',
+            'withTrashed'
         ]);
 
-        $this->assertEquals([
-            ['value' => 2, 'display' => $post2->title],
-        ], $response->original['resources']->all());
+        $this->assertEquals(
+            [['value' => 2, 'display' => $post2->title]],
+            $response->original['resources']->all()
+        );
 
         $this->assertFalse($response->original['softDeletes']);
         $this->assertFalse($response->original['withTrashed']);

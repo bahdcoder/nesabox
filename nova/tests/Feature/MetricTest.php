@@ -14,7 +14,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class MetricTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -23,7 +23,10 @@ class MetricTest extends IntegrationTest
     {
         factory(User::class, 2)->create();
 
-        $this->assertEquals(2, (new TotalUsers)->calculate(NovaRequest::create('/'))->value);
+        $this->assertEquals(
+            2,
+            (new TotalUsers())->calculate(NovaRequest::create('/'))->value
+        );
     }
 
     public function test_trend_with_custom_created_at()
@@ -38,12 +41,20 @@ class MetricTest extends IntegrationTest
         $post->published_at = Chronos::now()->subDay(1);
         $post->save();
 
-        $this->assertEquals([1, 1], array_values((new PostCountTrend())->countByDays(NovaRequest::create('/?range=2'), new PostWithCustomCreatedAt)->trend));
+        $this->assertEquals(
+            [1, 1],
+            array_values(
+                (new PostCountTrend())->countByDays(
+                    NovaRequest::create('/?range=2'),
+                    new PostWithCustomCreatedAt()
+                )->trend
+            )
+        );
     }
 
     public function test_metrics_can_be_set_to_refresh_automatically()
     {
-        $metric = new PostCountTrend;
+        $metric = new PostCountTrend();
 
         $this->assertfalse($metric->jsonSerialize()['refreshWhenActionRuns']);
 
@@ -58,8 +69,13 @@ class MetricTest extends IntegrationTest
 
     public function test_value_metrics_can_define_precision()
     {
-        $averageWordCount = factory(Post::class, 2)->create()->average('word_count');
+        $averageWordCount = factory(Post::class, 2)
+            ->create()
+            ->average('word_count');
 
-        $this->assertEquals($averageWordCount, (new AverageWordCount)->calculate(NovaRequest::create('/'))->value);
+        $this->assertEquals(
+            $averageWordCount,
+            (new AverageWordCount())->calculate(NovaRequest::create('/'))->value
+        );
     }
 }

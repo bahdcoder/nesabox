@@ -15,9 +15,7 @@ class LensMetricController extends Controller
      */
     public function index(LensMetricRequest $request)
     {
-        return response()->json(
-            $request->availableMetrics()
-        );
+        return response()->json($request->availableMetrics());
     }
 
     /**
@@ -29,7 +27,7 @@ class LensMetricController extends Controller
     public function show(LensMetricRequest $request)
     {
         return response()->json([
-            'value' => $request->metric()->resolve($request),
+            'value' => $request->metric()->resolve($request)
         ]);
     }
 }

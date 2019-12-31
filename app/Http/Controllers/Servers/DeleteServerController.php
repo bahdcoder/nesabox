@@ -15,7 +15,9 @@ class DeleteServerController extends Controller
 {
     public function destroy(Server $server)
     {
-        if ($server->user_id !== auth()->user()->id) abort(401);
+        if ($server->user_id !== auth()->user()->id) {
+            abort(401);
+        }
         // databases and database users
         $server->hasMany(DatabaseUser::class)->delete();
         // sites

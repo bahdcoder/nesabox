@@ -19,8 +19,11 @@ class ID extends Field
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name = null, $attribute = null, $resolveCallback = null)
-    {
+    public function __construct(
+        $name = null,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
         parent::__construct($name ?? 'ID', $attribute, $resolveCallback);
     }
 

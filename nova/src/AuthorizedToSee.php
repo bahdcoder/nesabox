@@ -22,7 +22,9 @@ trait AuthorizedToSee
      */
     public function authorizedToSee(Request $request)
     {
-        return $this->seeCallback ? call_user_func($this->seeCallback, $request) : true;
+        return $this->seeCallback
+            ? call_user_func($this->seeCallback, $request)
+            : true;
     }
 
     /**

@@ -17,8 +17,10 @@ class PostMaxTrend extends Trend
     public function calculate(Request $request)
     {
         return $this->max(
-            $request, Post::class,
-            $_SERVER['nova.postCountUnit'] ?? Trend::BY_MONTHS, 'word_count'
+            $request,
+            Post::class,
+            $_SERVER['nova.postCountUnit'] ?? Trend::BY_MONTHS,
+            'word_count'
         );
     }
 
@@ -31,7 +33,7 @@ class PostMaxTrend extends Trend
     {
         return $_SERVER['nova.postCountRanges'] ?? [
             6 => 'Last 6 Months',
-            12 => 'Last 12 Months',
+            12 => 'Last 12 Months'
         ];
     }
 

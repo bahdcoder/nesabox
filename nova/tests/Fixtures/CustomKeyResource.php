@@ -23,8 +23,6 @@ class CustomKeyResource extends Resource
      */
     public function fields(Request $request)
     {
-        return [
-            ID::make(),
-        ];
+        return [ID::make()];
     }
 }

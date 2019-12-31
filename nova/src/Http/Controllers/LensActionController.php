@@ -20,8 +20,8 @@ class LensActionController extends Controller
             'actions' => $request->lens()->availableActions($request),
             'pivotActions' => [
                 'name' => $request->pivotName(),
-                'actions' => $request->lens()->availablePivotActions($request),
-            ],
+                'actions' => $request->lens()->availablePivotActions($request)
+            ]
         ]);
     }
 

@@ -30,7 +30,9 @@ class ResourceTool extends Panel
      */
     public function __construct()
     {
-        parent::__construct($this->name(), [new ResourceToolElement($this->toolComponent())]);
+        parent::__construct($this->name(), [
+            new ResourceToolElement($this->toolComponent())
+        ]);
 
         $this->element = $this->data[0];
     }
@@ -52,7 +54,8 @@ class ResourceTool extends Panel
      */
     public function name()
     {
-        return $this->name ?: Str::title(Str::snake(class_basename(get_class($this)), ' '));
+        return $this->name ?:
+            Str::title(Str::snake(class_basename(get_class($this)), ' '));
     }
 
     /**
@@ -62,7 +65,8 @@ class ResourceTool extends Panel
      */
     public function toolComponent()
     {
-        return $this->toolComponent ?? Str::kebab(class_basename(get_class($this)));
+        return $this->toolComponent ??
+            Str::kebab(class_basename(get_class($this)));
     }
 
     /**
@@ -100,6 +104,6 @@ class ResourceTool extends Panel
      */
     public function __call($method, $parameters)
     {
-        return $this->withMeta([$method => ($parameters[0] ?? true)]);
+        return $this->withMeta([$method => $parameters[0] ?? true]);
     }
 }

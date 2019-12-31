@@ -16,7 +16,9 @@ class DeleteResourceRequest extends DeletionRequest
      */
     public function chunks($count, Closure $callback)
     {
-        return $this->chunkWithAuthorization($count, $callback, function ($models) {
+        return $this->chunkWithAuthorization($count, $callback, function (
+            $models
+        ) {
             return $this->deletableModels($models);
         });
     }
@@ -29,9 +31,9 @@ class DeleteResourceRequest extends DeletionRequest
      */
     protected function deletableModels(Collection $models)
     {
-        return $models->mapInto($this->resource())
-                        ->filter
-                        ->authorizedToDelete($this)
-                        ->map->model();
+        return $models
+            ->mapInto($this->resource())
+            ->filter->authorizedToDelete($this)
+            ->map->model();
     }
 }

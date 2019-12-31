@@ -38,9 +38,17 @@ class DashboardCommand extends GeneratorCommand
     {
         $stub = parent::buildClass($name);
 
-        $stub = str_replace('uri-key', Str::snake($this->argument('name'), '-'), $stub);
+        $stub = str_replace(
+            'uri-key',
+            Str::snake($this->argument('name'), '-'),
+            $stub
+        );
 
-        return str_replace('dashboard-name', ucwords(Str::snake($this->argument('name'), ' ')), $stub);
+        return str_replace(
+            'dashboard-name',
+            ucwords(Str::snake($this->argument('name'), ' ')),
+            $stub
+        );
     }
 
     /**
@@ -50,7 +58,7 @@ class DashboardCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return realpath(__DIR__.'/stubs/dashboard.stub');
+        return realpath(__DIR__ . '/stubs/dashboard.stub');
     }
 
     /**
@@ -61,6 +69,6 @@ class DashboardCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova\Dashboards';
+        return $rootNamespace . '\Nova\Dashboards';
     }
 }

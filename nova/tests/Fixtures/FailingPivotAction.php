@@ -34,8 +34,11 @@ class FailingPivotAction extends Action implements ShouldQueue
      * @param  \Throwable  $e
      * @return string|void
      */
-    public function failedForRoleAssignments(ActionFields $fields, Collection $models, $e)
-    {
+    public function failedForRoleAssignments(
+        ActionFields $fields,
+        Collection $models,
+        $e
+    ) {
         static::$failedForRoleAssignment = true;
     }
 }

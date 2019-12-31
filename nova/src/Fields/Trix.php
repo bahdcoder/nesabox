@@ -149,10 +149,10 @@ class Trix extends Field implements DeletableContract
         $this->disk($disk);
 
         $this->attach(new StorePendingAttachment($this))
-             ->detach(new DetachAttachment($this))
-             ->delete(new DeleteAttachments($this))
-             ->discard(new DiscardPendingAttachments($this))
-             ->prunable();
+            ->detach(new DetachAttachment($this))
+            ->delete(new DeleteAttachments($this))
+            ->discard(new DiscardPendingAttachments($this))
+            ->prunable();
 
         return $this;
     }
@@ -166,19 +166,28 @@ class Trix extends Field implements DeletableContract
      * @param  string  $attribute
      * @return void|\Closure
      */
-    protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute)
-    {
+    protected function fillAttribute(
+        NovaRequest $request,
+        $requestAttribute,
+        $model,
+        $attribute
+    ) {
         $callbacks = [];
 
-        $maybeCallback = parent::fillAttribute($request, $requestAttribute, $model, $attribute);
+        $maybeCallback = parent::fillAttribute(
+            $request,
+            $requestAttribute,
+            $model,
+            $attribute
+        );
         if (is_callable($maybeCallback)) {
             $callbacks[] = $maybeCallback;
         }
 
-        if ($request->{$this->attribute.'DraftId'} && $this->withFiles) {
+        if ($request->{$this->attribute . 'DraftId'} && $this->withFiles) {
             $callbacks[] = function () use ($request, $model, $attribute) {
                 PendingAttachment::persistDraft(
-                    $request->{$this->attribute.'DraftId'},
+                    $request->{$this->attribute . 'DraftId'},
                     $this,
                     $model
                 );
@@ -201,7 +210,7 @@ class Trix extends Field implements DeletableContract
     {
         return array_merge(parent::jsonSerialize(), [
             'shouldShow' => $this->shouldBeExpanded(),
-            'withFiles' => $this->withFiles,
+            'withFiles' => $this->withFiles
         ]);
     }
 }

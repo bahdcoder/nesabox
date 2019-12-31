@@ -55,7 +55,8 @@ class HasOne extends Field implements ListableField, RelatableField
     {
         parent::__construct($name, $attribute);
 
-        $resource = $resource ?? ResourceRelationshipGuesser::guessResource($name);
+        $resource =
+            $resource ?? ResourceRelationshipGuesser::guessResource($name);
 
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
@@ -71,7 +72,8 @@ class HasOne extends Field implements ListableField, RelatableField
     public function authorize(Request $request)
     {
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -106,11 +108,14 @@ class HasOne extends Field implements ListableField, RelatableField
      */
     public function meta()
     {
-        return array_merge([
-            'resourceName' => $this->resourceName,
-            'hasOneRelationship' => $this->hasOneRelationship,
-            'listable' => true,
-            'singularLabel' => $this->name,
-        ], $this->meta);
+        return array_merge(
+            [
+                'resourceName' => $this->resourceName,
+                'hasOneRelationship' => $this->hasOneRelationship,
+                'listable' => true,
+                'singularLabel' => $this->name
+            ],
+            $this->meta
+        );
     }
 }

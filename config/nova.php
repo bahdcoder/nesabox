@@ -87,7 +87,7 @@ return [
         Authenticate::class,
         DispatchServingNovaEvent::class,
         BootTools::class,
-        Authorize::class,
+        Authorize::class
     ],
 
     /*
@@ -101,5 +101,5 @@ return [
     |
     */
 
-    'pagination' => 'simple',
+    'pagination' => 'simple'
 ];

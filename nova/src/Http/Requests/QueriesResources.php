@@ -16,8 +16,12 @@ trait QueriesResources
         $resource = $this->resource();
 
         return $resource::buildIndexQuery(
-            $this, $this->newQuery(), $this->search,
-            $this->filters()->all(), $this->orderings(), $this->trashed()
+            $this,
+            $this->newQuery(),
+            $this->search,
+            $this->filters()->all(),
+            $this->orderings(),
+            $this->trashed()
         );
     }
 
@@ -28,14 +32,14 @@ trait QueriesResources
      */
     public function newQuery()
     {
-        if (! $this->viaRelationship()) {
+        if (!$this->viaRelationship()) {
             return $this->model()->newQuery();
         }
 
         return forward_static_call([$this->viaResource(), 'newModel'])
-                        ->newQueryWithoutScopes()->findOrFail(
-                            $this->viaResourceId
-                        )->{$this->viaRelationship}();
+            ->newQueryWithoutScopes()
+            ->findOrFail($this->viaResourceId)
+            ->{$this->viaRelationship}();
     }
 
     /**
@@ -45,14 +49,15 @@ trait QueriesResources
      */
     public function newQueryWithoutScopes()
     {
-        if (! $this->viaRelationship()) {
+        if (!$this->viaRelationship()) {
             return $this->model()->newQueryWithoutScopes();
         }
 
         return forward_static_call([$this->viaResource(), 'newModel'])
-                    ->newQueryWithoutScopes()->findOrFail(
-                        $this->viaResourceId
-                    )->{$this->viaRelationship}()->withoutGlobalScopes();
+            ->newQueryWithoutScopes()
+            ->findOrFail($this->viaResourceId)
+            ->{$this->viaRelationship}()
+            ->withoutGlobalScopes();
     }
 
     /**
@@ -62,9 +67,9 @@ trait QueriesResources
      */
     public function orderings()
     {
-        return ! empty($this->orderBy)
-                        ? [$this->orderBy => $this->orderByDirection ?? 'asc']
-                        : [];
+        return !empty($this->orderBy)
+            ? [$this->orderBy => $this->orderByDirection ?? 'asc']
+            : [];
     }
 
     /**

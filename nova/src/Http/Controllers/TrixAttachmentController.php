@@ -15,15 +15,16 @@ class TrixAttachmentController extends Controller
      */
     public function store(NovaRequest $request)
     {
-        $field = $request->newResource()
-                        ->availableFields($request)
-                        ->findFieldByAttribute($request->field, function () {
-                            abort(404);
-                        });
+        $field = $request
+            ->newResource()
+            ->availableFields($request)
+            ->findFieldByAttribute($request->field, function () {
+                abort(404);
+            });
 
-        return response()->json(['url' => call_user_func(
-            $field->attachCallback, $request
-        )]);
+        return response()->json([
+            'url' => call_user_func($field->attachCallback, $request)
+        ]);
     }
 
     /**
@@ -34,15 +35,14 @@ class TrixAttachmentController extends Controller
      */
     public function destroyAttachment(NovaRequest $request)
     {
-        $field = $request->newResource()
-                        ->availableFields($request)
-                        ->findFieldByAttribute($request->field, function () {
-                            abort(404);
-                        });
+        $field = $request
+            ->newResource()
+            ->availableFields($request)
+            ->findFieldByAttribute($request->field, function () {
+                abort(404);
+            });
 
-        call_user_func(
-            $field->detachCallback, $request
-        );
+        call_user_func($field->detachCallback, $request);
     }
 
     /**
@@ -53,14 +53,13 @@ class TrixAttachmentController extends Controller
      */
     public function destroyPending(NovaRequest $request)
     {
-        $field = $request->newResource()
-                        ->availableFields($request)
-                        ->findFieldByAttribute($request->field, function () {
-                            abort(404);
-                        });
+        $field = $request
+            ->newResource()
+            ->availableFields($request)
+            ->findFieldByAttribute($request->field, function () {
+                abort(404);
+            });
 
-        call_user_func(
-            $field->discardCallback, $request
-        );
+        call_user_func($field->discardCallback, $request);
     }
 }

@@ -19,14 +19,25 @@ class RelatableAuthorizationController extends Controller
 
         $resource = $request->viaResource();
 
-        if (in_array($request->relationshipType, ['belongsToMany', 'morphToMany'])) {
-            return ['authorized' => (new $resource($model))->authorizedToAttachAny(
-                $request, $request->model()
-            )];
+        if (
+            in_array($request->relationshipType, [
+                'belongsToMany',
+                'morphToMany'
+            ])
+        ) {
+            return [
+                'authorized' => (new $resource($model))->authorizedToAttachAny(
+                    $request,
+                    $request->model()
+                )
+            ];
         }
 
-        return ['authorized' => (new $resource($model))->authorizedToAdd(
-            $request, $request->model()
-        )];
+        return [
+            'authorized' => (new $resource($model))->authorizedToAdd(
+                $request,
+                $request->model()
+            )
+        ];
     }
 }

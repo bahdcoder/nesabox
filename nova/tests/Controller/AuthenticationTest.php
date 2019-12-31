@@ -9,20 +9,22 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class AuthenticationTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
 
     public function test_access_is_denied_when_unauthenticated()
     {
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/scripts/nova-tool');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/scripts/nova-tool'
+        );
 
         $response->assertStatus(302);
 
-        $response = $this->withExceptionHandling()
-                        ->getJson('/nova-api/scripts/nova-tool');
+        $response = $this->withExceptionHandling()->getJson(
+            '/nova-api/scripts/nova-tool'
+        );
 
         $response->assertStatus(401);
     }
@@ -41,18 +43,20 @@ class AuthenticationTest extends IntegrationTest
 
         $user = factory(User::class)->create([
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('password')
         ]);
 
-        $response = $this->withExceptionHandling()
-                        ->post('/nova/login', [
-                            'email' => 'taylor@laravel.com',
-                            'password' => 'password',
-                        ]);
+        $response = $this->withExceptionHandling()->post('/nova/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'password'
+        ]);
 
         $response->assertStatus(302);
         $this->assertAuthenticated();
-        $this->assertEquals('http://localhost/nova', $response->headers->get('Location'));
+        $this->assertEquals(
+            'http://localhost/nova',
+            $response->headers->get('Location')
+        );
     }
 
     // public function test_can_display_password_reset_link_request_screen()

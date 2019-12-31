@@ -17,7 +17,7 @@ trait Authorizable
      */
     public static function authorizable()
     {
-        return ! is_null(Gate::getPolicyFor(static::newModel()));
+        return !is_null(Gate::getPolicyFor(static::newModel()));
     }
 
     /**
@@ -28,7 +28,7 @@ trait Authorizable
      */
     public function authorizeToViewAny(Request $request)
     {
-        if (! static::authorizable()) {
+        if (!static::authorizable()) {
             return;
         }
 
@@ -45,13 +45,13 @@ trait Authorizable
      */
     public static function authorizedToViewAny(Request $request)
     {
-        if (! static::authorizable()) {
+        if (!static::authorizable()) {
             return true;
         }
 
         return method_exists(Gate::getPolicyFor(static::newModel()), 'viewAny')
-                        ? Gate::check('viewAny', get_class(static::newModel()))
-                        : true;
+            ? Gate::check('viewAny', get_class(static::newModel()))
+            : true;
     }
 
     /**
@@ -64,7 +64,8 @@ trait Authorizable
      */
     public function authorizeToView(Request $request)
     {
-        return $this->authorizeTo($request, 'view') && $this->authorizeToViewAny($request);
+        return $this->authorizeTo($request, 'view') &&
+            $this->authorizeToViewAny($request);
     }
 
     /**
@@ -75,7 +76,8 @@ trait Authorizable
      */
     public function authorizedToView(Request $request)
     {
-        return $this->authorizedTo($request, 'view') && $this->authorizedToViewAny($request);
+        return $this->authorizedTo($request, 'view') &&
+            $this->authorizedToViewAny($request);
     }
 
     /**
@@ -88,7 +90,10 @@ trait Authorizable
      */
     public static function authorizeToCreate(Request $request)
     {
-        throw_unless(static::authorizedToCreate($request), AuthorizationException::class);
+        throw_unless(
+            static::authorizedToCreate($request),
+            AuthorizationException::class
+        );
     }
 
     /**
@@ -185,15 +190,15 @@ trait Authorizable
      */
     public function authorizedToAdd(NovaRequest $request, $model)
     {
-        if (! static::authorizable()) {
+        if (!static::authorizable()) {
             return true;
         }
 
-        $method = 'add'.class_basename($model);
+        $method = 'add' . class_basename($model);
 
         return method_exists(Gate::getPolicyFor($this->model()), $method)
-                        ? Gate::check($method, $this->model())
-                        : true;
+            ? Gate::check($method, $this->model())
+            : true;
     }
 
     /**
@@ -205,15 +210,15 @@ trait Authorizable
      */
     public function authorizedToAttachAny(NovaRequest $request, $model)
     {
-        if (! static::authorizable()) {
+        if (!static::authorizable()) {
             return true;
         }
 
-        $method = 'attachAny'.Str::singular(class_basename($model));
+        $method = 'attachAny' . Str::singular(class_basename($model));
 
         return method_exists(Gate::getPolicyFor($this->model()), $method)
-                    ? Gate::check($method, [$this->model()])
-                    : true;
+            ? Gate::check($method, [$this->model()])
+            : true;
     }
 
     /**
@@ -225,15 +230,15 @@ trait Authorizable
      */
     public function authorizedToAttach(NovaRequest $request, $model)
     {
-        if (! static::authorizable()) {
+        if (!static::authorizable()) {
             return true;
         }
 
-        $method = 'attach'.Str::singular(class_basename($model));
+        $method = 'attach' . Str::singular(class_basename($model));
 
         return method_exists(Gate::getPolicyFor($this->model()), $method)
-                    ? Gate::check($method, [$this->model(), $model])
-                    : true;
+            ? Gate::check($method, [$this->model(), $model])
+            : true;
     }
 
     /**
@@ -244,17 +249,20 @@ trait Authorizable
      * @param  string  $relationship
      * @return bool
      */
-    public function authorizedToDetach(NovaRequest $request, $model, $relationship)
-    {
-        if (! static::authorizable()) {
+    public function authorizedToDetach(
+        NovaRequest $request,
+        $model,
+        $relationship
+    ) {
+        if (!static::authorizable()) {
             return true;
         }
 
-        $method = 'detach'.Str::singular(class_basename($model));
+        $method = 'detach' . Str::singular(class_basename($model));
 
         return method_exists(Gate::getPolicyFor($this->model()), $method)
-                    ? Gate::check($method, [$this->model(), $model])
-                    : true;
+            ? Gate::check($method, [$this->model(), $model])
+            : true;
     }
 
     /**
@@ -268,7 +276,10 @@ trait Authorizable
      */
     public function authorizeTo(Request $request, $ability)
     {
-        throw_unless($this->authorizedTo($request, $ability), AuthorizationException::class);
+        throw_unless(
+            $this->authorizedTo($request, $ability),
+            AuthorizationException::class
+        );
     }
 
     /**
@@ -280,6 +291,8 @@ trait Authorizable
      */
     public function authorizedTo(Request $request, $ability)
     {
-        return static::authorizable() ? Gate::check($ability, $this->resource) : true;
+        return static::authorizable()
+            ? Gate::check($ability, $this->resource)
+            : true;
     }
 }

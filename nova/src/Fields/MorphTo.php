@@ -110,16 +110,17 @@ class MorphTo extends Field implements RelatableField
      */
     public function authorize(Request $request)
     {
-        if (! $this->isNotRedundant($request)) {
+        if (!$this->isNotRedundant($request)) {
             return false;
         }
 
-        if (! $this->resourceClass) {
+        if (!$this->resourceClass) {
             return true && parent::authorize($request);
         }
 
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -133,7 +134,8 @@ class MorphTo extends Field implements RelatableField
      */
     public function isNotRedundant(Request $request)
     {
-        return ! $request instanceof ResourceIndexRequest || ! $this->isReverseRelation($request);
+        return !$request instanceof ResourceIndexRequest ||
+            !$this->isReverseRelation($request);
     }
 
     /**
@@ -151,13 +153,16 @@ class MorphTo extends Field implements RelatableField
             $value = $resource->getRelation($this->attribute);
         }
 
-        if (! $value) {
-            $value = $resource->{$this->attribute}()->withoutGlobalScopes()->getResults();
+        if (!$value) {
+            $value = $resource
+                ->{$this->attribute}()
+                ->withoutGlobalScopes()
+                ->getResults();
         }
 
         [$this->morphToId, $this->morphToType] = [
             optional($value)->getKey(),
-            $this->resolveMorphType($resource),
+            $this->resolveMorphType($resource)
         ];
 
         if ($resourceClass = $this->resolveResourceClass($value)) {
@@ -166,7 +171,8 @@ class MorphTo extends Field implements RelatableField
 
         if ($value) {
             $this->value = $this->formatDisplayValue(
-                $value, Nova::resourceForModel($value)
+                $value,
+                Nova::resourceForModel($value)
             );
         }
     }
@@ -191,13 +197,19 @@ class MorphTo extends Field implements RelatableField
      */
     protected function resolveMorphType($resource)
     {
-        if (! $type = optional($resource->{$this->attribute}())->getMorphType()) {
+        if (
+            !($type = optional($resource->{$this->attribute}())->getMorphType())
+        ) {
             return;
         }
 
         $value = $resource->{$type};
 
-        if ($morphResource = Nova::resourceForModel(Relation::getMorphedModel($value) ?? $value)) {
+        if (
+            $morphResource = Nova::resourceForModel(
+                Relation::getMorphedModel($value) ?? $value
+            )
+        ) {
             return $morphResource::uriKey();
         }
     }
@@ -224,8 +236,14 @@ class MorphTo extends Field implements RelatableField
         $possibleTypes = collect($this->morphToTypes)->map->value->values();
 
         return array_merge_recursive(parent::getRules($request), [
-            $this->attribute.'_type' => [$this->nullable ? 'nullable' : 'required', 'in:'.$possibleTypes->implode(',')],
-            $this->attribute => array_filter([$this->nullable ? 'nullable' : 'required', $this->getRelatableRule($request)]),
+            $this->attribute . '_type' => [
+                $this->nullable ? 'nullable' : 'required',
+                'in:' . $possibleTypes->implode(',')
+            ],
+            $this->attribute => array_filter([
+                $this->nullable ? 'nullable' : 'required',
+                $this->getRelatableRule($request)
+            ])
         ]);
     }
 
@@ -237,10 +255,19 @@ class MorphTo extends Field implements RelatableField
      */
     protected function getRelatableRule(NovaRequest $request)
     {
-        if ($relatedResource = Nova::resourceForKey($request->{$this->attribute.'_type'})) {
-            return new Relatable($request, $this->buildMorphableQuery(
-                $request, $relatedResource, $request->{$this->attribute.'_trashed'} === 'true'
-            ));
+        if (
+            $relatedResource = Nova::resourceForKey(
+                $request->{$this->attribute . '_type'}
+            )
+        ) {
+            return new Relatable(
+                $request,
+                $this->buildMorphableQuery(
+                    $request,
+                    $relatedResource,
+                    $request->{$this->attribute . '_trashed'} === 'true'
+                )
+            );
         }
     }
 
@@ -253,7 +280,9 @@ class MorphTo extends Field implements RelatableField
      */
     public function fill(NovaRequest $request, $model)
     {
-        $instance = Nova::modelInstanceForKey($request->{$this->attribute.'_type'});
+        $instance = Nova::modelInstanceForKey(
+            $request->{$this->attribute . '_type'}
+        );
 
         $morphType = $model->{$this->attribute}()->getMorphType();
         if ($instance) {
@@ -262,7 +291,9 @@ class MorphTo extends Field implements RelatableField
             );
         }
 
-        $foreignKey = $this->getRelationForeignKeyName($model->{$this->attribute}());
+        $foreignKey = $this->getRelationForeignKeyName(
+            $model->{$this->attribute}()
+        );
 
         if ($model->isDirty([$morphType, $foreignKey])) {
             $model->unsetRelation($this->attribute);
@@ -296,21 +327,38 @@ class MorphTo extends Field implements RelatableField
      * @param  bool  $withTrashed
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function buildMorphableQuery(NovaRequest $request, $relatedResource, $withTrashed = false)
-    {
+    public function buildMorphableQuery(
+        NovaRequest $request,
+        $relatedResource,
+        $withTrashed = false
+    ) {
         $model = $relatedResource::newModel();
 
-        $query = $request->first === 'true'
-                        ? $model->newQueryWithoutScopes()->whereKey($request->current)
-                        : $relatedResource::buildIndexQuery(
-                                $request, $model->newQuery(), $request->search,
-                                [], [], TrashedStatus::fromBoolean($withTrashed)
-                          );
+        $query =
+            $request->first === 'true'
+                ? $model->newQueryWithoutScopes()->whereKey($request->current)
+                : $relatedResource::buildIndexQuery(
+                    $request,
+                    $model->newQuery(),
+                    $request->search,
+                    [],
+                    [],
+                    TrashedStatus::fromBoolean($withTrashed)
+                );
 
-        return $query->tap(function ($query) use ($request, $relatedResource, $model) {
+        return $query->tap(function ($query) use (
+            $request,
+            $relatedResource,
+            $model
+        ) {
             forward_static_call(
-                $this->morphableQueryCallable($request, $relatedResource, $model),
-                $request, $query
+                $this->morphableQueryCallable(
+                    $request,
+                    $relatedResource,
+                    $model
+                ),
+                $request,
+                $query
             );
         });
     }
@@ -323,11 +371,14 @@ class MorphTo extends Field implements RelatableField
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return array
      */
-    protected function morphableQueryCallable(NovaRequest $request, $relatedResource, $model)
-    {
+    protected function morphableQueryCallable(
+        NovaRequest $request,
+        $relatedResource,
+        $model
+    ) {
         return ($method = $this->morphableQueryMethod($request, $model))
-                    ? [$request->resource(), $method]
-                    : [$relatedResource, 'relatableQuery'];
+            ? [$request->resource(), $method]
+            : [$relatedResource, 'relatableQuery'];
     }
 
     /**
@@ -339,7 +390,7 @@ class MorphTo extends Field implements RelatableField
      */
     protected function morphableQueryMethod(NovaRequest $request, $model)
     {
-        $method = 'relatable'.Str::plural(class_basename($model));
+        $method = 'relatable' . Str::plural(class_basename($model));
 
         return method_exists($request->resource(), $method) ? $method : null;
     }
@@ -352,12 +403,15 @@ class MorphTo extends Field implements RelatableField
      * @param  string  $relatedResource
      * @return array
      */
-    public function formatMorphableResource(NovaRequest $request, $resource, $relatedResource)
-    {
+    public function formatMorphableResource(
+        NovaRequest $request,
+        $resource,
+        $relatedResource
+    ) {
         return array_filter([
             'avatar' => $resource->resolveAvatarUrl($request),
             'display' => $this->formatDisplayValue($resource, $relatedResource),
-            'value' => $resource->getKey(),
+            'value' => $resource->getKey()
         ]);
     }
 
@@ -370,7 +424,7 @@ class MorphTo extends Field implements RelatableField
      */
     protected function formatDisplayValue($resource, $relatedResource)
     {
-        if (! $resource instanceof Resource) {
+        if (!$resource instanceof Resource) {
             $resource = Nova::newResourceFromModel($resource);
         }
 
@@ -389,14 +443,24 @@ class MorphTo extends Field implements RelatableField
      */
     public function types(array $types)
     {
-        $this->morphToTypes = collect($types)->map(function ($display, $key) {
-            return [
-                'type' => is_numeric($key) ? $display : $key,
-                'singularLabel' => is_numeric($key) ? $display::singularLabel() : $key::singularLabel(),
-                'display' => (is_string($display) && is_numeric($key)) ? $display::singularLabel() : $display,
-                'value' => is_numeric($key) ? $display::uriKey() : $key::uriKey(),
-            ];
-        })->values()->all();
+        $this->morphToTypes = collect($types)
+            ->map(function ($display, $key) {
+                return [
+                    'type' => is_numeric($key) ? $display : $key,
+                    'singularLabel' => is_numeric($key)
+                        ? $display::singularLabel()
+                        : $key::singularLabel(),
+                    'display' =>
+                        is_string($display) && is_numeric($key)
+                            ? $display::singularLabel()
+                            : $display,
+                    'value' => is_numeric($key)
+                        ? $display::uriKey()
+                        : $key::uriKey()
+                ];
+            })
+            ->values()
+            ->all();
 
         return $this;
     }
@@ -410,9 +474,11 @@ class MorphTo extends Field implements RelatableField
     public function display($display)
     {
         if (is_array($display)) {
-            $this->display = collect($display)->mapWithKeys(function ($display, $type) {
-                return [$type => $this->ensureDisplayerIsClosure($display)];
-            })->all();
+            $this->display = collect($display)
+                ->mapWithKeys(function ($display, $type) {
+                    return [$type => $this->ensureDisplayerIsClosure($display)];
+                })
+                ->all();
         } else {
             $this->display = $this->ensureDisplayerIsClosure($display);
         }
@@ -429,10 +495,10 @@ class MorphTo extends Field implements RelatableField
     protected function ensureDisplayerIsClosure($display)
     {
         return $display instanceof Closure
-                    ? $display
-                    : function ($resource) use ($display) {
-                        return $resource->{$display};
-                    };
+            ? $display
+            : function ($resource) use ($display) {
+                return $resource->{$display};
+            };
     }
 
     /**
@@ -485,15 +551,20 @@ class MorphTo extends Field implements RelatableField
     {
         $resourceClass = $this->resourceClass;
 
-        return array_merge([
-            'resourceName' => $this->resourceName,
-            'resourceLabel' => $resourceClass ? $resourceClass::singularLabel() : null,
-            'morphToRelationship' => $this->morphToRelationship,
-            'morphToTypes' => $this->morphToTypes,
-            'morphToType' => $this->morphToType,
-            'morphToId' => $this->morphToId,
-            'searchable' => $this->searchable,
-            'reverse' => $this->isReverseRelation(app(NovaRequest::class)),
-        ], $this->meta);
+        return array_merge(
+            [
+                'resourceName' => $this->resourceName,
+                'resourceLabel' => $resourceClass
+                    ? $resourceClass::singularLabel()
+                    : null,
+                'morphToRelationship' => $this->morphToRelationship,
+                'morphToTypes' => $this->morphToTypes,
+                'morphToType' => $this->morphToType,
+                'morphToId' => $this->morphToId,
+                'searchable' => $this->searchable,
+                'reverse' => $this->isReverseRelation(app(NovaRequest::class))
+            ],
+            $this->meta
+        );
     }
 }

@@ -20,7 +20,7 @@ class InitializationCallbackController extends Controller
             'ssh_key' => request()->all()['ssh_key'],
             'status' => STATUS_ACTIVE
         ]);
-        
+
         $server->user->notify(new ServerProvisioned($server));
 
         $server->user->notify(new ServerIsReady($server->fresh()));

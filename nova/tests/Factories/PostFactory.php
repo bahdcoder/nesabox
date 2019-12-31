@@ -13,11 +13,13 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Laravel\Nova\Tests\Fixtures\Post::class, function (Faker $faker) {
+$factory->define(Laravel\Nova\Tests\Fixtures\Post::class, function (
+    Faker $faker
+) {
     return [
         'user_id' => factory(Laravel\Nova\Tests\Fixtures\User::class),
         'title' => $faker->word,
         'word_count' => random_int(100, 500),
-        'published_at' => now()->subDays(random_int(1, 30)),
+        'published_at' => now()->subDays(random_int(1, 30))
     ];
 });

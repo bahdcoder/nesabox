@@ -9,7 +9,7 @@ use Laravel\Nova\Tool;
 
 class ToolTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -22,7 +22,7 @@ class ToolTest extends IntegrationTest
                 {
                     return false;
                 }
-            },
+            }
         ]);
 
         $this->assertCount(0, Nova::availableTools(Request::create('/')));

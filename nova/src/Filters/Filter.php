@@ -98,14 +98,24 @@ abstract class Filter implements FilterContract, JsonSerializable
     {
         $container = Container::getInstance();
 
-        return array_merge([
-            'class' => $this->key(),
-            'name' => $this->name(),
-            'component' => $this->component(),
-            'options' => collect($this->options($container->make(Request::class)))->map(function ($value, $key) {
-                return is_array($value) ? ($value + ['value' => $key]) : ['name' => $key, 'value' => $value];
-            })->values()->all(),
-            'currentValue' => $this->default() ?? '',
-        ], $this->meta());
+        return array_merge(
+            [
+                'class' => $this->key(),
+                'name' => $this->name(),
+                'component' => $this->component(),
+                'options' => collect(
+                    $this->options($container->make(Request::class))
+                )
+                    ->map(function ($value, $key) {
+                        return is_array($value)
+                            ? $value + ['value' => $key]
+                            : ['name' => $key, 'value' => $value];
+                    })
+                    ->values()
+                    ->all(),
+                'currentValue' => $this->default() ?? ''
+            ],
+            $this->meta()
+        );
     }
 }

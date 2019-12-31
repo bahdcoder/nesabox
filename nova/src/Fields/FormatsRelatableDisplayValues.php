@@ -16,7 +16,7 @@ trait FormatsRelatableDisplayValues
      */
     protected function formatDisplayValue($resource)
     {
-        if (! $resource instanceof Resource) {
+        if (!$resource instanceof Resource) {
             $resource = Nova::newResourceFromModel($resource);
         }
 
@@ -35,11 +35,12 @@ trait FormatsRelatableDisplayValues
      */
     public function display($display)
     {
-        $this->display = $display instanceof Closure
-                        ? $display
-                        : function ($resource) use ($display) {
-                            return $resource->{$display};
-                        };
+        $this->display =
+            $display instanceof Closure
+                ? $display
+                : function ($resource) use ($display) {
+                    return $resource->{$display};
+                };
 
         return $this;
     }

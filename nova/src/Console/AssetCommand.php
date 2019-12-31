@@ -33,23 +33,43 @@ class AssetCommand extends Command
      */
     public function handle()
     {
-        if (! $this->hasValidNameArgument()) {
+        if (!$this->hasValidNameArgument()) {
             return;
         }
 
-        (new Filesystem)->copyDirectory(
-            __DIR__.'/asset-stubs',
+        (new Filesystem())->copyDirectory(
+            __DIR__ . '/asset-stubs',
             $this->assetPath()
         );
 
         // AssetServiceProvider.php replacements...
-        $this->replace('{{ namespace }}', $this->assetNamespace(), $this->assetPath().'/src/AssetServiceProvider.stub');
-        $this->replace('{{ component }}', $this->assetName(), $this->assetPath().'/src/AssetServiceProvider.stub');
-        $this->replace('{{ name }}', $this->assetName(), $this->assetPath().'/src/AssetServiceProvider.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->assetNamespace(),
+            $this->assetPath() . '/src/AssetServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->assetName(),
+            $this->assetPath() . '/src/AssetServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ name }}',
+            $this->assetName(),
+            $this->assetPath() . '/src/AssetServiceProvider.stub'
+        );
 
         // Asset composer.json replacements...
-        $this->replace('{{ name }}', $this->argument('name'), $this->assetPath().'/composer.json');
-        $this->replace('{{ escapedNamespace }}', $this->escapedAssetNamespace(), $this->assetPath().'/composer.json');
+        $this->replace(
+            '{{ name }}',
+            $this->argument('name'),
+            $this->assetPath() . '/composer.json'
+        );
+        $this->replace(
+            '{{ escapedNamespace }}',
+            $this->escapedAssetNamespace(),
+            $this->assetPath() . '/composer.json'
+        );
 
         // Rename the stubs with the proper file extensions...
         $this->renameStubs();
@@ -59,19 +79,34 @@ class AssetCommand extends Command
         $this->addAssetPackageToRootComposer();
         $this->addScriptsToNpmPackage();
 
-        if ($this->confirm("Would you like to install the asset's NPM dependencies?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to install the asset's NPM dependencies?",
+                true
+            )
+        ) {
             $this->installNpmDependencies();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm("Would you like to compile the asset's assets?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to compile the asset's assets?",
+                true
+            )
+        ) {
             $this->compile();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm('Would you like to update your Composer packages?', true)) {
+        if (
+            $this->confirm(
+                'Would you like to update your Composer packages?',
+                true
+            )
+        ) {
             $this->composerUpdate();
         }
     }
@@ -83,9 +118,7 @@ class AssetCommand extends Command
      */
     protected function stubsToRename()
     {
-        return [
-            $this->assetPath().'/src/AssetServiceProvider.stub',
-        ];
+        return [$this->assetPath() . '/src/AssetServiceProvider.stub'];
     }
 
     /**
@@ -95,11 +128,14 @@ class AssetCommand extends Command
      */
     protected function addAssetRepositoryToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['repositories'][] = [
             'type' => 'path',
-            'url' => './'.$this->relativeAssetPath(),
+            'url' => './' . $this->relativeAssetPath()
         ];
 
         file_put_contents(
@@ -115,13 +151,21 @@ class AssetCommand extends Command
      */
     protected function addAssetPackageToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['require'][$this->argument('name')] = '*';
 
         file_put_contents(
             base_path('composer.json'),
-            json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+            json_encode(
+                $composer,
+                JSON_PRETTY_PRINT |
+                    JSON_UNESCAPED_SLASHES |
+                    JSON_UNESCAPED_UNICODE
+            )
         );
     }
 
@@ -132,10 +176,15 @@ class AssetCommand extends Command
      */
     protected function addScriptsToNpmPackage()
     {
-        $package = json_decode(file_get_contents(base_path('package.json')), true);
+        $package = json_decode(
+            file_get_contents(base_path('package.json')),
+            true
+        );
 
-        $package['scripts']['build-'.$this->assetName()] = 'cd '.$this->relativeAssetPath().' && npm run dev';
-        $package['scripts']['build-'.$this->assetName().'-prod'] = 'cd '.$this->relativeAssetPath().' && npm run prod';
+        $package['scripts']['build-' . $this->assetName()] =
+            'cd ' . $this->relativeAssetPath() . ' && npm run dev';
+        $package['scripts']['build-' . $this->assetName() . '-prod'] =
+            'cd ' . $this->relativeAssetPath() . ' && npm run prod';
 
         file_put_contents(
             base_path('package.json'),
@@ -150,7 +199,10 @@ class AssetCommand extends Command
      */
     protected function installNpmDependencies()
     {
-        $this->executeCommand('npm set progress=false && npm install', $this->assetPath());
+        $this->executeCommand(
+            'npm set progress=false && npm install',
+            $this->assetPath()
+        );
     }
 
     /**
@@ -184,7 +236,11 @@ class AssetCommand extends Command
     {
         $process = (new Process($command, $path))->setTimeout(null);
 
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+        if (
+            '\\' !== DIRECTORY_SEPARATOR &&
+            file_exists('/dev/tty') &&
+            is_readable('/dev/tty')
+        ) {
             $process->setTty(true);
         }
 
@@ -203,7 +259,10 @@ class AssetCommand extends Command
      */
     protected function replace($search, $replace, $path)
     {
-        file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
+        file_put_contents(
+            $path,
+            str_replace($search, $replace, file_get_contents($path))
+        );
     }
 
     /**
@@ -213,7 +272,7 @@ class AssetCommand extends Command
      */
     protected function assetPath()
     {
-        return base_path('nova-components/'.$this->assetClass());
+        return base_path('nova-components/' . $this->assetClass());
     }
 
     /**
@@ -223,7 +282,7 @@ class AssetCommand extends Command
      */
     protected function relativeAssetPath()
     {
-        return 'nova-components/'.$this->assetClass();
+        return 'nova-components/' . $this->assetClass();
     }
 
     /**
@@ -233,7 +292,7 @@ class AssetCommand extends Command
      */
     protected function assetNamespace()
     {
-        return Str::studly($this->assetVendor()).'\\'.$this->assetClass();
+        return Str::studly($this->assetVendor()) . '\\' . $this->assetClass();
     }
 
     /**

@@ -15,7 +15,9 @@ trait ResolvesCards
      */
     public function availableCards(NovaRequest $request)
     {
-        return $this->resolveCards($request)->filter->authorize($request)->values();
+        return $this->resolveCards($request)
+            ->filter->authorize($request)
+            ->values();
     }
 
     /**

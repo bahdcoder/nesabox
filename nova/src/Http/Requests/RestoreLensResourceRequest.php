@@ -16,7 +16,9 @@ class RestoreLensResourceRequest extends LensResourceDeletionRequest
      */
     public function chunks($count, Closure $callback)
     {
-        return $this->chunkWithAuthorization($count, $callback, function ($models) {
+        return $this->chunkWithAuthorization($count, $callback, function (
+            $models
+        ) {
             return $this->restorableModels($models);
         });
     }
@@ -29,12 +31,11 @@ class RestoreLensResourceRequest extends LensResourceDeletionRequest
      */
     protected function restorableModels(Collection $models)
     {
-        return $models->mapInto($this->resource())
-                        ->filter
-                        ->isSoftDeleted()
-                        ->filter
-                        ->authorizedToRestore($this)
-                        ->map->model();
+        return $models
+            ->mapInto($this->resource())
+            ->filter->isSoftDeleted()
+            ->filter->authorizedToRestore($this)
+            ->map->model();
     }
 
     /**

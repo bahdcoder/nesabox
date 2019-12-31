@@ -8,7 +8,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceFilledCallbackTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -21,10 +21,12 @@ class ResourceFilledCallbackTest extends IntegrationTest
         // For example, deriving the server_id from a selected site...
         $user = factory(User::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/addresses', [
-                            'user' => $user->id,
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/addresses',
+            [
+                'user' => $user->id
+            ]
+        );
 
         $response->assertStatus(201);
 

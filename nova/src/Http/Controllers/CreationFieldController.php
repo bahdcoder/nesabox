@@ -20,8 +20,12 @@ class CreationFieldController extends Controller
         $resourceClass::authorizeToCreate($request);
 
         return response()->json([
-            'fields' => $request->newResource()->creationFieldsWithinPanels($request),
-            'panels' => $request->newResource()->availablePanelsForCreate($request),
+            'fields' => $request
+                ->newResource()
+                ->creationFieldsWithinPanels($request),
+            'panels' => $request
+                ->newResource()
+                ->availablePanelsForCreate($request)
         ]);
     }
 }

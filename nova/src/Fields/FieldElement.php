@@ -50,10 +50,11 @@ abstract class FieldElement extends Element
      */
     public function hideFromIndex($callback = true)
     {
-        $this->showOnIndex = is_callable($callback) ? function () use ($callback) {
-            return ! call_user_func_array($callback, func_get_args());
-        }
-        : ! $callback;
+        $this->showOnIndex = is_callable($callback)
+            ? function () use ($callback) {
+                return !call_user_func_array($callback, func_get_args());
+            }
+            : !$callback;
 
         return $this;
     }
@@ -66,10 +67,11 @@ abstract class FieldElement extends Element
      */
     public function hideFromDetail($callback = true)
     {
-        $this->showOnDetail = is_callable($callback) ? function () use ($callback) {
-            return ! call_user_func_array($callback, func_get_args());
-        }
-        : ! $callback;
+        $this->showOnDetail = is_callable($callback)
+            ? function () use ($callback) {
+                return !call_user_func_array($callback, func_get_args());
+            }
+            : !$callback;
 
         return $this;
     }
@@ -82,10 +84,11 @@ abstract class FieldElement extends Element
      */
     public function hideWhenCreating($callback = true)
     {
-        $this->showOnCreation = is_callable($callback) ? function () use ($callback) {
-            return ! call_user_func_array($callback, func_get_args());
-        }
-        : ! $callback;
+        $this->showOnCreation = is_callable($callback)
+            ? function () use ($callback) {
+                return !call_user_func_array($callback, func_get_args());
+            }
+            : !$callback;
 
         return $this;
     }
@@ -98,10 +101,11 @@ abstract class FieldElement extends Element
      */
     public function hideWhenUpdating($callback = true)
     {
-        $this->showOnUpdate = is_callable($callback) ? function () use ($callback) {
-            return ! call_user_func_array($callback, func_get_args());
-        }
-        : ! $callback;
+        $this->showOnUpdate = is_callable($callback)
+            ? function () use ($callback) {
+                return !call_user_func_array($callback, func_get_args());
+            }
+            : !$callback;
 
         return $this;
     }
@@ -168,7 +172,11 @@ abstract class FieldElement extends Element
     public function isShownOnUpdate(NovaRequest $request, $resource): bool
     {
         if (is_callable($this->showOnUpdate)) {
-            $this->showOnUpdate = call_user_func($this->showOnUpdate, $request, $resource);
+            $this->showOnUpdate = call_user_func(
+                $this->showOnUpdate,
+                $request,
+                $resource
+            );
         }
 
         return $this->showOnUpdate;
@@ -184,7 +192,11 @@ abstract class FieldElement extends Element
     public function isShownOnIndex(NovaRequest $request, $resource): bool
     {
         if (is_callable($this->showOnIndex)) {
-            $this->showOnIndex = call_user_func($this->showOnIndex, $request, $resource);
+            $this->showOnIndex = call_user_func(
+                $this->showOnIndex,
+                $request,
+                $resource
+            );
         }
 
         return $this->showOnIndex;
@@ -200,7 +212,11 @@ abstract class FieldElement extends Element
     public function isShownOnDetail(NovaRequest $request, $resource): bool
     {
         if (is_callable($this->showOnDetail)) {
-            $this->showOnDetail = call_user_func($this->showOnDetail, $request, $resource);
+            $this->showOnDetail = call_user_func(
+                $this->showOnDetail,
+                $request,
+                $resource
+            );
         }
 
         return $this->showOnDetail;
@@ -215,7 +231,10 @@ abstract class FieldElement extends Element
     public function isShownOnCreation(NovaRequest $request): bool
     {
         if (is_callable($this->showOnCreation)) {
-            $this->showOnCreation = call_user_func($this->showOnCreation, $request);
+            $this->showOnCreation = call_user_func(
+                $this->showOnCreation,
+                $request
+            );
         }
 
         return $this->showOnCreation;
@@ -291,7 +310,7 @@ abstract class FieldElement extends Element
     public function jsonSerialize()
     {
         return array_merge(parent::jsonSerialize(), [
-            'panel' => $this->panel,
+            'panel' => $this->panel
         ]);
     }
 }

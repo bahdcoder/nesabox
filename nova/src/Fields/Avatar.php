@@ -15,8 +15,12 @@ class Avatar extends Image implements Cover
      * @param  callable|null  $storageCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $disk = 'public', $storageCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $disk = 'public',
+        $storageCallback = null
+    ) {
         parent::__construct($name, $attribute, $disk, $storageCallback);
 
         $this->rounded();

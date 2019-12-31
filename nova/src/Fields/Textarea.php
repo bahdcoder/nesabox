@@ -49,7 +49,7 @@ class Textarea extends Field
     {
         return array_merge(parent::jsonSerialize(), [
             'rows' => $this->rows,
-            'shouldShow' => $this->shouldBeExpanded(),
+            'shouldShow' => $this->shouldBeExpanded()
         ]);
     }
 }

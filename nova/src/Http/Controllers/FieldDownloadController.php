@@ -20,10 +20,12 @@ class FieldDownloadController extends Controller
 
         $resource->authorizeToView($request);
 
-        return $resource->detailFields($request)
-                    ->whereInstanceOf(File::class)
-                    ->findFieldByAttribute($request->field, function () {
-                        abort(404);
-                    })->toDownloadResponse($request, $resource);
+        return $resource
+            ->detailFields($request)
+            ->whereInstanceOf(File::class)
+            ->findFieldByAttribute($request->field, function () {
+                abort(404);
+            })
+            ->toDownloadResponse($request, $resource);
     }
 }

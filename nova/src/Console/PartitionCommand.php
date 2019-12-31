@@ -50,7 +50,7 @@ class PartitionCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/partition.stub';
+        return __DIR__ . '/stubs/partition.stub';
     }
 
     /**
@@ -61,6 +61,6 @@ class PartitionCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova\Metrics';
+        return $rootNamespace . '\Nova\Metrics';
     }
 }

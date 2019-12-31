@@ -9,7 +9,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class LensResourceCountTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -22,8 +22,9 @@ class LensResourceCountTest extends IntegrationTest
         factory(User::class)->create();
         factory(User::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->getJson('/nova-api/users/lens/user-lens/count');
+        $response = $this->withExceptionHandling()->getJson(
+            '/nova-api/users/lens/user-lens/count'
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(3, $response->original['count']);
@@ -35,15 +36,18 @@ class LensResourceCountTest extends IntegrationTest
         factory(User::class)->create();
         factory(User::class)->create();
 
-        $filters = base64_encode(json_encode([
-            [
-                'class' => IdFilter::class,
-                'value' => 2,
-            ],
-        ]));
+        $filters = base64_encode(
+            json_encode([
+                [
+                    'class' => IdFilter::class,
+                    'value' => 2
+                ]
+            ])
+        );
 
-        $response = $this->withExceptionHandling()
-                        ->getJson('/nova-api/users/lens/user-lens/count?filters='.$filters);
+        $response = $this->withExceptionHandling()->getJson(
+            '/nova-api/users/lens/user-lens/count?filters=' . $filters
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(1, $response->original['count']);
@@ -54,13 +58,14 @@ class LensResourceCountTest extends IntegrationTest
         $roles = factory(Role::class, 2)->create();
 
         factory(User::class, 3)
-           ->create()
-           ->each(function ($user) use ($roles) {
-               $user->roles()->sync($roles);
-           });
+            ->create()
+            ->each(function ($user) use ($roles) {
+                $user->roles()->sync($roles);
+            });
 
-        $response = $this->withExceptionHandling()
-                        ->getJson('/nova-api/users/lens/grouping-user-lens/count');
+        $response = $this->withExceptionHandling()->getJson(
+            '/nova-api/users/lens/grouping-user-lens/count'
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(3, $response->original['count']);

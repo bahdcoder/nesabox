@@ -142,7 +142,9 @@ class Action implements JsonSerializable
      */
     public function authorizedToRun(Request $request, $model)
     {
-        return $this->runCallback ? call_user_func($this->runCallback, $request, $model) : true;
+        return $this->runCallback
+            ? call_user_func($this->runCallback, $request, $model)
+            : true;
     }
 
     /**
@@ -200,8 +202,8 @@ class Action implements JsonSerializable
         return [
             'push' => [
                 'path' => $path,
-                'query' => $query,
-            ],
+                'query' => $query
+            ]
         ];
     }
 
@@ -239,7 +241,7 @@ class Action implements JsonSerializable
     {
         $method = ActionMethod::determine($this, $request->targetModel());
 
-        if (! method_exists($this, $method)) {
+        if (!method_exists($this, $method)) {
             throw MissingActionHandlerException::make($this, $method);
         }
 
@@ -247,22 +249,28 @@ class Action implements JsonSerializable
 
         $fields = $request->resolveFields();
 
-        $results = $request->chunks(
-            static::$chunkCount, function ($models) use ($fields, $request, $method, &$wasExecuted) {
-                $models = $models->filterForExecution($request);
+        $results = $request->chunks(static::$chunkCount, function (
+            $models
+        ) use ($fields, $request, $method, &$wasExecuted) {
+            $models = $models->filterForExecution($request);
 
-                if (count($models) > 0) {
-                    $wasExecuted = true;
-                }
-
-                return DispatchAction::forModels(
-                $request, $this, $method, $models, $fields
-            );
+            if (count($models) > 0) {
+                $wasExecuted = true;
             }
-        );
 
-        if (! $wasExecuted) {
-            return static::danger(__('Sorry! You are not authorized to perform this action.'));
+            return DispatchAction::forModels(
+                $request,
+                $this,
+                $method,
+                $models,
+                $fields
+            );
+        });
+
+        if (!$wasExecuted) {
+            return static::danger(
+                __('Sorry! You are not authorized to perform this action.')
+            );
         }
 
         return $this->handleResult($fields, $results);
@@ -289,7 +297,9 @@ class Action implements JsonSerializable
      */
     protected function markAsFinished($model)
     {
-        return $this->batchId ? ActionEvent::markAsFinished($this->batchId, $model) : 0;
+        return $this->batchId
+            ? ActionEvent::markAsFinished($this->batchId, $model)
+            : 0;
     }
 
     /**
@@ -301,7 +311,9 @@ class Action implements JsonSerializable
      */
     protected function markAsFailed($model, $e = null)
     {
-        return $this->batchId ? ActionEvent::markAsFailed($this->batchId, $model, $e) : 0;
+        return $this->batchId
+            ? ActionEvent::markAsFailed($this->batchId, $model, $e)
+            : 0;
     }
 
     /**
@@ -337,8 +349,8 @@ class Action implements JsonSerializable
     {
         $this->onlyOnIndex = $value;
         $this->showOnIndex = $value;
-        $this->showOnDetail = ! $value;
-        $this->showOnTableRow = ! $value;
+        $this->showOnDetail = !$value;
+        $this->showOnTableRow = !$value;
 
         return $this;
     }
@@ -367,8 +379,8 @@ class Action implements JsonSerializable
     {
         $this->onlyOnDetail = $value;
         $this->showOnDetail = $value;
-        $this->showOnIndex = ! $value;
-        $this->showOnTableRow = ! $value;
+        $this->showOnIndex = !$value;
+        $this->showOnTableRow = !$value;
 
         return $this;
     }
@@ -396,8 +408,8 @@ class Action implements JsonSerializable
     public function onlyOnTableRow($value = true)
     {
         $this->showOnTableRow = $value;
-        $this->showOnIndex = ! $value;
-        $this->showOnDetail = ! $value;
+        $this->showOnIndex = !$value;
+        $this->showOnDetail = !$value;
 
         return $this;
     }
@@ -624,22 +636,27 @@ class Action implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        return array_merge([
-            'cancelButtonText' => __($this->cancelButtonText),
-            'component' => $this->component(),
-            'confirmButtonText' => __($this->confirmButtonText),
-            'confirmText' => __($this->confirmText),
-            'destructive' => $this instanceof DestructiveAction,
-            'name' => $this->name(),
-            'uriKey' => $this->uriKey(),
-            'fields' => collect($this->fields())->each->resolve(new class {
-            })->all(),
-            'availableForEntireResource' => $this->availableForEntireResource,
-            'showOnDetail' => $this->shownOnDetail(),
-            'showOnIndex' => $this->shownOnIndex(),
-            'showOnTableRow' => $this->shownOnTableRow(),
-            'withoutConfirmation' => $this->withoutConfirmation,
-        ], $this->meta());
+        return array_merge(
+            [
+                'cancelButtonText' => __($this->cancelButtonText),
+                'component' => $this->component(),
+                'confirmButtonText' => __($this->confirmButtonText),
+                'confirmText' => __($this->confirmText),
+                'destructive' => $this instanceof DestructiveAction,
+                'name' => $this->name(),
+                'uriKey' => $this->uriKey(),
+                'fields' => collect($this->fields())
+                    ->each->resolve(new class {})
+                    ->all(),
+                'availableForEntireResource' =>
+                    $this->availableForEntireResource,
+                'showOnDetail' => $this->shownOnDetail(),
+                'showOnIndex' => $this->shownOnIndex(),
+                'showOnTableRow' => $this->shownOnTableRow(),
+                'withoutConfirmation' => $this->withoutConfirmation
+            ],
+            $this->meta()
+        );
     }
 
     /**
@@ -651,8 +668,18 @@ class Action implements JsonSerializable
     {
         $properties = (new ReflectionClass($this))->getProperties();
 
-        return array_values(array_filter(array_map(function ($p) {
-            return ($p->isStatic() || in_array($name = $p->getName(), ['runCallback', 'seeCallback'])) ? null : $name;
-        }, $properties)));
+        return array_values(
+            array_filter(
+                array_map(function ($p) {
+                    return $p->isStatic() ||
+                        in_array($name = $p->getName(), [
+                            'runCallback',
+                            'seeCallback'
+                        ])
+                        ? null
+                        : $name;
+                }, $properties)
+            )
+        );
     }
 }

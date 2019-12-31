@@ -185,7 +185,7 @@ class TrendResult implements JsonSerializable
             'prefix' => $this->prefix,
             'suffix' => $this->suffix,
             'suffixInflection' => $this->suffixInflection,
-            'format' => $this->format,
+            'format' => $this->format
         ];
     }
 }

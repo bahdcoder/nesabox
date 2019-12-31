@@ -15,7 +15,12 @@ class UserGrowth extends Value
      */
     public function calculate(Request $request)
     {
-        return $this->count($request, User::class, null, $_SERVER['__nova.userGrowthColumn'] ?? 'created_at');
+        return $this->count(
+            $request,
+            User::class,
+            null,
+            $_SERVER['__nova.userGrowthColumn'] ?? 'created_at'
+        );
     }
 
     /**
@@ -30,7 +35,7 @@ class UserGrowth extends Value
             'TODAY' => 'Today',
             'MTD' => 'Month To Date',
             'QTD' => 'Quarter To Date',
-            'YTD' => 'Year To Date',
+            'YTD' => 'Year To Date'
         ];
     }
 

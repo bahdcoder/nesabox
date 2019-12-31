@@ -26,11 +26,13 @@ trait PerformsValidation
      */
     public static function validatorForCreation(NovaRequest $request)
     {
-        return Validator::make($request->all(), static::rulesForCreation($request))
-                ->after(function ($validator) use ($request) {
-                    static::afterValidation($request, $validator);
-                    static::afterCreationValidation($request, $validator);
-                });
+        return Validator::make(
+            $request->all(),
+            static::rulesForCreation($request)
+        )->after(function ($validator) use ($request) {
+            static::afterValidation($request, $validator);
+            static::afterCreationValidation($request, $validator);
+        });
     }
 
     /**
@@ -41,14 +43,18 @@ trait PerformsValidation
      */
     public static function rulesForCreation(NovaRequest $request)
     {
-        return static::formatRules($request, (new static(static::newModel()))
-                    ->creationFields($request)
-                    ->reject(function ($field) use ($request) {
-                        return $field->isReadonly($request);
-                    })
-                    ->mapWithKeys(function ($field) use ($request) {
-                        return $field->getCreationRules($request);
-                    })->all());
+        return static::formatRules(
+            $request,
+            (new static(static::newModel()))
+                ->creationFields($request)
+                ->reject(function ($field) use ($request) {
+                    return $field->isReadonly($request);
+                })
+                ->mapWithKeys(function ($field) use ($request) {
+                    return $field->getCreationRules($request);
+                })
+                ->all()
+        );
     }
 
     /**
@@ -60,12 +66,16 @@ trait PerformsValidation
      */
     public static function creationRulesFor(NovaRequest $request, $field)
     {
-        return static::formatRules($request, (new static(static::newModel()))
-                    ->availableFields($request)
-                    ->where('attribute', $field)
-                    ->mapWithKeys(function ($field) use ($request) {
-                        return $field->getCreationRules($request);
-                    })->all());
+        return static::formatRules(
+            $request,
+            (new static(static::newModel()))
+                ->availableFields($request)
+                ->where('attribute', $field)
+                ->mapWithKeys(function ($field) use ($request) {
+                    return $field->getCreationRules($request);
+                })
+                ->all()
+        );
     }
 
     /**
@@ -87,11 +97,13 @@ trait PerformsValidation
      */
     public static function validatorForUpdate(NovaRequest $request)
     {
-        return Validator::make($request->all(), static::rulesForUpdate($request))
-                ->after(function ($validator) use ($request) {
-                    static::afterValidation($request, $validator);
-                    static::afterUpdateValidation($request, $validator);
-                });
+        return Validator::make(
+            $request->all(),
+            static::rulesForUpdate($request)
+        )->after(function ($validator) use ($request) {
+            static::afterValidation($request, $validator);
+            static::afterUpdateValidation($request, $validator);
+        });
     }
 
     /**
@@ -102,14 +114,18 @@ trait PerformsValidation
      */
     public static function rulesForUpdate(NovaRequest $request)
     {
-        return static::formatRules($request, (new static(static::newModel()))
-                    ->updateFields($request)
-                    ->reject(function ($field) use ($request) {
-                        return $field->isReadonly($request);
-                    })
-                    ->mapWithKeys(function ($field) use ($request) {
-                        return $field->getUpdateRules($request);
-                    })->all());
+        return static::formatRules(
+            $request,
+            (new static(static::newModel()))
+                ->updateFields($request)
+                ->reject(function ($field) use ($request) {
+                    return $field->isReadonly($request);
+                })
+                ->mapWithKeys(function ($field) use ($request) {
+                    return $field->getUpdateRules($request);
+                })
+                ->all()
+        );
     }
 
     /**
@@ -121,12 +137,16 @@ trait PerformsValidation
      */
     public static function updateRulesFor(NovaRequest $request, $field)
     {
-        return static::formatRules($request, (new static(static::newModel()))
-                    ->availableFields($request)
-                    ->where('attribute', $field)
-                    ->mapWithKeys(function ($field) use ($request) {
-                        return $field->getUpdateRules($request);
-                    })->all());
+        return static::formatRules(
+            $request,
+            (new static(static::newModel()))
+                ->availableFields($request)
+                ->where('attribute', $field)
+                ->mapWithKeys(function ($field) use ($request) {
+                    return $field->getUpdateRules($request);
+                })
+                ->all()
+        );
     }
 
     /**
@@ -148,7 +168,10 @@ trait PerformsValidation
      */
     public static function validatorForAttachment(NovaRequest $request)
     {
-        return Validator::make($request->all(), static::rulesForAttachment($request));
+        return Validator::make(
+            $request->all(),
+            static::rulesForAttachment($request)
+        );
     }
 
     /**
@@ -159,11 +182,15 @@ trait PerformsValidation
      */
     public static function rulesForAttachment(NovaRequest $request)
     {
-        return static::formatRules($request, (new static(static::newModel()))
-                    ->creationPivotFields($request, $request->relatedResource)
-                    ->mapWithKeys(function ($field) use ($request) {
-                        return $field->getCreationRules($request);
-                    })->all());
+        return static::formatRules(
+            $request,
+            (new static(static::newModel()))
+                ->creationPivotFields($request, $request->relatedResource)
+                ->mapWithKeys(function ($field) use ($request) {
+                    return $field->getCreationRules($request);
+                })
+                ->all()
+        );
     }
 
     /**
@@ -185,7 +212,10 @@ trait PerformsValidation
      */
     public static function validatorForAttachmentUpdate(NovaRequest $request)
     {
-        return Validator::make($request->all(), static::rulesForAttachmentUpdate($request));
+        return Validator::make(
+            $request->all(),
+            static::rulesForAttachmentUpdate($request)
+        );
     }
 
     /**
@@ -196,11 +226,15 @@ trait PerformsValidation
      */
     public static function rulesForAttachmentUpdate(NovaRequest $request)
     {
-        return static::formatRules($request, (new static(static::newModel()))
-                    ->updatePivotFields($request, $request->relatedResource)
-                    ->mapWithKeys(function ($field) use ($request) {
-                        return $field->getUpdateRules($request);
-                    })->all());
+        return static::formatRules(
+            $request,
+            (new static(static::newModel()))
+                ->updatePivotFields($request, $request->relatedResource)
+                ->mapWithKeys(function ($field) use ($request) {
+                    return $field->getUpdateRules($request);
+                })
+                ->all()
+        );
     }
 
     /**
@@ -213,20 +247,32 @@ trait PerformsValidation
     protected static function formatRules(NovaRequest $request, array $rules)
     {
         $replacements = array_filter([
-            '{{resourceId}}' => str_replace(['\'', '"', ',', '\\'], '', $request->resourceId),
+            '{{resourceId}}' => str_replace(
+                ['\'', '"', ',', '\\'],
+                '',
+                $request->resourceId
+            )
         ]);
 
         if (empty($replacements)) {
             return $rules;
         }
 
-        return collect($rules)->map(function ($rules) use ($replacements) {
-            return collect($rules)->map(function ($rule) use ($replacements) {
-                return is_string($rule)
-                            ? str_replace(array_keys($replacements), array_values($replacements), $rule)
+        return collect($rules)
+            ->map(function ($rules) use ($replacements) {
+                return collect($rules)
+                    ->map(function ($rule) use ($replacements) {
+                        return is_string($rule)
+                            ? str_replace(
+                                array_keys($replacements),
+                                array_values($replacements),
+                                $rule
+                            )
                             : $rule;
-            })->all();
-        })->all();
+                    })
+                    ->all();
+            })
+            ->all();
     }
 
     /**
@@ -239,9 +285,9 @@ trait PerformsValidation
     public static function validationAttributeFor(NovaRequest $request, $field)
     {
         return (new static(static::newModel()))
-                    ->availableFields($request)
-                    ->firstWhere('resourceName', $field)
-                    ->getValidationAttribute($request);
+            ->availableFields($request)
+            ->firstWhere('resourceName', $field)
+            ->getValidationAttribute($request);
     }
 
     /**
@@ -263,8 +309,10 @@ trait PerformsValidation
      * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
-    protected static function afterCreationValidation(NovaRequest $request, $validator)
-    {
+    protected static function afterCreationValidation(
+        NovaRequest $request,
+        $validator
+    ) {
         //
     }
 
@@ -275,8 +323,10 @@ trait PerformsValidation
      * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
-    protected static function afterUpdateValidation(NovaRequest $request, $validator)
-    {
+    protected static function afterUpdateValidation(
+        NovaRequest $request,
+        $validator
+    ) {
         //
     }
 }

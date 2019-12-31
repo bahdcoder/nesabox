@@ -70,14 +70,18 @@ class ActionResource extends Resource
             }),
 
             Text::make(__('Action Initiated By'), function () {
-                return $this->user->name ?? $this->user->email ?? __('Nova User');
+                return $this->user->name ??
+                    $this->user->email ??
+                    __('Nova User');
             }),
 
             MorphToActionTarget::make(__('Action Target'), 'target'),
 
             Status::make(__('Action Status'), 'status', function ($value) {
                 return __(ucfirst($value));
-            })->loadingWhen([__('Waiting'), __('Running')])->failedWhen([__('Failed')]),
+            })
+                ->loadingWhen([__('Waiting'), __('Running')])
+                ->failedWhen([__('Failed')]),
 
             $this->when(isset($this->original), function () {
                 return KeyValue::make(__('Original'), 'original');
@@ -89,7 +93,10 @@ class ActionResource extends Resource
 
             Textarea::make(__('Exception'), 'exception'),
 
-            DateTime::make(__('Action Happened At'), 'created_at')->exceptOnForms(),
+            DateTime::make(
+                __('Action Happened At'),
+                'created_at'
+            )->exceptOnForms()
         ];
     }
 

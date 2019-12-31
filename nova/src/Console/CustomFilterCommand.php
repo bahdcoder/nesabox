@@ -33,35 +33,67 @@ class CustomFilterCommand extends Command
      */
     public function handle()
     {
-        if (! $this->hasValidNameArgument()) {
+        if (!$this->hasValidNameArgument()) {
             return;
         }
 
-        (new Filesystem)->copyDirectory(
-            __DIR__.'/filter-stubs',
+        (new Filesystem())->copyDirectory(
+            __DIR__ . '/filter-stubs',
             $this->filterPath()
         );
 
         // Filter.js replacements...
-        $this->replace('{{ component }}', $this->filterName(), $this->filterPath().'/resources/js/filter.js');
+        $this->replace(
+            '{{ component }}',
+            $this->filterName(),
+            $this->filterPath() . '/resources/js/filter.js'
+        );
 
         // Filter.php replacements...
-        $this->replace('{{ namespace }}', $this->filterNamespace(), $this->filterPath().'/src/Filter.stub');
-        $this->replace('{{ class }}', $this->filterClass(), $this->filterPath().'/src/Filter.stub');
-        $this->replace('{{ component }}', $this->filterName(), $this->filterPath().'/src/Filter.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->filterNamespace(),
+            $this->filterPath() . '/src/Filter.stub'
+        );
+        $this->replace(
+            '{{ class }}',
+            $this->filterClass(),
+            $this->filterPath() . '/src/Filter.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->filterName(),
+            $this->filterPath() . '/src/Filter.stub'
+        );
 
-        (new Filesystem)->move(
-            $this->filterPath().'/src/Filter.stub',
-            $this->filterPath().'/src/'.$this->filterClass().'.php'
+        (new Filesystem())->move(
+            $this->filterPath() . '/src/Filter.stub',
+            $this->filterPath() . '/src/' . $this->filterClass() . '.php'
         );
 
         // FilterServiceProvider.php replacements...
-        $this->replace('{{ namespace }}', $this->filterNamespace(), $this->filterPath().'/src/FilterServiceProvider.stub');
-        $this->replace('{{ component }}', $this->filterName(), $this->filterPath().'/src/FilterServiceProvider.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->filterNamespace(),
+            $this->filterPath() . '/src/FilterServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->filterName(),
+            $this->filterPath() . '/src/FilterServiceProvider.stub'
+        );
 
         // Filter composer.json replacements...
-        $this->replace('{{ name }}', $this->argument('name'), $this->filterPath().'/composer.json');
-        $this->replace('{{ escapedNamespace }}', $this->escapedFilterNamespace(), $this->filterPath().'/composer.json');
+        $this->replace(
+            '{{ name }}',
+            $this->argument('name'),
+            $this->filterPath() . '/composer.json'
+        );
+        $this->replace(
+            '{{ escapedNamespace }}',
+            $this->escapedFilterNamespace(),
+            $this->filterPath() . '/composer.json'
+        );
 
         // Rename the stubs with the proper file extensions...
         $this->renameStubs();
@@ -71,19 +103,34 @@ class CustomFilterCommand extends Command
         $this->addFilterPackageToRootComposer();
         $this->addScriptsToNpmPackage();
 
-        if ($this->confirm("Would you like to install the filter's NPM dependencies?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to install the filter's NPM dependencies?",
+                true
+            )
+        ) {
             $this->installNpmDependencies();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm("Would you like to compile the filter's assets?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to compile the filter's assets?",
+                true
+            )
+        ) {
             $this->compile();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm('Would you like to update your Composer packages?', true)) {
+        if (
+            $this->confirm(
+                'Would you like to update your Composer packages?',
+                true
+            )
+        ) {
             $this->composerUpdate();
         }
     }
@@ -95,7 +142,7 @@ class CustomFilterCommand extends Command
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/filter.stub';
+        return __DIR__ . '/stubs/filter.stub';
     }
 
     /**
@@ -106,7 +153,7 @@ class CustomFilterCommand extends Command
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova\Filters';
+        return $rootNamespace . '\Nova\Filters';
     }
 
     /**
@@ -116,9 +163,7 @@ class CustomFilterCommand extends Command
      */
     protected function stubsToRename()
     {
-        return [
-            $this->filterPath().'/src/FilterServiceProvider.stub',
-        ];
+        return [$this->filterPath() . '/src/FilterServiceProvider.stub'];
     }
 
     /**
@@ -128,11 +173,14 @@ class CustomFilterCommand extends Command
      */
     protected function addFilterRepositoryToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['repositories'][] = [
             'type' => 'path',
-            'url' => './'.$this->relativeFilterPath(),
+            'url' => './' . $this->relativeFilterPath()
         ];
 
         file_put_contents(
@@ -148,7 +196,10 @@ class CustomFilterCommand extends Command
      */
     protected function addFilterPackageToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['require'][$this->argument('name')] = '*';
 
@@ -165,10 +216,15 @@ class CustomFilterCommand extends Command
      */
     protected function addScriptsToNpmPackage()
     {
-        $package = json_decode(file_get_contents(base_path('package.json')), true);
+        $package = json_decode(
+            file_get_contents(base_path('package.json')),
+            true
+        );
 
-        $package['scripts']['build-'.$this->filterName()] = 'cd '.$this->relativeFilterPath().' && npm run dev';
-        $package['scripts']['build-'.$this->filterName().'-prod'] = 'cd '.$this->relativeFilterPath().' && npm run prod';
+        $package['scripts']['build-' . $this->filterName()] =
+            'cd ' . $this->relativeFilterPath() . ' && npm run dev';
+        $package['scripts']['build-' . $this->filterName() . '-prod'] =
+            'cd ' . $this->relativeFilterPath() . ' && npm run prod';
 
         file_put_contents(
             base_path('package.json'),
@@ -183,7 +239,10 @@ class CustomFilterCommand extends Command
      */
     protected function installNpmDependencies()
     {
-        $this->executeCommand('npm set progress=false && npm install', $this->filterPath());
+        $this->executeCommand(
+            'npm set progress=false && npm install',
+            $this->filterPath()
+        );
     }
 
     /**
@@ -217,7 +276,11 @@ class CustomFilterCommand extends Command
     {
         $process = (new Process($command, $path))->setTimeout(null);
 
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+        if (
+            '\\' !== DIRECTORY_SEPARATOR &&
+            file_exists('/dev/tty') &&
+            is_readable('/dev/tty')
+        ) {
             $process->setTty(true);
         }
 
@@ -236,7 +299,10 @@ class CustomFilterCommand extends Command
      */
     protected function replace($search, $replace, $path)
     {
-        file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
+        file_put_contents(
+            $path,
+            str_replace($search, $replace, file_get_contents($path))
+        );
     }
 
     /**
@@ -246,7 +312,7 @@ class CustomFilterCommand extends Command
      */
     protected function filterPath()
     {
-        return base_path('nova-components/'.$this->filterClass());
+        return base_path('nova-components/' . $this->filterClass());
     }
 
     /**
@@ -256,7 +322,7 @@ class CustomFilterCommand extends Command
      */
     protected function relativeFilterPath()
     {
-        return 'nova-components/'.$this->filterClass();
+        return 'nova-components/' . $this->filterClass();
     }
 
     /**
@@ -266,7 +332,7 @@ class CustomFilterCommand extends Command
      */
     protected function filterNamespace()
     {
-        return Str::studly($this->filterVendor()).'\\'.$this->filterClass();
+        return Str::studly($this->filterVendor()) . '\\' . $this->filterClass();
     }
 
     /**

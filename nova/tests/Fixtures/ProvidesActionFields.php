@@ -24,7 +24,7 @@ trait ProvidesActionFields
                         return 'callback';
                     };
                 }
-            },
+            }
         ];
     }
 }

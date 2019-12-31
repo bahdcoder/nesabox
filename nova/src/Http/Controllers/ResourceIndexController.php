@@ -16,17 +16,21 @@ class ResourceIndexController extends Controller
     public function handle(ResourceIndexRequest $request)
     {
         $paginator = $this->paginator(
-            $request, $resource = $request->resource()
+            $request,
+            $resource = $request->resource()
         );
 
         return response()->json([
             'label' => $resource::label(),
-            'resources' => $paginator->getCollection()->mapInto($resource)->map->serializeForIndex($request),
+            'resources' => $paginator
+                ->getCollection()
+                ->mapInto($resource)
+                ->map->serializeForIndex($request),
             'prev_page_url' => $paginator->previousPageUrl(),
             'next_page_url' => $paginator->nextPageUrl(),
             'per_page' => $paginator->perPage(),
             'per_page_options' => $resource::perPageOptions(),
-            'softDeletes' => $resource::softDeletes(),
+            'softDeletes' => $resource::softDeletes()
         ]);
     }
 
@@ -39,10 +43,12 @@ class ResourceIndexController extends Controller
      */
     protected function paginator(ResourceIndexRequest $request, $resource)
     {
-        return $request->toQuery()->simplePaginate(
-            $request->viaRelationship()
-                        ? $resource::$perPageViaRelationship
-                        : ($request->perPage ?? $resource::perPageOptions()[0])
-        );
+        return $request
+            ->toQuery()
+            ->simplePaginate(
+                $request->viaRelationship()
+                    ? $resource::$perPageViaRelationship
+                    : $request->perPage ?? $resource::perPageOptions()[0]
+            );
     }
 }

@@ -29,13 +29,13 @@ trait InteractsWithRelatedResources
     public function findParentModel()
     {
         return once(function () {
-            if (! $this->viaRelationship()) {
+            if (!$this->viaRelationship()) {
                 return;
             }
 
             return Nova::modelInstanceForKey($this->viaResource)
-                                ->newQueryWithoutScopes()
-                                ->find($this->viaResourceId);
+                ->newQueryWithoutScopes()
+                ->find($this->viaResourceId);
         });
     }
 
@@ -80,19 +80,23 @@ trait InteractsWithRelatedResources
      */
     public function pivotName()
     {
-        if (! $this->viaRelationship()) {
+        if (!$this->viaRelationship()) {
             return Resource::DEFAULT_PIVOT_NAME;
         }
 
         $resource = Nova::resourceInstanceForKey($this->viaResource);
 
-        if ($name = $resource->pivotNameForField($this, $this->viaRelationship)) {
+        if (
+            $name = $resource->pivotNameForField($this, $this->viaRelationship)
+        ) {
             return $name;
         }
 
         return ($parent = $this->findParentModel())
-                    ? class_basename($parent->{$this->viaRelationship}()->getPivotClass())
-                    : Resource::DEFAULT_PIVOT_NAME;
+            ? class_basename(
+                $parent->{$this->viaRelationship}()->getPivotClass()
+            )
+            : Resource::DEFAULT_PIVOT_NAME;
     }
 
     /**
@@ -146,6 +150,8 @@ trait InteractsWithRelatedResources
      */
     public function viaRelationship()
     {
-        return $this->viaResource && $this->viaResourceId && $this->viaRelationship;
+        return $this->viaResource &&
+            $this->viaResourceId &&
+            $this->viaRelationship;
     }
 }

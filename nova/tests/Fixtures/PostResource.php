@@ -25,9 +25,7 @@ class PostResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'title',
-    ];
+    public static $search = ['id', 'title'];
 
     /**
      * Get the fields displayed by the resource.
@@ -38,23 +36,30 @@ class PostResource extends Resource
     public function fields(Request $request)
     {
         return [
-            BelongsTo::make('User', 'user', UserResource::class)->nullable()
+            BelongsTo::make('User', 'user', UserResource::class)
+                ->nullable()
                 ->viewable($_SERVER['nova.user.viewable-field'] ?? true),
             BelongsToMany::make('Authors', 'authors', UserResource::class),
-            Text::make('Title', 'title')->rules('required', 'string', 'max:255'),
-            Text::make('Description', 'description')->rules('string', 'max:255')
+            Text::make('Title', 'title')->rules(
+                'required',
+                'string',
+                'max:255'
+            ),
+            Text::make('Description', 'description')
+                ->rules('string', 'max:255')
                 ->nullable()
                 ->canSee(function () {
-                    return ! empty($_SERVER['nova.post.nullableDescription']);
+                    return !empty($_SERVER['nova.post.nullableDescription']);
                 }),
             MorphMany::make('Comments', 'comments', CommentResource::class),
-            MorphToMany::make('Tags', 'tags', TagResource::class)->display(function ($tag) {
-                return strtoupper($tag->name);
-            })->searchable()->fields(function () {
-                return [
-                    Text::make('Admin', 'admin')->rules('required'),
-                ];
-            }),
+            MorphToMany::make('Tags', 'tags', TagResource::class)
+                ->display(function ($tag) {
+                    return strtoupper($tag->name);
+                })
+                ->searchable()
+                ->fields(function () {
+                    return [Text::make('Admin', 'admin')->rules('required')];
+                })
         ];
     }
 
@@ -90,7 +95,7 @@ class PostResource extends Resource
      */
     public static function relatableUsers(NovaRequest $request, $query)
     {
-        if (! isset($_SERVER['nova.post.useCustomRelatableUsers'])) {
+        if (!isset($_SERVER['nova.post.useCustomRelatableUsers'])) {
             return UserResource::relatableQuery($request, $query);
         }
 
@@ -108,7 +113,7 @@ class PostResource extends Resource
      */
     public static function relatableTags(NovaRequest $request, $query)
     {
-        if (! isset($_SERVER['nova.post.useCustomRelatableTags'])) {
+        if (!isset($_SERVER['nova.post.useCustomRelatableTags'])) {
             return TagResource::relatableQuery($request, $query);
         }
 
@@ -126,14 +131,14 @@ class PostResource extends Resource
     public function cards(Request $request)
     {
         return [
-            new PostWordCount,
-            new PostCountTrend,
-            new PostAverageTrend,
-            new PostSumTrend,
-            new PostMaxTrend,
-            new PostMinTrend,
-            new PostsByUserPartition,
-            new WordCountByUserPartition,
+            new PostWordCount(),
+            new PostCountTrend(),
+            new PostAverageTrend(),
+            new PostSumTrend(),
+            new PostMaxTrend(),
+            new PostMinTrend(),
+            new PostsByUserPartition(),
+            new WordCountByUserPartition()
         ];
     }
 

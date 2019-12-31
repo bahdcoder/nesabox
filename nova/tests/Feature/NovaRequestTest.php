@@ -11,7 +11,7 @@ class NovaRequestTest extends IntegrationTest
     {
         $request = NovaRequest::create('/nova-api/users/1', 'POST', [
             'editing' => true,
-            'editMode' => 'create',
+            'editMode' => 'create'
         ]);
 
         $this->assertTrue($request->isCreateOrAttachRequest());
@@ -22,7 +22,7 @@ class NovaRequestTest extends IntegrationTest
     {
         $request = NovaRequest::create('/nova-api/users/1', 'PUT', [
             'editing' => true,
-            'editMode' => 'update',
+            'editMode' => 'update'
         ]);
 
         $this->assertTrue($request->isUpdateOrUpdateAttachedRequest());

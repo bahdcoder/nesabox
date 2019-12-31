@@ -21,7 +21,7 @@ trait AuthorizesRequests
     {
         static::$authUsing = $callback;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -32,8 +32,11 @@ trait AuthorizesRequests
      */
     public static function check($request)
     {
-        return (static::$authUsing ?: function () {
-            return app()->environment('local');
-        })($request);
+        return (
+            static::$authUsing ?:
+            function () {
+                return app()->environment('local');
+            }
+        )($request);
     }
 }

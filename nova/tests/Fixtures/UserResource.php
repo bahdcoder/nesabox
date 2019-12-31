@@ -29,9 +29,7 @@ class UserResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'name', 'email',
-    ];
+    public static $search = ['id', 'name', 'email'];
 
     /**
      * Determine if the given resource is authorizable.
@@ -52,7 +50,8 @@ class UserResource extends Resource
      */
     public function authorizedToAdd(NovaRequest $request, $model)
     {
-        return $_SERVER['nova.user.relatable'] ?? parent::authorizedToAdd($request, $model);
+        return $_SERVER['nova.user.relatable'] ??
+            parent::authorizedToAdd($request, $model);
     }
 
     /**
@@ -68,8 +67,8 @@ class UserResource extends Resource
                 ID::make(),
 
                 Text::make('Name')
-                            ->creationRules('required', 'string', 'max:255')
-                            ->updateRules('required', 'string', 'max:255'),
+                    ->creationRules('required', 'string', 'max:255')
+                    ->updateRules('required', 'string', 'max:255')
             ]),
 
             Text::make('Email')
@@ -85,8 +84,8 @@ class UserResource extends Resource
                 }),
 
             Text::make('Password')
-                                ->onlyOnForms()
-                                ->rules('required', 'string', 'min:8'),
+                ->onlyOnForms()
+                ->rules('required', 'string', 'min:8'),
 
             Text::make('Restricted')->canSee(function () {
                 return false;
@@ -95,38 +94,53 @@ class UserResource extends Resource
             HasOne::make('Address', 'address', AddressResource::class),
             HasMany::make('Posts', 'posts', PostResource::class),
 
-            BelongsToMany::make('Roles', 'roles', RoleResource::class)->referToPivotAs($_SERVER['nova.user.rolePivotName'] ?? null)->fields(function () {
-                return [
-                    Text::make('Admin', 'admin')->rules('required'),
-                    Text::make('Admin', 'pivot-update')->rules('required')->onlyOnForms()->hideWhenCreating(),
+            BelongsToMany::make('Roles', 'roles', RoleResource::class)
+                ->referToPivotAs($_SERVER['nova.user.rolePivotName'] ?? null)
+                ->fields(function () {
+                    return [
+                        Text::make('Admin', 'admin')->rules('required'),
+                        Text::make('Admin', 'pivot-update')
+                            ->rules('required')
+                            ->onlyOnForms()
+                            ->hideWhenCreating(),
 
-                    $this->when($_SERVER['__nova.user.pivotFile'] ?? false, function () {
-                        return File::make('Photo', 'photo');
-                    }),
+                        $this->when(
+                            $_SERVER['__nova.user.pivotFile'] ?? false,
+                            function () {
+                                return File::make('Photo', 'photo');
+                            }
+                        ),
 
-                    Text::make('Restricted', 'restricted')->canSee(function () {
-                        return false;
-                    }),
-                ];
-            }),
+                        Text::make('Restricted', 'restricted')->canSee(
+                            function () {
+                                return false;
+                            }
+                        )
+                    ];
+                }),
 
             BelongsToMany::make('Related Users', 'relatedUsers', self::class),
 
             Text::make('Index')->onlyOnIndex(),
             Text::make('Detail')->onlyOnDetail(),
             Text::make('Form')->onlyOnForms(),
-            Text::make('Update')->onlyOnForms()->hideWhenCreating(),
+            Text::make('Update')
+                ->onlyOnForms()
+                ->hideWhenCreating(),
 
             Text::make('Computed', function () {
                 return 'Computed';
             }),
 
-            Text::make('InvokableComputed', new class {
-                public function __invoke()
-                {
-                    return 'Computed';
+            Text::make(
+                'InvokableComputed',
+                new class {
+                    public function __invoke()
+                    {
+                        return 'Computed';
+                    }
                 }
-            }),
+            ),
 
             $this->when(false, function () {
                 return Text::make('Test', 'test');
@@ -139,7 +153,7 @@ class UserResource extends Resource
             new ResourceToolElement('component-name'),
             new MyResourceTool(),
 
-            KeyValue::make('Meta'),
+            KeyValue::make('Meta')
         ];
     }
 
@@ -170,9 +184,9 @@ class UserResource extends Resource
     public function lenses(Request $request)
     {
         return [
-            new UserLens,
-            new GroupingUserLens,
-            new PaginatingUserLens,
+            new UserLens(),
+            new GroupingUserLens(),
+            new PaginatingUserLens()
         ];
     }
 
@@ -185,14 +199,14 @@ class UserResource extends Resource
     public function actions(Request $request)
     {
         return [
-            new OpensInNewTabAction,
-            new RedirectAction,
-            new DestructiveAction,
-            new EmptyAction,
-            new ExceptionAction,
-            new FailingAction,
-            new NoopAction,
-            tap(new QueuedAction, function (QueuedAction $action) {
+            new OpensInNewTabAction(),
+            new RedirectAction(),
+            new DestructiveAction(),
+            new EmptyAction(),
+            new ExceptionAction(),
+            new FailingAction(),
+            new NoopAction(),
+            tap(new QueuedAction(), function (QueuedAction $action) {
                 if ($_SERVER['nova.user.actionCallbacks'] ?? false) {
                     $action->canRun(function ($request, $model) {
                         return $model->id % 2;
@@ -202,23 +216,28 @@ class UserResource extends Resource
                     });
                 }
             }),
-            new QueuedResourceAction,
-            new QueuedUpdateStatusAction,
-            new RequiredFieldAction,
-            (new UnauthorizedAction)->canSee(function ($request) {
+            new QueuedResourceAction(),
+            new QueuedUpdateStatusAction(),
+            new RequiredFieldAction(),
+            (new UnauthorizedAction())->canSee(function ($request) {
                 return false;
             }),
-            (new UnrunnableAction)->canSee(function ($request) {
-                return true;
-            })->canRun(function ($request, $model) {
+            (new UnrunnableAction())
+                ->canSee(function ($request) {
+                    return true;
+                })
+                ->canRun(function ($request, $model) {
+                    return false;
+                }),
+            (new UnrunnableDestructiveAction())->canRun(function (
+                $request,
+                $model
+            ) {
                 return false;
             }),
-            (new UnrunnableDestructiveAction)->canRun(function ($request, $model) {
-                return false;
-            }),
-            new UpdateStatusAction,
-            new NoopActionWithoutActionable,
-            new HandleResultAction,
+            new UpdateStatusAction(),
+            new NoopActionWithoutActionable(),
+            new HandleResultAction()
         ];
     }
 
@@ -231,11 +250,11 @@ class UserResource extends Resource
     public function filters(Request $request)
     {
         return [
-            (new IdFilter)->canSee(function ($request) {
+            (new IdFilter())->canSee(function ($request) {
                 return $_SERVER['nova.idFilter.canSee'] ?? true;
             }),
 
-            (new CustomKeyFilter)->canSee(function ($request) {
+            (new CustomKeyFilter())->canSee(function ($request) {
                 return $_SERVER['nova.customKeyFilter.canSee'] ?? true;
             }),
 
@@ -243,9 +262,11 @@ class UserResource extends Resource
                 return $_SERVER['nova.columnFilter.canSee'] ?? true;
             }),
 
-            (new CreateDateFilter)->firstDayOfWeek(4)->canSee(function ($request) {
-                return $_SERVER['nova.dateFilter.canSee'] ?? true;
-            }),
+            (new CreateDateFilter())
+                ->firstDayOfWeek(4)
+                ->canSee(function ($request) {
+                    return $_SERVER['nova.dateFilter.canSee'] ?? true;
+                })
         ];
     }
 
@@ -272,7 +293,7 @@ class UserResource extends Resource
      */
     public static function relatableRoles(NovaRequest $request, $query)
     {
-        if (! isset($_SERVER['nova.user.useCustomRelatableRoles'])) {
+        if (!isset($_SERVER['nova.user.useCustomRelatableRoles'])) {
             return RoleResource::relatableQuery($request, $query);
         }
 
@@ -290,12 +311,12 @@ class UserResource extends Resource
     public function cards(Request $request)
     {
         return [
-            (new TotalUsers)->canSee(function ($request) {
+            (new TotalUsers())->canSee(function ($request) {
                 return $_SERVER['nova.totalUsers.canSee'] ?? true;
             }),
 
-            new UserGrowth,
-            (new CustomerRevenue)->onlyOnDetail(),
+            new UserGrowth(),
+            (new CustomerRevenue())->onlyOnDetail()
         ];
     }
 

@@ -15,7 +15,8 @@ class MetricRequest extends NovaRequest
     {
         return $this->availableMetrics()->first(function ($metric) {
             return $this->metric === $metric->uriKey();
-        }) ?: abort(404);
+        }) ?:
+            abort(404);
     }
 
     /**
@@ -25,7 +26,8 @@ class MetricRequest extends NovaRequest
      */
     public function availableMetrics()
     {
-        return $this->newResource()->availableCards($this)
-                ->whereInstanceOf(Metric::class);
+        return $this->newResource()
+            ->availableCards($this)
+            ->whereInstanceOf(Metric::class);
     }
 }

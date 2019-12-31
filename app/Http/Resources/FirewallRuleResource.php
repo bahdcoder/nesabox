@@ -18,6 +18,7 @@ class FirewallRuleResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'port' => $this->resource->port,
+            'status' => $this->resource->status,
             'from' => $this->resource->from ? $this->resource->from : 'Any',
             'installing_firewall_rule' =>
                 $this->resource->status === STATUS_INSTALLING

@@ -47,11 +47,13 @@ class PartitionColors
      */
     protected function next()
     {
-        return blank($this->colors) ? null :
-            tap($this->colors[
-                $this->pointer % count($this->colors)
-            ], function () {
-                $this->pointer++;
-            });
+        return blank($this->colors)
+            ? null
+            : tap(
+                $this->colors[$this->pointer % count($this->colors)],
+                function () {
+                    $this->pointer++;
+                }
+            );
     }
 }

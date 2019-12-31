@@ -27,7 +27,7 @@ class ActionEvent extends Model
      */
     protected $casts = [
         'original' => 'array',
-        'changes' => 'array',
+        'changes' => 'array'
     ];
 
     /**
@@ -42,7 +42,10 @@ class ActionEvent extends Model
      */
     public function user()
     {
-        return $this->belongsTo(config('auth.providers.users.model'), 'user_id');
+        return $this->belongsTo(
+            config('auth.providers.users.model'),
+            'user_id'
+        );
     }
 
     /**
@@ -50,7 +53,11 @@ class ActionEvent extends Model
      */
     public function target()
     {
-        return $this->morphTo('target', 'target_type', 'target_id')->withTrashed();
+        return $this->morphTo(
+            'target',
+            'target_type',
+            'target_id'
+        )->withTrashed();
     }
 
     /**
@@ -76,7 +83,7 @@ class ActionEvent extends Model
             'original' => null,
             'changes' => $model->attributesToArray(),
             'status' => 'finished',
-            'exception' => '',
+            'exception' => ''
         ]);
     }
 
@@ -100,10 +107,13 @@ class ActionEvent extends Model
             'model_type' => $model->getMorphClass(),
             'model_id' => $model->getKey(),
             'fields' => '',
-            'original' => array_intersect_key($model->getOriginal(), $model->getDirty()),
+            'original' => array_intersect_key(
+                $model->getOriginal(),
+                $model->getDirty()
+            ),
             'changes' => $model->getDirty(),
             'status' => 'finished',
-            'exception' => '',
+            'exception' => ''
         ]);
     }
 
@@ -115,15 +125,20 @@ class ActionEvent extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $pivot
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public static function forAttachedResource(NovaRequest $request, $parent, $pivot)
-    {
+    public static function forAttachedResource(
+        NovaRequest $request,
+        $parent,
+        $pivot
+    ) {
         return new static([
             'batch_id' => (string) Str::orderedUuid(),
             'user_id' => $request->user()->getAuthIdentifier(),
             'name' => 'Attach',
             'actionable_type' => $parent->getMorphClass(),
             'actionable_id' => $parent->getKey(),
-            'target_type' => Nova::modelInstanceForKey($request->relatedResource)->getMorphClass(),
+            'target_type' => Nova::modelInstanceForKey(
+                $request->relatedResource
+            )->getMorphClass(),
             'target_id' => $parent->getKey(),
             'model_type' => $pivot->getMorphClass(),
             'model_id' => $pivot->getKey(),
@@ -131,7 +146,7 @@ class ActionEvent extends Model
             'original' => null,
             'changes' => $pivot->attributesToArray(),
             'status' => 'finished',
-            'exception' => '',
+            'exception' => ''
         ]);
     }
 
@@ -143,23 +158,31 @@ class ActionEvent extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $pivot
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public static function forAttachedResourceUpdate(NovaRequest $request, $parent, $pivot)
-    {
+    public static function forAttachedResourceUpdate(
+        NovaRequest $request,
+        $parent,
+        $pivot
+    ) {
         return new static([
             'batch_id' => (string) Str::orderedUuid(),
             'user_id' => $request->user()->getAuthIdentifier(),
             'name' => 'Update Attached',
             'actionable_type' => $parent->getMorphClass(),
             'actionable_id' => $parent->getKey(),
-            'target_type' => Nova::modelInstanceForKey($request->relatedResource)->getMorphClass(),
+            'target_type' => Nova::modelInstanceForKey(
+                $request->relatedResource
+            )->getMorphClass(),
             'target_id' => $request->relatedResourceId,
             'model_type' => $pivot->getMorphClass(),
             'model_id' => $pivot->getKey(),
             'fields' => '',
-            'original' => array_intersect_key($pivot->getOriginal(), $pivot->getDirty()),
+            'original' => array_intersect_key(
+                $pivot->getOriginal(),
+                $pivot->getDirty()
+            ),
             'changes' => $pivot->getDirty(),
             'status' => 'finished',
-            'exception' => '',
+            'exception' => ''
         ]);
     }
 
@@ -195,8 +218,11 @@ class ActionEvent extends Model
      * @param  \Illuminate\Support\Collection  $models
      * @return \Illuminate\Support\Collection
      */
-    public static function forSoftDeleteAction($action, $user, Collection $models)
-    {
+    public static function forSoftDeleteAction(
+        $action,
+        $user,
+        Collection $models
+    ) {
         $batchId = (string) Str::orderedUuid();
 
         return $models->map(function ($model) use ($action, $user, $batchId) {
@@ -215,8 +241,8 @@ class ActionEvent extends Model
                 'changes' => null,
                 'status' => 'finished',
                 'exception' => '',
-                'created_at' => new DateTime,
-                'updated_at' => new DateTime,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
             ]);
         });
     }
@@ -230,11 +256,20 @@ class ActionEvent extends Model
      * @param  string  $pivotClass
      * @return \Illuminate\Support\Collection
      */
-    public static function forResourceDetach($user, $parent, Collection $models, $pivotClass)
-    {
+    public static function forResourceDetach(
+        $user,
+        $parent,
+        Collection $models,
+        $pivotClass
+    ) {
         $batchId = (string) Str::orderedUuid();
 
-        return $models->map(function ($model) use ($user, $parent, $pivotClass, $batchId) {
+        return $models->map(function ($model) use (
+            $user,
+            $parent,
+            $pivotClass,
+            $batchId
+        ) {
             return new static([
                 'batch_id' => $batchId,
                 'user_id' => $user->getAuthIdentifier(),
@@ -250,8 +285,8 @@ class ActionEvent extends Model
                 'changes' => null,
                 'status' => 'finished',
                 'exception' => '',
-                'created_at' => new DateTime,
-                'updated_at' => new DateTime,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
             ]);
         });
     }
@@ -266,16 +301,25 @@ class ActionEvent extends Model
      * @param  string  $status
      * @return void
      */
-    public static function createForModels(ActionRequest $request, Action $action,
-                                           $batchId, Collection $models, $status = 'running')
-    {
-        $models = $models->map(function ($model) use ($request, $action, $batchId, $status) {
+    public static function createForModels(
+        ActionRequest $request,
+        Action $action,
+        $batchId,
+        Collection $models,
+        $status = 'running'
+    ) {
+        $models = $models->map(function ($model) use (
+            $request,
+            $action,
+            $batchId,
+            $status
+        ) {
             return array_merge(
                 static::defaultAttributes($request, $action, $batchId, $status),
                 [
                     'actionable_id' => $request->actionableKey($model),
                     'target_id' => $request->targetKey($model),
-                    'model_id' => $model->getKey(),
+                    'model_id' => $model->getKey()
                 ]
             );
         });
@@ -296,15 +340,22 @@ class ActionEvent extends Model
      * @param  string  $status
      * @return array
      */
-    public static function defaultAttributes(ActionRequest $request, Action $action,
-                                             $batchId, $status = 'running')
-    {
+    public static function defaultAttributes(
+        ActionRequest $request,
+        Action $action,
+        $batchId,
+        $status = 'running'
+    ) {
         if ($request->isPivotAction()) {
             $pivotClass = $request->pivotRelation()->getPivotClass();
 
-            $modelType = collect(Relation::$morphMap)->filter(function ($model, $alias) use ($pivotClass) {
-                return $model === $pivotClass;
-            })->keys()->first() ?? $pivotClass;
+            $modelType =
+                collect(Relation::$morphMap)
+                    ->filter(function ($model, $alias) use ($pivotClass) {
+                        return $model === $pivotClass;
+                    })
+                    ->keys()
+                    ->first() ?? $pivotClass;
         } else {
             $modelType = $request->actionableModel()->getMorphClass();
         }
@@ -321,8 +372,8 @@ class ActionEvent extends Model
             'changes' => null,
             'status' => $status,
             'exception' => '',
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
         ];
     }
 
@@ -339,13 +390,19 @@ class ActionEvent extends Model
                 ->where('actionable_type', $model['actionable_type'])
                 ->whereNotIn('id', function ($query) use ($model, $limit) {
                     $query->select('id')->fromSub(
-                        static::select('id')->orderBy('id', 'desc')
-                                ->where('actionable_id', $model['actionable_id'])
-                                ->where('actionable_type', $model['actionable_type'])
-                                ->limit($limit)->toBase(),
+                        static::select('id')
+                            ->orderBy('id', 'desc')
+                            ->where('actionable_id', $model['actionable_id'])
+                            ->where(
+                                'actionable_type',
+                                $model['actionable_type']
+                            )
+                            ->limit($limit)
+                            ->toBase(),
                         'action_events_temp'
                     );
-                })->delete();
+                })
+                ->delete();
         });
     }
 
@@ -358,9 +415,10 @@ class ActionEvent extends Model
     public static function markBatchAsRunning($batchId)
     {
         return static::where('batch_id', $batchId)
-                    ->whereNotIn('status', ['finished', 'failed'])->update([
-                        'status' => 'running',
-                    ]);
+            ->whereNotIn('status', ['finished', 'failed'])
+            ->update([
+                'status' => 'running'
+            ]);
     }
 
     /**
@@ -372,9 +430,10 @@ class ActionEvent extends Model
     public static function markBatchAsFinished($batchId)
     {
         return static::where('batch_id', $batchId)
-                    ->whereNotIn('status', ['finished', 'failed'])->update([
-                        'status' => 'finished',
-                    ]);
+            ->whereNotIn('status', ['finished', 'failed'])
+            ->update([
+                'status' => 'finished'
+            ]);
     }
 
     /**
@@ -399,10 +458,11 @@ class ActionEvent extends Model
     public static function markBatchAsFailed($batchId, $e = null)
     {
         return static::where('batch_id', $batchId)
-                    ->whereNotIn('status', ['finished', 'failed'])->update([
-                        'status' => 'failed',
-                        'exception' => $e ? (string) $e : '',
-                    ]);
+            ->whereNotIn('status', ['finished', 'failed'])
+            ->update([
+                'status' => 'failed',
+                'exception' => $e ? (string) $e : ''
+            ]);
     }
 
     /**
@@ -430,9 +490,9 @@ class ActionEvent extends Model
     public static function updateStatus($batchId, $model, $status, $e = null)
     {
         return static::where('batch_id', $batchId)
-                        ->where('model_type', $model->getMorphClass())
-                        ->where('model_id', $model->getKey())
-                        ->update(['status' => $status, 'exception' => (string) $e]);
+            ->where('model_type', $model->getMorphClass())
+            ->where('model_id', $model->getKey())
+            ->update(['status' => $status, 'exception' => (string) $e]);
     }
 
     /**

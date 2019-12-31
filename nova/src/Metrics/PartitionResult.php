@@ -41,9 +41,11 @@ class PartitionResult implements JsonSerializable
      */
     public function label(Closure $callback)
     {
-        $this->value = collect($this->value)->mapWithKeys(function ($value, $label) use ($callback) {
-            return [$callback($label) => $value];
-        })->all();
+        $this->value = collect($this->value)
+            ->mapWithKeys(function ($value, $label) use ($callback) {
+                return [$callback($label) => $value];
+            })
+            ->all();
 
         return $this;
     }
@@ -69,15 +71,21 @@ class PartitionResult implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'value' => collect($this->value ?? [])->map(function ($value, $label) {
-                return array_filter([
-                    'color' => $this->colors->get($label),
-                    'label' => $label,
-                    'value' => $value,
-                ], function ($value) {
-                    return ! is_null($value);
-                });
-            })->values()->all(),
+            'value' => collect($this->value ?? [])
+                ->map(function ($value, $label) {
+                    return array_filter(
+                        [
+                            'color' => $this->colors->get($label),
+                            'label' => $label,
+                            'value' => $value
+                        ],
+                        function ($value) {
+                            return !is_null($value);
+                        }
+                    );
+                })
+                ->values()
+                ->all()
         ];
     }
 }

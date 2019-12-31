@@ -19,18 +19,21 @@ class Place extends Text
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->secondAddressLine('address_line_2')
-             ->city('city')
-             ->state('state')
-             ->postalCode('postal_code')
-             ->suburb('suburb')
-             ->country('country')
-             ->latitude('latitude')
-             ->longitude('longitude');
+            ->city('city')
+            ->state('state')
+            ->postalCode('postal_code')
+            ->suburb('suburb')
+            ->country('country')
+            ->latitude('latitude')
+            ->longitude('longitude');
     }
 
     /**
@@ -52,7 +55,9 @@ class Place extends Text
     public function type($type)
     {
         if ($type == 'city') {
-            $this->secondAddressLine(null)->city(null)->postalCode(null);
+            $this->secondAddressLine(null)
+                ->city(null)
+                ->postalCode(null);
         }
 
         return $this->withMeta(['placeType' => $type]);

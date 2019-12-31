@@ -15,8 +15,6 @@ class LensCardController extends Controller
      */
     public function index(LensCardRequest $request)
     {
-        return response()->json(
-            $request->availableCards()
-        );
+        return response()->json($request->availableCards());
     }
 }

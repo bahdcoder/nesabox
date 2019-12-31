@@ -34,10 +34,9 @@ class DeleteAttachments
     public function __invoke(Request $request, $model)
     {
         Attachment::where('attachable_type', get_class($model))
-                ->where('attachable_id', $model->getKey())
-                ->get()
-                ->each
-                ->purge();
+            ->where('attachable_id', $model->getKey())
+            ->get()
+            ->each->purge();
 
         return [$this->field->attribute => ''];
     }

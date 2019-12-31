@@ -10,7 +10,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class LensMetricControllerTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -19,34 +19,59 @@ class LensMetricControllerTest extends IntegrationTest
 
     public function test_available_cards_can_be_retrieved()
     {
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/cards');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/cards'
+        );
 
         $response->assertStatus(200);
-        $this->assertEquals('value-metric', $response->original[0]->jsonSerialize()['component']);
-        $this->assertEquals(TotalUsers::class, $response->original[0]->jsonSerialize()['class']);
-        $this->assertEquals((new TotalUsers)->uriKey(), $response->original[0]->jsonSerialize()['uriKey']);
-        $this->assertFalse($response->original[0]->jsonSerialize()['onlyOnDetail']);
+        $this->assertEquals(
+            'value-metric',
+            $response->original[0]->jsonSerialize()['component']
+        );
+        $this->assertEquals(
+            TotalUsers::class,
+            $response->original[0]->jsonSerialize()['class']
+        );
+        $this->assertEquals(
+            (new TotalUsers())->uriKey(),
+            $response->original[0]->jsonSerialize()['uriKey']
+        );
+        $this->assertFalse(
+            $response->original[0]->jsonSerialize()['onlyOnDetail']
+        );
     }
 
     public function test_available_metrics_can_be_retrieved()
     {
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics'
+        );
 
         $response->assertStatus(200);
-        $this->assertEquals('value-metric', $response->original[0]->jsonSerialize()['component']);
-        $this->assertEquals(TotalUsers::class, $response->original[0]->jsonSerialize()['class']);
-        $this->assertEquals((new TotalUsers)->uriKey(), $response->original[0]->jsonSerialize()['uriKey']);
-        $this->assertFalse($response->original[0]->jsonSerialize()['onlyOnDetail']);
+        $this->assertEquals(
+            'value-metric',
+            $response->original[0]->jsonSerialize()['component']
+        );
+        $this->assertEquals(
+            TotalUsers::class,
+            $response->original[0]->jsonSerialize()['class']
+        );
+        $this->assertEquals(
+            (new TotalUsers())->uriKey(),
+            $response->original[0]->jsonSerialize()['uriKey']
+        );
+        $this->assertFalse(
+            $response->original[0]->jsonSerialize()['onlyOnDetail']
+        );
     }
 
     public function test_available_metrics_cant_be_retrieved_if_not_authorized_to_view_resource()
     {
         $_SERVER['nova.authorize.forbidden-user-lens'] = false;
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics'
+        );
 
         unset($_SERVER['nova.authorize.forbidden-user-lens']);
 
@@ -57,22 +82,27 @@ class LensMetricControllerTest extends IntegrationTest
     {
         $_SERVER['nova.totalUsers.canSee'] = false;
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics'
+        );
 
         unset($_SERVER['nova.totalUsers.canSee']);
 
         $response->assertStatus(200);
         $this->assertCount(2, $response->original);
-        $this->assertEquals(UserGrowth::class, $response->original[0]->jsonSerialize()['class']);
+        $this->assertEquals(
+            UserGrowth::class,
+            $response->original[0]->jsonSerialize()['class']
+        );
     }
 
     public function test_can_retrieve_metric_value()
     {
         factory(User::class, 2)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics/total-users');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics/total-users'
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(2, $response->original['value']->value);
@@ -83,8 +113,9 @@ class LensMetricControllerTest extends IntegrationTest
     {
         $_SERVER['nova.totalUsers.canSee'] = false;
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics/total-users');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics/total-users'
+        );
 
         unset($_SERVER['nova.totalUsers.canSee']);
 
@@ -99,8 +130,9 @@ class LensMetricControllerTest extends IntegrationTest
         $user->created_at = now()->subDays(31);
         $user->save();
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics/user-growth?range=30');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics/user-growth?range=30'
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(1, $response->original['value']->value);
@@ -117,8 +149,9 @@ class LensMetricControllerTest extends IntegrationTest
 
         $_SERVER['__nova.userGrowthColumn'] = 'updated_at';
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics/user-growth?range=30');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics/user-growth?range=30'
+        );
 
         unset($_SERVER['__nova.userGrowthColumn']);
 
@@ -132,11 +165,14 @@ class LensMetricControllerTest extends IntegrationTest
         factory(User::class, 2)->create();
 
         $user = User::find(2);
-        $user->created_at = now()->subMonthsNoOverflow(1)->firstOfMonth();
+        $user->created_at = now()
+            ->subMonthsNoOverflow(1)
+            ->firstOfMonth();
         $user->save();
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics/user-growth?range=MTD');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics/user-growth?range=MTD'
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(1, $response->original['value']->value);
@@ -155,8 +191,9 @@ class LensMetricControllerTest extends IntegrationTest
         $user->created_at = $this->getFirstDayOfPreviousQuarter();
         $user->save();
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics/user-growth?range=QTD');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics/user-growth?range=QTD'
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(1, $response->original['value']->value);
@@ -168,11 +205,14 @@ class LensMetricControllerTest extends IntegrationTest
         factory(User::class, 2)->create();
 
         $user = User::find(2);
-        $user->created_at = now()->subYearsNoOverflow(1)->firstOfYear();
+        $user->created_at = now()
+            ->subYearsNoOverflow(1)
+            ->firstOfYear();
         $user->save();
 
-        $response = $this->withExceptionHandling()
-                        ->get('/nova-api/users/lens/user-lens/metrics/user-growth?range=YTD');
+        $response = $this->withExceptionHandling()->get(
+            '/nova-api/users/lens/user-lens/metrics/user-growth?range=YTD'
+        );
 
         $response->assertStatus(200);
         $this->assertEquals(1, $response->original['value']->value);

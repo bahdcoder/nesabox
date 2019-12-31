@@ -18,14 +18,19 @@ class MorphedResourceAttachController extends ResourceAttachController
     {
         ($pivot = $relationship->newPivot())->forceFill([
             $relationship->getForeignPivotKeyName() => $request->resourceId,
-            $relationship->getRelatedPivotKeyName() => $request->input($request->relatedResource),
-            $relationship->getMorphType() => $request->findModelOrFail()->{$request->viaRelationship}()->getMorphClass(),
+            $relationship->getRelatedPivotKeyName() => $request->input(
+                $request->relatedResource
+            ),
+            $relationship->getMorphType() => $request
+                ->findModelOrFail()
+                ->{$request->viaRelationship}()
+                ->getMorphClass()
         ]);
 
         if ($relationship->withTimestamps) {
             $pivot->forceFill([
-                $relationship->createdAt() => new DateTime,
-                $relationship->updatedAt() => new DateTime,
+                $relationship->createdAt() => new DateTime(),
+                $relationship->updatedAt() => new DateTime()
             ]);
         }
 

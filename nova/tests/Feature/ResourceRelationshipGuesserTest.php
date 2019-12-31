@@ -10,14 +10,16 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceRelationshipGuesserTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
 
     public function test_resource_can_be_guessed()
     {
-        $fields = (new RelationshipGuesserResource(new Fluent))->fields(Request::create('/'));
+        $fields = (new RelationshipGuesserResource(new Fluent()))->fields(
+            Request::create('/')
+        );
         $this->assertEquals(UserResource::class, $fields[1]->resourceClass);
     }
 }

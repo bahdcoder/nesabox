@@ -15,7 +15,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceDestroyTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -29,10 +29,12 @@ class ResourceDestroyTest extends IntegrationTest
         $role->users()->attach($user);
         $role2 = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/roles', [
-                            'resources' => [$role->id, $role2->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/roles',
+            [
+                'resources' => [$role->id, $role2->id]
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -41,7 +43,10 @@ class ResourceDestroyTest extends IntegrationTest
 
         $this->assertCount(2, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($role->id, ActionEvent::where('actionable_id', $role->id)->first()->target_id);
+        $this->assertEquals(
+            $role->id,
+            ActionEvent::where('actionable_id', $role->id)->first()->target_id
+        );
     }
 
     public function test_destroying_resource_can_prune_attachment_records()
@@ -52,10 +57,12 @@ class ResourceDestroyTest extends IntegrationTest
         $user = factory(User::class)->create();
         $role->users()->attach($user);
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/roles', [
-                            'resources' => [$role->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/roles',
+            [
+                'resources' => [$role->id]
+            ]
+        );
 
         unset($_SERVER['__nova.role.prunable']);
 
@@ -70,10 +77,12 @@ class ResourceDestroyTest extends IntegrationTest
         $role = factory(Role::class)->create();
         $role2 = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/roles?search=1', [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/roles?search=1',
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -81,7 +90,10 @@ class ResourceDestroyTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($role->id, ActionEvent::where('actionable_id', $role->id)->first()->target_id);
+        $this->assertEquals(
+            $role->id,
+            ActionEvent::where('actionable_id', $role->id)->first()->target_id
+        );
     }
 
     public function test_can_destroy_resources_via_filters()
@@ -89,17 +101,21 @@ class ResourceDestroyTest extends IntegrationTest
         $role = factory(Role::class)->create();
         $role2 = factory(Role::class)->create();
 
-        $filters = base64_encode(json_encode([
-            [
-                'class' => IdFilter::class,
-                'value' => 1,
-            ],
-        ]));
+        $filters = base64_encode(
+            json_encode([
+                [
+                    'class' => IdFilter::class,
+                    'value' => 1
+                ]
+            ])
+        );
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/roles?filters='.$filters, [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/roles?filters=' . $filters,
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -107,7 +123,10 @@ class ResourceDestroyTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($role->id, ActionEvent::where('actionable_id', $role->id)->first()->target_id);
+        $this->assertEquals(
+            $role->id,
+            ActionEvent::where('actionable_id', $role->id)->first()->target_id
+        );
     }
 
     public function test_can_destroy_soft_deleted_resources()
@@ -115,10 +134,12 @@ class ResourceDestroyTest extends IntegrationTest
         $user = factory(User::class)->create();
         $this->assertNull($user->deleted_at);
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users', [
-                            'resources' => [$user->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users',
+            [
+                'resources' => [$user->id]
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -141,10 +162,12 @@ class ResourceDestroyTest extends IntegrationTest
 
         Gate::policy(User::class, UserPolicy::class);
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users', [
-                            'resources' => [$user->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users',
+            [
+                'resources' => [$user->id]
+            ]
+        );
 
         unset($_SERVER['nova.user.authorizable']);
         unset($_SERVER['nova.user.deletable']);
@@ -159,12 +182,16 @@ class ResourceDestroyTest extends IntegrationTest
 
     public function test_can_destroy_all_matching()
     {
-        factory(Post::class)->times(250)->create();
+        factory(Post::class)
+            ->times(250)
+            ->create();
 
-        $response = $this->withExceptionHandling()
-            ->deleteJson('/nova-api/posts', [
-                'resources' => 'all',
-            ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/posts',
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -182,10 +209,12 @@ class ResourceDestroyTest extends IntegrationTest
         $user = factory(User::class)->create();
         $role->users()->attach($user);
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/roles', [
-                            'resources' => [$role->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/roles',
+            [
+                'resources' => [$role->id]
+            ]
+        );
 
         $actionEvent = ActionEvent::first();
 

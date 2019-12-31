@@ -57,6 +57,13 @@ cat >> /home/{$user}/.ssh/authorized_keys << EOF
 
 EOF
 
+cat >> /root/.ssh/authorized_keys << EOF
+# {$this->key->name}
+
+{$this->key->key}
+
+EOF
+
 # Restart SSH
 service ssh restart        
 EOD;

@@ -15,7 +15,11 @@ class AverageWordCount extends Value
      */
     public function calculate(Request $request)
     {
-        return $this->precision(2)->average($request, Post::class, 'word_count');
+        return $this->precision(2)->average(
+            $request,
+            Post::class,
+            'word_count'
+        );
     }
 
     /**

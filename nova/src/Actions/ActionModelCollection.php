@@ -17,15 +17,17 @@ class ActionModelCollection extends EloquentCollection
     {
         $action = $request->action();
 
-        if (! $request->isPivotAction()) {
+        if (!$request->isPivotAction()) {
             $models = $this->filterByResourceAuthorization($request);
         } else {
             $models = $this;
         }
 
-        return static::make($models->filter(function ($model) use ($request, $action) {
-            return $action->authorizedToRun($request, $model);
-        }));
+        return static::make(
+            $models->filter(function ($model) use ($request, $action) {
+                return $action->authorizedToRun($request, $model);
+            })
+        );
     }
 
     /**
@@ -39,15 +41,17 @@ class ActionModelCollection extends EloquentCollection
         if ($request->action()->runCallback) {
             $models = $this->mapInto($request->resource())->map->resource;
         } else {
-            $models = $this->mapInto($request->resource())
-                           ->filter->authorizedToUpdate($request)->map->resource;
+            $models = $this->mapInto(
+                $request->resource()
+            )->filter->authorizedToUpdate($request)->map->resource;
         }
 
         $action = $request->action();
 
         if ($action instanceof DestructiveAction) {
-            $models = $this->mapInto($request->resource())
-                           ->filter->authorizedToDelete($request)->map->resource;
+            $models = $this->mapInto(
+                $request->resource()
+            )->filter->authorizedToDelete($request)->map->resource;
         }
 
         return $models;

@@ -30,10 +30,7 @@ class UserLens extends Lens
      */
     public function fields(Request $request)
     {
-        return [
-            ID::make('ID', 'id'),
-            Text::make('Name', 'name'),
-        ];
+        return [ID::make('ID', 'id'), Text::make('Name', 'name')];
     }
 
     /**
@@ -44,9 +41,7 @@ class UserLens extends Lens
      */
     public function filters(Request $request)
     {
-        return [
-            new IdFilter,
-        ];
+        return [new IdFilter()];
     }
 
     /**
@@ -67,7 +62,8 @@ class UserLens extends Lens
      */
     public function authorizedToSee(Request $request)
     {
-        return $_SERVER['nova.authorize.forbidden-user-lens'] ?? parent::authorizedToSee($request);
+        return $_SERVER['nova.authorize.forbidden-user-lens'] ??
+            parent::authorizedToSee($request);
     }
 
     /**
@@ -78,9 +74,7 @@ class UserLens extends Lens
      */
     public function actions(Request $request)
     {
-        return [
-            new NoopAction(),
-        ];
+        return [new NoopAction()];
     }
 
     /**
@@ -92,12 +86,12 @@ class UserLens extends Lens
     public function cards(Request $request)
     {
         return [
-            (new TotalUsers)->canSee(function ($request) {
+            (new TotalUsers())->canSee(function ($request) {
                 return $_SERVER['nova.totalUsers.canSee'] ?? true;
             }),
 
-            new UserGrowth,
-            (new CustomerRevenue)->onlyOnDetail(),
+            new UserGrowth(),
+            (new CustomerRevenue())->onlyOnDetail()
         ];
     }
 }

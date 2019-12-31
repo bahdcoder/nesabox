@@ -27,7 +27,7 @@ class DashboardMetricController extends Controller
     public function show(DashboardMetricRequest $request)
     {
         return response()->json([
-            'value' => $request->metric()->resolve($request),
+            'value' => $request->metric()->resolve($request)
         ]);
     }
 }

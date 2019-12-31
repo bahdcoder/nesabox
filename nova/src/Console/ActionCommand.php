@@ -36,10 +36,10 @@ class ActionCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('destructive')) {
-            return __DIR__.'/stubs/destructive-action.stub';
+            return __DIR__ . '/stubs/destructive-action.stub';
         }
 
-        return __DIR__.'/stubs/action.stub';
+        return __DIR__ . '/stubs/action.stub';
     }
 
     /**
@@ -50,7 +50,7 @@ class ActionCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova\Actions';
+        return $rootNamespace . '\Nova\Actions';
     }
 
     /**
@@ -61,7 +61,12 @@ class ActionCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['destructive', null, InputOption::VALUE_NONE, 'Indicate that the action deletes / destroys resources'],
+            [
+                'destructive',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicate that the action deletes / destroys resources'
+            ]
         ];
     }
 }

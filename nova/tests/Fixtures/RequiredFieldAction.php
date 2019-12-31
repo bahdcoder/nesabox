@@ -34,8 +34,6 @@ class RequiredFieldAction extends Action
      */
     public function fields()
     {
-        return [
-            Text::make('Test', 'test')->rules('required'),
-        ];
+        return [Text::make('Test', 'test')->rules('required')];
     }
 }

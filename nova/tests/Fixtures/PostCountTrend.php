@@ -19,11 +19,12 @@ class PostCountTrend extends Trend
         if ($request->resourceId) {
             $query = Post::where('user_id', $request->resourceId);
         } else {
-            $query = (new Post)->newQuery();
+            $query = (new Post())->newQuery();
         }
 
         return $this->count(
-            $request, $query,
+            $request,
+            $query,
             $_SERVER['nova.postCountUnit'] ?? Trend::BY_MONTHS
         );
     }
@@ -38,7 +39,7 @@ class PostCountTrend extends Trend
         return $_SERVER['nova.postCountRanges'] ?? [
             3 => 'Last 3 Months',
             6 => 'Last 6 Months',
-            12 => 'Last 12 Months',
+            12 => 'Last 12 Months'
         ];
     }
 

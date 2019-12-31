@@ -22,7 +22,8 @@ class ActionRequest extends NovaRequest
         return once(function () {
             return $this->availableActions()->first(function ($action) {
                 return $action->uriKey() == $this->query('action');
-            }) ?: abort($this->actionExists() ? 403 : 404);
+            }) ?:
+                abort($this->actionExists() ? 403 : 404);
         });
     }
 
@@ -34,8 +35,8 @@ class ActionRequest extends NovaRequest
     protected function resolveActions()
     {
         return $this->isPivotAction()
-                    ? $this->newResource()->resolvePivotActions($this)
-                    : $this->newResource()->resolveActions($this);
+            ? $this->newResource()->resolvePivotActions($this)
+            : $this->newResource()->resolveActions($this);
     }
 
     /**
@@ -45,7 +46,9 @@ class ActionRequest extends NovaRequest
      */
     protected function availableActions()
     {
-        return $this->resolveActions()->filter->authorizedToSee($this)->values();
+        return $this->resolveActions()
+            ->filter->authorizedToSee($this)
+            ->values();
     }
 
     /**
@@ -81,11 +84,14 @@ class ActionRequest extends NovaRequest
     {
         $output = [];
 
-        $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
-            $query->whereKey(explode(',', $this->resources));
-        })->latest($this->model()->getKeyName())->chunk($count, function ($chunk) use ($callback, &$output) {
-            $output[] = $callback($this->mapChunk($chunk));
-        });
+        $this->toSelectedResourceQuery()
+            ->when(!$this->forAllMatchingResources(), function ($query) {
+                $query->whereKey(explode(',', $this->resources));
+            })
+            ->latest($this->model()->getKeyName())
+            ->chunk($count, function ($chunk) use ($callback, &$output) {
+                $output[] = $callback($this->mapChunk($chunk));
+            });
 
         return $output;
     }
@@ -102,8 +108,8 @@ class ActionRequest extends NovaRequest
         }
 
         return $this->viaRelationship()
-                        ? $this->modelsViaRelationship()
-                        : $this->newQueryWithoutScopes();
+            ? $this->modelsViaRelationship()
+            : $this->newQueryWithoutScopes();
     }
 
     /**
@@ -113,9 +119,13 @@ class ActionRequest extends NovaRequest
      */
     protected function modelsViaRelationship()
     {
-        return $this->findParentModel()->{$this->viaRelationship}()
-                        ->withoutGlobalScopes()
-                        ->whereIn($this->model()->getQualifiedKeyName(), explode(',', $this->resources));
+        return $this->findParentModel()
+            ->{$this->viaRelationship}()
+            ->withoutGlobalScopes()
+            ->whereIn(
+                $this->model()->getQualifiedKeyName(),
+                explode(',', $this->resources)
+            );
     }
 
     /**
@@ -126,9 +136,9 @@ class ActionRequest extends NovaRequest
      */
     protected function mapChunk($chunk)
     {
-        return ActionModelCollection::make($this->isPivotAction()
-                    ? $chunk->map->pivot
-                    : $chunk);
+        return ActionModelCollection::make(
+            $this->isPivotAction() ? $chunk->map->pivot : $chunk
+        );
     }
 
     /**
@@ -138,9 +148,13 @@ class ActionRequest extends NovaRequest
      */
     public function validateFields()
     {
-        $this->validate(collect($this->action()->fields())->mapWithKeys(function ($field) {
-            return $field->getCreationRules($this);
-        })->all());
+        $this->validate(
+            collect($this->action()->fields())
+                ->mapWithKeys(function ($field) {
+                    return $field->getCreationRules($this);
+                })
+                ->all()
+        );
     }
 
     /**
@@ -150,9 +164,13 @@ class ActionRequest extends NovaRequest
      */
     public function resolveFieldsForStorage()
     {
-        return collect($this->resolveFields()->getAttributes())->map(function ($attribute) {
-            return $attribute instanceof UploadedFile ? $attribute->hashName() : $attribute;
-        })->all();
+        return collect($this->resolveFields()->getAttributes())
+            ->map(function ($attribute) {
+                return $attribute instanceof UploadedFile
+                    ? $attribute->hashName()
+                    : $attribute;
+            })
+            ->all();
     }
 
     /**
@@ -163,15 +181,25 @@ class ActionRequest extends NovaRequest
     public function resolveFields()
     {
         return once(function () {
-            $fields = new Fluent;
+            $fields = new Fluent();
 
-            $results = collect($this->action()->fields())->mapWithKeys(function ($field) use ($fields) {
-                return [$field->attribute => $field->fillForAction($this, $fields)];
-            });
+            $results = collect($this->action()->fields())->mapWithKeys(
+                function ($field) use ($fields) {
+                    return [
+                        $field->attribute => $field->fillForAction(
+                            $this,
+                            $fields
+                        )
+                    ];
+                }
+            );
 
-            return new ActionFields(collect($fields->getAttributes()), $results->filter(function ($field) {
-                return is_callable($field);
-            }));
+            return new ActionFields(
+                collect($fields->getAttributes()),
+                $results->filter(function ($field) {
+                    return is_callable($field);
+                })
+            );
         });
     }
 
@@ -186,8 +214,8 @@ class ActionRequest extends NovaRequest
     public function actionableKey($model)
     {
         return $this->isPivotAction()
-                        ? $model->{$this->pivotRelation()->getForeignPivotKeyName()}
-                        : $model->getKey();
+            ? $model->{$this->pivotRelation()->getForeignPivotKeyName()}
+            : $model->getKey();
     }
 
     /**
@@ -200,8 +228,8 @@ class ActionRequest extends NovaRequest
     public function actionableModel()
     {
         return $this->isPivotAction()
-                        ? $this->newViaResource()->model()
-                        : $this->model();
+            ? $this->newViaResource()->model()
+            : $this->model();
     }
 
     /**
@@ -215,8 +243,8 @@ class ActionRequest extends NovaRequest
     public function targetKey($model)
     {
         return $this->isPivotAction()
-                        ? $model->{$this->pivotRelation()->getRelatedPivotKeyName()}
-                        : $model->getKey();
+            ? $model->{$this->pivotRelation()->getRelatedPivotKeyName()}
+            : $model->getKey();
     }
 
     /**
@@ -226,7 +254,9 @@ class ActionRequest extends NovaRequest
      */
     public function targetModel()
     {
-        return $this->isPivotAction() ? $this->pivotRelation()->newPivot() : $this->model();
+        return $this->isPivotAction()
+            ? $this->pivotRelation()->newPivot()
+            : $this->model();
     }
 
     /**
@@ -237,7 +267,9 @@ class ActionRequest extends NovaRequest
     public function pivotRelation()
     {
         if ($this->isPivotAction()) {
-            return $this->newViaResource()->model()->{$this->viaRelationship}();
+            return $this->newViaResource()
+                ->model()
+                ->{$this->viaRelationship}();
         }
     }
 

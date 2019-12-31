@@ -43,7 +43,10 @@ class Boolean extends Field
      */
     protected function resolveAttribute($resource, $attribute)
     {
-        return parent::resolveAttribute($resource, $attribute) == $this->trueValue ? true : false;
+        return parent::resolveAttribute($resource, $attribute) ==
+            $this->trueValue
+            ? true
+            : false;
     }
 
     /**
@@ -55,11 +58,17 @@ class Boolean extends Field
      * @param  string  $attribute
      * @return void
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
-    {
+    protected function fillAttributeFromRequest(
+        NovaRequest $request,
+        $requestAttribute,
+        $model,
+        $attribute
+    ) {
         if (isset($request[$requestAttribute])) {
-            $model->{$attribute} = $request[$requestAttribute] == 1
-                    ? $this->trueValue : $this->falseValue;
+            $model->{$attribute} =
+                $request[$requestAttribute] == 1
+                    ? $this->trueValue
+                    : $this->falseValue;
         }
     }
 

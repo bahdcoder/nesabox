@@ -12,8 +12,11 @@ class Country extends Select
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->options([
@@ -262,7 +265,7 @@ class Country extends Select
             'EH' => __('Western Sahara'),
             'YE' => __('Yemen'),
             'ZM' => __('Zambia'),
-            'ZW' => __('Zimbabwe'),
+            'ZW' => __('Zimbabwe')
         ]);
     }
 }

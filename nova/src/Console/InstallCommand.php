@@ -41,7 +41,7 @@ class InstallCommand extends Command
 
         $this->comment('Generating User Resource...');
         $this->callSilent('nova:resource', ['name' => 'User']);
-        copy(__DIR__.'/stubs/user-resource.stub', app_path('Nova/User.php'));
+        copy(__DIR__ . '/stubs/user-resource.stub', app_path('Nova/User.php'));
 
         $this->setAppNamespace();
 
@@ -57,11 +57,18 @@ class InstallCommand extends Command
     {
         $namespace = Str::replaceLast('\\', '', $this->getAppNamespace());
 
-        file_put_contents(config_path('app.php'), str_replace(
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\NovaServiceProvider::class,".PHP_EOL,
-            file_get_contents(config_path('app.php'))
-        ));
+        file_put_contents(
+            config_path('app.php'),
+            str_replace(
+                "{$namespace}\\Providers\EventServiceProvider::class," .
+                    PHP_EOL,
+                "{$namespace}\\Providers\EventServiceProvider::class," .
+                    PHP_EOL .
+                    "        {$namespace}\Providers\NovaServiceProvider::class," .
+                    PHP_EOL,
+                file_get_contents(config_path('app.php'))
+            )
+        );
     }
 
     /**
@@ -74,7 +81,10 @@ class InstallCommand extends Command
         $namespace = $this->getAppNamespace();
 
         $this->setAppNamespaceOn(app_path('Nova/User.php'), $namespace);
-        $this->setAppNamespaceOn(app_path('Providers/NovaServiceProvider.php'), $namespace);
+        $this->setAppNamespaceOn(
+            app_path('Providers/NovaServiceProvider.php'),
+            $namespace
+        );
     }
 
     /**
@@ -86,10 +96,9 @@ class InstallCommand extends Command
      */
     protected function setAppNamespaceOn($file, $namespace)
     {
-        file_put_contents($file, str_replace(
-            'App\\',
-            $namespace,
-            file_get_contents($file)
-        ));
+        file_put_contents(
+            $file,
+            str_replace('App\\', $namespace, file_get_contents($file))
+        );
     }
 }

@@ -24,9 +24,14 @@ class Select extends Field
         }
 
         return $this->withMeta([
-            'options' => collect($options ?? [])->map(function ($label, $value) {
-                return is_array($label) ? $label + ['value' => $value] : ['label' => $label, 'value' => $value];
-            })->values()->all(),
+            'options' => collect($options ?? [])
+                ->map(function ($label, $value) {
+                    return is_array($label)
+                        ? $label + ['value' => $value]
+                        : ['label' => $label, 'value' => $value];
+                })
+                ->values()
+                ->all()
         ]);
     }
 
@@ -39,8 +44,8 @@ class Select extends Field
     {
         return $this->displayUsing(function ($value) {
             return collect($this->meta['options'])
-                    ->where('value', $value)
-                    ->first()['label'] ?? $value;
+                ->where('value', $value)
+                ->first()['label'] ?? $value;
         });
     }
 }

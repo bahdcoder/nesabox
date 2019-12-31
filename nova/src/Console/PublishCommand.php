@@ -29,22 +29,22 @@ class PublishCommand extends Command
     {
         $this->call('vendor:publish', [
             '--tag' => 'nova-config',
-            '--force' => $this->option('force'),
+            '--force' => $this->option('force')
         ]);
 
         $this->call('vendor:publish', [
             '--tag' => 'nova-assets',
-            '--force' => true,
+            '--force' => true
         ]);
 
         $this->call('vendor:publish', [
             '--tag' => 'nova-lang',
-            '--force' => $this->option('force'),
+            '--force' => $this->option('force')
         ]);
 
         $this->call('vendor:publish', [
             '--tag' => 'nova-views',
-            '--force' => $this->option('force'),
+            '--force' => $this->option('force')
         ]);
 
         $this->call('view:clear');

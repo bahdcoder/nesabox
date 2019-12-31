@@ -11,6 +11,8 @@ class Tag extends Model
      */
     public function posts()
     {
-        return $this->morphedByMany(Post::class, 'taggable')->withPivot('admin');
+        return $this->morphedByMany(Post::class, 'taggable')->withPivot(
+            'admin'
+        );
     }
 }

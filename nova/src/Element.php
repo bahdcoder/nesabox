@@ -86,10 +86,13 @@ abstract class Element implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        return array_merge([
-            'component' => $this->component(),
-            'prefixComponent' => false,
-            'onlyOnDetail' => $this->onlyOnDetail,
-        ], $this->meta());
+        return array_merge(
+            [
+                'component' => $this->component(),
+                'prefixComponent' => false,
+                'onlyOnDetail' => $this->onlyOnDetail
+            ],
+            $this->meta()
+        );
     }
 }

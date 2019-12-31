@@ -11,13 +11,17 @@ class UserWithRedirectResource extends UserResource
         return 'users-with-redirects';
     }
 
-    public static function redirectAfterCreate(NovaRequest $request, $newResource)
-    {
+    public static function redirectAfterCreate(
+        NovaRequest $request,
+        $newResource
+    ) {
         return 'https://yahoo.com';
     }
 
-    public static function redirectAfterUpdate(NovaRequest $request, $newResource)
-    {
+    public static function redirectAfterUpdate(
+        NovaRequest $request,
+        $newResource
+    ) {
         return 'https://google.com';
     }
 }

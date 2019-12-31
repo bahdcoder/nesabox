@@ -18,8 +18,7 @@ class DashboardCardRequest extends NovaRequest
         if ($dashboard === 'main') {
             return collect(Nova::$defaultDashboardCards)
                 ->unique()
-                ->filter
-                ->authorize($this)
+                ->filter->authorize($this)
                 ->values();
         }
 

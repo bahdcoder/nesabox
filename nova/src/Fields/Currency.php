@@ -19,12 +19,17 @@ class Currency extends Number
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->step('0.01')->displayUsing(function ($value) {
-            return ! is_null($value) ? money_format($this->format ?? '%i', $value) : null;
+            return !is_null($value)
+                ? money_format($this->format ?? '%i', $value)
+                : null;
         });
     }
 

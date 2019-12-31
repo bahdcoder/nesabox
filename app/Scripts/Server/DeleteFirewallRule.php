@@ -27,7 +27,7 @@ class DeleteFirewallRule extends Base
      *
      * @return void
      */
-    public function __construct(Server $server, FirewallRule $rule)
+    public function __construct(Server $server, Firewallrule $rule)
     {
         $this->rule = $rule;
         $this->server = $server;

@@ -11,7 +11,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class LensResourceDestroyTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,10 +23,12 @@ class LensResourceDestroyTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/lens/user-lens', [
-                            'resources' => [$user->id, $user2->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/lens/user-lens',
+            [
+                'resources' => [$user->id, $user2->id]
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -35,7 +37,10 @@ class LensResourceDestroyTest extends IntegrationTest
 
         $this->assertCount(2, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_can_destroy_all_matching_resources()
@@ -43,10 +48,12 @@ class LensResourceDestroyTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/lens/user-lens', [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/lens/user-lens',
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -55,7 +62,10 @@ class LensResourceDestroyTest extends IntegrationTest
 
         $this->assertCount(2, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_can_destroy_resources_via_filters()
@@ -63,17 +73,21 @@ class LensResourceDestroyTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        $filters = base64_encode(json_encode([
-            [
-                'class' => IdFilter::class,
-                'value' => 1,
-            ],
-        ]));
+        $filters = base64_encode(
+            json_encode([
+                [
+                    'class' => IdFilter::class,
+                    'value' => 1
+                ]
+            ])
+        );
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/lens/user-lens?filters='.$filters, [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/lens/user-lens?filters=' . $filters,
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -81,7 +95,10 @@ class LensResourceDestroyTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_cant_destroy_resources_not_authorized_to_destroy()
@@ -94,10 +111,12 @@ class LensResourceDestroyTest extends IntegrationTest
 
         Gate::policy(User::class, UserPolicy::class);
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/lens/user-lens', [
-                            'resources' => [$user->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/lens/user-lens',
+            [
+                'resources' => [$user->id]
+            ]
+        );
 
         unset($_SERVER['nova.user.authorizable']);
         unset($_SERVER['nova.user.deletable']);

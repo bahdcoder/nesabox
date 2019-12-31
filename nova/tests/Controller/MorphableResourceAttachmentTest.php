@@ -8,7 +8,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class MorphableResourceAttachmentTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -20,12 +20,14 @@ class MorphableResourceAttachmentTest extends IntegrationTest
         $post = factory(Post::class)->create();
         $tag = factory(Tag::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/posts/'.$post->id.'/attach-morphed/tags', [
-                            'tags' => $tag->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'tags',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/posts/' . $post->id . '/attach-morphed/tags',
+            [
+                'tags' => $tag->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'tags'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -42,12 +44,14 @@ class MorphableResourceAttachmentTest extends IntegrationTest
         $tag2 = factory(Tag::class)->create();
         $tag3 = factory(Tag::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/posts/'.$post->id.'/attach-morphed/tags', [
-                            'tags' => $tag3->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'tags',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/posts/' . $post->id . '/attach-morphed/tags',
+            [
+                'tags' => $tag3->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'tags'
+            ]
+        );
 
         $response->assertStatus(422);
         $this->assertCount(0, $post->fresh()->tags);
@@ -65,12 +69,14 @@ class MorphableResourceAttachmentTest extends IntegrationTest
         $_SERVER['nova.post.useCustomRelatableTags'] = true;
         unset($_SERVER['nova.post.relatableTags']);
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/posts/'.$post->id.'/attach-morphed/tags', [
-                            'tags' => $tag3->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'tags',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/posts/' . $post->id . '/attach-morphed/tags',
+            [
+                'tags' => $tag3->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'tags'
+            ]
+        );
 
         unset($_SERVER['nova.post.useCustomRelatableTags']);
 
@@ -86,12 +92,14 @@ class MorphableResourceAttachmentTest extends IntegrationTest
         $post = factory(Post::class)->create();
         $tag = factory(Tag::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/posts/'.$post->id.'/attach/tags', [
-                            'tags' => 100,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'tags',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/posts/' . $post->id . '/attach/tags',
+            [
+                'tags' => 100,
+                'admin' => 'Y',
+                'viaRelationship' => 'tags'
+            ]
+        );
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['tags']);
@@ -105,12 +113,14 @@ class MorphableResourceAttachmentTest extends IntegrationTest
         $tag = factory(Tag::class)->create();
         $post->tags()->attach($tag);
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/posts/'.$post->id.'/attach/tags', [
-                            'tags' => $tag->id,
-                            'admin' => 'Y',
-                            'viaRelationship' => 'tags',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/posts/' . $post->id . '/attach/tags',
+            [
+                'tags' => $tag->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'tags'
+            ]
+        );
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['tags']);
@@ -123,11 +133,13 @@ class MorphableResourceAttachmentTest extends IntegrationTest
         $post = factory(Post::class)->create();
         $tag = factory(Tag::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->postJson('/nova-api/posts/'.$post->id.'/attach/tags', [
-                            'tags' => $tag->id,
-                            'viaRelationship' => 'tags',
-                        ]);
+        $response = $this->withExceptionHandling()->postJson(
+            '/nova-api/posts/' . $post->id . '/attach/tags',
+            [
+                'tags' => $tag->id,
+                'viaRelationship' => 'tags'
+            ]
+        );
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['admin']);

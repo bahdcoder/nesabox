@@ -19,24 +19,35 @@ class MorphableController extends Controller
     {
         $relatedResource = Nova::resourceForKey($request->type);
 
-        $field = $request->newResource()
-                        ->availableFields($request)
-                        ->whereInstanceOf(RelatableField::class)
-                        ->findFieldByAttribute($request->field);
+        $field = $request
+            ->newResource()
+            ->availableFields($request)
+            ->whereInstanceOf(RelatableField::class)
+            ->findFieldByAttribute($request->field);
 
-        $withTrashed = $this->shouldIncludeTrashed(
-            $request, $relatedResource
-        );
+        $withTrashed = $this->shouldIncludeTrashed($request, $relatedResource);
 
         return [
-            'resources' => $field->buildMorphableQuery($request, $relatedResource, $withTrashed)->get()
-                                ->mapInto($relatedResource)
-                                ->filter->authorizedToAdd($request, $request->model())
-                                ->map(function ($resource) use ($request, $field, $relatedResource) {
-                                    return $field->formatMorphableResource($request, $resource, $relatedResource);
-                                })->sortBy('display')->values(),
+            'resources' => $field
+                ->buildMorphableQuery($request, $relatedResource, $withTrashed)
+                ->get()
+                ->mapInto($relatedResource)
+                ->filter->authorizedToAdd($request, $request->model())
+                ->map(function ($resource) use (
+                    $request,
+                    $field,
+                    $relatedResource
+                ) {
+                    return $field->formatMorphableResource(
+                        $request,
+                        $resource,
+                        $relatedResource
+                    );
+                })
+                ->sortBy('display')
+                ->values(),
             'withTrashed' => $withTrashed,
-            'softDeletes' => $relatedResource::softDeletes(),
+            'softDeletes' => $relatedResource::softDeletes()
         ];
     }
 
@@ -47,16 +58,24 @@ class MorphableController extends Controller
      * @param  string  $associatedResource
      * @return bool
      */
-    protected function shouldIncludeTrashed(NovaRequest $request, $associatedResource)
-    {
+    protected function shouldIncludeTrashed(
+        NovaRequest $request,
+        $associatedResource
+    ) {
         if ($request->withTrashed === 'true') {
             return true;
         }
 
         $associatedModel = $associatedResource::newModel();
 
-        if ($request->current && empty($request->search) && $associatedResource::softDeletes()) {
-            $associatedModel = $associatedModel->newQueryWithoutScopes()->find($request->current);
+        if (
+            $request->current &&
+            empty($request->search) &&
+            $associatedResource::softDeletes()
+        ) {
+            $associatedModel = $associatedModel
+                ->newQueryWithoutScopes()
+                ->find($request->current);
 
             return $associatedModel ? $associatedModel->trashed() : false;
         }

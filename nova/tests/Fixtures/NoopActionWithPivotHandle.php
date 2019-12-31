@@ -20,8 +20,10 @@ class NoopActionWithPivotHandle extends Action
      * @param  \Illuminate\Support\Collection  $models
      * @return string|void
      */
-    public function handleForRoleAssignments(ActionFields $fields, Collection $models)
-    {
+    public function handleForRoleAssignments(
+        ActionFields $fields,
+        Collection $models
+    ) {
         static::$applied[] = $models;
         static::$appliedFields[] = $fields;
     }

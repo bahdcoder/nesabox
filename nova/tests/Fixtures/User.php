@@ -16,21 +16,17 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password', 'meta',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'meta'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
-        'meta' => 'array',
+        'meta' => 'array'
     ];
 
     /**
@@ -61,9 +57,14 @@ class User extends Authenticatable
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')
-                            ->withPivot('id', 'admin', 'photo', 'restricted')
-                            ->using(RoleAssignment::class);
+        return $this->belongsToMany(
+            Role::class,
+            'user_roles',
+            'user_id',
+            'role_id'
+        )
+            ->withPivot('id', 'admin', 'photo', 'restricted')
+            ->using(RoleAssignment::class);
     }
 
     /**
@@ -71,8 +72,14 @@ class User extends Authenticatable
      */
     public function relatedUsers()
     {
-        return $this->belongsToMany(self::class, 'user_emails_xref', 'email_to', 'email_from', 'email', 'email')
-            ->using(UserEmailRelationship::class);
+        return $this->belongsToMany(
+            self::class,
+            'user_emails_xref',
+            'email_to',
+            'email_from',
+            'email',
+            'email'
+        )->using(UserEmailRelationship::class);
     }
 
     /**

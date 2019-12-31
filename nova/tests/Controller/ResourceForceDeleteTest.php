@@ -11,7 +11,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceForceDeleteTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,10 +23,12 @@ class ResourceForceDeleteTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/force', [
-                            'resources' => [$user->id, $user2->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/force',
+            [
+                'resources' => [$user->id, $user2->id]
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -34,7 +36,10 @@ class ResourceForceDeleteTest extends IntegrationTest
 
         $this->assertCount(2, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_can_force_delete_resources_via_search()
@@ -42,10 +47,12 @@ class ResourceForceDeleteTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/force?search='.$user->email, [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/force?search=' . $user->email,
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -53,7 +60,10 @@ class ResourceForceDeleteTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_can_destroy_resources_via_filters()
@@ -61,17 +71,21 @@ class ResourceForceDeleteTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        $filters = base64_encode(json_encode([
-            [
-                'class' => IdFilter::class,
-                'value' => 1,
-            ],
-        ]));
+        $filters = base64_encode(
+            json_encode([
+                [
+                    'class' => IdFilter::class,
+                    'value' => 1
+                ]
+            ])
+        );
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/force?filters='.$filters, [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/force?filters=' . $filters,
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -79,7 +93,10 @@ class ResourceForceDeleteTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Delete', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_cant_force_delete_resources_not_authorized_to_force_delete()
@@ -91,10 +108,12 @@ class ResourceForceDeleteTest extends IntegrationTest
 
         Gate::policy(User::class, UserPolicy::class);
 
-        $response = $this->withExceptionHandling()
-                        ->deleteJson('/nova-api/users/force', [
-                            'resources' => [$user->id],
-                        ]);
+        $response = $this->withExceptionHandling()->deleteJson(
+            '/nova-api/users/force',
+            [
+                'resources' => [$user->id]
+            ]
+        );
 
         unset($_SERVER['nova.user.authorizable']);
         unset($_SERVER['nova.user.forceDeletable']);

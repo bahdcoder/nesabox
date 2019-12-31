@@ -37,7 +37,7 @@ class ServeNova
         $path = trim(Nova::path(), '/') ?: '/';
 
         return $request->is($path) ||
-               $request->is(trim($path.'/*', '/')) ||
-               $request->is('nova-api/*');
+            $request->is(trim($path . '/*', '/')) ||
+            $request->is('nova-api/*');
     }
 }

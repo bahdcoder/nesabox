@@ -15,7 +15,9 @@ trait ResolvesActions
      */
     public function availableActions(NovaRequest $request)
     {
-        return $this->resolveActions($request)->filter->authorizedToSee($request)->values();
+        return $this->resolveActions($request)
+            ->filter->authorizedToSee($request)
+            ->values();
     }
 
     /**
@@ -37,7 +39,9 @@ trait ResolvesActions
      */
     public function availablePivotActions(NovaRequest $request)
     {
-        return $this->resolvePivotActions($request)->filter->authorizedToSee($request)->values();
+        return $this->resolvePivotActions($request)
+            ->filter->authorizedToSee($request)
+            ->values();
     }
 
     /**
@@ -49,7 +53,9 @@ trait ResolvesActions
     public function resolvePivotActions(NovaRequest $request)
     {
         if ($request->viaRelationship()) {
-            return collect(array_values($this->filter($this->getPivotActions($request))));
+            return collect(
+                array_values($this->filter($this->getPivotActions($request)))
+            );
         }
 
         return collect();
@@ -63,13 +69,17 @@ trait ResolvesActions
      */
     protected function getPivotActions(NovaRequest $request)
     {
-        $field = $this->availableFields($request)->first(function ($field) use ($request) {
+        $field = $this->availableFields($request)->first(function ($field) use (
+            $request
+        ) {
             return isset($field->resourceName) &&
-                   $field->resourceName == $request->viaResource;
+                $field->resourceName == $request->viaResource;
         });
 
         if ($field && isset($field->actionsCallback)) {
-            return array_values(call_user_func($field->actionsCallback, $request));
+            return array_values(
+                call_user_func($field->actionsCallback, $request)
+            );
         }
 
         return [];

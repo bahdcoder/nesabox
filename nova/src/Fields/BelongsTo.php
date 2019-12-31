@@ -105,7 +105,8 @@ class BelongsTo extends Field implements RelatableField
     {
         parent::__construct($name, $attribute);
 
-        $resource = $resource ?? ResourceRelationshipGuesser::guessResource($name);
+        $resource =
+            $resource ?? ResourceRelationshipGuesser::guessResource($name);
 
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
@@ -120,9 +121,12 @@ class BelongsTo extends Field implements RelatableField
      */
     public function authorize(Request $request)
     {
-        return $this->isNotRedundant($request) && call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
-        ) && parent::authorize($request);
+        return $this->isNotRedundant($request) &&
+            call_user_func(
+                [$this->resourceClass, 'authorizedToViewAny'],
+                $request
+            ) &&
+            parent::authorize($request);
     }
 
     /**
@@ -135,7 +139,8 @@ class BelongsTo extends Field implements RelatableField
      */
     public function isNotRedundant(Request $request)
     {
-        return ! $request instanceof ResourceIndexRequest || ! $this->isReverseRelation($request);
+        return !$request instanceof ResourceIndexRequest ||
+            !$this->isReverseRelation($request);
     }
 
     /**
@@ -153,8 +158,11 @@ class BelongsTo extends Field implements RelatableField
             $value = $resource->getRelation($this->attribute);
         }
 
-        if (! $value) {
-            $value = $resource->{$this->attribute}()->withoutGlobalScopes()->getResults();
+        if (!$value) {
+            $value = $resource
+                ->{$this->attribute}()
+                ->withoutGlobalScopes()
+                ->getResults();
         }
 
         if ($value) {
@@ -164,8 +172,8 @@ class BelongsTo extends Field implements RelatableField
 
             $this->value = $this->formatDisplayValue($resource);
 
-            $this->viewable = $this->viewable
-                && $resource->authorizedToView(request());
+            $this->viewable =
+                $this->viewable && $resource->authorizedToView(request());
         }
     }
 
@@ -189,14 +197,15 @@ class BelongsTo extends Field implements RelatableField
     public function getRules(NovaRequest $request)
     {
         $query = $this->buildAssociatableQuery(
-            $request, $request->{$this->attribute.'_trashed'} === 'true'
+            $request,
+            $request->{$this->attribute . '_trashed'} === 'true'
         );
 
         return array_merge_recursive(parent::getRules($request), [
             $this->attribute => array_filter([
                 $this->nullable ? 'nullable' : 'required',
-                new Relatable($request, $query),
-            ]),
+                new Relatable($request, $query)
+            ])
         ]);
     }
 
@@ -209,7 +218,9 @@ class BelongsTo extends Field implements RelatableField
      */
     public function fill(NovaRequest $request, $model)
     {
-        $foreignKey = $this->getRelationForeignKeyName($model->{$this->attribute}());
+        $foreignKey = $this->getRelationForeignKeyName(
+            $model->{$this->attribute}()
+        );
 
         parent::fillInto($request, $model, $foreignKey);
 
@@ -231,8 +242,12 @@ class BelongsTo extends Field implements RelatableField
      * @param  string  $attribute
      * @return mixed
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
-    {
+    protected function fillAttributeFromRequest(
+        NovaRequest $request,
+        $requestAttribute,
+        $model,
+        $attribute
+    ) {
         if ($request->exists($requestAttribute)) {
             $value = $request[$requestAttribute];
 
@@ -243,7 +258,12 @@ class BelongsTo extends Field implements RelatableField
             if ($this->isNullValue($value)) {
                 $relation->dissociate();
             } else {
-                $relation->associate($relation->getQuery()->withoutGlobalScopes()->find($value));
+                $relation->associate(
+                    $relation
+                        ->getQuery()
+                        ->withoutGlobalScopes()
+                        ->find($value)
+                );
             }
         }
     }
@@ -255,21 +275,33 @@ class BelongsTo extends Field implements RelatableField
      * @param  bool  $withTrashed
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function buildAssociatableQuery(NovaRequest $request, $withTrashed = false)
-    {
-        $model = forward_static_call(
-            [$resourceClass = $this->resourceClass, 'newModel']
-        );
+    public function buildAssociatableQuery(
+        NovaRequest $request,
+        $withTrashed = false
+    ) {
+        $model = forward_static_call([
+            ($resourceClass = $this->resourceClass),
+            'newModel'
+        ]);
 
-        $query = $request->first === 'true'
-                        ? $model->newQueryWithoutScopes()->whereKey($request->current)
-                        : $resourceClass::buildIndexQuery(
-                                $request, $model->newQuery(), $request->search,
-                                [], [], TrashedStatus::fromBoolean($withTrashed)
-                          );
+        $query =
+            $request->first === 'true'
+                ? $model->newQueryWithoutScopes()->whereKey($request->current)
+                : $resourceClass::buildIndexQuery(
+                    $request,
+                    $model->newQuery(),
+                    $request->search,
+                    [],
+                    [],
+                    TrashedStatus::fromBoolean($withTrashed)
+                );
 
         return $query->tap(function ($query) use ($request, $model) {
-            forward_static_call($this->associatableQueryCallable($request, $model), $request, $query);
+            forward_static_call(
+                $this->associatableQueryCallable($request, $model),
+                $request,
+                $query
+            );
         });
     }
 
@@ -283,8 +315,8 @@ class BelongsTo extends Field implements RelatableField
     protected function associatableQueryCallable(NovaRequest $request, $model)
     {
         return ($method = $this->associatableQueryMethod($request, $model))
-                    ? [$request->resource(), $method]
-                    : [$this->resourceClass, 'relatableQuery'];
+            ? [$request->resource(), $method]
+            : [$this->resourceClass, 'relatableQuery'];
     }
 
     /**
@@ -296,7 +328,7 @@ class BelongsTo extends Field implements RelatableField
      */
     protected function associatableQueryMethod(NovaRequest $request, $model)
     {
-        $method = 'relatable'.Str::plural(class_basename($model));
+        $method = 'relatable' . Str::plural(class_basename($model));
 
         if (method_exists($request->resource(), $method)) {
             return $method;
@@ -315,7 +347,7 @@ class BelongsTo extends Field implements RelatableField
         return array_filter([
             'avatar' => $resource->resolveAvatarUrl($request),
             'display' => $this->formatDisplayValue($resource),
-            'value' => $resource->getKey(),
+            'value' => $resource->getKey()
         ]);
     }
 
@@ -390,15 +422,24 @@ class BelongsTo extends Field implements RelatableField
      */
     public function meta()
     {
-        return array_merge([
-            'resourceName' => $this->resourceName,
-            'label' => forward_static_call([$this->resourceClass, 'label']),
-            'singularLabel' => $this->singularLabel ?? $this->name ?? forward_static_call([$this->resourceClass, 'singularLabel']),
-            'belongsToRelationship' => $this->belongsToRelationship,
-            'belongsToId' => $this->belongsToId,
-            'searchable' => $this->searchable,
-            'viewable' => $this->viewable,
-            'reverse' => $this->isReverseRelation(app(NovaRequest::class)),
-        ], $this->meta);
+        return array_merge(
+            [
+                'resourceName' => $this->resourceName,
+                'label' => forward_static_call([$this->resourceClass, 'label']),
+                'singularLabel' =>
+                    $this->singularLabel ??
+                    $this->name ??
+                    forward_static_call([
+                        $this->resourceClass,
+                        'singularLabel'
+                    ]),
+                'belongsToRelationship' => $this->belongsToRelationship,
+                'belongsToId' => $this->belongsToId,
+                'searchable' => $this->searchable,
+                'viewable' => $this->viewable,
+                'reverse' => $this->isReverseRelation(app(NovaRequest::class))
+            ],
+            $this->meta
+        );
     }
 }

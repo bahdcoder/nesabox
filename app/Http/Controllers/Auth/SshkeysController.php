@@ -6,6 +6,7 @@ use App\Sshkey;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\Users\AddSshkeyRequest;
+use Illuminate\Support\Facades\Log;
 
 class SshkeysController extends Controller
 {
@@ -40,19 +41,14 @@ class SshkeysController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sshkey $key)
+    public function destroy($key)
     {
-        return new UserResource(
-            auth()
-                ->user()
-                ->fresh()
-        );
+        $sshkey = Sshkey::where([
+            'id' => $key,
+            'user_id' => auth()->user()->id
+        ])->firstOrFail();
 
-        if ($key->user_id !== auth()->user()->id) {
-            abort(401);
-        }
-
-        $key->delete();
+        $sshkey->delete();
 
         return new UserResource(
             auth()

@@ -30,7 +30,7 @@ class PostWordCount extends Value
             'TODAY' => 'Today',
             'MTD' => 'Month To Date',
             'QTD' => 'Quarter To Date',
-            'YTD' => 'Year To Date',
+            'YTD' => 'Year To Date'
         ];
     }
 

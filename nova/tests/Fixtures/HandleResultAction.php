@@ -17,9 +17,13 @@ class HandleResultAction extends Action
 
     public function handleResult(ActionFields $fields, $results)
     {
-        $count = array_reduce($results, function ($a, $b) {
-            return $a + $b;
-        }, 0);
+        $count = array_reduce(
+            $results,
+            function ($a, $b) {
+                return $a + $b;
+            },
+            0
+        );
 
         return Action::message("Processed {$count} records");
     }

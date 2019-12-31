@@ -16,19 +16,28 @@ class DeletionRequest extends NovaRequest
      * @param  \Closure  $authCallback
      * @return mixed
      */
-    protected function chunkWithAuthorization($count, Closure $callback, Closure $authCallback)
-    {
-        $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
-            $query->whereKey($this->resources);
-        })->tap(function ($query) {
-            $query->getQuery()->orders = [];
-        })->chunkById($count, function ($models) use ($callback, $authCallback) {
-            $models = $authCallback($models);
+    protected function chunkWithAuthorization(
+        $count,
+        Closure $callback,
+        Closure $authCallback
+    ) {
+        $this->toSelectedResourceQuery()
+            ->when(!$this->forAllMatchingResources(), function ($query) {
+                $query->whereKey($this->resources);
+            })
+            ->tap(function ($query) {
+                $query->getQuery()->orders = [];
+            })
+            ->chunkById($count, function ($models) use (
+                $callback,
+                $authCallback
+            ) {
+                $models = $authCallback($models);
 
-            if ($models->isNotEmpty()) {
-                $callback($models);
-            }
-        });
+                if ($models->isNotEmpty()) {
+                    $callback($models);
+                }
+            });
     }
 
     /**

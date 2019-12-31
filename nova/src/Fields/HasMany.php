@@ -56,7 +56,8 @@ class HasMany extends Field implements ListableField, RelatableField
     {
         parent::__construct($name, $attribute);
 
-        $resource = $resource ?? ResourceRelationshipGuesser::guessResource($name);
+        $resource =
+            $resource ?? ResourceRelationshipGuesser::guessResource($name);
 
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
@@ -72,7 +73,8 @@ class HasMany extends Field implements ListableField, RelatableField
     public function authorize(Request $request)
     {
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -107,12 +109,16 @@ class HasMany extends Field implements ListableField, RelatableField
      */
     public function meta()
     {
-        return array_merge([
-            'resourceName' => $this->resourceName,
-            'hasManyRelationship' => $this->hasManyRelationship,
-            'listable' => true,
-            'singularLabel' => $this->singularLabel ?? Str::singular($this->name),
-            'perPage'=> $this->resourceClass::$perPageViaRelationship,
-        ], $this->meta);
+        return array_merge(
+            [
+                'resourceName' => $this->resourceName,
+                'hasManyRelationship' => $this->hasManyRelationship,
+                'listable' => true,
+                'singularLabel' =>
+                    $this->singularLabel ?? Str::singular($this->name),
+                'perPage' => $this->resourceClass::$perPageViaRelationship
+            ],
+            $this->meta
+        );
     }
 }

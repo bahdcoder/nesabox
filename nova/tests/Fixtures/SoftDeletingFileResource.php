@@ -21,9 +21,7 @@ class SoftDeletingFileResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id',
-    ];
+    public static $search = ['id'];
 
     /**
      * Get the fields displayed by the resource.
@@ -38,11 +36,14 @@ class SoftDeletingFileResource extends Resource
 
             File::make('Avatar', 'avatar', null, function ($request, $model) {
                 return $request->avatar->storeAs('avatars', 'avatar.png');
-            })->rules('required')->delete(function ($request) {
-                $_SERVER['__nova.fileDeleted'] = true;
+            })
+                ->rules('required')
+                ->delete(function ($request) {
+                    $_SERVER['__nova.fileDeleted'] = true;
 
-                return $_SERVER['__nova.fileDelete'] ?? null;
-            })->prunable(),
+                    return $_SERVER['__nova.fileDelete'] ?? null;
+                })
+                ->prunable()
         ];
     }
 

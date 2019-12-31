@@ -6,9 +6,7 @@ use Illuminate\Support\Str;
 
 abstract class Dashboard extends Element
 {
-    use AuthorizedToSee,
-        Metable,
-        ProxiesCanSeeToGate;
+    use AuthorizedToSee, Metable, ProxiesCanSeeToGate;
 
     /**
      * Get the displayable name of the dashboard.
@@ -27,6 +25,8 @@ abstract class Dashboard extends Element
      */
     public static function uriKey()
     {
-        return Str::singular(Str::snake(class_basename(get_called_class()), '-'));
+        return Str::singular(
+            Str::snake(class_basename(get_called_class()), '-')
+        );
     }
 }

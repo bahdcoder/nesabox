@@ -32,7 +32,7 @@ class PaginatingUserLens extends Lens
     {
         return [
             'ID' => ID::make('ID', 'id'),
-            'Name' => Text::make('Name', 'name'),
+            'Name' => Text::make('Name', 'name')
         ];
     }
 

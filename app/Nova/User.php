@@ -30,9 +30,7 @@ class User extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'name', 'email',
-    ];
+    public static $search = ['id', 'name', 'email'];
 
     /**
      * Get the fields displayed by the resource.
@@ -62,7 +60,7 @@ class User extends Resource
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
+                ->updateRules('nullable', 'string', 'min:8')
         ];
     }
 

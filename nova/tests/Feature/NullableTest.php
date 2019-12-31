@@ -10,7 +10,9 @@ class NullableTest extends IntegrationTest
 {
     public function test_nullable_can_be_null()
     {
-        $field = Text::make('Text')->nullable()->nullValues(['', 0]);
+        $field = Text::make('Text')
+            ->nullable()
+            ->nullValues(['', 0]);
 
         $model = new \stdClass();
 
@@ -29,9 +31,11 @@ class NullableTest extends IntegrationTest
 
     public function test_nullable_with_callback()
     {
-        $field = Text::make('Text')->nullable()->nullValues(function ($value) {
-            return $value == '0';
-        });
+        $field = Text::make('Text')
+            ->nullable()
+            ->nullValues(function ($value) {
+                return $value == '0';
+            });
 
         $model = new \stdClass();
 

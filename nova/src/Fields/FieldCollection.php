@@ -16,8 +16,7 @@ class FieldCollection extends Collection
     public function findFieldByAttribute($attribute, $default = null)
     {
         return $this->first(function ($field) use ($attribute) {
-            return isset($field->attribute) &&
-                   $field->attribute == $attribute;
+            return isset($field->attribute) && $field->attribute == $attribute;
         }, $default);
     }
 }

@@ -50,7 +50,7 @@ class LensCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/lens.stub';
+        return __DIR__ . '/stubs/lens.stub';
     }
 
     /**
@@ -61,6 +61,6 @@ class LensCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova\Lenses';
+        return $rootNamespace . '\Nova\Lenses';
     }
 }

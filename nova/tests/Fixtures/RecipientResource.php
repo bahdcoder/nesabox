@@ -22,9 +22,7 @@ class RecipientResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'name', 'email',
-    ];
+    public static $search = ['id', 'name', 'email'];
 
     /**
      * Get the fields displayed by the resource.
@@ -39,7 +37,7 @@ class RecipientResource extends Resource
 
             Text::make('Name'),
 
-            BelongsTo::make('User', 'user', UserResource::class),
+            BelongsTo::make('User', 'user', UserResource::class)
         ];
     }
 

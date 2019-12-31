@@ -17,7 +17,8 @@ class GroupingUserLens extends Lens
      */
     public static function query(LensRequest $request, $query)
     {
-        return $query->select('users.id')
+        return $query
+            ->select('users.id')
             ->join('user_roles', 'user_roles.user_id', '=', 'users.id')
             ->where('user_roles.role_id', '=', 1)
             ->groupBy('users.id');

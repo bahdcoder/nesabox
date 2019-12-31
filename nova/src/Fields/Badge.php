@@ -14,8 +14,11 @@ class Badge extends Field
      * @param  callable|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, callable $resolveCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        callable $resolveCallback = null
+    ) {
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->exceptOnForms();
@@ -65,7 +68,7 @@ class Badge extends Field
         'success' => 'bg-success-light text-success-dark',
         'info' => 'bg-info-light text-info-dark',
         'danger' => 'bg-danger-light text-danger-dark',
-        'warning' => 'bg-warning-light text-warning-dark',
+        'warning' => 'bg-warning-light text-warning-dark'
     ];
 
     /**
@@ -145,7 +148,9 @@ class Badge extends Field
 
             return $this->types[$mappedValue];
         } catch (Exception $e) {
-            throw new Exception("Error trying to find type [{$mappedValue}] inside of the field's type mapping.");
+            throw new Exception(
+                "Error trying to find type [{$mappedValue}] inside of the field's type mapping."
+            );
         }
     }
 
@@ -172,7 +177,7 @@ class Badge extends Field
     {
         return array_merge(parent::jsonSerialize(), [
             'label' => $this->resolveLabel(),
-            'typeClass' => $this->resolveBadgeClasses(),
+            'typeClass' => $this->resolveBadgeClasses()
         ]);
     }
 }

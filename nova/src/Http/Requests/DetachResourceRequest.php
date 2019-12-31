@@ -18,15 +18,21 @@ class DetachResourceRequest extends DeletionRequest
     {
         $parentResource = $this->findParentResourceOrFail();
 
-        $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
-            $query->whereKey($this->resources);
-        })->latest($this->model()->getQualifiedKeyName())->chunk($count, function ($models) use ($callback, $parentResource) {
-            $models = $this->detachableModels($models, $parentResource);
+        $this->toSelectedResourceQuery()
+            ->when(!$this->forAllMatchingResources(), function ($query) {
+                $query->whereKey($this->resources);
+            })
+            ->latest($this->model()->getQualifiedKeyName())
+            ->chunk($count, function ($models) use (
+                $callback,
+                $parentResource
+            ) {
+                $models = $this->detachableModels($models, $parentResource);
 
-            if ($models->isNotEmpty()) {
-                $callback($models);
-            }
-        });
+                if ($models->isNotEmpty()) {
+                    $callback($models);
+                }
+            });
     }
 
     /**
@@ -39,7 +45,11 @@ class DetachResourceRequest extends DeletionRequest
     protected function detachableModels(Collection $models, $parentResource)
     {
         return $models->filter(function ($model) use ($parentResource) {
-            return $parentResource->authorizedToDetach($this, $model, $this->viaRelationship);
+            return $parentResource->authorizedToDetach(
+                $this,
+                $model,
+                $this->viaRelationship
+            );
         });
     }
 }

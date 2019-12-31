@@ -21,8 +21,11 @@ class PasswordConfirmation extends Password
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->onlyOnForms();
@@ -37,8 +40,12 @@ class PasswordConfirmation extends Password
      * @param  string  $attribute
      * @return void
      */
-    protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute)
-    {
+    protected function fillAttribute(
+        NovaRequest $request,
+        $requestAttribute,
+        $model,
+        $attribute
+    ) {
         //
     }
 }

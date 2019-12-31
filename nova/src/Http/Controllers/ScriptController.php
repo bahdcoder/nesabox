@@ -23,9 +23,8 @@ class ScriptController extends Controller
 
         abort_if(is_null($path), 404);
 
-        return response(
-            file_get_contents($path),
-            200, ['Content-Type' => 'application/javascript']
-        );
+        return response(file_get_contents($path), 200, [
+            'Content-Type' => 'application/javascript'
+        ]);
     }
 }

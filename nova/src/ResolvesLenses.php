@@ -15,7 +15,9 @@ trait ResolvesLenses
      */
     public function availableLenses(NovaRequest $request)
     {
-        return $this->resolveLenses($request)->filter->authorizedToSee($request)->values();
+        return $this->resolveLenses($request)
+            ->filter->authorizedToSee($request)
+            ->values();
     }
 
     /**

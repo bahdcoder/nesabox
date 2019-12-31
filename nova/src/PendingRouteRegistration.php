@@ -61,9 +61,18 @@ class PendingRouteRegistration
             ->as('nova.')
             ->prefix(Nova::path())
             ->group(function () {
-                Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
-                Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-                Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+                Route::get(
+                    '/password/reset',
+                    'ForgotPasswordController@showLinkRequestForm'
+                )->name('password.request');
+                Route::post(
+                    '/password/email',
+                    'ForgotPasswordController@sendResetLinkEmail'
+                )->name('password.email');
+                Route::get(
+                    '/password/reset/{token}',
+                    'ResetPasswordController@showResetForm'
+                )->name('password.reset');
                 Route::post('/password/reset', 'ResetPasswordController@reset');
             });
 
@@ -83,14 +92,20 @@ class PendingRouteRegistration
             Route::middleware(config('nova.middleware', []))
                 ->domain(config('nova.domain', null))
                 ->group(function () {
-                    Route::get(Nova::path(), 'Laravel\Nova\Http\Controllers\RouterController@show')->name('nova.index');
+                    Route::get(
+                        Nova::path(),
+                        'Laravel\Nova\Http\Controllers\RouterController@show'
+                    )->name('nova.index');
                 });
 
             Route::middleware(config('nova.middleware', []))
                 ->domain(config('nova.domain', null))
                 ->as('nova.')
                 ->prefix(Nova::path())
-                ->get('/{view}', 'Laravel\Nova\Http\Controllers\RouterController@show')
+                ->get(
+                    '/{view}',
+                    'Laravel\Nova\Http\Controllers\RouterController@show'
+                )
                 ->where('view', '.*');
         });
     }
@@ -102,7 +117,7 @@ class PendingRouteRegistration
      */
     public function __destruct()
     {
-        if (! $this->registered) {
+        if (!$this->registered) {
             $this->register();
         }
     }

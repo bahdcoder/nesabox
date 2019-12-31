@@ -37,12 +37,14 @@ abstract class Metric extends Card
     {
         $resolver = function () use ($request) {
             return $this->onlyOnDetail
-                    ? $this->calculate($request, $request->findModelOrFail())
-                    : $this->calculate($request);
+                ? $this->calculate($request, $request->findModelOrFail())
+                : $this->calculate($request);
         };
 
         if ($cacheFor = $this->cacheFor()) {
-            $cacheFor = is_numeric($cacheFor) ? new DateInterval(sprintf('PT%dS', $cacheFor * 60)) : $cacheFor;
+            $cacheFor = is_numeric($cacheFor)
+                ? new DateInterval(sprintf('PT%dS', $cacheFor * 60))
+                : $cacheFor;
 
             return Cache::remember(
                 $this->getCacheKey($request),
@@ -68,7 +70,9 @@ abstract class Metric extends Card
             $request->input('range', 'no-range'),
             $request->input('timezone', 'no-timezone'),
             $request->input('twelveHourTime', 'no-12-hour-time'),
-            $this->onlyOnDetail ? $request->findModelOrFail()->getKey() : 'no-resource-id'
+            $this->onlyOnDetail
+                ? $request->findModelOrFail()->getKey()
+                : 'no-resource-id'
         );
     }
 
@@ -127,7 +131,7 @@ abstract class Metric extends Card
             'uriKey' => $this->uriKey(),
             'helpWidth' => $this->getHelpWidth(),
             'helpText' => $this->getHelpText(),
-            'refreshWhenActionRuns' => $this->refreshWhenActionRuns,
+            'refreshWhenActionRuns' => $this->refreshWhenActionRuns
         ]);
     }
 }

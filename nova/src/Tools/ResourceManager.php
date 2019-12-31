@@ -18,7 +18,7 @@ class ResourceManager extends Tool
         Nova::provideToScript([
             'resources' => function (Request $request) {
                 return Nova::resourceInformation($request);
-            },
+            }
         ]);
     }
 
@@ -39,7 +39,7 @@ class ResourceManager extends Tool
 
         return view('nova::resources.navigation', [
             'navigation' => $navigation,
-            'groups' => $groups,
+            'groups' => $groups
         ]);
     }
 }

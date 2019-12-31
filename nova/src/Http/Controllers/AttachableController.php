@@ -17,30 +17,43 @@ class AttachableController extends Controller
      */
     public function index(NovaRequest $request)
     {
-        $field = $request->newResource()
-                    ->availableFields($request)
-                    ->filter(function ($field) {
-                        return $field instanceof BelongsToMany || $field instanceof MorphToMany;
-                    })
-                    ->firstWhere('resourceName', $request->field);
+        $field = $request
+            ->newResource()
+            ->availableFields($request)
+            ->filter(function ($field) {
+                return $field instanceof BelongsToMany ||
+                    $field instanceof MorphToMany;
+            })
+            ->firstWhere('resourceName', $request->field);
 
         $withTrashed = $this->shouldIncludeTrashed(
-            $request, $associatedResource = $field->resourceClass
+            $request,
+            $associatedResource = $field->resourceClass
         );
 
         $parentResource = $request->findResourceOrFail();
 
         return [
-            'resources' => $field->buildAttachableQuery($request, $withTrashed)->get()
-                        ->mapInto($field->resourceClass)
-                        ->filter(function ($resource) use ($request, $parentResource) {
-                            return $parentResource->authorizedToAttach($request, $resource->resource);
-                        })
-                        ->map(function ($resource) use ($request, $field) {
-                            return $field->formatAttachableResource($request, $resource);
-                        })->sortBy('display', SORT_NATURAL | SORT_FLAG_CASE)->values(),
+            'resources' => $field
+                ->buildAttachableQuery($request, $withTrashed)
+                ->get()
+                ->mapInto($field->resourceClass)
+                ->filter(function ($resource) use ($request, $parentResource) {
+                    return $parentResource->authorizedToAttach(
+                        $request,
+                        $resource->resource
+                    );
+                })
+                ->map(function ($resource) use ($request, $field) {
+                    return $field->formatAttachableResource(
+                        $request,
+                        $resource
+                    );
+                })
+                ->sortBy('display', SORT_NATURAL | SORT_FLAG_CASE)
+                ->values(),
             'withTrashed' => $withTrashed,
-            'softDeletes' => $associatedResource::softDeletes(),
+            'softDeletes' => $associatedResource::softDeletes()
         ];
     }
 
@@ -51,8 +64,10 @@ class AttachableController extends Controller
      * @param  string  $associatedResource
      * @return bool
      */
-    protected function shouldIncludeTrashed(NovaRequest $request, $associatedResource)
-    {
+    protected function shouldIncludeTrashed(
+        NovaRequest $request,
+        $associatedResource
+    ) {
         if ($request->withTrashed === 'true') {
             return true;
         }
@@ -60,7 +75,9 @@ class AttachableController extends Controller
         $associatedModel = $associatedResource::newModel();
 
         if ($request->current && $associatedResource::softDeletes()) {
-            $associatedModel = $associatedModel->newQueryWithoutScopes()->find($request->current);
+            $associatedModel = $associatedModel
+                ->newQueryWithoutScopes()
+                ->find($request->current);
 
             return $associatedModel ? $associatedModel->trashed() : false;
         }

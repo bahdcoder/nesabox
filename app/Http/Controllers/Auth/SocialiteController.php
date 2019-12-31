@@ -10,7 +10,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
-        /**
+    /**
      * Obtain the user information from provider.
      *
      * @return \Illuminate\Http\Response
@@ -24,7 +24,7 @@ class SocialiteController extends Controller
         // Find a matching user from our database
         $user = User::where('email', $userDetails->email)->first();
 
-        if (! $user) {
+        if (!$user) {
             $user = User::create([
                 'name' => $userDetails->name,
                 'email' => $userDetails->email,
@@ -41,12 +41,10 @@ class SocialiteController extends Controller
                     'github' => null,
                     'bitbucket' => null,
                     'gitlab' => null
-                ],
+                ]
             ]);
 
-            event(new Registered((
-                $user
-            )));
+            event(new Registered($user));
 
             $user->rollApiKey();
         }

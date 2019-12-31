@@ -14,12 +14,19 @@ class Timezone extends Select
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
         parent::__construct($name, $attribute, $resolveCallback);
 
-        $this->options(collect(DateTimeZone::listIdentifiers(DateTimeZone::ALL))->mapWithKeys(function ($timezone) {
-            return [$timezone => $timezone];
-        })->all());
+        $this->options(
+            collect(DateTimeZone::listIdentifiers(DateTimeZone::ALL))
+                ->mapWithKeys(function ($timezone) {
+                    return [$timezone => $timezone];
+                })
+                ->all()
+        );
     }
 }

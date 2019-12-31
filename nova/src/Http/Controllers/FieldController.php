@@ -16,11 +16,12 @@ class FieldController extends Controller
     public function show(NovaRequest $request)
     {
         return response()->json(
-            $request->newResource()
-                    ->availableFields($request)
-                    ->findFieldByAttribute($request->field, function () {
-                        abort(404);
-                    })
+            $request
+                ->newResource()
+                ->availableFields($request)
+                ->findFieldByAttribute($request->field, function () {
+                    abort(404);
+                })
         );
     }
 }

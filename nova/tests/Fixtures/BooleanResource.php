@@ -21,9 +21,7 @@ class BooleanResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id',
-    ];
+    public static $search = ['id'];
 
     /**
      * Get the fields displayed by the resource.
@@ -37,8 +35,8 @@ class BooleanResource extends Resource
             ID::make('ID', 'id'),
 
             Boolean::make('Active', 'active')
-                        ->trueValue('Yes')
-                        ->falseValue('No'),
+                ->trueValue('Yes')
+                ->falseValue('No')
         ];
     }
 

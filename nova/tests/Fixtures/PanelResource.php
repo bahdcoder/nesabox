@@ -32,12 +32,12 @@ class PanelResource extends Resource
                 ID::make('ID', 'id'),
 
                 Text::make('Name', 'name')
-                            ->creationRules('required', 'string', 'max:255')
-                            ->updateRules('required', 'string', 'max:255'),
+                    ->creationRules('required', 'string', 'max:255')
+                    ->updateRules('required', 'string', 'max:255'),
 
                 $this->when(false, function () {
                     return Text::make('Exclude', 'exclude');
-                }),
+                })
             ]),
 
             Text::make('Email', 'email'),
@@ -49,8 +49,8 @@ class PanelResource extends Resource
             new Panel('Extra', [
                 $this->when(true, function () {
                     return Text::make('Include', 'include');
-                }),
-            ]),
+                })
+            ])
         ];
     }
 

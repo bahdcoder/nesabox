@@ -30,8 +30,6 @@ class QueuedResourceAction extends Action implements ShouldQueue
      */
     public function fields()
     {
-        return [
-            Text::make('Test', 'test'),
-        ];
+        return [Text::make('Test', 'test')];
     }
 }

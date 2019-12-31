@@ -11,7 +11,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class LensResourceRestoreTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -26,10 +26,12 @@ class LensResourceRestoreTest extends IntegrationTest
         $user->delete();
         $user2->delete();
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/lens/user-lens/restore', [
-                            'resources' => [$user->id, $user2->id],
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/lens/user-lens/restore',
+            [
+                'resources' => [$user->id, $user2->id]
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -40,7 +42,10 @@ class LensResourceRestoreTest extends IntegrationTest
 
         $this->assertCount(2, ActionEvent::all());
         $this->assertEquals('Restore', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target->id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target->id
+        );
     }
 
     public function test_can_restore_all_matching_resources()
@@ -51,10 +56,12 @@ class LensResourceRestoreTest extends IntegrationTest
         $user->delete();
         $user2->delete();
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/lens/user-lens/restore', [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/lens/user-lens/restore',
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -75,17 +82,21 @@ class LensResourceRestoreTest extends IntegrationTest
         $user->delete();
         $user2->delete();
 
-        $filters = base64_encode(json_encode([
-            [
-                'class' => IdFilter::class,
-                'value' => 1,
-            ],
-        ]));
+        $filters = base64_encode(
+            json_encode([
+                [
+                    'class' => IdFilter::class,
+                    'value' => 1
+                ]
+            ])
+        );
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/lens/user-lens/restore?filters='.$filters, [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/lens/user-lens/restore?filters=' . $filters,
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -96,7 +107,10 @@ class LensResourceRestoreTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Restore', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_cant_restore_resources_not_authorized_to_restore()
@@ -112,10 +126,12 @@ class LensResourceRestoreTest extends IntegrationTest
 
         Gate::policy(User::class, UserPolicy::class);
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/lens/user-lens/restore', [
-                            'resources' => [$user->id],
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/lens/user-lens/restore',
+            [
+                'resources' => [$user->id]
+            ]
+        );
 
         unset($_SERVER['nova.user.authorizable']);
         unset($_SERVER['nova.user.restorable']);

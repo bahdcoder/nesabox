@@ -14,7 +14,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class RelationsTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -26,15 +26,26 @@ class RelationsTest extends IntegrationTest
         $user1 = factory(User::class)->create();
         $user2 = factory(User::class)->create();
         /** @var Post $post */
-        $post = factory(Post::class)->create()->user()->associate($user1);
+        $post = factory(Post::class)
+            ->create()
+            ->user()
+            ->associate($user1);
 
         $this->assertTrue($post->relationLoaded('user'));
 
-        $request = tap(new NovaRequest([], [
-            'user' => $user2->id,
-        ]))->setMethod('POST');
+        $request = tap(
+            new NovaRequest(
+                [],
+                [
+                    'user' => $user2->id
+                ]
+            )
+        )->setMethod('POST');
 
-        BelongsTo::make('User', 'user', UserResource::class)->fill($request, $post);
+        BelongsTo::make('User', 'user', UserResource::class)->fill(
+            $request,
+            $post
+        );
 
         $this->assertFalse($post->relationLoaded('user'));
 
@@ -47,14 +58,22 @@ class RelationsTest extends IntegrationTest
         $post2 = factory(Post::class)->create();
 
         /** @var Post $post */
-        $comment = factory(Comment::class)->create()->commentable()->associate($post1);
+        $comment = factory(Comment::class)
+            ->create()
+            ->commentable()
+            ->associate($post1);
 
         $this->assertTrue($comment->relationLoaded('commentable'));
 
-        $request = tap(new NovaRequest([], [
-            'commentable_type' => PostResource::uriKey(),
-            'commentable' => $post2->id,
-        ]))->setMethod('POST');
+        $request = tap(
+            new NovaRequest(
+                [],
+                [
+                    'commentable_type' => PostResource::uriKey(),
+                    'commentable' => $post2->id
+                ]
+            )
+        )->setMethod('POST');
 
         MorphTo::make('Commentable', 'commentable')->fill($request, $comment);
 

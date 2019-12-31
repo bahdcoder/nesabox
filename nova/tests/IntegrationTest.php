@@ -39,7 +39,7 @@ abstract class IntegrationTest extends TestCase
      *
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ abstract class IntegrationTest extends TestCase
 
         $this->loadMigrations();
 
-        $this->withFactories(__DIR__.'/Factories');
+        $this->withFactories(__DIR__ . '/Factories');
 
         Nova::$tools = [];
         Nova::$resources = [];
@@ -69,7 +69,7 @@ abstract class IntegrationTest extends TestCase
             ForbiddenUserResource::class,
             GroupedUserResource::class,
             CustomKeyResource::class,
-            RecipientResource::class,
+            RecipientResource::class
         ]);
 
         Nova::auth(function () {
@@ -86,7 +86,7 @@ abstract class IntegrationTest extends TestCase
     {
         $this->loadMigrationsFrom([
             '--database' => 'sqlite',
-            '--realpath' => realpath(__DIR__.'/Migrations'),
+            '--realpath' => realpath(__DIR__ . '/Migrations')
         ]);
     }
 
@@ -97,9 +97,13 @@ abstract class IntegrationTest extends TestCase
      */
     protected function authenticate()
     {
-        $this->actingAs($this->authenticatedAs = Mockery::mock(Authenticatable::class));
+        $this->actingAs(
+            $this->authenticatedAs = Mockery::mock(Authenticatable::class)
+        );
 
-        $this->authenticatedAs->shouldReceive('getAuthIdentifier')->andReturn(1);
+        $this->authenticatedAs
+            ->shouldReceive('getAuthIdentifier')
+            ->andReturn(1);
         $this->authenticatedAs->shouldReceive('getKey')->andReturn(1);
 
         return $this;
@@ -115,7 +119,9 @@ abstract class IntegrationTest extends TestCase
     {
         for ($i = 0; $i < $times; $i++) {
             $this->worker()->runNextJob(
-                'redis', 'default', $this->workerOptions()
+                'redis',
+                'default',
+                $this->workerOptions()
             );
         }
     }
@@ -137,7 +143,7 @@ abstract class IntegrationTest extends TestCase
      */
     protected function workerOptions()
     {
-        return tap(new WorkerOptions, function ($options) {
+        return tap(new WorkerOptions(), function ($options) {
             $options->sleep = 0;
             $options->maxTries = 1;
         });
@@ -155,7 +161,7 @@ abstract class IntegrationTest extends TestCase
             'Orchestra\Database\ConsoleServiceProvider',
             'Laravel\Nova\NovaCoreServiceProvider',
             'Laravel\Nova\NovaServiceProvider',
-            'Laravel\Nova\Tests\TestServiceProvider',
+            'Laravel\Nova\Tests\TestServiceProvider'
         ];
     }
 
@@ -170,9 +176,9 @@ abstract class IntegrationTest extends TestCase
         $app['config']->set('database.default', 'sqlite');
 
         $app['config']->set('database.connections.sqlite', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => ''
         ]);
     }
 
@@ -185,8 +191,14 @@ abstract class IntegrationTest extends TestCase
      */
     public function assertSubset($subset, $array)
     {
-        $values = collect($array)->only(array_keys($subset))->all();
+        $values = collect($array)
+            ->only(array_keys($subset))
+            ->all();
 
-        $this->assertEquals($subset, $values, 'The expected subset does not match the given array.');
+        $this->assertEquals(
+            $subset,
+            $values,
+            'The expected subset does not match the given array.'
+        );
     }
 }

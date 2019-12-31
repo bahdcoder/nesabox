@@ -16,24 +16,33 @@ class AssociatableController extends Controller
      */
     public function index(NovaRequest $request)
     {
-        $field = $request->newResource()
-                    ->availableFields($request)
-                    ->whereInstanceOf(RelatableField::class)
-                    ->findFieldByAttribute($request->field);
+        $field = $request
+            ->newResource()
+            ->availableFields($request)
+            ->whereInstanceOf(RelatableField::class)
+            ->findFieldByAttribute($request->field);
 
         $withTrashed = $this->shouldIncludeTrashed(
-            $request, $associatedResource = $field->resourceClass
+            $request,
+            $associatedResource = $field->resourceClass
         );
 
         return [
-            'resources' => $field->buildAssociatableQuery($request, $withTrashed)->get()
-                        ->mapInto($field->resourceClass)
-                        ->filter->authorizedToAdd($request, $request->model())
-                        ->map(function ($resource) use ($request, $field) {
-                            return $field->formatAssociatableResource($request, $resource);
-                        })->sortBy('display')->values(),
+            'resources' => $field
+                ->buildAssociatableQuery($request, $withTrashed)
+                ->get()
+                ->mapInto($field->resourceClass)
+                ->filter->authorizedToAdd($request, $request->model())
+                ->map(function ($resource) use ($request, $field) {
+                    return $field->formatAssociatableResource(
+                        $request,
+                        $resource
+                    );
+                })
+                ->sortBy('display')
+                ->values(),
             'softDeletes' => $associatedResource::softDeletes(),
-            'withTrashed' => $withTrashed,
+            'withTrashed' => $withTrashed
         ];
     }
 
@@ -44,16 +53,24 @@ class AssociatableController extends Controller
      * @param  string  $associatedResource
      * @return bool
      */
-    protected function shouldIncludeTrashed(NovaRequest $request, $associatedResource)
-    {
+    protected function shouldIncludeTrashed(
+        NovaRequest $request,
+        $associatedResource
+    ) {
         if ($request->withTrashed === 'true') {
             return true;
         }
 
         $associatedModel = $associatedResource::newModel();
 
-        if ($request->current && empty($request->search) && $associatedResource::softDeletes()) {
-            $associatedModel = $associatedModel->newQueryWithoutScopes()->find($request->current);
+        if (
+            $request->current &&
+            empty($request->search) &&
+            $associatedResource::softDeletes()
+        ) {
+            $associatedModel = $associatedModel
+                ->newQueryWithoutScopes()
+                ->find($request->current);
 
             return $associatedModel ? $associatedModel->trashed() : false;
         }

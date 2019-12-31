@@ -32,7 +32,9 @@ class PendingAttachment extends Model
      */
     public static function persistDraft($draftId, Trix $field, $model)
     {
-        static::where('draft_id', $draftId)->get()->each->persist($field, $model);
+        static::where('draft_id', $draftId)
+            ->get()
+            ->each->persist($field, $model);
     }
 
     /**
@@ -49,7 +51,7 @@ class PendingAttachment extends Model
             'attachable_id' => $model->getKey(),
             'attachment' => $this->attachment,
             'disk' => $field->disk,
-            'url' => Storage::disk($field->disk)->url($this->attachment),
+            'url' => Storage::disk($field->disk)->url($this->attachment)
         ]);
 
         $this->delete();

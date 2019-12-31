@@ -15,6 +15,8 @@ class FilterController extends Controller
      */
     public function index(NovaRequest $request)
     {
-        return response()->json($request->newResource()->availableFilters($request));
+        return response()->json(
+            $request->newResource()->availableFilters($request)
+        );
     }
 }

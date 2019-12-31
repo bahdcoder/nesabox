@@ -13,7 +13,8 @@ trait InteractsWithLenses
     {
         return $this->availableLenses()->first(function ($lens) {
             return $this->lens === $lens->uriKey();
-        }) ?: abort($this->lensExists() ? 403 : 404);
+        }) ?:
+            abort($this->lensExists() ? 403 : 404);
     }
 
     /**
@@ -33,8 +34,10 @@ trait InteractsWithLenses
      */
     protected function lensExists()
     {
-        return $this->newResource()->resolveLenses($this)->contains(function ($lens) {
-            return $this->lens === $lens->uriKey();
-        });
+        return $this->newResource()
+            ->resolveLenses($this)
+            ->contains(function ($lens) {
+                return $this->lens === $lens->uriKey();
+            });
     }
 }

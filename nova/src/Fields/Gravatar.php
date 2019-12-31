@@ -12,8 +12,11 @@ class Gravatar extends Avatar
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name = 'Avatar', $attribute = 'email', $resolveCallback = null)
-    {
+    public function __construct(
+        $name = 'Avatar',
+        $attribute = 'email',
+        $resolveCallback = null
+    ) {
         parent::__construct($name, $attribute ?? 'email', $resolveCallback);
 
         $this->exceptOnForms();
@@ -31,7 +34,11 @@ class Gravatar extends Avatar
     protected function resolveAttribute($resource, $attribute)
     {
         $callback = function () use ($resource, $attribute) {
-            return 'https://www.gravatar.com/avatar/'.md5(strtolower(parent::resolveAttribute($resource, $attribute))).'?s=300';
+            return 'https://www.gravatar.com/avatar/' .
+                md5(
+                    strtolower(parent::resolveAttribute($resource, $attribute))
+                ) .
+                '?s=300';
         };
 
         $this->preview($callback)->thumbnail($callback);

@@ -31,8 +31,11 @@ abstract class Card extends Element
      */
     public function jsonSerialize()
     {
-        return array_merge([
-            'width' => $this->width,
-        ], parent::jsonSerialize());
+        return array_merge(
+            [
+                'width' => $this->width
+            ],
+            parent::jsonSerialize()
+        );
     }
 }

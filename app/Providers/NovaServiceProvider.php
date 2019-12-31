@@ -27,9 +27,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function routes()
     {
         Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
+            ->withAuthenticationRoutes()
+            ->withPasswordResetRoutes()
+            ->register();
     }
 
     /**
@@ -43,7 +43,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
         Nova::auth(function ($request) {
             return app()->environment('local') ||
-                   Gate::check('viewNova', [$request->user()]);
+                Gate::check('viewNova', [$request->user()]);
         });
     }
 
@@ -57,9 +57,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewNova', function ($user) {
-            return in_array($user->email, [
-                'bahdcoder@gmail.com'
-            ]);
+            return in_array($user->email, ['bahdcoder@gmail.com']);
         });
     }
 
@@ -70,9 +68,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function cards()
     {
-        return [
-            new Help,
-        ];
+        return [new Help()];
     }
 
     /**

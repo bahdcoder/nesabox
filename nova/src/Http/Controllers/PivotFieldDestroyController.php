@@ -20,12 +20,15 @@ class PivotFieldDestroyController extends Controller
         $request->authorizeForAttachment();
 
         DeleteField::forRequest(
-            $request, $request->findFieldOrFail(),
+            $request,
+            $request->findFieldOrFail(),
             $pivot = $request->findPivotModel()
         )->save();
 
         ActionEvent::forAttachedResourceUpdate(
-            $request, $request->findModelOrFail(), $pivot
+            $request,
+            $request->findModelOrFail(),
+            $pivot
         )->save();
     }
 }

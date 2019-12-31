@@ -16,10 +16,10 @@ class CreationPivotFieldController extends Controller
     public function index(NovaRequest $request)
     {
         return response()->json(
-            $request->newResource()->creationPivotFields(
-                $request,
-                $request->relatedResource
-            )->all()
+            $request
+                ->newResource()
+                ->creationPivotFields($request, $request->relatedResource)
+                ->all()
         );
     }
 }

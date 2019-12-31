@@ -46,9 +46,12 @@ class Relatable implements Rule
      */
     public function passes($attribute, $value)
     {
-        $model = $this->query->select('*')->whereKey($value)->first();
+        $model = $this->query
+            ->select('*')
+            ->whereKey($value)
+            ->first();
 
-        if (! $model) {
+        if (!$model) {
             return false;
         }
 
@@ -73,10 +76,12 @@ class Relatable implements Rule
      */
     protected function relationshipIsFull($model, $attribute, $value)
     {
-        $inverseRelation = $this->request->newResource()
-                    ->resolveInverseFieldsForAttribute($this->request, $attribute)->first(function ($field) {
-                        return $field instanceof HasOne || $field instanceof MorphOne;
-                    });
+        $inverseRelation = $this->request
+            ->newResource()
+            ->resolveInverseFieldsForAttribute($this->request, $attribute)
+            ->first(function ($field) {
+                return $field instanceof HasOne || $field instanceof MorphOne;
+            });
 
         if ($inverseRelation && $this->request->resourceId) {
             $modelBeingUpdated = $this->request->findModelOrFail();
@@ -87,7 +92,7 @@ class Relatable implements Rule
         }
 
         return $inverseRelation &&
-               $model->{$inverseRelation->attribute}()->count() > 0;
+            $model->{$inverseRelation->attribute}()->count() > 0;
     }
 
     /**
@@ -100,7 +105,8 @@ class Relatable implements Rule
     protected function authorize($resource, $model)
     {
         return (new $resource($model))->authorizedToAdd(
-            $this->request, $this->request->model()
+            $this->request,
+            $this->request->model()
         );
     }
 

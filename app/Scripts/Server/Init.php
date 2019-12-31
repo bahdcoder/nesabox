@@ -477,7 +477,7 @@ EOD;
 
         $userKeys = '';
 
-        foreach($this->server->user->sshkeys as $key) {
+        foreach ($this->server->user->sshkeys as $key) {
             $userKeys .= <<<EOD
 \n
 # {$key->name} key

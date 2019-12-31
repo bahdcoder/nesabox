@@ -16,20 +16,37 @@ trait DetachesPivotModels
     protected function detachmentCallback()
     {
         return function ($request, $model) {
-            foreach ($model->{$this->attribute}()->withoutGlobalScopes()->get() as $related) {
+            foreach (
+                $model
+                    ->{$this->attribute}()
+                    ->withoutGlobalScopes()
+                    ->get()
+                as $related
+            ) {
                 $resource = Nova::resourceForModel($related);
 
                 $resource = new $resource($related);
 
-                $pivot = $related->{$model->{$this->attribute}()->getPivotAccessor()};
+                $pivot =
+                    $related->{$model
+                        ->{$this->attribute}()
+                        ->getPivotAccessor()};
 
-                $pivotFields = $resource->resolvePivotFields($request, $request->resource);
+                $pivotFields = $resource->resolvePivotFields(
+                    $request,
+                    $request->resource
+                );
 
-                $pivotFields->whereInstanceOf(Deletable::class)
-                        ->filter->isPrunable()
-                        ->each(function ($field) use ($request, $pivot) {
-                            DeleteField::forRequest($request, $field, $pivot)->save();
-                        });
+                $pivotFields
+                    ->whereInstanceOf(Deletable::class)
+                    ->filter->isPrunable()
+                    ->each(function ($field) use ($request, $pivot) {
+                        DeleteField::forRequest(
+                            $request,
+                            $field,
+                            $pivot
+                        )->save();
+                    });
 
                 $pivot->delete();
             }

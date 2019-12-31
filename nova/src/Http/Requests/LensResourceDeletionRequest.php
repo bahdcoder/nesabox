@@ -18,19 +18,28 @@ class LensResourceDeletionRequest extends NovaRequest
      * @param  \Closure  $authCallback
      * @return mixed
      */
-    protected function chunkWithAuthorization($count, Closure $callback, Closure $authCallback)
-    {
-        $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
-            $query->whereKey($this->resources);
-        })->tap(function ($query) {
-            $query->getQuery()->orders = [];
-        })->chunkById($count, function ($models) use ($callback, $authCallback) {
-            $models = $authCallback($models);
+    protected function chunkWithAuthorization(
+        $count,
+        Closure $callback,
+        Closure $authCallback
+    ) {
+        $this->toSelectedResourceQuery()
+            ->when(!$this->forAllMatchingResources(), function ($query) {
+                $query->whereKey($this->resources);
+            })
+            ->tap(function ($query) {
+                $query->getQuery()->orders = [];
+            })
+            ->chunkById($count, function ($models) use (
+                $callback,
+                $authCallback
+            ) {
+                $models = $authCallback($models);
 
-            if ($models->isNotEmpty()) {
-                $callback($models);
-            }
-        });
+                if ($models->isNotEmpty()) {
+                    $callback($models);
+                }
+            });
     }
 
     /**
@@ -41,8 +50,8 @@ class LensResourceDeletionRequest extends NovaRequest
     protected function toSelectedResourceQuery()
     {
         return $this->forAllMatchingResources()
-                    ? $this->toQuery()
-                    : $this->newQueryWithoutScopes();
+            ? $this->toQuery()
+            : $this->newQueryWithoutScopes();
     }
 
     /**
@@ -52,11 +61,19 @@ class LensResourceDeletionRequest extends NovaRequest
      */
     public function toQuery()
     {
-        return tap($this->lens()->query(LensRequest::createFrom($this), $this->newQuery()), function ($query) {
-            if (! $query instanceof Builder) {
-                throw new LogicException('Lens must return an Eloquent query instance in order to perform this action.');
+        return tap(
+            $this->lens()->query(
+                LensRequest::createFrom($this),
+                $this->newQuery()
+            ),
+            function ($query) {
+                if (!$query instanceof Builder) {
+                    throw new LogicException(
+                        'Lens must return an Eloquent query instance in order to perform this action.'
+                    );
+                }
             }
-        });
+        );
     }
 
     /**

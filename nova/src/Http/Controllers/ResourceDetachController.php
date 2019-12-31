@@ -24,16 +24,25 @@ class ResourceDetachController extends Controller
 
             foreach ($models as $model) {
                 $this->deletePivotFields(
-                    $request, $resource = $request->newResourceWith($model),
-                    $pivot = $model->{$parent->{$request->viaRelationship}()->getPivotAccessor()}
+                    $request,
+                    $resource = $request->newResourceWith($model),
+                    $pivot =
+                        $model->{$parent
+                            ->{$request->viaRelationship}()
+                            ->getPivotAccessor()}
                 );
 
                 $pivot->delete();
 
                 DB::table('action_events')->insert(
                     ActionEvent::forResourceDetach(
-                        $request->user(), $parent, collect([$model]), $pivot->getMorphClass()
-                    )->map->getAttributes()->all()
+                        $request->user(),
+                        $parent,
+                        collect([$model]),
+                        $pivot->getMorphClass()
+                    )
+                        ->map->getAttributes()
+                        ->all()
                 );
             }
         });
@@ -47,9 +56,13 @@ class ResourceDetachController extends Controller
      * @param  \Illuminate\Database\Eloquent\Model
      * @return void
      */
-    protected function deletePivotFields(DetachResourceRequest $request, $resource, $pivot)
-    {
-        $resource->resolvePivotFields($request, $request->viaResource)
+    protected function deletePivotFields(
+        DetachResourceRequest $request,
+        $resource,
+        $pivot
+    ) {
+        $resource
+            ->resolvePivotFields($request, $request->viaResource)
             ->whereInstanceOf(Deletable::class)
             ->filter->isPrunable()
             ->each(function ($field) use ($request, $pivot) {

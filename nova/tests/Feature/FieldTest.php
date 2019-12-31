@@ -17,7 +17,7 @@ use stdClass;
 
 class FieldTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -27,7 +27,10 @@ class FieldTest extends IntegrationTest
         Text::useComponent('something');
         $this->assertEquals('something', (new Text('Foo', 'foo'))->component());
 
-        $this->assertEquals('belongs-to-field', (new BelongsTo('User', 'user', UserResource::class))->component());
+        $this->assertEquals(
+            'belongs-to-field',
+            (new BelongsTo('User', 'user', UserResource::class))->component()
+        );
     }
 
     public function test_fields_can_have_custom_display_callback()
@@ -145,28 +148,36 @@ class FieldTest extends IntegrationTest
     {
         $field = Text::make('Name');
 
-        $this->assertContains([
-            'component' => 'text-field',
-            'prefixComponent' => true,
-            'indexName' => 'Name',
-            'name' => 'Name',
-            'attribute' => 'name',
-            'value' => null,
-            'panel' => null,
-            'sortable' => false,
-            'textAlign' => 'left',
-        ], $field->jsonSerialize());
+        $this->assertContains(
+            [
+                'component' => 'text-field',
+                'prefixComponent' => true,
+                'indexName' => 'Name',
+                'name' => 'Name',
+                'attribute' => 'name',
+                'value' => null,
+                'panel' => null,
+                'sortable' => false,
+                'textAlign' => 'left'
+            ],
+            $field->jsonSerialize()
+        );
     }
 
     public function test_text_fields_can_have_extra_meta_data()
     {
-        $field = Text::make('Name')->withMeta(['extraAttributes' => [
-            'placeholder' => 'This is a placeholder',
-        ]]);
+        $field = Text::make('Name')->withMeta([
+            'extraAttributes' => [
+                'placeholder' => 'This is a placeholder'
+            ]
+        ]);
 
-        $this->assertContains([
-            'extraAttributes' => ['placeholder' => 'This is a placeholder'],
-        ], $field->jsonSerialize());
+        $this->assertContains(
+            [
+                'extraAttributes' => ['placeholder' => 'This is a placeholder']
+            ],
+            $field->jsonSerialize()
+        );
     }
 
     public function test_select_fields_options_with_additional_parameters()
@@ -175,16 +186,19 @@ class FieldTest extends IntegrationTest
             ['label' => 'A', 'value' => 'a'],
             ['label' => 'B', 'value' => 'b'],
             ['label' => 'C', 'value' => 'c'],
-            ['label' => 'D', 'value' => 'd', 'group' => 'E'],
+            ['label' => 'D', 'value' => 'd', 'group' => 'E']
         ];
         $field = Select::make('Name')->options([
             'a' => 'A',
             'b' => ['label' => 'B'],
             ['value' => 'c', 'label' => 'C'],
-            ['value' => 'd', 'label' => 'D', 'group' => 'E'],
+            ['value' => 'd', 'label' => 'D', 'group' => 'E']
         ]);
 
-        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($field->jsonSerialize()['options']));
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expected),
+            json_encode($field->jsonSerialize()['options'])
+        );
     }
 
     public function test_field_can_be_set_to_readonly()
@@ -219,7 +233,7 @@ class FieldTest extends IntegrationTest
     {
         $request = NovaRequest::create('/nova-api/users', 'POST', [
             'editing' => true,
-            'editMode' => 'create',
+            'editMode' => 'create'
         ]);
 
         $field = Text::make('Name')->readonly(function ($request) {
@@ -233,7 +247,7 @@ class FieldTest extends IntegrationTest
     {
         $request = NovaRequest::create('/nova-api/users/1', 'PUT', [
             'editing' => true,
-            'editMode' => 'update',
+            'editMode' => 'update'
         ]);
 
         $field = Text::make('Name')->readonly(function ($request) {
@@ -245,18 +259,23 @@ class FieldTest extends IntegrationTest
 
     public function test_collision_of_request_properties()
     {
-        $request = new NovaRequest([], [
-            'query' => '',
-            'resource' => 'resource',
-        ]);
+        $request = new NovaRequest(
+            [],
+            [
+                'query' => '',
+                'resource' => 'resource'
+            ]
+        );
 
         $request->setMethod('POST');
         $request->setRouteResolver(function () use ($request) {
-            return tap(new Route('POST', '/{resource}', function () {
-            }), function (Route $route) use ($request) {
-                $route->bind($request);
-                $route->setParameter('resource', UserResource::class);
-            });
+            return tap(
+                new Route('POST', '/{resource}', function () {}),
+                function (Route $route) use ($request) {
+                    $route->bind($request);
+                    $route->setParameter('resource', UserResource::class);
+                }
+            );
         });
 
         $model = new stdClass();
@@ -270,7 +289,10 @@ class FieldTest extends IntegrationTest
 
     public function test_fields_are_not_required_by_default()
     {
-        $request = NovaRequest::create('/nova-api/users/creation-fields', 'GET');
+        $request = NovaRequest::create(
+            '/nova-api/users/creation-fields',
+            'GET'
+        );
 
         $field = Text::make('Name');
 
@@ -279,10 +301,14 @@ class FieldTest extends IntegrationTest
 
     public function test_can_mark_a_field_as_required_for_create_if_in_validation()
     {
-        $request = NovaRequest::create('/nova-api/users/creation-fields', 'GET', [
-            'editing' => true,
-            'editMode' => 'create',
-        ]);
+        $request = NovaRequest::create(
+            '/nova-api/users/creation-fields',
+            'GET',
+            [
+                'editing' => true,
+                'editMode' => 'create'
+            ]
+        );
 
         $field = Text::make('Name')->rules('required');
 
@@ -293,7 +319,7 @@ class FieldTest extends IntegrationTest
     {
         $request = NovaRequest::create('/nova-api/users/update-fields', 'GET', [
             'editing' => true,
-            'editMode' => 'update',
+            'editMode' => 'update'
         ]);
 
         $field = Text::make('Name')->rules('required');

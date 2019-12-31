@@ -24,9 +24,7 @@ class RoleResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'name',
-    ];
+    public static $search = ['id', 'name'];
 
     /**
      * Determine if the resource should be displayed for the given request.
@@ -50,30 +48,38 @@ class RoleResource extends Resource
         return [
             ID::make('ID', 'id'),
 
-            BelongsToMany::make('Users', 'users', UserResource::class)->fields(function () {
-                return [
-                    Text::make('Admin', 'admin')->rules('required'),
+            BelongsToMany::make('Users', 'users', UserResource::class)
+                ->fields(function () {
+                    return [
+                        Text::make('Admin', 'admin')->rules('required'),
 
-                    $this->when($_SERVER['__nova.role.pivotFile'] ?? false, function () {
-                        return File::make('Photo', 'photo');
-                    }),
+                        $this->when(
+                            $_SERVER['__nova.role.pivotFile'] ?? false,
+                            function () {
+                                return File::make('Photo', 'photo');
+                            }
+                        ),
 
-                    Text::make('Restricted', 'restricted')->canSee(function () {
-                        return false;
-                    }),
-                ];
-            })->actions(function ($request) {
-                return [
-                    new FailingPivotAction,
-                    new NoopAction,
-                    new NoopActionWithPivotHandle,
-                    new QueuedAction,
-                    new QueuedUpdateStatusAction,
-                    new UpdateStatusAction,
-                ];
-            })->prunable($_SERVER['__nova.role.prunable'] ?? false),
+                        Text::make('Restricted', 'restricted')->canSee(
+                            function () {
+                                return false;
+                            }
+                        )
+                    ];
+                })
+                ->actions(function ($request) {
+                    return [
+                        new FailingPivotAction(),
+                        new NoopAction(),
+                        new NoopActionWithPivotHandle(),
+                        new QueuedAction(),
+                        new QueuedUpdateStatusAction(),
+                        new UpdateStatusAction()
+                    ];
+                })
+                ->prunable($_SERVER['__nova.role.prunable'] ?? false),
 
-            Text::make('Name', 'name')->rules('required', 'string', 'max:255'),
+            Text::make('Name', 'name')->rules('required', 'string', 'max:255')
         ];
     }
 
@@ -85,9 +91,7 @@ class RoleResource extends Resource
      */
     public function actions(Request $request)
     {
-        return [
-            new NoopAction,
-        ];
+        return [new NoopAction()];
     }
 
     /**
@@ -98,7 +102,7 @@ class RoleResource extends Resource
      */
     public function filters(Request $request)
     {
-        return [new IdFilter];
+        return [new IdFilter()];
     }
 
     /**

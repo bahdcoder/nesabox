@@ -12,7 +12,10 @@ use Laravel\Nova\Rules\NotAttached;
 use Laravel\Nova\Rules\RelatableAttachment;
 use Laravel\Nova\TrashedStatus;
 
-class MorphToMany extends Field implements DeletableContract, ListableField, RelatableField
+class MorphToMany extends Field implements
+    DeletableContract,
+    ListableField,
+    RelatableField
 {
     use Deletable, DetachesPivotModels, FormatsRelatableDisplayValues;
 
@@ -98,7 +101,8 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
     {
         parent::__construct($name, $attribute);
 
-        $resource = $resource ?? ResourceRelationshipGuesser::guessResource($name);
+        $resource =
+            $resource ?? ResourceRelationshipGuesser::guessResource($name);
 
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
@@ -123,7 +127,8 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
     public function authorize(Request $request)
     {
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -147,12 +152,16 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
      */
     public function getRules(NovaRequest $request)
     {
-        $withTrashed = $request->{$this->attribute.'_trashed'} === 'true';
+        $withTrashed = $request->{$this->attribute . '_trashed'} === 'true';
 
         return array_merge_recursive(parent::getRules($request), [
             $this->attribute => array_filter([
-                'required', new RelatableAttachment($request, $this->buildAttachableQuery($request, $withTrashed)),
-            ]),
+                'required',
+                new RelatableAttachment(
+                    $request,
+                    $this->buildAttachableQuery($request, $withTrashed)
+                )
+            ])
         ]);
     }
 
@@ -166,8 +175,8 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
     {
         return array_merge_recursive(parent::getCreationRules($request), [
             $this->attribute => [
-                new NotAttached($request, $request->findModelOrFail()),
-            ],
+                new NotAttached($request, $request->findModelOrFail())
+            ]
         ]);
     }
 
@@ -178,19 +187,33 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
      * @param  bool  $withTrashed
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function buildAttachableQuery(NovaRequest $request, $withTrashed = false)
-    {
-        $model = forward_static_call([$resourceClass = $this->resourceClass, 'newModel']);
+    public function buildAttachableQuery(
+        NovaRequest $request,
+        $withTrashed = false
+    ) {
+        $model = forward_static_call([
+            ($resourceClass = $this->resourceClass),
+            'newModel'
+        ]);
 
-        $query = $request->first === 'true'
-                            ? $model->newQueryWithoutScopes()->whereKey($request->current)
-                            : $resourceClass::buildIndexQuery(
-                                    $request, $model->newQuery(), $request->search,
-                                    [], [], TrashedStatus::fromBoolean($withTrashed)
-                              );
+        $query =
+            $request->first === 'true'
+                ? $model->newQueryWithoutScopes()->whereKey($request->current)
+                : $resourceClass::buildIndexQuery(
+                    $request,
+                    $model->newQuery(),
+                    $request->search,
+                    [],
+                    [],
+                    TrashedStatus::fromBoolean($withTrashed)
+                );
 
         return $query->tap(function ($query) use ($request, $model) {
-            forward_static_call($this->attachableQueryCallable($request, $model), $request, $query);
+            forward_static_call(
+                $this->attachableQueryCallable($request, $model),
+                $request,
+                $query
+            );
         });
     }
 
@@ -204,8 +227,8 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
     protected function attachableQueryCallable(NovaRequest $request, $model)
     {
         return ($method = $this->attachableQueryMethod($request, $model))
-                    ? [$request->resource(), $method]
-                    : [$this->resourceClass, 'relatableQuery'];
+            ? [$request->resource(), $method]
+            : [$this->resourceClass, 'relatableQuery'];
     }
 
     /**
@@ -217,7 +240,7 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
      */
     protected function attachableQueryMethod(NovaRequest $request, $model)
     {
-        $method = 'relatable'.Str::plural(class_basename($model));
+        $method = 'relatable' . Str::plural(class_basename($model));
 
         if (method_exists($request->resource(), $method)) {
             return $method;
@@ -236,7 +259,7 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
         return array_filter([
             'avatar' => $resource->resolveAvatarUrl($request),
             'display' => $this->formatDisplayValue($resource),
-            'value' => $resource->getKey(),
+            'value' => $resource->getKey()
         ]);
     }
 
@@ -311,13 +334,17 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
      */
     public function meta()
     {
-        return array_merge([
-            'resourceName' => $this->resourceName,
-            'morphToManyRelationship' => $this->manyToManyRelationship,
-            'searchable' => $this->searchable,
-            'listable' => true,
-            'singularLabel' => $this->singularLabel ?? Str::singular($this->name),
-            'perPage'=> $this->resourceClass::$perPageViaRelationship,
-        ], $this->meta);
+        return array_merge(
+            [
+                'resourceName' => $this->resourceName,
+                'morphToManyRelationship' => $this->manyToManyRelationship,
+                'searchable' => $this->searchable,
+                'listable' => true,
+                'singularLabel' =>
+                    $this->singularLabel ?? Str::singular($this->name),
+                'perPage' => $this->resourceClass::$perPageViaRelationship
+            ],
+            $this->meta
+        );
     }
 }

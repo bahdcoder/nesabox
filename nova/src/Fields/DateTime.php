@@ -22,15 +22,25 @@ class DateTime extends Field
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
-    {
-        parent::__construct($name, $attribute, $resolveCallback ?? function ($value) {
-            if (! $value instanceof DateTimeInterface) {
-                throw new Exception("DateTime field must cast to 'datetime' in Eloquent model.");
-            }
+    public function __construct(
+        $name,
+        $attribute = null,
+        $resolveCallback = null
+    ) {
+        parent::__construct(
+            $name,
+            $attribute,
+            $resolveCallback ??
+                function ($value) {
+                    if (!$value instanceof DateTimeInterface) {
+                        throw new Exception(
+                            "DateTime field must cast to 'datetime' in Eloquent model."
+                        );
+                    }
 
-            return $value->format('Y-m-d H:i:s');
-        });
+                    return $value->format('Y-m-d H:i:s');
+                }
+        );
     }
 
     /**

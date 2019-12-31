@@ -3,13 +3,12 @@
 namespace App\Jobs\Servers;
 
 use App\Server;
-use App\FirewallRule;
+use App\Firewallrule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\AddFirewallRule as AppAddFirewallRule;
 
 class AddFirewallRule implements ShouldQueue
@@ -29,7 +28,7 @@ class AddFirewallRule implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Server $server, FirewallRule $rule)
+    public function __construct(Server $server, Firewallrule $rule)
     {
         $this->rule = $rule;
         $this->server = $server;

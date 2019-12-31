@@ -12,7 +12,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceRestoreTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -27,10 +27,12 @@ class ResourceRestoreTest extends IntegrationTest
         $user->delete();
         $user2->delete();
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/restore', [
-                            'resources' => [$user->id, $user2->id],
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/restore',
+            [
+                'resources' => [$user->id, $user2->id]
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -41,7 +43,10 @@ class ResourceRestoreTest extends IntegrationTest
 
         $this->assertCount(2, ActionEvent::all());
         $this->assertEquals('Restore', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target->id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target->id
+        );
     }
 
     public function test_can_restore_resources_via_search()
@@ -52,10 +57,12 @@ class ResourceRestoreTest extends IntegrationTest
         $user->delete();
         $user2->delete();
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/restore?search='.$user->email, [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/restore?search=' . $user->email,
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -66,7 +73,10 @@ class ResourceRestoreTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Restore', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_can_restore_resources_via_filters()
@@ -77,17 +87,21 @@ class ResourceRestoreTest extends IntegrationTest
         $user->delete();
         $user2->delete();
 
-        $filters = base64_encode(json_encode([
-            [
-                'class' => IdFilter::class,
-                'value' => 1,
-            ],
-        ]));
+        $filters = base64_encode(
+            json_encode([
+                [
+                    'class' => IdFilter::class,
+                    'value' => 1
+                ]
+            ])
+        );
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/restore?filters='.$filters, [
-                            'resources' => 'all',
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/restore?filters=' . $filters,
+            [
+                'resources' => 'all'
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -98,7 +112,10 @@ class ResourceRestoreTest extends IntegrationTest
 
         $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('Restore', ActionEvent::first()->name);
-        $this->assertEquals($user->id, ActionEvent::where('actionable_id', $user->id)->first()->target_id);
+        $this->assertEquals(
+            $user->id,
+            ActionEvent::where('actionable_id', $user->id)->first()->target_id
+        );
     }
 
     public function test_cant_restore_resources_not_authorized_to_restore()
@@ -114,10 +131,12 @@ class ResourceRestoreTest extends IntegrationTest
 
         Gate::policy(User::class, UserPolicy::class);
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/restore', [
-                            'resources' => [$user->id],
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/restore',
+            [
+                'resources' => [$user->id]
+            ]
+        );
 
         unset($_SERVER['nova.user.authorizable']);
         unset($_SERVER['nova.user.restorable']);
@@ -137,10 +156,12 @@ class ResourceRestoreTest extends IntegrationTest
         $user = factory(User::class)->create();
         $user->delete();
 
-        $response = $this->withExceptionHandling()
-                        ->putJson('/nova-api/users/restore', [
-                            'resources' => [$user->id],
-                        ]);
+        $response = $this->withExceptionHandling()->putJson(
+            '/nova-api/users/restore',
+            [
+                'resources' => [$user->id]
+            ]
+        );
 
         $actionEvent = ActionEvent::first();
 

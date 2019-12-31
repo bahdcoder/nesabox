@@ -51,7 +51,7 @@ trait CallsQueuedActions
 
         $callback($action);
 
-        if (! $this->job->hasFailed() && ! $this->job->isReleased()) {
+        if (!$this->job->hasFailed() && !$this->job->isReleased()) {
             ActionEvent::markBatchAsFinished($this->batchId);
         }
     }
@@ -64,7 +64,12 @@ trait CallsQueuedActions
      */
     protected function setJobInstanceIfNecessary($instance)
     {
-        if (in_array(InteractsWithQueue::class, class_uses_recursive(get_class($instance)))) {
+        if (
+            in_array(
+                InteractsWithQueue::class,
+                class_uses_recursive(get_class($instance))
+            )
+        ) {
             $instance->setJob($this->job);
         }
 

@@ -36,12 +36,12 @@ class FilterCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('boolean')) {
-            return __DIR__.'/stubs/boolean-filter.stub';
+            return __DIR__ . '/stubs/boolean-filter.stub';
         } elseif ($this->option('date')) {
-            return __DIR__.'/stubs/date-filter.stub';
+            return __DIR__ . '/stubs/date-filter.stub';
         }
 
-        return __DIR__.'/stubs/filter.stub';
+        return __DIR__ . '/stubs/filter.stub';
     }
 
     /**
@@ -52,7 +52,7 @@ class FilterCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova\Filters';
+        return $rootNamespace . '\Nova\Filters';
     }
 
     /**
@@ -63,8 +63,18 @@ class FilterCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['boolean', null, InputOption::VALUE_NONE, 'Indicates if the generated filter should be a boolean filter'],
-            ['date', null, InputOption::VALUE_NONE, 'Indicates if the generated filter should be a date filter'],
+            [
+                'boolean',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicates if the generated filter should be a boolean filter'
+            ],
+            [
+                'date',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicates if the generated filter should be a date filter'
+            ]
         ];
     }
 }

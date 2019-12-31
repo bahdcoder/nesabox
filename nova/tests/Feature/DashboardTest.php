@@ -9,7 +9,7 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class DashboardTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -22,7 +22,7 @@ class DashboardTest extends IntegrationTest
                 {
                     return false;
                 }
-            },
+            }
         ]);
 
         $this->assertCount(0, Nova::availableDashboards(Request::create('/')));

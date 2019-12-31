@@ -33,37 +33,77 @@ class CardCommand extends Command
      */
     public function handle()
     {
-        if (! $this->hasValidNameArgument()) {
+        if (!$this->hasValidNameArgument()) {
             return;
         }
 
-        (new Filesystem)->copyDirectory(
-            __DIR__.'/card-stubs',
+        (new Filesystem())->copyDirectory(
+            __DIR__ . '/card-stubs',
             $this->cardPath()
         );
 
         // Card.js replacements...
-        $this->replace('{{ title }}', $this->cardTitle(), $this->cardPath().'/resources/js/components/Card.vue');
-        $this->replace('{{ component }}', $this->cardName(), $this->cardPath().'/resources/js/card.js');
+        $this->replace(
+            '{{ title }}',
+            $this->cardTitle(),
+            $this->cardPath() . '/resources/js/components/Card.vue'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->cardName(),
+            $this->cardPath() . '/resources/js/card.js'
+        );
 
         // Card.php replacements...
-        $this->replace('{{ namespace }}', $this->cardNamespace(), $this->cardPath().'/src/Card.stub');
-        $this->replace('{{ class }}', $this->cardClass(), $this->cardPath().'/src/Card.stub');
-        $this->replace('{{ component }}', $this->cardName(), $this->cardPath().'/src/Card.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->cardNamespace(),
+            $this->cardPath() . '/src/Card.stub'
+        );
+        $this->replace(
+            '{{ class }}',
+            $this->cardClass(),
+            $this->cardPath() . '/src/Card.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->cardName(),
+            $this->cardPath() . '/src/Card.stub'
+        );
 
-        (new Filesystem)->move(
-            $this->cardPath().'/src/Card.stub',
-            $this->cardPath().'/src/'.$this->cardClass().'.php'
+        (new Filesystem())->move(
+            $this->cardPath() . '/src/Card.stub',
+            $this->cardPath() . '/src/' . $this->cardClass() . '.php'
         );
 
         // CardServiceProvider.php replacements...
-        $this->replace('{{ namespace }}', $this->cardNamespace(), $this->cardPath().'/src/CardServiceProvider.stub');
-        $this->replace('{{ component }}', $this->cardName(), $this->cardPath().'/src/CardServiceProvider.stub');
-        $this->replace('{{ name }}', $this->cardName(), $this->cardPath().'/src/CardServiceProvider.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->cardNamespace(),
+            $this->cardPath() . '/src/CardServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->cardName(),
+            $this->cardPath() . '/src/CardServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ name }}',
+            $this->cardName(),
+            $this->cardPath() . '/src/CardServiceProvider.stub'
+        );
 
         // Card composer.json replacements...
-        $this->replace('{{ name }}', $this->argument('name'), $this->cardPath().'/composer.json');
-        $this->replace('{{ escapedNamespace }}', $this->escapedCardNamespace(), $this->cardPath().'/composer.json');
+        $this->replace(
+            '{{ name }}',
+            $this->argument('name'),
+            $this->cardPath() . '/composer.json'
+        );
+        $this->replace(
+            '{{ escapedNamespace }}',
+            $this->escapedCardNamespace(),
+            $this->cardPath() . '/composer.json'
+        );
 
         // Rename the stubs with the proper file extensions...
         $this->renameStubs();
@@ -73,19 +113,31 @@ class CardCommand extends Command
         $this->addCardPackageToRootComposer();
         $this->addScriptsToNpmPackage();
 
-        if ($this->confirm("Would you like to install the card's NPM dependencies?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to install the card's NPM dependencies?",
+                true
+            )
+        ) {
             $this->installNpmDependencies();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm("Would you like to compile the card's assets?", true)) {
+        if (
+            $this->confirm("Would you like to compile the card's assets?", true)
+        ) {
             $this->compile();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm('Would you like to update your Composer packages?', true)) {
+        if (
+            $this->confirm(
+                'Would you like to update your Composer packages?',
+                true
+            )
+        ) {
             $this->composerUpdate();
         }
     }
@@ -98,8 +150,8 @@ class CardCommand extends Command
     protected function stubsToRename()
     {
         return [
-            $this->cardPath().'/src/CardServiceProvider.stub',
-            $this->cardPath().'/routes/api.stub',
+            $this->cardPath() . '/src/CardServiceProvider.stub',
+            $this->cardPath() . '/routes/api.stub'
         ];
     }
 
@@ -110,11 +162,14 @@ class CardCommand extends Command
      */
     protected function addCardRepositoryToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['repositories'][] = [
             'type' => 'path',
-            'url' => './'.$this->relativeCardPath(),
+            'url' => './' . $this->relativeCardPath()
         ];
 
         file_put_contents(
@@ -130,7 +185,10 @@ class CardCommand extends Command
      */
     protected function addCardPackageToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['require'][$this->argument('name')] = '*';
 
@@ -147,10 +205,15 @@ class CardCommand extends Command
      */
     protected function addScriptsToNpmPackage()
     {
-        $package = json_decode(file_get_contents(base_path('package.json')), true);
+        $package = json_decode(
+            file_get_contents(base_path('package.json')),
+            true
+        );
 
-        $package['scripts']['build-'.$this->cardName()] = 'cd '.$this->relativeCardPath().' && npm run dev';
-        $package['scripts']['build-'.$this->cardName().'-prod'] = 'cd '.$this->relativeCardPath().' && npm run prod';
+        $package['scripts']['build-' . $this->cardName()] =
+            'cd ' . $this->relativeCardPath() . ' && npm run dev';
+        $package['scripts']['build-' . $this->cardName() . '-prod'] =
+            'cd ' . $this->relativeCardPath() . ' && npm run prod';
 
         file_put_contents(
             base_path('package.json'),
@@ -165,7 +228,10 @@ class CardCommand extends Command
      */
     protected function installNpmDependencies()
     {
-        $this->executeCommand('npm set progress=false && npm install', $this->cardPath());
+        $this->executeCommand(
+            'npm set progress=false && npm install',
+            $this->cardPath()
+        );
     }
 
     /**
@@ -199,7 +265,11 @@ class CardCommand extends Command
     {
         $process = (new Process($command, $path))->setTimeout(null);
 
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+        if (
+            '\\' !== DIRECTORY_SEPARATOR &&
+            file_exists('/dev/tty') &&
+            is_readable('/dev/tty')
+        ) {
             $process->setTty(true);
         }
 
@@ -218,7 +288,10 @@ class CardCommand extends Command
      */
     protected function replace($search, $replace, $path)
     {
-        file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
+        file_put_contents(
+            $path,
+            str_replace($search, $replace, file_get_contents($path))
+        );
     }
 
     /**
@@ -228,7 +301,7 @@ class CardCommand extends Command
      */
     protected function cardPath()
     {
-        return base_path('nova-components/'.$this->cardClass());
+        return base_path('nova-components/' . $this->cardClass());
     }
 
     /**
@@ -238,7 +311,7 @@ class CardCommand extends Command
      */
     protected function relativeCardPath()
     {
-        return 'nova-components/'.$this->cardClass();
+        return 'nova-components/' . $this->cardClass();
     }
 
     /**
@@ -248,7 +321,7 @@ class CardCommand extends Command
      */
     protected function cardNamespace()
     {
-        return Str::studly($this->cardVendor()).'\\'.$this->cardClass();
+        return Str::studly($this->cardVendor()) . '\\' . $this->cardClass();
     }
 
     /**

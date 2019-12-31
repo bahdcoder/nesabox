@@ -14,24 +14,34 @@ class MySqlTrendDateExpression extends TrendDateExpression
         $offset = $this->offset();
 
         if ($offset > 0) {
-            $interval = '+ INTERVAL '.$offset.' HOUR';
+            $interval = '+ INTERVAL ' . $offset . ' HOUR';
         } elseif ($offset === 0) {
             $interval = '';
         } else {
-            $interval = '- INTERVAL '.($offset * -1).' HOUR';
+            $interval = '- INTERVAL ' . $offset * -1 . ' HOUR';
         }
 
         switch ($this->unit) {
             case 'month':
-                return "date_format({$this->wrap($this->column)} {$interval}, '%Y-%m')";
+                return "date_format({$this->wrap(
+                    $this->column
+                )} {$interval}, '%Y-%m')";
             case 'week':
-                return "date_format({$this->wrap($this->column)} {$interval}, '%x-%v')";
+                return "date_format({$this->wrap(
+                    $this->column
+                )} {$interval}, '%x-%v')";
             case 'day':
-                return "date_format({$this->wrap($this->column)} {$interval}, '%Y-%m-%d')";
+                return "date_format({$this->wrap(
+                    $this->column
+                )} {$interval}, '%Y-%m-%d')";
             case 'hour':
-                return "date_format({$this->wrap($this->column)} {$interval}, '%Y-%m-%d %H:00')";
+                return "date_format({$this->wrap(
+                    $this->column
+                )} {$interval}, '%Y-%m-%d %H:00')";
             case 'minute':
-                return "date_format({$this->wrap($this->column)} {$interval}, '%Y-%m-%d %H:%i:00')";
+                return "date_format({$this->wrap(
+                    $this->column
+                )} {$interval}, '%Y-%m-%d %H:%i:00')";
         }
     }
 }

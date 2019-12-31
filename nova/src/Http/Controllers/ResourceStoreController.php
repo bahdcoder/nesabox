@@ -25,13 +25,15 @@ class ResourceStoreController extends Controller
 
         $model = DB::transaction(function () use ($request, $resource) {
             [$model, $callbacks] = $resource::fill(
-                $request, $resource::newModel()
+                $request,
+                $resource::newModel()
             );
 
             if ($request->viaRelationship()) {
-                $request->findParentModelOrFail()
-                        ->{$request->viaRelationship}()
-                        ->save($model);
+                $request
+                    ->findParentModelOrFail()
+                    ->{$request->viaRelationship}()
+                    ->save($model);
             } else {
                 $model->save();
             }
@@ -43,10 +45,16 @@ class ResourceStoreController extends Controller
             return $model;
         });
 
-        return response()->json([
-            'id' => $model->getKey(),
-            'resource' => $model->attributesToArray(),
-            'redirect' => $resource::redirectAfterCreate($request, $request->newResourceWith($model)),
-        ], 201);
+        return response()->json(
+            [
+                'id' => $model->getKey(),
+                'resource' => $model->attributesToArray(),
+                'redirect' => $resource::redirectAfterCreate(
+                    $request,
+                    $request->newResourceWith($model)
+                )
+            ],
+            201
+        );
     }
 }

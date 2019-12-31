@@ -24,9 +24,7 @@ class CommentResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'body',
-    ];
+    public static $search = ['id', 'body'];
 
     /**
      * Get the fields displayed by the resource.
@@ -38,13 +36,18 @@ class CommentResource extends Resource
     {
         return [
             ID::make('ID', 'id'),
-            MorphTo::make('Commentable', 'commentable')->display([PostResource::class => function ($resource) {
-                return $resource->title;
-            }])->types([
-                PostResource::class => 'Post',
-            ])->searchable(),
+            MorphTo::make('Commentable', 'commentable')
+                ->display([
+                    PostResource::class => function ($resource) {
+                        return $resource->title;
+                    }
+                ])
+                ->types([
+                    PostResource::class => 'Post'
+                ])
+                ->searchable(),
             BelongsTo::make('Author', 'author', UserResource::class),
-            Text::make('Body', 'body')->rules('required', 'string', 'max:255'),
+            Text::make('Body', 'body')->rules('required', 'string', 'max:255')
         ];
     }
 
@@ -56,7 +59,7 @@ class CommentResource extends Resource
      */
     public function filters(Request $request)
     {
-        return [new IdFilter];
+        return [new IdFilter()];
     }
 
     /**
@@ -67,7 +70,7 @@ class CommentResource extends Resource
      */
     public function actions(Request $request)
     {
-        return [new NoopAction];
+        return [new NoopAction()];
     }
 
     /**
@@ -95,7 +98,7 @@ class CommentResource extends Resource
      */
     public static function relatablePosts(NovaRequest $request, $query)
     {
-        if (! isset($_SERVER['nova.comment.useCustomRelatablePosts'])) {
+        if (!isset($_SERVER['nova.comment.useCustomRelatablePosts'])) {
             return PostResource::relatableQuery($request, $query);
         }
 

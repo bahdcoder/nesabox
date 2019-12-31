@@ -16,10 +16,10 @@ class NovaRequest extends FormRequest
      */
     public function viaManyToMany()
     {
-        return in_array(
-            $this->relationshipType,
-            ['belongsToMany', 'morphToMany']
-        );
+        return in_array($this->relationshipType, [
+            'belongsToMany',
+            'morphToMany'
+        ]);
     }
 
     /**
@@ -29,7 +29,8 @@ class NovaRequest extends FormRequest
      */
     public function isCreateOrAttachRequest()
     {
-        return $this->editing && in_array($this->editMode, ['create', 'attach']);
+        return $this->editing &&
+            in_array($this->editMode, ['create', 'attach']);
     }
 
     /**
@@ -39,6 +40,7 @@ class NovaRequest extends FormRequest
      */
     public function isUpdateOrUpdateAttachedRequest()
     {
-        return $this->editing && in_array($this->editMode, ['update', 'update-attached']);
+        return $this->editing &&
+            in_array($this->editMode, ['update', 'update-attached']);
     }
 }

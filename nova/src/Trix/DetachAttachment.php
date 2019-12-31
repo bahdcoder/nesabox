@@ -15,8 +15,7 @@ class DetachAttachment
     public function __invoke(Request $request)
     {
         Attachment::where('url', $request->attachmentUrl)
-                        ->get()
-                        ->each
-                        ->purge();
+            ->get()
+            ->each->purge();
     }
 }

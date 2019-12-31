@@ -15,15 +15,17 @@ class ResourceShowController extends Controller
      */
     public function handle(ResourceDetailRequest $request)
     {
-        $resource = $request->newResourceWith(tap($request->findModelQuery(), function ($query) use ($request) {
-            $request->newResource()->detailQuery($request, $query);
-        })->firstOrFail());
+        $resource = $request->newResourceWith(
+            tap($request->findModelQuery(), function ($query) use ($request) {
+                $request->newResource()->detailQuery($request, $query);
+            })->firstOrFail()
+        );
 
         $resource->authorizeToView($request);
 
         return response()->json([
             'panels' => $resource->availablePanelsForDetail($request),
-            'resource' => $resource->serializeForDetail($request),
+            'resource' => $resource->serializeForDetail($request)
         ]);
     }
 }

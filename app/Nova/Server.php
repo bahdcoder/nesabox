@@ -28,9 +28,7 @@ class Server extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id',
-    ];
+    public static $search = ['id'];
 
     /**
      * Get the fields displayed by the resource.
@@ -40,10 +38,7 @@ class Server extends Resource
      */
     public function fields(Request $request)
     {
-        return [
-            ID::make()->sortable(),
-            BelongsTo::make('User')
-        ];
+        return [ID::make()->sortable(), BelongsTo::make('User')];
     }
 
     /**

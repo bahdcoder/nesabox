@@ -22,8 +22,12 @@ class ResourceRestoreController extends Controller
                 $model->restore();
 
                 DB::table('action_events')->insert(
-                    ActionEvent::forResourceRestore($request->user(), collect([$model]))
-                                ->map->getAttributes()->all()
+                    ActionEvent::forResourceRestore(
+                        $request->user(),
+                        collect([$model])
+                    )
+                        ->map->getAttributes()
+                        ->all()
                 );
             });
         });

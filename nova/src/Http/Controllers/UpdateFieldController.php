@@ -21,7 +21,7 @@ class UpdateFieldController extends Controller
 
         return response()->json([
             'fields' => $resource->updateFieldsWithinPanels($request),
-            'panels' => $resource->availablePanelsForUpdate($request),
+            'panels' => $resource->availablePanelsForUpdate($request)
         ]);
     }
 }

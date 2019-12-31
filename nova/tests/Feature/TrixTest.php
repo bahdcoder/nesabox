@@ -17,24 +17,30 @@ class TrixTest extends IntegrationTest
 
     public function test_fields_can_execute_custom_filling_callback()
     {
-        $field = Trix::make('Trix key')->fillUsing(
-            function (
-                NovaRequest $request,
-                Model $model,
-                string $attribute,
-                string $requestAttribute
+        $field = Trix::make('Trix key')->fillUsing(function (
+            NovaRequest $request,
+            Model $model,
+            string $attribute,
+            string $requestAttribute
+        ) {
+            return function () use (
+                $request,
+                $model,
+                $attribute,
+                $requestAttribute
             ) {
-                return function () use ($request, $model, $attribute, $requestAttribute) {
-                    $this->assertInstanceOf(Post::class, $model);
-                    $this->assertEquals('trix_key', $attribute);
-                    $this->assertEquals('trix_key', $requestAttribute);
-                    $this->assertEquals('TRIX_DATA', $request->{$attribute});
-                };
-            }
-        );
+                $this->assertInstanceOf(Post::class, $model);
+                $this->assertEquals('trix_key', $attribute);
+                $this->assertEquals('trix_key', $requestAttribute);
+                $this->assertEquals('TRIX_DATA', $request->{$attribute});
+            };
+        });
 
         $model = new Post();
-        $result = $field->fill(NovaRequest::create('/?trix_key=TRIX_DATA'), $model);
+        $result = $field->fill(
+            NovaRequest::create('/?trix_key=TRIX_DATA'),
+            $model
+        );
 
         $this->assertIsCallable($result);
 

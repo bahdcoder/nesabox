@@ -50,7 +50,7 @@ class TrendCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/trend.stub';
+        return __DIR__ . '/stubs/trend.stub';
     }
 
     /**
@@ -61,6 +61,6 @@ class TrendCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Nova\Metrics';
+        return $rootNamespace . '\Nova\Metrics';
     }
 }

@@ -22,9 +22,7 @@ class AddressResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id',
-    ];
+    public static $search = ['id'];
 
     /**
      * Get the fields displayed by the resource.
@@ -39,11 +37,13 @@ class AddressResource extends Resource
 
             // This simulates filling another field from a belongs to if the user has other fields that can be derived
             // from this field such as other foreign keys that are only present for querying convenience...
-            BelongsTo::make('User', 'user', UserResource::class)->filled(function ($request, $model) {
-                $model->name = 'Filled Name';
-            }),
+            BelongsTo::make('User', 'user', UserResource::class)->filled(
+                function ($request, $model) {
+                    $model->name = 'Filled Name';
+                }
+            ),
 
-            Text::make('Name', 'name')->onlyOnIndex(),
+            Text::make('Name', 'name')->onlyOnIndex()
         ];
     }
 

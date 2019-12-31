@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Servers;
 
+use Log;
 use App\Server;
 use App\FirewallRule;
 use App\Http\Controllers\Controller;
@@ -26,17 +27,20 @@ class UfwController extends Controller
         return new ServerResource($server);
     }
 
-    public function destroy(Server $server, FirewallRule $rule)
+    public function destroy(Server $server, $rule)
+
     {
-        if ($rule->status === STATUS_DELETING) {
+        $firewallRule = FirewallRule::findOrFail($rule);
+    
+        if ($firewallRule->status === STATUS_DELETING) {
             return new ServerResource($server);
         }
 
-        $rule->update([
+        $firewallRule->update([
             'status' => STATUS_DELETING
         ]);
 
-        DeleteFirewallRule::dispatch($server, $rule);
+        DeleteFirewallRule::dispatch($server, $firewallRule);
 
         return new ServerResource($server);
     }

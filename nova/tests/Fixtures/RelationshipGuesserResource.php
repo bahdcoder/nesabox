@@ -21,9 +21,7 @@ class RelationshipGuesserResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id',
-    ];
+    public static $search = ['id'];
 
     /**
      * Get the fields displayed by the resource.
@@ -33,9 +31,6 @@ class RelationshipGuesserResource extends Resource
      */
     public function fields(Request $request)
     {
-        return [
-            ID::make('ID', 'id'),
-            BelongsTo::make('UserResource', 'user'),
-        ];
+        return [ID::make('ID', 'id'), BelongsTo::make('UserResource', 'user')];
     }
 }

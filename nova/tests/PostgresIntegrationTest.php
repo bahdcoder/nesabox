@@ -13,7 +13,7 @@ abstract class PostgresIntegrationTest extends IntegrationTest
     {
         $this->loadMigrationsFrom([
             '--database' => 'pgsql',
-            '--realpath' => realpath(__DIR__.'/Migrations'),
+            '--realpath' => realpath(__DIR__ . '/Migrations')
         ]);
     }
 
@@ -37,7 +37,7 @@ abstract class PostgresIntegrationTest extends IntegrationTest
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => 'prefer'
         ]);
     }
 }

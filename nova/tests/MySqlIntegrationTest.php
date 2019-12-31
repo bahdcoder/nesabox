@@ -13,7 +13,7 @@ abstract class MySqlIntegrationTest extends IntegrationTest
     {
         $this->loadMigrationsFrom([
             '--database' => 'mysql',
-            '--realpath' => realpath(__DIR__.'/Migrations'),
+            '--realpath' => realpath(__DIR__ . '/Migrations')
         ]);
     }
 
@@ -39,7 +39,7 @@ abstract class MySqlIntegrationTest extends IntegrationTest
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'strict' => true,
-            'engine' => null,
+            'engine' => null
         ]);
     }
 }

@@ -20,16 +20,38 @@ class TrendDateExpressionFactory
     {
         switch ($query->getConnection()->getDriverName()) {
             case 'sqlite':
-                return new SqliteTrendDateExpression($query, $column, $unit, $timezone);
+                return new SqliteTrendDateExpression(
+                    $query,
+                    $column,
+                    $unit,
+                    $timezone
+                );
             case 'mysql':
             case 'mariadb':
-                return new MySqlTrendDateExpression($query, $column, $unit, $timezone);
+                return new MySqlTrendDateExpression(
+                    $query,
+                    $column,
+                    $unit,
+                    $timezone
+                );
             case 'pgsql':
-                return new PostgresTrendDateExpression($query, $column, $unit, $timezone);
+                return new PostgresTrendDateExpression(
+                    $query,
+                    $column,
+                    $unit,
+                    $timezone
+                );
             case 'sqlsrv':
-                return new SqlSrvTrendDateExpression($query, $column, $unit, $timezone);
+                return new SqlSrvTrendDateExpression(
+                    $query,
+                    $column,
+                    $unit,
+                    $timezone
+                );
             default:
-                throw new InvalidArgumentException('Trend metric helpers are not supported for this database.');
+                throw new InvalidArgumentException(
+                    'Trend metric helpers are not supported for this database.'
+                );
         }
     }
 }

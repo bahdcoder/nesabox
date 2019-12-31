@@ -25,7 +25,7 @@ class DeleteFirewallRule implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Server $server, FirewallRule $rule)
+    public function __construct(Server $server, Firewallrule $rule)
     {
         $this->rule = $rule;
         $this->server = $server;

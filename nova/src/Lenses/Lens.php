@@ -25,8 +25,7 @@ use stdClass;
 
 abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
 {
-    use
-        AuthorizedToSee,
+    use AuthorizedToSee,
         ConditionallyLoadsAttributes,
         DelegatesToResource,
         ProxiesCanSeeToGate,
@@ -73,7 +72,7 @@ abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function __construct($resource = null)
     {
-        $this->resource = $resource ?: new stdClass;
+        $this->resource = $resource ?: new stdClass();
     }
 
     /**
@@ -115,10 +114,11 @@ abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function serializeForIndex(NovaRequest $request)
     {
-        return $this->serializeWithId($this->resolveFields($request)
-                ->reject(function ($field) {
-                    return $field instanceof ListableField || ! $field->showOnIndex;
-                }));
+        return $this->serializeWithId(
+            $this->resolveFields($request)->reject(function ($field) {
+                return $field instanceof ListableField || !$field->showOnIndex;
+            })
+        );
     }
 
     /**
@@ -134,7 +134,8 @@ abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
                 ->each->resolve($this->resource)
                 ->filter->authorize($request)
                 ->each->resolveForDisplay($this->resource)
-                ->values()->all()
+                ->values()
+                ->all()
         );
     }
 
@@ -158,8 +159,10 @@ abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
     protected function serializeWithId(Collection $fields)
     {
         return [
-            'id' => $fields->whereInstanceOf(ID::class)->first() ?: ID::forModel($this->resource),
-            'fields' => $fields->all(),
+            'id' =>
+                $fields->whereInstanceOf(ID::class)->first() ?:
+                ID::forModel($this->resource),
+            'fields' => $fields->all()
         ];
     }
 
@@ -172,7 +175,7 @@ abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         return [
             'name' => $this->name(),
-            'uriKey' => $this->uriKey(),
+            'uriKey' => $this->uriKey()
         ];
     }
 }

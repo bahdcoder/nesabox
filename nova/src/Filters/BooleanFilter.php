@@ -23,8 +23,11 @@ abstract class BooleanFilter extends Filter
     {
         $container = Container::getInstance();
 
-        return collect($this->options($container->make(Request::class)))->values()->mapWithKeys(function ($option) {
-            return [$option => false];
-        })->all();
+        return collect($this->options($container->make(Request::class)))
+            ->values()
+            ->mapWithKeys(function ($option) {
+                return [$option => false];
+            })
+            ->all();
     }
 }

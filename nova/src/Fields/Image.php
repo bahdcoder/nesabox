@@ -36,14 +36,22 @@ class Image extends File
      * @param  callable|null  $storageCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $disk = 'public', $storageCallback = null)
-    {
+    public function __construct(
+        $name,
+        $attribute = null,
+        $disk = 'public',
+        $storageCallback = null
+    ) {
         parent::__construct($name, $attribute, $disk, $storageCallback);
 
         $this->thumbnail(function () {
-            return $this->value ? Storage::disk($this->disk)->url($this->value) : null;
+            return $this->value
+                ? Storage::disk($this->disk)->url($this->value)
+                : null;
         })->preview(function () {
-            return $this->value ? Storage::disk($this->disk)->url($this->value) : null;
+            return $this->value
+                ? Storage::disk($this->disk)->url($this->value)
+                : null;
         });
     }
 
@@ -113,7 +121,7 @@ class Image extends File
     {
         return array_merge(parent::jsonSerialize(), [
             'maxWidth' => $this->maxWidth,
-            'rounded' => $this->isRounded(),
+            'rounded' => $this->isRounded()
         ]);
     }
 }

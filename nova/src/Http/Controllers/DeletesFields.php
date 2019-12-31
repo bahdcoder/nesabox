@@ -28,18 +28,25 @@ trait DeletesFields
      * @param  bool  $skipSoftDeletes
      * @return void
      */
-    protected function deleteFields(NovaRequest $request, $model, $skipSoftDeletes = true)
-    {
-        if ($skipSoftDeletes && $request->newResourceWith($model)->softDeletes()) {
+    protected function deleteFields(
+        NovaRequest $request,
+        $model,
+        $skipSoftDeletes = true
+    ) {
+        if (
+            $skipSoftDeletes &&
+            $request->newResourceWith($model)->softDeletes()
+        ) {
             return;
         }
 
-        $request->newResourceWith($model)
-                    ->detailFields($request)
-                    ->whereInstanceOf(Deletable::class)
-                    ->filter->isPrunable()
-                    ->each(function ($field) use ($request, $model) {
-                        DeleteField::forRequest($request, $field, $model);
-                    });
+        $request
+            ->newResourceWith($model)
+            ->detailFields($request)
+            ->whereInstanceOf(Deletable::class)
+            ->filter->isPrunable()
+            ->each(function ($field) use ($request, $model) {
+                DeleteField::forRequest($request, $field, $model);
+            });
     }
 }

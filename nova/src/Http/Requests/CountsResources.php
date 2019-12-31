@@ -18,13 +18,19 @@ trait CountsResources
             return $baseQuery;
         }
 
-        $subQuery = $baseQuery->cloneWithout(
-            $baseQuery->unions ? ['orders', 'limit', 'offset'] : ['columns', 'orders', 'limit', 'offset']
-        )->cloneWithoutBindings(
-            $baseQuery->unions ? ['order'] : ['select', 'order']
-        )->selectRaw('1 as exists_temp');
+        $subQuery = $baseQuery
+            ->cloneWithout(
+                $baseQuery->unions
+                    ? ['orders', 'limit', 'offset']
+                    : ['columns', 'orders', 'limit', 'offset']
+            )
+            ->cloneWithoutBindings(
+                $baseQuery->unions ? ['order'] : ['select', 'order']
+            )
+            ->selectRaw('1 as exists_temp');
 
-        return $query->getConnection()
+        return $query
+            ->getConnection()
             ->query()
             ->fromSub($subQuery, 'count_temp');
     }

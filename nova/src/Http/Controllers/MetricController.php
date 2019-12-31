@@ -27,7 +27,7 @@ class MetricController extends Controller
     public function show(MetricRequest $request)
     {
         return response()->json([
-            'value' => $request->metric()->resolve($request),
+            'value' => $request->metric()->resolve($request)
         ]);
     }
 }

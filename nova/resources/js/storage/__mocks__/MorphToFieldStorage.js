@@ -6,7 +6,11 @@ const resourceTypes = {
 
 export default {
     fetchAvailableResources(resourceName, fieldAttribute, { params }) {
-        if (resourceName === undefined || fieldAttribute == undefined || params == undefined) {
+        if (
+            resourceName === undefined ||
+            fieldAttribute == undefined ||
+            params == undefined
+        ) {
             throw Error('please pass the right things')
         }
 

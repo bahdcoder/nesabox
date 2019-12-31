@@ -19,7 +19,10 @@ class ResourceUpdateController extends Controller
     public function handle(UpdateResourceRequest $request)
     {
         [$model, $resource] = DB::transaction(function () use ($request) {
-            $model = $request->findModelQuery()->lockForUpdate()->firstOrFail();
+            $model = $request
+                ->findModelQuery()
+                ->lockForUpdate()
+                ->firstOrFail();
 
             $resource = $request->newResourceWith($model);
             $resource->authorizeToUpdate($request);
@@ -43,7 +46,7 @@ class ResourceUpdateController extends Controller
         return response()->json([
             'id' => $model->getKey(),
             'resource' => $model->attributesToArray(),
-            'redirect' => $resource::redirectAfterUpdate($request, $resource),
+            'redirect' => $resource::redirectAfterUpdate($request, $resource)
         ]);
     }
 
@@ -54,16 +57,20 @@ class ResourceUpdateController extends Controller
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
-    protected function modelHasBeenUpdatedSinceRetrieval(UpdateResourceRequest $request, $model)
-    {
+    protected function modelHasBeenUpdatedSinceRetrieval(
+        UpdateResourceRequest $request,
+        $model
+    ) {
         $column = $model->getUpdatedAtColumn();
 
-        if (! $model->{$column}) {
+        if (!$model->{$column}) {
             return false;
         }
 
-        return $request->input('_retrieved_at') && $model->usesTimestamps() && $model->{$column}->gt(
-            Carbon::createFromTimestamp($request->input('_retrieved_at'))
-        );
+        return $request->input('_retrieved_at') &&
+            $model->usesTimestamps() &&
+            $model->{$column}->gt(
+                Carbon::createFromTimestamp($request->input('_retrieved_at'))
+            );
     }
 }

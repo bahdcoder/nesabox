@@ -43,7 +43,7 @@ class ForbiddenUserResource extends Resource
      */
     public function lenses(Request $request)
     {
-        return [new UserLens];
+        return [new UserLens()];
     }
 
     /**

@@ -27,8 +27,13 @@ class CallQueuedAction
      * @param  string  $batchId
      * @return void
      */
-    public function __construct(Action $action, $method, ActionFields $fields, Collection $models, $batchId)
-    {
+    public function __construct(
+        Action $action,
+        $method,
+        ActionFields $fields,
+        Collection $models,
+        $batchId
+    ) {
         $this->action = $action;
         $this->method = $method;
         $this->fields = $fields;
@@ -44,7 +49,9 @@ class CallQueuedAction
     public function handle()
     {
         return $this->callAction(function ($action) {
-            return $action->withBatchId($this->batchId)->{$this->method}($this->fields, $this->models);
+            return $action
+                ->withBatchId($this->batchId)
+                ->{$this->method}($this->fields, $this->models);
         });
     }
 
@@ -59,7 +66,12 @@ class CallQueuedAction
         ActionEvent::markBatchAsFailed($this->batchId, $e);
 
         if ($method = $this->failedMethodName()) {
-            call_user_func([$this->action, $method], $this->fields, $this->models, $e);
+            call_user_func(
+                [$this->action, $method],
+                $this->fields,
+                $this->models,
+                $e
+            );
         }
     }
 
@@ -70,13 +82,14 @@ class CallQueuedAction
      */
     protected function failedMethodName()
     {
-        if (($method = $this->failedMethodForModel()) &&
-            method_exists($this->action, $method)) {
+        if (
+            ($method = $this->failedMethodForModel()) &&
+            method_exists($this->action, $method)
+        ) {
             return $method;
         }
 
-        return method_exists($this, 'failed')
-                    ? 'failed' : null;
+        return method_exists($this, 'failed') ? 'failed' : null;
     }
 
     /**
@@ -87,7 +100,8 @@ class CallQueuedAction
     protected function failedMethodForModel()
     {
         if ($this->models->isNotEmpty()) {
-            return 'failedFor'.Str::plural(class_basename($this->models->first()));
+            return 'failedFor' .
+                Str::plural(class_basename($this->models->first()));
         }
     }
 }

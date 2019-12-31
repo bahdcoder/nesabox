@@ -20,8 +20,10 @@ class ActionController extends Controller
             'actions' => $request->newResource()->availableActions($request),
             'pivotActions' => [
                 'name' => $request->pivotName(),
-                'actions' => $request->newResource()->availablePivotActions($request),
-            ],
+                'actions' => $request
+                    ->newResource()
+                    ->availablePivotActions($request)
+            ]
         ]);
     }
 

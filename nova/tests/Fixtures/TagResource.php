@@ -23,9 +23,7 @@ class TagResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id', 'name',
-    ];
+    public static $search = ['id', 'name'];
 
     /**
      * Get the fields displayed by the resource.
@@ -37,12 +35,13 @@ class TagResource extends Resource
     {
         return [
             ID::make('ID', 'id'),
-            MorphToMany::make('Videos', 'videos', PostResource::class)->display('title')->searchable()->fields(function () {
-                return [
-                    Text::make('Admin', 'admin')->rules('required'),
-                ];
-            }),
-            Text::make('Name', 'name')->rules('required', 'string', 'max:255'),
+            MorphToMany::make('Videos', 'videos', PostResource::class)
+                ->display('title')
+                ->searchable()
+                ->fields(function () {
+                    return [Text::make('Admin', 'admin')->rules('required')];
+                }),
+            Text::make('Name', 'name')->rules('required', 'string', 'max:255')
         ];
     }
 

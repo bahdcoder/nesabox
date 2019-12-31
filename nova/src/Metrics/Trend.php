@@ -113,11 +113,19 @@ abstract class Trend extends RangedMetric
      */
     public function count($request, $model, $unit, $column = null)
     {
-        $resource = $model instanceof Builder ? $model->getModel() : new $model;
+        $resource =
+            $model instanceof Builder ? $model->getModel() : new $model();
 
         $column = $column ?? $resource->getCreatedAtColumn();
 
-        return $this->aggregate($request, $model, $unit, 'count', $resource->getQualifiedKeyName(), $column);
+        return $this->aggregate(
+            $request,
+            $model,
+            $unit,
+            'count',
+            $resource->getQualifiedKeyName(),
+            $column
+        );
     }
 
     /**
@@ -129,9 +137,20 @@ abstract class Trend extends RangedMetric
      * @param  string  $dateColumn
      * @return \Laravel\Nova\Metrics\TrendResult
      */
-    public function averageByMonths($request, $model, $column, $dateColumn = null)
-    {
-        return $this->aggregate($request, $model, self::BY_MONTHS, 'avg', $column, $dateColumn);
+    public function averageByMonths(
+        $request,
+        $model,
+        $column,
+        $dateColumn = null
+    ) {
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MONTHS,
+            'avg',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -143,9 +162,20 @@ abstract class Trend extends RangedMetric
      * @param  string  $dateColumn
      * @return \Laravel\Nova\Metrics\TrendResult
      */
-    public function averageByWeeks($request, $model, $column, $dateColumn = null)
-    {
-        return $this->aggregate($request, $model, self::BY_WEEKS, 'avg', $column, $dateColumn);
+    public function averageByWeeks(
+        $request,
+        $model,
+        $column,
+        $dateColumn = null
+    ) {
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_WEEKS,
+            'avg',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -159,7 +189,14 @@ abstract class Trend extends RangedMetric
      */
     public function averageByDays($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_DAYS, 'avg', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_DAYS,
+            'avg',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -171,9 +208,20 @@ abstract class Trend extends RangedMetric
      * @param  string  $dateColumn
      * @return \Laravel\Nova\Metrics\TrendResult
      */
-    public function averageByHours($request, $model, $column, $dateColumn = null)
-    {
-        return $this->aggregate($request, $model, self::BY_HOURS, 'avg', $column, $dateColumn);
+    public function averageByHours(
+        $request,
+        $model,
+        $column,
+        $dateColumn = null
+    ) {
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_HOURS,
+            'avg',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -185,9 +233,20 @@ abstract class Trend extends RangedMetric
      * @param  string  $dateColumn
      * @return \Laravel\Nova\Metrics\TrendResult
      */
-    public function averageByMinutes($request, $model, $column, $dateColumn = null)
-    {
-        return $this->aggregate($request, $model, self::BY_MINUTES, 'avg', $column, $dateColumn);
+    public function averageByMinutes(
+        $request,
+        $model,
+        $column,
+        $dateColumn = null
+    ) {
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MINUTES,
+            'avg',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -200,9 +259,21 @@ abstract class Trend extends RangedMetric
      * @param  string  $dateColumn
      * @return \Laravel\Nova\Metrics\TrendResult
      */
-    public function average($request, $model, $unit, $column, $dateColumn = null)
-    {
-        return $this->aggregate($request, $model, $unit, 'avg', $column, $dateColumn);
+    public function average(
+        $request,
+        $model,
+        $unit,
+        $column,
+        $dateColumn = null
+    ) {
+        return $this->aggregate(
+            $request,
+            $model,
+            $unit,
+            'avg',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -216,7 +287,14 @@ abstract class Trend extends RangedMetric
      */
     public function sumByMonths($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_MONTHS, 'sum', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MONTHS,
+            'sum',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -230,7 +308,14 @@ abstract class Trend extends RangedMetric
      */
     public function sumByWeeks($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_WEEKS, 'sum', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_WEEKS,
+            'sum',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -244,7 +329,14 @@ abstract class Trend extends RangedMetric
      */
     public function sumByDays($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_DAYS, 'sum', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_DAYS,
+            'sum',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -258,7 +350,14 @@ abstract class Trend extends RangedMetric
      */
     public function sumByHours($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_HOURS, 'sum', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_HOURS,
+            'sum',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -272,7 +371,14 @@ abstract class Trend extends RangedMetric
      */
     public function sumByMinutes($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_MINUTES, 'sum', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MINUTES,
+            'sum',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -287,7 +393,14 @@ abstract class Trend extends RangedMetric
      */
     public function sum($request, $model, $unit, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, $unit, 'sum', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            $unit,
+            'sum',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -301,7 +414,14 @@ abstract class Trend extends RangedMetric
      */
     public function maxByMonths($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_MONTHS, 'max', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MONTHS,
+            'max',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -315,7 +435,14 @@ abstract class Trend extends RangedMetric
      */
     public function maxByWeeks($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_WEEKS, 'max', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_WEEKS,
+            'max',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -329,7 +456,14 @@ abstract class Trend extends RangedMetric
      */
     public function maxByDays($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_DAYS, 'max', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_DAYS,
+            'max',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -343,7 +477,14 @@ abstract class Trend extends RangedMetric
      */
     public function maxByHours($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_HOURS, 'max', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_HOURS,
+            'max',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -357,7 +498,14 @@ abstract class Trend extends RangedMetric
      */
     public function maxByMinutes($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_MINUTES, 'max', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MINUTES,
+            'max',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -372,7 +520,14 @@ abstract class Trend extends RangedMetric
      */
     public function max($request, $model, $unit, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, $unit, 'max', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            $unit,
+            'max',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -386,7 +541,14 @@ abstract class Trend extends RangedMetric
      */
     public function minByMonths($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_MONTHS, 'min', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MONTHS,
+            'min',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -400,7 +562,14 @@ abstract class Trend extends RangedMetric
      */
     public function minByWeeks($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_WEEKS, 'min', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_WEEKS,
+            'min',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -414,7 +583,14 @@ abstract class Trend extends RangedMetric
      */
     public function minByDays($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_DAYS, 'min', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_DAYS,
+            'min',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -428,7 +604,14 @@ abstract class Trend extends RangedMetric
      */
     public function minByHours($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_HOURS, 'min', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_HOURS,
+            'min',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -442,7 +625,14 @@ abstract class Trend extends RangedMetric
      */
     public function minByMinutes($request, $model, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, self::BY_MINUTES, 'min', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            self::BY_MINUTES,
+            'min',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -457,7 +647,14 @@ abstract class Trend extends RangedMetric
      */
     public function min($request, $model, $unit, $column, $dateColumn = null)
     {
-        return $this->aggregate($request, $model, $unit, 'min', $column, $dateColumn);
+        return $this->aggregate(
+            $request,
+            $model,
+            $unit,
+            'min',
+            $column,
+            $dateColumn
+        );
     }
 
     /**
@@ -471,15 +668,25 @@ abstract class Trend extends RangedMetric
      * @param  string  $dateColumn
      * @return \Laravel\Nova\Metrics\TrendResult
      */
-    protected function aggregate($request, $model, $unit, $function, $column, $dateColumn = null)
-    {
-        $query = $model instanceof Builder ? $model : (new $model)->newQuery();
+    protected function aggregate(
+        $request,
+        $model,
+        $unit,
+        $function,
+        $column,
+        $dateColumn = null
+    ) {
+        $query =
+            $model instanceof Builder ? $model : (new $model())->newQuery();
 
         $timezone = $request->timezone;
 
         $expression = (string) TrendDateExpressionFactory::make(
-            $query, $dateColumn = $dateColumn ?? $query->getModel()->getCreatedAtColumn(),
-            $unit, $timezone
+            $query,
+            $dateColumn =
+                $dateColumn ?? $query->getModel()->getCreatedAtColumn(),
+            $unit,
+            $timezone
         );
 
         $possibleDateResults = $this->getAllPossibleDateResults(
@@ -490,28 +697,42 @@ abstract class Trend extends RangedMetric
             $request->twelveHourTime === 'true'
         );
 
-        $wrappedColumn = $query->getQuery()->getGrammar()->wrap($column);
+        $wrappedColumn = $query
+            ->getQuery()
+            ->getGrammar()
+            ->wrap($column);
 
         $results = $query
-                ->select(DB::raw("{$expression} as date_result, {$function}({$wrappedColumn}) as aggregate"))
-                ->whereBetween($dateColumn, [$startingDate, $endingDate])
-                ->groupBy(DB::raw($expression))
-                ->orderBy('date_result')
-                ->get();
+            ->select(
+                DB::raw(
+                    "{$expression} as date_result, {$function}({$wrappedColumn}) as aggregate"
+                )
+            )
+            ->whereBetween($dateColumn, [$startingDate, $endingDate])
+            ->groupBy(DB::raw($expression))
+            ->orderBy('date_result')
+            ->get();
 
-        $results = array_merge($possibleDateResults, $results->mapWithKeys(function ($result) use ($request, $unit) {
-            return [$this->formatAggregateResultDate(
-                $result->date_result, $unit, $request->twelveHourTime === 'true'
-            ) => round($result->aggregate, 0)];
-        })->all());
+        $results = array_merge(
+            $possibleDateResults,
+            $results
+                ->mapWithKeys(function ($result) use ($request, $unit) {
+                    return [
+                        $this->formatAggregateResultDate(
+                            $result->date_result,
+                            $unit,
+                            $request->twelveHourTime === 'true'
+                        ) => round($result->aggregate, 0)
+                    ];
+                })
+                ->all()
+        );
 
         if (count($results) > $request->range) {
             array_shift($results);
         }
 
-        return $this->result()->trend(
-            $results
-        );
+        return $this->result()->trend($results);
     }
 
     /**
@@ -527,26 +748,40 @@ abstract class Trend extends RangedMetric
 
         switch ($unit) {
             case 'month':
-                return $now->subMonths($request->range - 1)->firstOfMonth()->setTime(0, 0);
+                return $now
+                    ->subMonths($request->range - 1)
+                    ->firstOfMonth()
+                    ->setTime(0, 0);
 
             case 'week':
-                return $now->subWeeks($request->range - 1)->startOfWeek()->setTime(0, 0);
+                return $now
+                    ->subWeeks($request->range - 1)
+                    ->startOfWeek()
+                    ->setTime(0, 0);
 
             case 'day':
                 return $now->subDays($request->range - 1)->setTime(0, 0);
 
             case 'hour':
-                return with($now->subHours($request->range - 1), function ($now) {
-                    return $now->setTimeFromTimeString($now->hour.':00');
+                return with($now->subHours($request->range - 1), function (
+                    $now
+                ) {
+                    return $now->setTimeFromTimeString($now->hour . ':00');
                 });
 
             case 'minute':
-                return with($now->subMinutes($request->range - 1), function ($now) {
-                    return $now->setTimeFromTimeString($now->hour.':'.$now->minute.':00');
+                return with($now->subMinutes($request->range - 1), function (
+                    $now
+                ) {
+                    return $now->setTimeFromTimeString(
+                        $now->hour . ':' . $now->minute . ':00'
+                    );
                 });
 
             default:
-                throw new InvalidArgumentException('Invalid trend unit provided.');
+                throw new InvalidArgumentException(
+                    'Invalid trend unit provided.'
+                );
         }
     }
 
@@ -558,8 +793,11 @@ abstract class Trend extends RangedMetric
      * @param  bool  $twelveHourTime
      * @return string
      */
-    protected function formatAggregateResultDate($result, $unit, $twelveHourTime)
-    {
+    protected function formatAggregateResultDate(
+        $result,
+        $unit,
+        $twelveHourTime
+    ) {
         switch ($unit) {
             case 'month':
                 return $this->formatAggregateMonthDate($result);
@@ -568,23 +806,52 @@ abstract class Trend extends RangedMetric
                 return $this->formatAggregateWeekDate($result);
 
             case 'day':
-                return with(Chronos::createFromFormat('Y-m-d', $result), function ($date) {
-                    return __($date->format('F')).' '.$date->format('j').', '.$date->format('Y');
-                });
+                return with(
+                    Chronos::createFromFormat('Y-m-d', $result),
+                    function ($date) {
+                        return __($date->format('F')) .
+                            ' ' .
+                            $date->format('j') .
+                            ', ' .
+                            $date->format('Y');
+                    }
+                );
 
             case 'hour':
-                return with(Chronos::createFromFormat('Y-m-d H:00', $result), function ($date) use ($twelveHourTime) {
-                    return $twelveHourTime
-                            ? __($date->format('F')).' '.$date->format('j').' - '.$date->format('g:00 A')
-                            : __($date->format('F')).' '.$date->format('j').' - '.$date->format('G:00');
-                });
+                return with(
+                    Chronos::createFromFormat('Y-m-d H:00', $result),
+                    function ($date) use ($twelveHourTime) {
+                        return $twelveHourTime
+                            ? __($date->format('F')) .
+                                    ' ' .
+                                    $date->format('j') .
+                                    ' - ' .
+                                    $date->format('g:00 A')
+                            : __($date->format('F')) .
+                                    ' ' .
+                                    $date->format('j') .
+                                    ' - ' .
+                                    $date->format('G:00');
+                    }
+                );
 
             case 'minute':
-                return with(Chronos::createFromFormat('Y-m-d H:i:00', $result), function ($date) use ($twelveHourTime) {
-                    return $twelveHourTime
-                            ? __($date->format('F')).' '.$date->format('j').' - '.$date->format('g:i A')
-                            : __($date->format('F')).' '.$date->format('j').' - '.$date->format('G:i');
-                });
+                return with(
+                    Chronos::createFromFormat('Y-m-d H:i:00', $result),
+                    function ($date) use ($twelveHourTime) {
+                        return $twelveHourTime
+                            ? __($date->format('F')) .
+                                    ' ' .
+                                    $date->format('j') .
+                                    ' - ' .
+                                    $date->format('g:i A')
+                            : __($date->format('F')) .
+                                    ' ' .
+                                    $date->format('j') .
+                                    ' - ' .
+                                    $date->format('G:i');
+                    }
+                );
         }
     }
 
@@ -598,8 +865,10 @@ abstract class Trend extends RangedMetric
     {
         [$year, $month] = explode('-', $result);
 
-        return with(Chronos::create((int) $year, (int) $month, 1), function ($date) {
-            return __($date->format('F')).' '.$date->format('Y');
+        return with(Chronos::create((int) $year, (int) $month, 1), function (
+            $date
+        ) {
+            return __($date->format('F')) . ' ' . $date->format('Y');
         });
     }
 
@@ -613,15 +882,20 @@ abstract class Trend extends RangedMetric
     {
         [$year, $week] = explode('-', $result);
 
-        $isoDate = (new DateTime)->setISODate($year, $week)->setTime(0, 0);
+        $isoDate = (new DateTime())->setISODate($year, $week)->setTime(0, 0);
 
         [$startingDate, $endingDate] = [
             Chronos::instance($isoDate),
-            Chronos::instance($isoDate)->endOfWeek(),
+            Chronos::instance($isoDate)->endOfWeek()
         ];
 
-        return __($startingDate->format('F')).' '.$startingDate->format('j').' - '.
-               __($endingDate->format('F')).' '.$endingDate->format('j');
+        return __($startingDate->format('F')) .
+            ' ' .
+            $startingDate->format('j') .
+            ' - ' .
+            __($endingDate->format('F')) .
+            ' ' .
+            $endingDate->format('j');
     }
 
     /**
@@ -634,19 +908,27 @@ abstract class Trend extends RangedMetric
      * @param  bool  $twelveHourTime
      * @return array
      */
-    protected function getAllPossibleDateResults(Chronos $startingDate, Chronos $endingDate,
-                                                 $unit, $timezone, $twelveHourTime)
-    {
+    protected function getAllPossibleDateResults(
+        Chronos $startingDate,
+        Chronos $endingDate,
+        $unit,
+        $timezone,
+        $twelveHourTime
+    ) {
         $nextDate = $startingDate;
 
-        if (! empty($timezone)) {
+        if (!empty($timezone)) {
             $nextDate = $startingDate->setTimezone($timezone);
             $endingDate = $endingDate->setTimezone($timezone);
         }
 
-        $possibleDateResults[$this->formatPossibleAggregateResultDate(
-            $nextDate, $unit, $twelveHourTime
-        )] = 0;
+        $possibleDateResults[
+            $this->formatPossibleAggregateResultDate(
+                $nextDate,
+                $unit,
+                $twelveHourTime
+            )
+        ] = 0;
 
         while ($nextDate->lt($endingDate)) {
             if ($unit === self::BY_MONTHS) {
@@ -664,7 +946,9 @@ abstract class Trend extends RangedMetric
             if ($nextDate->lte($endingDate)) {
                 $possibleDateResults[
                     $this->formatPossibleAggregateResultDate(
-                        $nextDate, $unit, $twelveHourTime
+                        $nextDate,
+                        $unit,
+                        $twelveHourTime
                     )
                 ] = 0;
             }
@@ -681,28 +965,56 @@ abstract class Trend extends RangedMetric
      * @param  bool  $twelveHourTime
      * @return string
      */
-    protected function formatPossibleAggregateResultDate(Chronos $date, $unit, $twelveHourTime)
-    {
+    protected function formatPossibleAggregateResultDate(
+        Chronos $date,
+        $unit,
+        $twelveHourTime
+    ) {
         switch ($unit) {
             case 'month':
-                return __($date->format('F')).' '.$date->format('Y');
+                return __($date->format('F')) . ' ' . $date->format('Y');
 
             case 'week':
-                return __($date->startOfWeek()->format('F')).' '.$date->startOfWeek()->format('j').' - '.
-                       __($date->endOfWeek()->format('F')).' '.$date->endOfWeek()->format('j');
+                return __($date->startOfWeek()->format('F')) .
+                    ' ' .
+                    $date->startOfWeek()->format('j') .
+                    ' - ' .
+                    __($date->endOfWeek()->format('F')) .
+                    ' ' .
+                    $date->endOfWeek()->format('j');
 
             case 'day':
-                return __($date->format('F')).' '.$date->format('j').', '.$date->format('Y');
+                return __($date->format('F')) .
+                    ' ' .
+                    $date->format('j') .
+                    ', ' .
+                    $date->format('Y');
 
             case 'hour':
                 return $twelveHourTime
-                        ? __($date->format('F')).' '.$date->format('j').' - '.$date->format('g:00 A')
-                        : __($date->format('F')).' '.$date->format('j').' - '.$date->format('G:00');
+                    ? __($date->format('F')) .
+                            ' ' .
+                            $date->format('j') .
+                            ' - ' .
+                            $date->format('g:00 A')
+                    : __($date->format('F')) .
+                            ' ' .
+                            $date->format('j') .
+                            ' - ' .
+                            $date->format('G:00');
 
             case 'minute':
                 return $twelveHourTime
-                        ? __($date->format('F')).' '.$date->format('j').' - '.$date->format('g:i A')
-                        : __($date->format('F')).' '.$date->format('j').' - '.$date->format('G:i');
+                    ? __($date->format('F')) .
+                            ' ' .
+                            $date->format('j') .
+                            ' - ' .
+                            $date->format('g:i A')
+                    : __($date->format('F')) .
+                            ' ' .
+                            $date->format('j') .
+                            ' - ' .
+                            $date->format('G:i');
         }
     }
 }

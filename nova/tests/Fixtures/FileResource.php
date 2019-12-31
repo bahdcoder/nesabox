@@ -21,9 +21,7 @@ class FileResource extends Resource
      *
      * @var array
      */
-    public static $search = [
-        'id',
-    ];
+    public static $search = ['id'];
 
     /**
      * Get the fields displayed by the resource.
@@ -40,13 +38,20 @@ class FileResource extends Resource
         return [
             ID::make('ID', 'id'),
 
-            $field ?? Image::make('Avatar', 'avatar', null, function ($request, $model) {
-                return $request->avatar->storeAs('avatars', 'avatar.png');
-            })->rules('required')->delete(function ($request) {
-                $_SERVER['__nova.fileDeleted'] = true;
+            $field ??
+                Image::make('Avatar', 'avatar', null, function (
+                    $request,
+                    $model
+                ) {
+                    return $request->avatar->storeAs('avatars', 'avatar.png');
+                })
+                    ->rules('required')
+                    ->delete(function ($request) {
+                        $_SERVER['__nova.fileDeleted'] = true;
 
-                return $_SERVER['__nova.fileDelete'] ?? null;
-            })->prunable(),
+                        return $_SERVER['__nova.fileDelete'] ?? null;
+                    })
+                    ->prunable()
         ];
     }
 

@@ -50,10 +50,17 @@ class KeyValue extends Field
      * @param  string  $attribute
      * @return void
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
-    {
+    protected function fillAttributeFromRequest(
+        NovaRequest $request,
+        $requestAttribute,
+        $model,
+        $attribute
+    ) {
         if ($request->exists($requestAttribute)) {
-            $model->{$attribute} = json_decode($request[$requestAttribute], true);
+            $model->{$attribute} = json_decode(
+                $request[$requestAttribute],
+                true
+            );
         }
     }
 
@@ -106,7 +113,7 @@ class KeyValue extends Field
         return array_merge(parent::jsonSerialize(), [
             'keyLabel' => $this->keyLabel ?? __('Key'),
             'valueLabel' => $this->valueLabel ?? __('Value'),
-            'actionText' => $this->actionText ?? __('Add row'),
+            'actionText' => $this->actionText ?? __('Add row')
         ]);
     }
 }

@@ -24,13 +24,16 @@ class Authenticate extends BaseAuthenticationMiddleware
         try {
             $guard = config('nova.guard');
 
-            if (! empty($guard)) {
+            if (!empty($guard)) {
                 $guards[] = $guard;
             }
 
             return parent::handle($request, $next, ...$guards);
         } catch (AuthenticationException $e) {
-            throw new NovaAuthenticationException('Unauthenticated.', $e->guards());
+            throw new NovaAuthenticationException(
+                'Unauthenticated.',
+                $e->guards()
+            );
         }
     }
 }

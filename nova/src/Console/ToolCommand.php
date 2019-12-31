@@ -33,48 +33,108 @@ class ToolCommand extends Command
      */
     public function handle()
     {
-        if (! $this->hasValidNameArgument()) {
+        if (!$this->hasValidNameArgument()) {
             return;
         }
 
-        (new Filesystem)->copyDirectory(
-            __DIR__.'/tool-stubs',
+        (new Filesystem())->copyDirectory(
+            __DIR__ . '/tool-stubs',
             $this->toolPath()
         );
 
         // Tool.js replacements...
-        $this->replace('{{ component }}', $this->toolName(), $this->toolPath().'/resources/js/tool.js');
+        $this->replace(
+            '{{ component }}',
+            $this->toolName(),
+            $this->toolPath() . '/resources/js/tool.js'
+        );
 
         // Tool.vue replacements...
-        $this->replace('{{ title }}', $this->toolTitle(), $this->toolPath().'/resources/js/components/Tool.vue');
-        $this->replace('{{ class }}', $this->toolClass(), $this->toolPath().'/resources/js/components/Tool.vue');
+        $this->replace(
+            '{{ title }}',
+            $this->toolTitle(),
+            $this->toolPath() . '/resources/js/components/Tool.vue'
+        );
+        $this->replace(
+            '{{ class }}',
+            $this->toolClass(),
+            $this->toolPath() . '/resources/js/components/Tool.vue'
+        );
 
         // Tool.php replacements...
-        $this->replace('{{ namespace }}', $this->toolNamespace(), $this->toolPath().'/src/Tool.stub');
-        $this->replace('{{ class }}', $this->toolClass(), $this->toolPath().'/src/Tool.stub');
-        $this->replace('{{ component }}', $this->toolName(), $this->toolPath().'/src/Tool.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->toolNamespace(),
+            $this->toolPath() . '/src/Tool.stub'
+        );
+        $this->replace(
+            '{{ class }}',
+            $this->toolClass(),
+            $this->toolPath() . '/src/Tool.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->toolName(),
+            $this->toolPath() . '/src/Tool.stub'
+        );
 
-        (new Filesystem)->move(
-            $this->toolPath().'/src/Tool.stub',
-            $this->toolPath().'/src/'.$this->toolClass().'.php'
+        (new Filesystem())->move(
+            $this->toolPath() . '/src/Tool.stub',
+            $this->toolPath() . '/src/' . $this->toolClass() . '.php'
         );
 
         // ToolServiceProvider.php replacements...
-        $this->replace('{{ namespace }}', $this->toolNamespace(), $this->toolPath().'/src/ToolServiceProvider.stub');
-        $this->replace('{{ component }}', $this->toolName(), $this->toolPath().'/src/ToolServiceProvider.stub');
-        $this->replace('{{ name }}', $this->toolName(), $this->toolPath().'/src/ToolServiceProvider.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->toolNamespace(),
+            $this->toolPath() . '/src/ToolServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->toolName(),
+            $this->toolPath() . '/src/ToolServiceProvider.stub'
+        );
+        $this->replace(
+            '{{ name }}',
+            $this->toolName(),
+            $this->toolPath() . '/src/ToolServiceProvider.stub'
+        );
 
         // Authorize.php replacements...
-        $this->replace('{{ namespace }}', $this->toolNamespace(), $this->toolPath().'/src/Http/Middleware/Authorize.stub');
-        $this->replace('{{ class }}', $this->toolClass(), $this->toolPath().'/src/Http/Middleware/Authorize.stub');
+        $this->replace(
+            '{{ namespace }}',
+            $this->toolNamespace(),
+            $this->toolPath() . '/src/Http/Middleware/Authorize.stub'
+        );
+        $this->replace(
+            '{{ class }}',
+            $this->toolClass(),
+            $this->toolPath() . '/src/Http/Middleware/Authorize.stub'
+        );
 
         // Navigation replacements...
-        $this->replace('{{ title }}', $this->toolTitle(), $this->toolPath().'/resources/views/navigation.blade.php');
-        $this->replace('{{ component }}', $this->toolName(), $this->toolPath().'/resources/views/navigation.blade.php');
+        $this->replace(
+            '{{ title }}',
+            $this->toolTitle(),
+            $this->toolPath() . '/resources/views/navigation.blade.php'
+        );
+        $this->replace(
+            '{{ component }}',
+            $this->toolName(),
+            $this->toolPath() . '/resources/views/navigation.blade.php'
+        );
 
         // Tool composer.json replacements...
-        $this->replace('{{ name }}', $this->argument('name'), $this->toolPath().'/composer.json');
-        $this->replace('{{ escapedNamespace }}', $this->escapedToolNamespace(), $this->toolPath().'/composer.json');
+        $this->replace(
+            '{{ name }}',
+            $this->argument('name'),
+            $this->toolPath() . '/composer.json'
+        );
+        $this->replace(
+            '{{ escapedNamespace }}',
+            $this->escapedToolNamespace(),
+            $this->toolPath() . '/composer.json'
+        );
 
         // Rename the stubs with the proper file extensions...
         $this->renameStubs();
@@ -84,19 +144,31 @@ class ToolCommand extends Command
         $this->addToolPackageToRootComposer();
         $this->addScriptsToNpmPackage();
 
-        if ($this->confirm("Would you like to install the tool's NPM dependencies?", true)) {
+        if (
+            $this->confirm(
+                "Would you like to install the tool's NPM dependencies?",
+                true
+            )
+        ) {
             $this->installNpmDependencies();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm("Would you like to compile the tool's assets?", true)) {
+        if (
+            $this->confirm("Would you like to compile the tool's assets?", true)
+        ) {
             $this->compile();
 
             $this->output->newLine();
         }
 
-        if ($this->confirm('Would you like to update your Composer packages?', true)) {
+        if (
+            $this->confirm(
+                'Would you like to update your Composer packages?',
+                true
+            )
+        ) {
             $this->composerUpdate();
         }
     }
@@ -109,9 +181,9 @@ class ToolCommand extends Command
     protected function stubsToRename()
     {
         return [
-            $this->toolPath().'/src/ToolServiceProvider.stub',
-            $this->toolPath().'/src/Http/Middleware/Authorize.stub',
-            $this->toolPath().'/routes/api.stub',
+            $this->toolPath() . '/src/ToolServiceProvider.stub',
+            $this->toolPath() . '/src/Http/Middleware/Authorize.stub',
+            $this->toolPath() . '/routes/api.stub'
         ];
     }
 
@@ -122,11 +194,14 @@ class ToolCommand extends Command
      */
     protected function addToolRepositoryToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['repositories'][] = [
             'type' => 'path',
-            'url' => './'.$this->relativeToolPath(),
+            'url' => './' . $this->relativeToolPath()
         ];
 
         file_put_contents(
@@ -142,7 +217,10 @@ class ToolCommand extends Command
      */
     protected function addToolPackageToRootComposer()
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = json_decode(
+            file_get_contents(base_path('composer.json')),
+            true
+        );
 
         $composer['require'][$this->argument('name')] = '*';
 
@@ -159,10 +237,15 @@ class ToolCommand extends Command
      */
     protected function addScriptsToNpmPackage()
     {
-        $package = json_decode(file_get_contents(base_path('package.json')), true);
+        $package = json_decode(
+            file_get_contents(base_path('package.json')),
+            true
+        );
 
-        $package['scripts']['build-'.$this->toolName()] = 'cd '.$this->relativeToolPath().' && npm run dev';
-        $package['scripts']['build-'.$this->toolName().'-prod'] = 'cd '.$this->relativeToolPath().' && npm run prod';
+        $package['scripts']['build-' . $this->toolName()] =
+            'cd ' . $this->relativeToolPath() . ' && npm run dev';
+        $package['scripts']['build-' . $this->toolName() . '-prod'] =
+            'cd ' . $this->relativeToolPath() . ' && npm run prod';
 
         file_put_contents(
             base_path('package.json'),
@@ -177,7 +260,10 @@ class ToolCommand extends Command
      */
     protected function installNpmDependencies()
     {
-        $this->executeCommand('npm set progress=false && npm install', $this->toolPath());
+        $this->executeCommand(
+            'npm set progress=false && npm install',
+            $this->toolPath()
+        );
     }
 
     /**
@@ -211,7 +297,11 @@ class ToolCommand extends Command
     {
         $process = (new Process($command, $path))->setTimeout(null);
 
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+        if (
+            '\\' !== DIRECTORY_SEPARATOR &&
+            file_exists('/dev/tty') &&
+            is_readable('/dev/tty')
+        ) {
             $process->setTty(true);
         }
 
@@ -230,7 +320,10 @@ class ToolCommand extends Command
      */
     protected function replace($search, $replace, $path)
     {
-        file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
+        file_put_contents(
+            $path,
+            str_replace($search, $replace, file_get_contents($path))
+        );
     }
 
     /**
@@ -240,7 +333,7 @@ class ToolCommand extends Command
      */
     protected function toolPath()
     {
-        return base_path('nova-components/'.$this->toolClass());
+        return base_path('nova-components/' . $this->toolClass());
     }
 
     /**
@@ -250,7 +343,7 @@ class ToolCommand extends Command
      */
     protected function relativeToolPath()
     {
-        return 'nova-components/'.$this->toolClass();
+        return 'nova-components/' . $this->toolClass();
     }
 
     /**
@@ -260,7 +353,7 @@ class ToolCommand extends Command
      */
     protected function toolNamespace()
     {
-        return Str::studly($this->toolVendor()).'\\'.$this->toolClass();
+        return Str::studly($this->toolVendor()) . '\\' . $this->toolClass();
     }
 
     /**

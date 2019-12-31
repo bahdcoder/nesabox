@@ -66,9 +66,11 @@ class Panel extends MergeValue implements JsonSerializable
      */
     protected function prepareFields($fields)
     {
-        return collect(is_callable($fields) ? $fields() : $fields)->each(function ($field) {
-            $field->panel = $this->name;
-        })->all();
+        return collect(is_callable($fields) ? $fields() : $fields)
+            ->each(function ($field) {
+                $field->panel = $this->name;
+            })
+            ->all();
     }
 
     /**
@@ -80,7 +82,7 @@ class Panel extends MergeValue implements JsonSerializable
     public static function defaultNameForDetail(Resource $resource)
     {
         return __(':resource Details', [
-            'resource' => $resource->singularLabel(),
+            'resource' => $resource->singularLabel()
         ]);
     }
 
@@ -93,7 +95,7 @@ class Panel extends MergeValue implements JsonSerializable
     public static function defaultNameForCreate(Resource $resource)
     {
         return __('Create :resource', [
-            'resource' => $resource->singularLabel(),
+            'resource' => $resource->singularLabel()
         ]);
     }
 
@@ -106,7 +108,7 @@ class Panel extends MergeValue implements JsonSerializable
     public static function defaultNameForUpdate(Resource $resource)
     {
         return __('Update :resource', [
-            'resource' => $resource->singularLabel(),
+            'resource' => $resource->singularLabel()
         ]);
     }
 
@@ -165,11 +167,14 @@ class Panel extends MergeValue implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        return array_merge([
-            'component' => $this->component(),
-            'name' => $this->name,
-            'showToolbar' => $this->showToolbar,
-            'limit' => $this->limit,
-        ], $this->meta());
+        return array_merge(
+            [
+                'component' => $this->component(),
+                'name' => $this->name,
+                'showToolbar' => $this->showToolbar,
+                'limit' => $this->limit
+            ],
+            $this->meta()
+        );
     }
 }
