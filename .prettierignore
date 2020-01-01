@@ -4,3 +4,6 @@
 /storage
 /vultr/vendor
 /public/js
+/nova
+/public
+watch-files-app/
