@@ -158,7 +158,7 @@ trait HandlesProcesses
      */
     public function runCreateSiteScript(Server $server, Site $site)
     {
-        $scriptPath = base_path('scripts/sites/add-site.sh');
+        $scriptPath = base_path($server->type === 'load_balancer' ? 'scripts/sites/add-load-balancing-site.sh' : 'scripts/sites/add-site.sh');
 
         $user = SSH_USER;
 
