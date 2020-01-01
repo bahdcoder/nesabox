@@ -28,10 +28,9 @@ class UfwController extends Controller
     }
 
     public function destroy(Server $server, $rule)
-
     {
         $firewallRule = FirewallRule::findOrFail($rule);
-    
+
         if ($firewallRule->status === STATUS_DELETING) {
             return new ServerResource($server);
         }

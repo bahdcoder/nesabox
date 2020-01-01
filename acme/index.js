@@ -15,14 +15,14 @@ app.post('/', async (req, res) => {
         })
 
         console.log('CLIENT CREATED.')
-    
+
         const [key, csr] = await acme.forge.createCsr({
             commonName: 'staging-p.nesabox.com',
             altNames: ['staging-q.nesabox.com', 'staging.r.nesabox.com']
         })
 
         console.log('csr CREATED.')
-    
+
         const cert = await client.auto({
             csr,
             termsOfServiceAgreed: true,
@@ -32,15 +32,13 @@ app.post('/', async (req, res) => {
                 // nesabox will receive the token and file contents
                 // then ssh into the user's server.
                 // then write the file
-                // 
+                //
             },
-            challengeRemoveFn: async (authz, challenge, keyAuthorization) => {
-
-            }
+            challengeRemoveFn: async (authz, challenge, keyAuthorization) => {}
         })
 
         console.log('cert CREATED.')
-    
+
         res.json({
             key,
             csr,

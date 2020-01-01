@@ -34,11 +34,8 @@ class AddSiteSsl extends Base
      *
      * @return void
      */
-    public function __construct(
-        Server $server,
-        Site $site,
-        array $sites
-    ) {
+    public function __construct(Server $server, Site $site, array $sites)
+    {
         $this->site = $site;
         $this->server = $server;
         $this->sites = $sites;
