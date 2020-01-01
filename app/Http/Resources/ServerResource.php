@@ -24,6 +24,7 @@ class ServerResource extends JsonResource
             'size' => $this->size,
             'slug' => $this->slug,
             'name' => $this->name,
+            'type' => $this->type,
             'status' => $this->status,
             'region' => $this->region,
             'ssh_key' => $this->ssh_key,
@@ -31,16 +32,6 @@ class ServerResource extends JsonResource
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
             'node_version' => $this->node_version,
-            'log_watcher_site' => "https://{$this->resource->getLogWatcherSiteDomain()}",
-            'server_monitoring_username' => $this->server_monitoring_username,
-            'server_monitoring_password' => $this->server_monitoring_password,
-            'server_monitoring_installed' =>
-                $this->server_monitoring_status === STATUS_ACTIVE,
-            'server_monitoring_site' =>
-                'https://' .
-                $this->resource->getNesaboxServerMonitoringDomain(),
-            'server_monitoring_installing' =>
-                $this->server_monitoring_status === STATUS_INSTALLING,
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
             'daemons' => DaemonsResource::collection($this->daemons),

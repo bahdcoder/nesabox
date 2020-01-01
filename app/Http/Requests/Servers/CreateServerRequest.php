@@ -50,8 +50,8 @@ class CreateServerRequest extends FormRequest
                 'string'
             ],
             'provider' => 'required|in:' . implode(',', $providers),
-            'databases' => 'required',
-            'databases.*' => 'required|in:' . implode(',', $databases)
+            'databases.*' => 'in:' . implode(',', $databases),
+            'type' => 'in:load_balancer,default,database'
         ];
     }
 

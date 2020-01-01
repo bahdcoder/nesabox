@@ -73,6 +73,7 @@ class CreateServersController extends Controller
                 'sudo_password' => str_random(12),
                 'databases' => $request->databases,
                 'ip_address' => $request->ip_address,
+                'type' => $request->type || 'default',
                 'credential_id' => $request->credential_id,
                 'private_ip_address' => $request->private_ip_address,
                 'region' => get_region_name(
