@@ -298,6 +298,11 @@ Route::middleware(['auth:api'])->group(function () {
     );
 
     Route::delete('logout', [LogoutController::class, 'delete']);
+
+    Route::patch(
+        'servers/{server}/sites/{site}/upstream',
+        '\App\Http\Controllers\Sites\UpdateBalancedServersController'
+    );
 });
 
 Route::get('get-update-nginx-config/{hash}', [

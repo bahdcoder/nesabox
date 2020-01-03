@@ -5,7 +5,6 @@ namespace App\Http\Traits;
 use App\Site;
 use App\Server;
 use App\Sshkey;
-use App\Scripts\Server\Init;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,7 +17,9 @@ trait HandlesProcesses
      */
     public function execProcess($command, $mustRun = false, $timeOut = 3600)
     {
-        $process = new Process($command);
+        $process = app()->makeWith('ProcessRunner', [
+            'command' => $command
+        ]);
 
         $process->setTimeout($timeOut);
         $process->setIdleTimeout($timeOut);

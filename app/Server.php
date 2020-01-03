@@ -66,6 +66,11 @@ class Server extends Model
         );
     }
 
+    public function balancedServers()
+    {
+        return $this->hasMany(BalancedServer::class);
+    }
+
     public function daemons()
     {
         return $this->hasMany(Daemon::class)->where(

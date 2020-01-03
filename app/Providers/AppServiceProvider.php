@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Symfony\Component\Process\Process;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\Resource;
 
@@ -14,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('ProcessRunner', function ($app, $params) {
+            return new Process($params['command']);
+        });
     }
 
     /**

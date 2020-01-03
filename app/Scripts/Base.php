@@ -65,7 +65,7 @@ class Base
     {
         $func = $callback ? 'execProcessAsync' : 'execProcess';
 
-        if (app()->environment('local')) {
+        if (app()->environment('local', 'testing')) {
             echo $this->generate();
             echo '\n';
         }

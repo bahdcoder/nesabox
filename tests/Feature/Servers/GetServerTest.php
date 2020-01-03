@@ -56,21 +56,22 @@ class GetServerTest extends TestCase
         $response = $this->actingAs($user)->getJson("/servers/{$server1->id}");
 
         $response->assertJson([
-            'family_servers' => [[
-                'id' => $server2->id,
-                'provider' => DIGITAL_OCEAN,
-                'region' => 'nyc1'
-            ], [
-                'id' => $server3->id,
-                'provider' => DIGITAL_OCEAN,
-                'region' => 'nyc1'
-            ]]
+            'family_servers' => [
+                [
+                    'id' => $server2->id,
+                    'provider' => DIGITAL_OCEAN,
+                    'region' => 'nyc1'
+                ],
+                [
+                    'id' => $server3->id,
+                    'provider' => DIGITAL_OCEAN,
+                    'region' => 'nyc1'
+                ]
+            ]
         ]);
 
         $this->assertEquals(
-            count(
-                json_decode($response->getContent())->family_servers
-            ),
+            count(json_decode($response->getContent())->family_servers),
             2
         );
     }

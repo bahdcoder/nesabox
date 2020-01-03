@@ -56,6 +56,21 @@ class ServerPolicy
     }
 
     /**
+     * Determine whether the server is a load balancer
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function loadBalancer(User $user, Server $server)
+    {
+        if ($server->type !== 'load_balancer') {
+            return $this->deny('The server must be a load balancer.');
+        }
+
+        return true;
+    }
+
+    /**
      * Determine whether the user can update the server.
      *
      * @param  \App\User  $user
