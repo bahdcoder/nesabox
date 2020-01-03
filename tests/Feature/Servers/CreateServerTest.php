@@ -109,7 +109,8 @@ class CreateServerTest extends TestCase
             "/servers/{$server->id}/vps?api_token=" . $server->user->api_token
         );
 
-        $response->assertStatus(200)
+        $response
+            ->assertStatus(200)
             ->assertSeeText('apt-get install -y nginx')
             ->assertDontSeeText('mongodb')
             ->assertDontSeeText('mysql')

@@ -235,7 +235,7 @@ class CreateServersController extends Controller
                     DIGITAL_OCEAN_SERVER_TYPE,
                     false,
                     false,
-                    false,
+                    true,
                     [$keyId],
                     $this->getUserData($server)
                 );

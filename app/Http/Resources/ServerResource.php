@@ -64,7 +64,14 @@ class ServerResource extends JsonResource
             $this->mergeWhen($this->provider === CUSTOM_PROVIDER, [
                 'deploy_script' => $deploy_script_route,
                 'deploy_command' => "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh"
-            ])
+            ]),
+            'family_servers' => $this->user
+                ->servers()
+                ->where('id', '!=', $this->id)
+                ->where('region', $this->region)
+                ->where('provider', $this->provider)
+                ->whereNotNull('private_ip_address')
+                ->get()
         ];
     }
 }
