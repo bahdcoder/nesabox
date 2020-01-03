@@ -25,7 +25,9 @@ cat > /etc/nginx/nesa-conf/$SITE_NAME/upstream.conf << EOF
 # | Upstream configuration file for $SITE_NAME - (Do not remove or modify)      |
 # -------------------------------------------------------------------------------
 
-upstream app {}
+upstream app {
+    server 192.168.1.1:80;
+}
 EOF
 
 # Create default configurations file for this site
@@ -63,7 +65,7 @@ cat > /etc/nginx/sites-available/$SITE_NAME << EOF
 include nesa-conf/$SITE_NAME/base.conf;
 
 # ----------------------------------------------------------------------
-# | Nesa bae upstream config file for $SITE_NAME - (Do not remove)     |
+# | Nesa upstream config file for $SITE_NAME - (Do not remove)     |
 # ----------------------------------------------------------------------
 include nesa-conf/$SITE_NAME/upstream.conf;
 
