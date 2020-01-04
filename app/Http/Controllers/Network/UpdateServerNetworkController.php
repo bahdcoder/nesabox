@@ -12,14 +12,17 @@ class UpdateServerNetworkController extends Controller
 {
     /**
      * This method receives a list of servers.
-     * 
+     *
      * It opens up a bunch of its ports to all the selected servers.
-     * 
-     * First this method runs a script that closes 
-     * 
+     *
+     * First this method runs a script that closes
+     *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(UpdateServerNetworkRequest $request, Server $server) {
+    public function __invoke(
+        UpdateServerNetworkRequest $request,
+        Server $server
+    ) {
         $this->authorize('view', $server);
 
         $servers = collect();
@@ -37,13 +40,17 @@ class UpdateServerNetworkController extends Controller
             );
         endforeach;
 
-        foreach($server->friendServers as $friendServer):
+        foreach ($server->friendServers as $friendServer):
             $serversToDelete->push(
                 Server::find($friendServer->friend_server_id)
             );
         endforeach;
 
-        $process = (new UpdateServerNetwork($servers, $serversToDelete, $server))->run();
+        $process = (new UpdateServerNetwork(
+            $servers,
+            $serversToDelete,
+            $server
+        ))->run();
 
         if (!$process->isSuccessful()) {
             return abort(400, $process->getErrorOutput());

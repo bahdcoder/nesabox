@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\HasTeams;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use App\Http\ServerProviders\HasServerProviders;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, HasServerProviders;
+    use Notifiable, HasApiTokens, HasServerProviders, HasTeams;
 
     /**
      * The attributes that are mass assignable.
@@ -71,10 +72,5 @@ class User extends Authenticatable
         } while ($this->where('api_token', $this->api_token)->exists());
 
         $this->save();
-    }
-
-    public function phone()
-    {
-        return $this->hasOne(Phone::class);
     }
 }

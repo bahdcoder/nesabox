@@ -34,8 +34,11 @@ class UpdateServerNetwork extends Base
      *
      * @return void
      */
-    public function __construct(Collection $servers, Collection $serversToDelete, Server $server)
-    {
+    public function __construct(
+        Collection $servers,
+        Collection $serversToDelete,
+        Server $server
+    ) {
         $this->server = $server;
         $this->servers = $servers;
         $this->serversToDelete = $serversToDelete;
@@ -90,7 +93,7 @@ ufw allow from {$server->private_ip_address} to any port 27017;
 EOD;
         endforeach;
 
-        foreach ($this->serversToDelete as $server): 
+        foreach ($this->serversToDelete as $server):
             $firewallDeleteScript .= <<<EOD
 \n
 ufw delete allow from {$server->ip_address} to any port 3306;

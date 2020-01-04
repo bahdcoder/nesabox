@@ -54,10 +54,12 @@ class UpdateServerNetworkTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'id' => $server1->id,
-                'friend_servers' => [[
-                    'friend_server_id' => $server2->id,
-                    'server_id' => $server1->id
-                ]]
+                'friend_servers' => [
+                    [
+                        'friend_server_id' => $server2->id,
+                        'server_id' => $server1->id
+                    ]
+                ]
             ]);
 
         $this->actingAs($user)
@@ -67,10 +69,12 @@ class UpdateServerNetworkTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'id' => $server1->id,
-                'friend_servers' => [[
-                    'friend_server_id' => $server3->id,
-                    'server_id' => $server1->id
-                ]]
+                'friend_servers' => [
+                    [
+                        'friend_server_id' => $server3->id,
+                        'server_id' => $server1->id
+                    ]
+                ]
             ]);
     }
 }

@@ -308,6 +308,8 @@ Route::middleware(['auth:api'])->group(function () {
         'servers/{server}/network',
         '\App\Http\Controllers\Network\UpdateServerNetworkController'
     );
+
+    Route::resource('teams', '\App\Http\Controllers\Users\TeamController');
 });
 
 Route::get('get-update-nginx-config/{hash}', [
