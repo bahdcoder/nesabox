@@ -259,4 +259,9 @@ class Server extends Model
     {
         $this->user->notify(new Alert($this, $message, $output, $type));
     }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class);
+    }
 }

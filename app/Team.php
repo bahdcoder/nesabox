@@ -8,4 +8,9 @@ class Team extends Model
     {
         return $this->hasMany(TeamInvite::class);
     }
+
+    public function servers()
+    {
+        return $this->belongsToMany(Server::class);
+    }
 }

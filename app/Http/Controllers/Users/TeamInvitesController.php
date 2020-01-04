@@ -13,6 +13,8 @@ class TeamInvitesController extends Controller
 {
     public function store(CreateTeamInviteRequest $request, Team $team)
     {
+        $this->authorize('update', $team);
+
         $user = User::where('email', $request->email)->first();
 
         $invite = $team->invites()->create([

@@ -40,11 +40,11 @@ class TeamsTest extends TestCase
         $user3 = factory(User::class)->create();
 
         $team = factory(Team::class)->create([
-            'user_id' => $user3->id
+            'user_id' => $user->id
         ]);
 
         $team2 = factory(Team::class)->create([
-            'user_id' => $user3->id
+            'user_id' => $user2->id
         ]);
 
         $this->actingAs($user)->postJson("/teams/{$team->id}/invites", [

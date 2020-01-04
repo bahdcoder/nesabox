@@ -76,17 +76,9 @@ class TeamInvitesTest extends TestCase
         $this->actingAs($mike)
             ->getJson('/teams/memberships')
             ->assertStatus(200)
-            ->assertJson([
-                'data' => [
-                    [
-                        'team_id' => $team->id,
-                        'status' => 'accepted'
-                    ],
-                    [
-                        'team_id' => $circle->id,
-                        'status' => 'declined'
-                    ]
-                ]
-            ]);
+            ->assertJson([]);
+
+        $this->assertNull($invite2->fresh());
+        $this->assertEquals($invite->fresh()->status, 'accepted');
     }
 }

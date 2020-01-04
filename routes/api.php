@@ -332,6 +332,16 @@ Route::middleware(['auth:api'])->group(function () {
     );
 
     Route::patch(
+        'teams/{team}/servers',
+        '\App\Http\Controllers\Users\TeamServersController@update'
+    );
+
+    Route::get(
+        'teams/{team}/servers',
+        '\App\Http\Controllers\Users\TeamServersController@index'
+    );
+
+    Route::patch(
         '/invites/{teamInvite}/{status}',
         '\App\Http\Controllers\Users\TeamInvitesController@update'
     );

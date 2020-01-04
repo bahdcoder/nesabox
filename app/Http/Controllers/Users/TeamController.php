@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teams\CreateTeamRequest;
+use App\Http\Resources\TeamResource;
 use App\Team;
+use App\TeamInvite;
 
 class TeamController extends Controller
 {
@@ -15,11 +17,7 @@ class TeamController extends Controller
     public function index()
     {
         return response()->json(
-            auth()
-                ->user()
-                ->teams()
-                ->with('invites')
-                ->paginate(25)
+            TeamResource::collection(auth()->user()->teams)
         );
     }
 
