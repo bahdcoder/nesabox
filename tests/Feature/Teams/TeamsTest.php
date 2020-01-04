@@ -17,7 +17,7 @@ class TeamsTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $teams = factory(Team::class, 17)->create([
+        $teams = factory(Team::class, 2)->create([
             'user_id' => $user->id
         ]);
 
@@ -25,10 +25,8 @@ class TeamsTest extends TestCase
             ->getJson('/teams')
             ->assertStatus(200)
             ->assertJson([
-                'data' => [
-                    [
-                        'name' => $teams[0]->name
-                    ]
+                [
+                    'name' => $teams[0]->name
                 ]
             ]);
     }
