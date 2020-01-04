@@ -30,6 +30,10 @@ class ServerPolicy
      */
     public function view(User $user, Server $server)
     {
+        // TODO: here we'll get all accepted memberships of the user
+        // then we'll check if any of the user's memberships
+        // have granted access to this server
+
         return $server->user_id === $user->id;
     }
 

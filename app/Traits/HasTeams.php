@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Server;
 use App\Team;
 use App\TeamInvite;
 
@@ -20,5 +21,10 @@ trait HasTeams
     public function memberships()
     {
         return $this->hasMany(TeamInvite::class);
+    }
+
+    public function acceptedMemberships()
+    {
+        return $this->memberships()->with('team.servers');
     }
 }

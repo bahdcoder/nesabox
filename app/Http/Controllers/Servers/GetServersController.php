@@ -10,11 +10,19 @@ class GetServersController extends Controller
     /**
      * Fetch all servers of authenticated user
      *
+     * Also fetch all servers shared with this user.
+     *
      * @return \Illuminate\Http\Response
      *
      */
     public function index()
     {
-        return ServerResource::collection(auth()->user()->servers);
+        return [
+            'servers' => ServerResource::collection(auth()->user()->servers),
+            'team_servers' => auth()
+                ->user()
+                ->acceptedMemberships()
+                ->get()
+        ];
     }
 }
