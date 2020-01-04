@@ -27,6 +27,7 @@
         "laravel/socialite": "^4.1",
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1",
+        "protonemedia/laravel-paddle": "^1.0",
         "pusher/pusher-php-server": "~4.0",
         "spatie/laravel-activitylog": "^3.7",
         "spatie/laravel-cors": "^1.5",
