@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
@@ -54,6 +56,15 @@ Route::post('auth/{provider}/callback', [
     SocialiteController::class,
     'handleProviderCallback'
 ]);
+
+Route::post('auth/login', [LoginController::class, 'login']);
+
+Route::post('auth/register', [RegisterController::class, 'register']);
+
+Route::get(
+    '/invites/{teamInvite}',
+    '\App\Http\Controllers\Users\TeamInvitesController@show'
+);
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('settings/server-providers', [
@@ -309,7 +320,21 @@ Route::middleware(['auth:api'])->group(function () {
         '\App\Http\Controllers\Network\UpdateServerNetworkController'
     );
 
+    Route::get(
+        'teams/memberships',
+        '\App\Http\Controllers\Users\TeamController@memberships'
+    );
     Route::resource('teams', '\App\Http\Controllers\Users\TeamController');
+
+    Route::post(
+        'teams/{team}/invites',
+        '\App\Http\Controllers\Users\TeamInvitesController@store'
+    );
+
+    Route::patch(
+        '/invites/{teamInvite}/{status}',
+        '\App\Http\Controllers\Users\TeamInvitesController@update'
+    );
 });
 
 Route::get('get-update-nginx-config/{hash}', [

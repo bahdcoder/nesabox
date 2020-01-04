@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\UserInvitedToTeam;
+use App\Listeners\SendTeamInviteMail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -15,7 +17,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [SendEmailVerificationNotification::class]
+        Registered::class => [SendEmailVerificationNotification::class],
+        UserInvitedToTeam::class => [SendTeamInviteMail::class]
     ];
 
     /**

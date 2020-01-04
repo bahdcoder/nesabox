@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
+use App\TeamInvite;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
@@ -103,6 +104,11 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         event(new Registered(($user = $this->create($request->all()))));
+
+        // here we'll find any pending team invites for the user with this email, and update those invites
+        TeamInvite::where('email', $user->email)->update([
+            'user_id' => $user->id
+        ]);
 
         $user->rollApiKey();
 

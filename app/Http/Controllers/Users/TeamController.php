@@ -4,9 +4,42 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teams\CreateTeamRequest;
+use App\Team;
 
 class TeamController extends Controller
 {
+    /**
+     *
+     * Fetch all teams of authenticated users
+     */
+    public function index()
+    {
+        return response()->json(
+            auth()
+                ->user()
+                ->teams()
+                ->with('invites')
+                ->paginate(25)
+        );
+    }
+
+    /**
+     *
+     * This fetches all the team memberships for a user
+     * The user is a part of a team if the
+     * status of the invite/membership
+     * is accepted.
+     */
+    public function memberships()
+    {
+        return response()->json(
+            auth()
+                ->user()
+                ->memberships()
+                ->paginate(25)
+        );
+    }
+
     /**
      *
      * A user can create teams
@@ -17,7 +50,33 @@ class TeamController extends Controller
             auth()
                 ->user()
                 ->teams()
-                ->create($request->all())
+                ->create($request->only(['name']))
         );
+    }
+
+    /**
+     *
+     * A user can update a team
+     */
+    public function update(CreateTeamRequest $request, Team $team)
+    {
+        $this->authorize('view', $team);
+
+        $team->update($request->only(['name']));
+
+        return response()->json($team->fresh());
+    }
+
+    /**
+     *
+     * A user can delete a team
+     */
+    public function destroy(Team $team)
+    {
+        $this->authorize('view', $team);
+
+        $team->delete();
+
+        return response()->json([]);
     }
 }
