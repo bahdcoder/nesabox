@@ -72,7 +72,8 @@ class ServerResource extends JsonResource
                 ->where('provider', $this->provider)
                 ->whereNotNull('private_ip_address')
                 ->get(),
-            'balanced_servers' => $this->balancedServers
+            'balanced_servers' => $this->balancedServers,
+            'friend_servers' => $this->friendServers
         ];
     }
 }

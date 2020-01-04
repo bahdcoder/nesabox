@@ -71,6 +71,11 @@ class Server extends Model
         return $this->hasMany(BalancedServer::class);
     }
 
+    public function friendServers()
+    {
+        return $this->hasMany(FriendServer::class);
+    }
+
     public function daemons()
     {
         return $this->hasMany(Daemon::class)->where(

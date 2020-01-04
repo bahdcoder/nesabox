@@ -303,6 +303,11 @@ Route::middleware(['auth:api'])->group(function () {
         'servers/{server}/sites/{site}/upstream',
         '\App\Http\Controllers\Sites\UpdateBalancedServersController'
     );
+
+    Route::patch(
+        'servers/{server}/network',
+        '\App\Http\Controllers\Network\UpdateServerNetworkController'
+    );
 });
 
 Route::get('get-update-nginx-config/{hash}', [
