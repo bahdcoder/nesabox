@@ -138,7 +138,10 @@ Route::middleware(['auth:api'])->group(function () {
         'unlinkProvider'
     ]);
 
-    Route::post('servers', [CreateServersController::class, 'store']);
+    Route::post('servers', [
+        CreateServersController::class,
+        'store'
+    ])->middleware(['check-create-more-servers']);
     Route::get('servers/{server}', [GetServerController::class, 'show']);
 
     Route::post('servers/{server}/sshkeys', [
@@ -324,22 +327,25 @@ Route::middleware(['auth:api'])->group(function () {
         'teams/memberships',
         '\App\Http\Controllers\Users\TeamController@memberships'
     );
-    Route::resource('teams', '\App\Http\Controllers\Users\TeamController');
 
-    Route::post(
-        'teams/{team}/invites',
-        '\App\Http\Controllers\Users\TeamInvitesController@store'
-    );
+    Route::middleware(['subscribed:business'])->group(function () {
+        Route::resource('teams', '\App\Http\Controllers\Users\TeamController');
 
-    Route::patch(
-        'teams/{team}/servers',
-        '\App\Http\Controllers\Users\TeamServersController@update'
-    );
+        Route::post(
+            'teams/{team}/invites',
+            '\App\Http\Controllers\Users\TeamInvitesController@store'
+        );
 
-    Route::get(
-        'teams/{team}/servers',
-        '\App\Http\Controllers\Users\TeamServersController@index'
-    );
+        Route::patch(
+            'teams/{team}/servers',
+            '\App\Http\Controllers\Users\TeamServersController@update'
+        );
+
+        Route::get(
+            'teams/{team}/servers',
+            '\App\Http\Controllers\Users\TeamServersController@index'
+        );
+    });
 
     Route::patch(
         '/invites/{teamInvite}/{status}',

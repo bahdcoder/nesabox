@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\HasTeams;
+use App\Traits\HasSubscription;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use App\Http\ServerProviders\HasServerProviders;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, HasServerProviders, HasTeams;
+    use Notifiable, HasApiTokens, HasServerProviders, HasTeams, HasSubscription;
 
     /**
      * The attributes that are mass assignable.
@@ -72,10 +73,5 @@ class User extends Authenticatable
         } while ($this->where('api_token', $this->api_token)->exists());
 
         $this->save();
-    }
-
-    public function subscription()
-    {
-        return $this->hasOne(Subscription::class);
     }
 }

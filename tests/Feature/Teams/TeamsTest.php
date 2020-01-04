@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Teams;
 
+use App\Subscription;
 use App\Team;
 use App\TeamInvite;
 use App\User;
@@ -16,6 +17,12 @@ class TeamsTest extends TestCase
     public function test_a_user_can_fetch_all_her_teams()
     {
         $user = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
 
         $teams = factory(Team::class, 2)->create([
             'user_id' => $user->id
@@ -36,6 +43,18 @@ class TeamsTest extends TestCase
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
         $user3 = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user2->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
 
         $team = factory(Team::class)->create([
             'user_id' => $user->id
@@ -72,6 +91,12 @@ class TeamsTest extends TestCase
     {
         $user = factory(User::class)->create();
 
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
         $this->actingAs($user)
             ->postJson('/teams', [
                 'name' => $this->faker->name
@@ -85,6 +110,12 @@ class TeamsTest extends TestCase
     public function test_team_name_must_be_unique_to_user()
     {
         $user = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
 
         $name = $this->faker->name;
 
@@ -101,6 +132,12 @@ class TeamsTest extends TestCase
 
         $user2 = factory(User::class)->create();
 
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user2->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
         $this->actingAs($user2)
             ->postJson('/teams', [
                 'name' => $name
@@ -112,6 +149,12 @@ class TeamsTest extends TestCase
     {
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user2->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
 
         $name = $this->faker->name;
 
@@ -133,6 +176,12 @@ class TeamsTest extends TestCase
     {
         $user = factory(User::class)->create();
 
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
         $team = factory(Team::class)->create([
             'user_id' => $user->id
         ]);
@@ -146,6 +195,12 @@ class TeamsTest extends TestCase
     {
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user2->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
 
         $team = factory(Team::class)->create([
             'user_id' => $user->id

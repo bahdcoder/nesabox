@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckIfUserCanCreateMoreServers;
+use App\Http\Middleware\Subscribed;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -59,7 +61,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'api-token' => \App\Http\Middleware\ValidateApiToken::class
+        'api-token' => \App\Http\Middleware\ValidateApiToken::class,
+        'subscribed' => Subscribed::class,
+        'check-create-more-servers' => CheckIfUserCanCreateMoreServers::class
     ];
 
     /**

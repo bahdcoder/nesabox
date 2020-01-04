@@ -6,6 +6,7 @@ use App\User;
 use App\Server;
 use Tests\TestCase;
 use App\Jobs\Servers\Initialize;
+use App\Subscription;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -115,5 +116,54 @@ class CreateServerTest extends TestCase
             ->assertDontSeeText('mongodb')
             ->assertDontSeeText('mysql')
             ->assertDontSeeText('mariadb');
+    }
+
+    public function test_a_user_cannot_create_more_than_one_server_without_at_least_a_pro_plan()
+    {
+        Queue::fake();
+
+        $user = factory(User::class)->create();
+
+        factory(Server::class)->create([
+            'provider' => DIGITAL_OCEAN,
+            'region' => 'nyc1',
+            'user_id' => $user->id,
+            'type' => 'load_balancer'
+        ]);
+
+        $this->actingAs($user)->postJson('/servers')->assertStatus(400)->assertJson([
+            'message' => 'Please upgrade your plan to add more servers.'
+        ]);
+    }
+
+    public function test_a_user_on_a_pro_or_business_plan_can_create_more_than_one_server()
+    {
+        Queue::fake();
+
+        $finn = factory(User::class)->create();
+        $jake = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $finn->id,
+            'subscription_plan_id' => config('paddle.plans')->get('pro')
+        ]);
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $jake->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
+        factory(Server::class)->create([
+            'user_id' => $finn->id,
+        ]);
+
+        factory(Server::class)->create([
+            'user_id' => $jake->id,
+        ]);
+
+        $this->actingAs($jake)->postJson('/servers')->assertStatus(422);
+        $this->actingAs($finn)->postJson('/servers')->assertStatus(422);
     }
 }

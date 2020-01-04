@@ -3,6 +3,7 @@
 namespace Tests\Feature\Teams;
 
 use App\Server;
+use App\Subscription;
 use App\Team;
 use App\User;
 use Tests\TestCase;
@@ -16,6 +17,13 @@ class TeamServersTest extends TestCase
     public function test_a_user_can_update_all_servers_available_to_her_team()
     {
         $user = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $user->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
         $team = factory(Team::class)->create([
             'user_id' => $user->id
         ]);

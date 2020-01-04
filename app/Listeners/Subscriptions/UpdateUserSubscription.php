@@ -17,7 +17,7 @@ class UpdateUserSubscription
     {
         $user = User::where('email', $event->email)->first();
 
-        if (! $user) {
+        if (!$user) {
             return;
         }
 
@@ -25,7 +25,9 @@ class UpdateUserSubscription
             'status' => $event->status,
             'subscription_plan_id' => $event->subscription_plan_id,
             'subscription_id' => $event->subscription_id,
-            'next_bill_date' => isset($event->next_bill_date) ? $event->next_bill_date : null,
+            'next_bill_date' => isset($event->next_bill_date)
+                ? $event->next_bill_date
+                : null
         ]);
     }
 }

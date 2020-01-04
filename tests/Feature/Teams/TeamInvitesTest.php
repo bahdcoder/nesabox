@@ -6,6 +6,7 @@ use App\Team;
 use App\User;
 use Tests\TestCase;
 use App\Mail\InviteToTeam;
+use App\Subscription;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,6 +20,13 @@ class TeamInvitesTest extends TestCase
         Mail::fake();
 
         $jane = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $jane->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
         $mike = factory(User::class)->create();
 
         $team = factory(Team::class)->create([
@@ -46,6 +54,18 @@ class TeamInvitesTest extends TestCase
         $jane = factory(User::class)->create();
         $finn = factory(User::class)->create();
         $mike = factory(User::class)->create();
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $jane->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
+
+        factory(Subscription::class)->create([
+            'status' => 'active',
+            'user_id' => $finn->id,
+            'subscription_plan_id' => config('paddle.plans')->get('business')
+        ]);
 
         $team = factory(Team::class)->create([
             'user_id' => $jane->id
