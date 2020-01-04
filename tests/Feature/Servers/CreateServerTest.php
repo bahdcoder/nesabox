@@ -131,9 +131,12 @@ class CreateServerTest extends TestCase
             'type' => 'load_balancer'
         ]);
 
-        $this->actingAs($user)->postJson('/servers')->assertStatus(400)->assertJson([
-            'message' => 'Please upgrade your plan to add more servers.'
-        ]);
+        $this->actingAs($user)
+            ->postJson('/servers')
+            ->assertStatus(400)
+            ->assertJson([
+                'message' => 'Please upgrade your plan to add more servers.'
+            ]);
     }
 
     public function test_a_user_on_a_pro_or_business_plan_can_create_more_than_one_server()
@@ -156,14 +159,18 @@ class CreateServerTest extends TestCase
         ]);
 
         factory(Server::class)->create([
-            'user_id' => $finn->id,
+            'user_id' => $finn->id
         ]);
 
         factory(Server::class)->create([
-            'user_id' => $jake->id,
+            'user_id' => $jake->id
         ]);
 
-        $this->actingAs($jake)->postJson('/servers')->assertStatus(422);
-        $this->actingAs($finn)->postJson('/servers')->assertStatus(422);
+        $this->actingAs($jake)
+            ->postJson('/servers')
+            ->assertStatus(422);
+        $this->actingAs($finn)
+            ->postJson('/servers')
+            ->assertStatus(422);
     }
 }

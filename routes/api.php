@@ -67,6 +67,16 @@ Route::get(
 );
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::patch(
+        'subscription/update',
+        '\App\Http\Controllers\Users\SubscriptionController@update'
+    );
+
+    Route::delete(
+        'subscription/cancel',
+        '\App\Http\Controllers\Users\SubscriptionController@destroy'
+    );
+
     Route::post('settings/server-providers', [
         ServerProvidersController::class,
         'store'
@@ -142,6 +152,7 @@ Route::middleware(['auth:api'])->group(function () {
         CreateServersController::class,
         'store'
     ])->middleware(['check-create-more-servers']);
+
     Route::get('servers/{server}', [GetServerController::class, 'show']);
 
     Route::post('servers/{server}/sshkeys', [

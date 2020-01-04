@@ -65,7 +65,13 @@ class UserResource extends JsonResource
             ],
             'access_token' => $token
                 ? $token
-                : $this->createToken('Personal')->accessToken
+                : $this->createToken('Personal')->accessToken,
+            'subscription' => $this->subscription ? [
+                'status' => $this->subscription->status,
+                'id' => $this->subscription->id,
+                'pro' => $this->subscribed('pro'),
+                'business' => $this->subscribed('business')
+            ]: null
         ];
     }
 }

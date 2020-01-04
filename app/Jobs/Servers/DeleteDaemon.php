@@ -57,7 +57,7 @@ class DeleteDaemon implements ShouldQueue
         } else {
             $message = "Failed deleting daemon {$this->daemon->command} on server {$this->server->name}.";
 
-            $this->daemon([
+            $this->daemon->update([
                 'status' => STATUS_ACTIVE
             ]);
 
