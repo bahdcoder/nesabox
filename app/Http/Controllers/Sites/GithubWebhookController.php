@@ -18,8 +18,6 @@ class GithubWebhookController extends Controller
      */
     public function __invoke(Site $site, Request $request)
     {
-        Log::info($request->all());
-
         $branchFromRequest = explode('refs/heads/', $request->ref);
 
         if (

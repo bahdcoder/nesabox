@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -52,20 +53,13 @@ class UserResource extends JsonResource
                 ) {
                     return $this->defineCredential($credential);
                 }),
-                // AWS => collect($this->providers[AWS])->map(function (
-                //     $credential
-                // ) {
-                //     return $this->defineCredential($credential);
-                // }),
                 LINODE => collect($this->providers[LINODE])->map(function (
                     $credential
                 ) {
                     return $this->defineCredential($credential);
                 })
             ],
-            'access_token' => $token
-                ? $token
-                : $this->createToken('Personal')->accessToken,
+            'access_token' => JWTAuth::fromUser($this->resource),
             'subscription' => $this->subscription ? [
                 'status' => $this->subscription->status,
                 'id' => $this->subscription->id,

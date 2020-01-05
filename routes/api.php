@@ -66,7 +66,7 @@ Route::get(
     '\App\Http\Controllers\Users\TeamInvitesController@show'
 );
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:api-jwt'])->group(function () {
     Route::patch(
         'subscription/update',
         '\App\Http\Controllers\Users\SubscriptionController@update'
@@ -369,7 +369,7 @@ Route::get('get-update-nginx-config/{hash}', [
     'getUpdatingConfig'
 ]);
 
-Route::middleware(['guest', 'api-token'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::get('servers/{server}/vps', [
         CustomServerController::class,
         'vps'

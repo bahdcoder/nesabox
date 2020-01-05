@@ -13,7 +13,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'api-jwt',
         'passwords' => 'users'
     ],
 
@@ -41,9 +41,14 @@ return [
         ],
 
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'token',
             'provider' => 'users',
             'hash' => false
+        ],
+
+        'api-jwt' => [
+            'driver' => 'jwt',
+            'provider' => 'users'
         ]
     ],
 

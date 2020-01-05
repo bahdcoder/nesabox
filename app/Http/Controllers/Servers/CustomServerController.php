@@ -17,13 +17,7 @@ class CustomServerController extends Controller
      */
     public function vps(Server $server)
     {
-        $token = request()->query('api_token');
-
-        $user = User::where('api_token', $token)->firstOrFail();
-
-        if ($user->id !== $server->user_id) {
-            abort(401, __('Unauthorized.'));
-        }
+        $this->authorize('view', $server);
 
         if ($server->type === 'load_balancer') {
             return (new InitLoadBalancerServer($server))->generate();

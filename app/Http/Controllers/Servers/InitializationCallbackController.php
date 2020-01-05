@@ -16,6 +16,8 @@ class InitializationCallbackController extends Controller
      */
     public function callback(Server $server)
     {
+        $this->authorize('view', $server);
+    
         $server->update([
             'ssh_key' => request()->all()['ssh_key'],
             'status' => STATUS_ACTIVE

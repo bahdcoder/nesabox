@@ -4,14 +4,14 @@ namespace App;
 
 use App\Traits\HasTeams;
 use App\Traits\HasSubscription;
-use Laravel\Passport\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use App\Http\ServerProviders\HasServerProviders;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable, HasApiTokens, HasServerProviders, HasTeams, HasSubscription;
+    use Notifiable, HasServerProviders, HasTeams, HasSubscription;
 
     /**
      * The attributes that are mass assignable.
@@ -73,5 +73,25 @@ class User extends Authenticatable
         } while ($this->where('api_token', $this->api_token)->exists());
 
         $this->save();
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }
