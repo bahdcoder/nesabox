@@ -116,11 +116,15 @@ trait InteractsWithDigitalOcean
      *
      * @return object
      */
-    public function getDigitalOceanDroplet(string $dropletId, $user = null)
-    {
+    public function getDigitalOceanDroplet(
+        string $dropletId,
+        $user = null,
+        $credentialId = null
+    ) {
         return $this->getDigitalOceanConnectionInstance(
             ($user ? $user : auth()->user())->getDefaultCredentialsFor(
-                DIGITAL_OCEAN
+                DIGITAL_OCEAN,
+                $credentialId
             )->apiToken
         )
             ->droplet()

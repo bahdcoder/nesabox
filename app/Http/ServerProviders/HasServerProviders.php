@@ -27,13 +27,9 @@ trait HasServerProviders
     {
         $provider = $this->getCredentialProvider($credentialId);
 
-        $newCredentials = [];
-
-        $newCredentials[$provider] = collect($this->providers[$provider])
-            ->filter(function ($credential) use ($credentialId) {
-                return $credential['id'] !== $credentialId;
-            })
-            ->all();
+        $newCredentials[$provider] = array_filter($this->providers[$provider], function ($credential) use ($credentialId) {
+            return $credential['id'] !== $credentialId;
+        });
 
         $this->update([
             'providers' => array_merge($this->providers, $newCredentials)

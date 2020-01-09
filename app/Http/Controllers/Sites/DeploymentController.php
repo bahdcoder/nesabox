@@ -22,7 +22,9 @@ class DeploymentController extends Controller
 
         $site->triggerDeployment();
 
-        auth()->user()->notify(new SiteUpdated($site));
+        auth()
+            ->user()
+            ->notify(new SiteUpdated($site));
 
         return response()->json([
             'message' => 'Deployment queued.'

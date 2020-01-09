@@ -102,7 +102,8 @@ class Initialize implements ShouldQueue
 
                 $droplet = $this->getDigitalOceanDroplet(
                     $server->identifier,
-                    $server->user
+                    $server->user,
+                    $server->credential_id
                 );
 
                 if ($droplet->status === 'active') {

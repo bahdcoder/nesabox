@@ -10,10 +10,10 @@ use ProtoneMedia\LaravelPaddle\Paddle;
 class SubscriptionController extends Controller
 {
     /**
-     * 
+     *
      * Switch a user's subscription plan
-     * 
-     * 
+     *
+     *
      */
     public function update()
     {
@@ -34,10 +34,7 @@ class SubscriptionController extends Controller
         }
 
         // if user is changing to a plan they are already on, throw an error
-        if (
-            $user->subscription->subscription_plan_id ===
-            $plan
-        ) {
+        if ($user->subscription->subscription_plan_id === $plan) {
             abort(400, 'You are already on this plan.');
         }
 
@@ -50,10 +47,12 @@ class SubscriptionController extends Controller
         }
 
         // if user is upgrading or downgrading and all is well, go on
-        $subscription = Paddle::subscription()->updateUser([
-            'subscription_id' => $user->subscription->subscription_id,
-            'plan_id' => $plan
-        ])->send();
+        $subscription = Paddle::subscription()
+            ->updateUser([
+                'subscription_id' => $user->subscription->subscription_id,
+                'plan_id' => $plan
+            ])
+            ->send();
 
         $user->subscription()->update([
             'subscription_plan_id' => $plan,
@@ -64,7 +63,7 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * 
+     *
      * Cancel a user's subscription
      */
     public function destroy()
@@ -76,9 +75,11 @@ class SubscriptionController extends Controller
             abort(400, 'A subscription is required.');
         }
         // if user is upgrading or downgrading and all is well, go on
-        Paddle::subscription()->cancelUser([
-            'subscription_id' => $user->subscription->subscription_id,
-        ])->send();
+        Paddle::subscription()
+            ->cancelUser([
+                'subscription_id' => $user->subscription->subscription_id
+            ])
+            ->send();
 
         $user->subscription()->delete();
 
