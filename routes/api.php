@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LogoutController;
@@ -60,6 +61,7 @@ Route::post('auth/{provider}/callback', [
 Route::post('auth/login', [LoginController::class, 'login']);
 
 Route::post('auth/register', [RegisterController::class, 'register']);
+Route::post('auth/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 
 Route::get(
     '/invites/{teamInvite}',
@@ -321,8 +323,6 @@ Route::middleware(['auth:api-jwt'])->group(function () {
         'servers/{server}/sites/{site}/push-to-deploy',
         '\App\Http\Controllers\Sites\PushToDeployController'
     );
-
-    Route::delete('logout', [LogoutController::class, 'delete']);
 
     Route::patch(
         'servers/{server}/sites/{site}/upstream',

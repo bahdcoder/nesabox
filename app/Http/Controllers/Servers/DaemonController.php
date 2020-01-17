@@ -1,4 +1,6 @@
- <?php namespace App\Http\Controllers\Servers;
+<?php
+
+namespace App\Http\Controllers\Servers;
 
  use App\Server;
  use App\Daemon;
