@@ -3,8 +3,8 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
@@ -61,7 +61,13 @@ Route::post('auth/{provider}/callback', [
 Route::post('auth/login', [LoginController::class, 'login']);
 
 Route::post('auth/register', [RegisterController::class, 'register']);
-Route::post('auth/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+
+Route::post('auth/forgot-password', [
+    ForgotPasswordController::class,
+    'sendResetLinkEmail'
+]);
+
+Route::post('auth/reset-password', [ResetPasswordController::class, 'reset']);
 
 Route::get(
     '/invites/{teamInvite}',
