@@ -15,6 +15,7 @@ use App\Notifications\Sites\SiteUpdated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Scripts\Sites\InstallGhost as InstallGhostScript;
+use Illuminate\Support\Facades\Notification;
 
 class InstallGhost implements ShouldQueue
 {
@@ -103,9 +104,7 @@ class InstallGhost implements ShouldQueue
                     'logs' => $this->site->logs . $log
                 ]);
 
-                $this->server->user->notify(
-                    new SiteUpdated($this->site->fresh())
-                );
+                Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
             });
 
         if ($process->isSuccessful()) {
@@ -119,7 +118,7 @@ class InstallGhost implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->server->user->notify(new SiteUpdated($this->site->fresh()));
+            Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
         } else {
             $this->alertServer(
                 "Failed installing ghost blog on server {$this->server->name}.",
@@ -141,7 +140,7 @@ class InstallGhost implements ShouldQueue
 
         $this->database->delete();
 
-        $this->server->user->notify(new SiteUpdated($this->site->fresh()));
+        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
     }
 
     public function failed(Exception $e)

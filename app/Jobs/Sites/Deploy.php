@@ -13,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Notifications\Sites\SiteUpdated;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Notification;
 
 class Deploy implements ShouldQueue
 {
@@ -87,9 +88,7 @@ class Deploy implements ShouldQueue
                         $this->deployment->properties['log'] . $log
                 ]);
 
-                $this->server->user->notify(
-                    new SiteUpdated($this->site->fresh())
-                );
+                Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
             });
 
         $this->site->update([
@@ -120,6 +119,6 @@ class Deploy implements ShouldQueue
             );
         }
 
-        $this->server->user->notify(new SiteUpdated($this->site->fresh()));
+        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
     }
 }

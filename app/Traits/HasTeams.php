@@ -18,6 +18,16 @@ trait HasTeams
         return $this->hasMany(Team::class);
     }
 
+        /**
+     *
+     * Has many relationship with teams
+     *
+     */
+    public function invites()
+    {
+        return $this->hasMany(TeamInvite::class);
+    }
+
     public function memberships()
     {
         return $this->hasMany(TeamInvite::class);

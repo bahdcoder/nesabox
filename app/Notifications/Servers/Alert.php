@@ -4,9 +4,8 @@ namespace App\Notifications\Servers;
 
 use App\Server;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
+use Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class Alert extends Notification implements ShouldQueue

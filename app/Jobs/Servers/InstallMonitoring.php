@@ -5,6 +5,7 @@ namespace App\Jobs\Servers;
 use Illuminate\Bus\Queueable;
 use App\Http\Traits\HandlesProcesses;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -56,7 +57,7 @@ class InstallMonitoring implements ShouldQueue
             $this->handleFailed();
         }
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
     }
 
     public function handleFailed($error = null)

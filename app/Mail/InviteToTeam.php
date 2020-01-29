@@ -24,7 +24,7 @@ class InviteToTeam extends Mailable implements ShouldQueue
     public function __construct(TeamInvite $invite)
     {
         $this->invite = $invite;
-        $this->url = config('app.client_url') . '/teams';
+        $this->url = config('app.client_url') . '/account/teams';
     }
 
     /**

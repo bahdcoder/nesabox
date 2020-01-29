@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Exceptions\ServerNotReadyException;
 use App\Notifications\Servers\ServerIsReady;
+use Notification;
 use App\Http\ServerProviders\InteractsWithVultr;
 use App\Http\ServerProviders\HasServerProviders;
 use App\Http\ServerProviders\InteractWithLinode;
@@ -68,7 +69,7 @@ class Initialize implements ShouldQueue
     {
         $this->sync();
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
     }
 
     /**

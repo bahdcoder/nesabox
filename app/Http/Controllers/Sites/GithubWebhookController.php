@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Notifications\Sites\SiteUpdated;
 use App\Site;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class GithubWebhookController extends Controller
 {
@@ -27,7 +28,7 @@ class GithubWebhookController extends Controller
         ) {
             $site->triggerDeployment();
 
-            $site->server->user->notify(new SiteUpdated($site));
+            Notification::send($site->server->getAllMembers(), new SiteUpdated($site));
 
             return response()->json([
                 'message' => 'Deployment triggered.'

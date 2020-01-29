@@ -1,5 +1,5 @@
 {
-    "authHost": "http://nesabox.box",
+    "authHost": "http://nesabox.test",
     "authEndpoint": "/broadcasting/auth",
     "clients": [
         {

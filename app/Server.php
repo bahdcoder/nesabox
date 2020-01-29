@@ -4,6 +4,7 @@ namespace App;
 
 use GuzzleHttp\Client;
 use App\Notifications\Servers\Alert;
+use Notification;
 
 class Server extends Model
 {
@@ -257,11 +258,35 @@ class Server extends Model
      */
     public function alert($message, $output = null, $type = 'error')
     {
-        $this->user->notify(new Alert($this, $message, $output, $type));
+        Notification::send($this->getAllMembers(), new Alert($this, $message, $output, $type));
     }
 
     public function teams()
     {
         return $this->belongsToMany(Team::class);
+    }
+
+    public function canBeAccessedBy(User $user) {
+        return (bool) TeamInvite::where('user_id', $user->id)->with('team.servers')->get()->first(function ($membership) {
+            return (bool) $membership->team->servers->first(function ($server) {
+                return $server->id === $this->id;
+            });
+        });;
+    }
+
+    public function getAllMembers() {
+        $teams = $this->teams()->with('invites.user')->get();
+
+        $users = collect([$this->user]);
+
+        $teams->each(function ($team) use ($users) {
+            $team->invites->each(function ($invite) use ($users)  {
+                if ($invite->status === 'active') {
+                    $users->push($invite->user);
+                }
+            });
+        });
+
+        return $users;
     }
 }

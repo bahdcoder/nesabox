@@ -62,14 +62,15 @@ class UserResource extends JsonResource
             'access_token' => JWTAuth::fromUser($this->resource, [
                 'exp' => \Carbon\Carbon::now()->addDays(7)->timestamp
             ]),
-            'subscription' => $this->subscription
-                ? [
-                    'status' => $this->subscription->status,
-                    'id' => $this->subscription->id,
-                    'pro' => $this->subscribed('pro'),
-                    'business' => $this->subscribed('business')
-                ]
-                : null
+            'subscription' => [
+                'status' => (bool) $this->subscription
+                    ? $this->subscription->status
+                    : null,
+                'id' => (bool) $this->subscription
+                    ? $this->subscription->id
+                    : null,
+                'plan' => $this->getCurrentPlanName()
+            ]
         ];
     }
 }

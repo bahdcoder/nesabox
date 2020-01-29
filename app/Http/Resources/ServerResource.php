@@ -28,6 +28,7 @@ class ServerResource extends JsonResource
             'status' => $this->status,
             'region' => $this->region,
             'ssh_key' => $this->ssh_key,
+            'user_id' => $this->user_id,
             'provider' => $this->provider,
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,

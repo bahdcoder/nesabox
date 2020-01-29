@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Http\SourceControlProviders\InteractsWithGithub;
 use App\Http\SourceControlProviders\InteractsWithGitlab;
+use Illuminate\Support\Facades\Notification;
 
 class InstallGitRepository implements ShouldQueue
 {
@@ -99,7 +100,7 @@ class InstallGitRepository implements ShouldQueue
             ]);
         }
 
-        $this->server->user->notify(new SiteUpdated($this->site->fresh()));
+        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
     }
 
     /**

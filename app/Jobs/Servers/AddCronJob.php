@@ -9,7 +9,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\AddCronJob as AppAddCronJob;
 
 class AddCronJob implements ShouldQueue

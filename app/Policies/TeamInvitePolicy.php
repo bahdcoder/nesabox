@@ -19,6 +19,6 @@ class TeamInvitePolicy
      */
     public function update(User $user, TeamInvite $teamInvite)
     {
-        return $teamInvite->user_id === (string) $user->id;
+        return (int) $teamInvite->user_id === (int) $user->id;
     }
 }

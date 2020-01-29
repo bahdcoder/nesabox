@@ -3,7 +3,6 @@
 namespace App\Jobs\Servers;
 
 use App\Job;
-use App\Notifications\Servers\ServerIsReady;
 use App\Server;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -14,7 +13,7 @@ use App\Scripts\Server\DeleteCronJob as AppDeleteCronJob;
 
 class DeleteCronJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, BroadcastServer;
 
     public $server;
 

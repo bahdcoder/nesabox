@@ -8,6 +8,7 @@ use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\DeleteFirewallRule as AppDeleteFirewallRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
+use Notification;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -64,6 +65,6 @@ class DeleteFirewallRule implements ShouldQueue
             $this->alertServer($message, $process->getErrorOutput());
         }
 
-        $this->server->user->notify(new ServerIsReady($this->server));
+        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
     }
 }

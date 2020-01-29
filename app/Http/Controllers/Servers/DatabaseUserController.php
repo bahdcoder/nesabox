@@ -15,6 +15,8 @@ class DatabaseUserController extends Controller
 {
     public function store(AddDatabaseUserRequest $request, Server $server)
     {
+        $this->authorize('view', $server);
+
         if ($request->databases):
             foreach ($request->databases as $databaseId):
                 Database::where('id', $databaseId)
@@ -41,6 +43,8 @@ class DatabaseUserController extends Controller
 
     public function destroy(Server $server, DatabaseUser $databaseUser)
     {
+        $this->authorize('view', $server);
+
         $databaseUser->update([
             'status' => STATUS_DELETING
         ]);

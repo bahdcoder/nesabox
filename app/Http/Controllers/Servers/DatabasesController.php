@@ -17,6 +17,8 @@ class DatabasesController extends Controller
 {
     public function index(Server $server, string $databaseType)
     {
+        $this->authorize('view', $server);
+    
         switch ($databaseType) {
             case MYSQL8_DB:
                 return response()->json([
@@ -68,6 +70,8 @@ class DatabasesController extends Controller
     }
     public function store(CreateDatabaseRequest $request, Server $server)
     {
+        $this->authorize('view', $server);
+
         if ($request->user && $request->password) {
             $databaseUser = $server->databaseUsers()->create([
                 'name' => $request->user,
@@ -97,6 +101,8 @@ class DatabasesController extends Controller
 
     public function destroy(Server $server, Database $database)
     {
+        $this->authorize('view', $server);
+
         $database->update([
             'status' => STATUS_DELETING
         ]);

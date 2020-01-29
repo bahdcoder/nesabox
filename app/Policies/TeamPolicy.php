@@ -19,7 +19,7 @@ class TeamPolicy
      */
     public function view(User $user, Team $team)
     {
-        return $team->user_id === (string) $user->id;
+        return (int) $team->user_id === (int) $user->id;
     }
 
     /**
@@ -31,6 +31,18 @@ class TeamPolicy
      */
     public function update(User $user, Team $team)
     {
-        return $team->user_id === (string) $user->id;
+        return (int) $team->user_id === (int) $user->id;
+    }
+
+        /**
+     * Determine whether the user can view the server.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Server  $server
+     * @return mixed
+     */
+    public function destroy(User $user, Team $team)
+    {
+        return (int) $team->user_id === (int) $user->id;
     }
 }

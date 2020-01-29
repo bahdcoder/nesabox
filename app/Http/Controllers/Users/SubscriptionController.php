@@ -38,14 +38,6 @@ class SubscriptionController extends Controller
             abort(400, 'You are already on this plan.');
         }
 
-        // if a user is downgrading, check the number of servers
-        if (
-            $user->subscription->subscription_plan_id === $businessPlanId &&
-            $user->servers()->count() > 1
-        ) {
-            abort(400, 'You have too many servers to downgrade to this plan.');
-        }
-
         // if user is upgrading or downgrading and all is well, go on
         $subscription = Paddle::subscription()
             ->updateUser([
@@ -74,6 +66,15 @@ class SubscriptionController extends Controller
         if (!$user->subscribed()) {
             abort(400, 'A subscription is required.');
         }
+
+        // if a user is downgrading, check the number of servers
+        if ($user->servers()->count() > 1) {
+            abort(
+                400,
+                'You have too many servers to cancel your current plan. Delete some servers and try again.'
+            );
+        }
+
         // if user is upgrading or downgrading and all is well, go on
         Paddle::subscription()
             ->cancelUser([

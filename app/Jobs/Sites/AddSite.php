@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
 use App\Http\ServerProviders\InteractsWithDigitalOcean;
+use Illuminate\Support\Facades\Notification;
 
 class AddSite implements ShouldQueue
 {
@@ -73,8 +74,8 @@ class AddSite implements ShouldQueue
             'status' => STATUS_ACTIVE
         ]);
 
-        $this->server->user->notify(new SiteUpdated($this->site));
-        $this->server->user->notify(new ServerIsReady($this->server));
+        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
+        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
     }
 
     public function failed($e)

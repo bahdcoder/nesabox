@@ -73,6 +73,10 @@ class TeamController extends Controller
     {
         $this->authorize('view', $team);
 
+        $team->invites()->delete();
+
+        $team->servers()->sync([]);
+
         $team->delete();
 
         return response()->json([]);

@@ -6,6 +6,7 @@ use App\Daemon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Notifications\Servers\ServerIsReady;
@@ -49,17 +50,9 @@ class AddDaemon implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->daemon->server->user->notify(
-                new ServerIsReady($this->daemon->server)
-            );
+            Notification::send($this->daemon->server->getAllMembers(), new ServerIsReady($this->daemon->server));
         } else {
-            $this->daemon->server->user->notify(
-                new ServerIsReady($this->daemon->server)
-            );
-
-            $this->alertError(
-                "Failed adding daemon on server {$this->daemon->server->name}"
-            );
+            Notification::send($this->daemon->server->getAllMembers(), new ServerIsReady($this->daemon->server));
         }
     }
 }

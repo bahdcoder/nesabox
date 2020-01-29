@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use App\Notifications\Sites\SiteUpdated;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Scripts\Sites\DeleteSite as AppDeleteSite;
@@ -59,7 +60,7 @@ class DeleteSite implements ShouldQueue
                 'deleting_site' => false
             ]);
 
-            $this->server->user->notify(new SiteUpdated($this->site));
+            Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
 
             $this->server->alert(
                 "Failed to delete site {$this->site->name}. View log for more details.",

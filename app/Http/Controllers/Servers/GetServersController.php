@@ -25,4 +25,13 @@ class GetServersController extends Controller
                 ->get()
         ];
     }
+
+    public function ownServers()
+    {
+        return auth()
+            ->user()
+            ->servers()
+            ->select(['name', 'id'])
+            ->get();
+    }
 }

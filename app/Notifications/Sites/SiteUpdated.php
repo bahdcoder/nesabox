@@ -5,8 +5,8 @@ namespace App\Notifications\Sites;
 use App\Site;
 use Illuminate\Bus\Queueable;
 use App\Http\Resources\SiteResource;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class SiteUpdated extends Notification implements ShouldQueue

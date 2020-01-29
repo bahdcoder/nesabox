@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Notification;
 
 class SslCertificate implements ShouldQueue
 {
@@ -76,6 +77,6 @@ class SslCertificate implements ShouldQueue
 
     public function broadcastToUser()
     {
-        $this->server->user->notify(new SiteUpdated($this->site->fresh()));
+        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
     }
 }

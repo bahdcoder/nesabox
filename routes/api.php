@@ -130,6 +130,7 @@ Route::middleware(['auth:api-jwt'])->group(function () {
     ]);
 
     Route::get('servers', [GetServersController::class, 'index']);
+    Route::get('servers/own', [GetServersController::class, 'ownServers']);
 
     Route::get('me', [UserController::class, 'show']);
     Route::put('me', [UserController::class, 'update']);
@@ -345,6 +346,11 @@ Route::middleware(['auth:api-jwt'])->group(function () {
         '\App\Http\Controllers\Users\TeamController@memberships'
     );
 
+    Route::get(
+        'invites',
+        '\App\Http\Controllers\Users\TeamInvitesController@index'
+    );
+
     Route::middleware(['subscribed:business'])->group(function () {
         Route::resource('teams', '\App\Http\Controllers\Users\TeamController');
 
@@ -367,6 +373,11 @@ Route::middleware(['auth:api-jwt'])->group(function () {
     Route::patch(
         '/invites/{teamInvite}/{status}',
         '\App\Http\Controllers\Users\TeamInvitesController@update'
+    );
+
+    Route::delete(
+        '/invites/{teamInvite}',
+        '\App\Http\Controllers\Users\TeamInvitesController@destroy'
     );
 });
 

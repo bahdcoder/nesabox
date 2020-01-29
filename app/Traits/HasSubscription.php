@@ -41,4 +41,21 @@ trait HasSubscription
     {
         return $this->subscribed('pro');
     }
+
+    public function getCurrentPlanName()
+    {
+        if (!$this->subscribed()) {
+            return 'free';
+        }
+
+        if ($this->subscribedToPro()) {
+            return 'pro';
+        }
+
+        if ($this->subscribedToBusiness()) {
+            return 'business';
+        }
+
+        return 'free';
+    }
 }

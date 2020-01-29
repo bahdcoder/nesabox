@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Servers;
 
 use App\Server;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Notifications\Servers\ServerIsReady;
 use App\Notifications\Servers\ServerProvisioned;
+use Illuminate\Support\Facades\Notification;
 
 class InitializationCallbackController extends Controller
 {
@@ -25,7 +25,7 @@ class InitializationCallbackController extends Controller
 
         $server->user->notify(new ServerProvisioned($server));
 
-        $server->user->notify(new ServerIsReady($server->fresh()));
+        Notification::send($server->getAllMembers(), new ServerIsReady($server->fresh()));
 
         return response()->json([
             'message' => 'Great ! Server is now active.'

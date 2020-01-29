@@ -51,6 +51,9 @@ class GetServersTest extends TestCase
                 'status' => 'accepted'
             ]);
 
+        $this->assertTrue($team->hasMember($jake));
+        $this->assertTrue($circle->hasMember($ryan));
+
         $server = factory(Server::class)->create([
             'user_id' => $jake->id
         ]);

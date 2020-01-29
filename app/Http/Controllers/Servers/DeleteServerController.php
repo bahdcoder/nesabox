@@ -16,7 +16,7 @@ class DeleteServerController extends Controller
     public function destroy(Server $server)
     {
         if ($server->user_id !== auth()->user()->id) {
-            abort(401);
+            abort(401, 'You are not authorized to perform this action.');
         }
         // databases and database users
         $server->hasMany(DatabaseUser::class)->delete();
@@ -33,6 +33,8 @@ class DeleteServerController extends Controller
         // delete ssh keys of server on system
         $this->execProcess("rm ~/.ssh/{$server->slug}");
         $this->execProcess("rm ~/.ssh/{$server->slug}.pub");
+
+        $server->teams()->sync([]);
 
         $server->delete();
 
