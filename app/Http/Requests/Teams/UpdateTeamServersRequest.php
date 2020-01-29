@@ -24,7 +24,7 @@ class UpdateTeamServersRequest extends FormRequest
     public function rules()
     {
         return [
-            'servers' => 'required|array'
+            'servers' => 'array'
         ];
     }
 }
