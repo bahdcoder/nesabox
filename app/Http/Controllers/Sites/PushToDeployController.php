@@ -34,7 +34,7 @@ class PushToDeployController extends Controller
                     'push_to_deploy' => true,
                     'push_to_deploy_hook_id' => $this->addGithubPushWebhook(
                         $site,
-                        auth()->user()
+                        $site->server->user
                     )->id
                 ]);
             default:
@@ -48,7 +48,7 @@ class PushToDeployController extends Controller
     {
         switch ($site->repository_provider):
             case 'github':
-                $this->deleteGithubPushWebhook($site, auth()->user());
+                $this->deleteGithubPushWebhook($site, $site->server->user);
             default:
                 break;
         endswitch;
