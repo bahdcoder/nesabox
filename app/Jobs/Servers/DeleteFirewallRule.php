@@ -65,6 +65,9 @@ class DeleteFirewallRule implements ShouldQueue
             $this->alertServer($message, $process->getErrorOutput());
         }
 
-        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new ServerIsReady($this->server)
+        );
     }
 }

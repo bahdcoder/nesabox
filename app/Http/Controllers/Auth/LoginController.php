@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -31,51 +28,18 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except(['logout']);
     }
 
     /**
-     * Attempt to log the user into the application.
+     * Where to redirect users after login.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
+     * @var string
      */
-    protected function attemptLogin(Request $request)
+    protected $redirectTo = '/dashboard';
+
+    public function showLoginForm()
     {
-        $credentials = $this->credentials($request);
-
-        $userByEmail = User::where(
-            $this->username(),
-            $credentials[$this->username()]
-        )->first();
-
-        if (!$userByEmail) {
-            return false;
-        }
-
-        if (!Hash::check($credentials['password'], $userByEmail->password)) {
-            return false;
-        }
-
-        return $userByEmail;
-    }
-
-    /**
-     * Handle a login request to the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function login(Request $request)
-    {
-        $this->validateLogin($request);
-
-        if ($user = $this->attemptLogin($request)) {
-            return new UserResource($user);
-        }
-
-        return $this->sendFailedLoginResponse($request);
+        return Inertia::render('Auth/Login');
     }
 }

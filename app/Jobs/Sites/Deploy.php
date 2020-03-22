@@ -88,7 +88,10 @@ class Deploy implements ShouldQueue
                         $this->deployment->properties['log'] . $log
                 ]);
 
-                Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+                Notification::send(
+                    $this->server->getAllMembers(),
+                    new SiteUpdated($this->site)
+                );
             });
 
         $this->site->update([
@@ -119,6 +122,9 @@ class Deploy implements ShouldQueue
             );
         }
 
-        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new SiteUpdated($this->site)
+        );
     }
 }

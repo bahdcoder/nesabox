@@ -50,9 +50,15 @@ class AddDaemon implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            Notification::send($this->daemon->server->getAllMembers(), new ServerIsReady($this->daemon->server));
+            Notification::send(
+                $this->daemon->server->getAllMembers(),
+                new ServerIsReady($this->daemon->server)
+            );
         } else {
-            Notification::send($this->daemon->server->getAllMembers(), new ServerIsReady($this->daemon->server));
+            Notification::send(
+                $this->daemon->server->getAllMembers(),
+                new ServerIsReady($this->daemon->server)
+            );
         }
     }
 }

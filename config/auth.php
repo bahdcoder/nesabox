@@ -13,7 +13,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api-jwt',
+        'guard' => 'web',
         'passwords' => 'users'
     ],
 

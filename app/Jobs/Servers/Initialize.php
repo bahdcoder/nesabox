@@ -69,7 +69,10 @@ class Initialize implements ShouldQueue
     {
         $this->sync();
 
-        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new ServerIsReady($this->server)
+        );
     }
 
     /**

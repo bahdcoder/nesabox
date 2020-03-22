@@ -75,7 +75,10 @@ class UninstallGhost implements ShouldQueue
                 'app_type' => null
             ]);
 
-            Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+            Notification::send(
+                $this->server->getAllMembers(),
+                new SiteUpdated($this->site)
+            );
         } else {
             // $this->handleFailed();
         }

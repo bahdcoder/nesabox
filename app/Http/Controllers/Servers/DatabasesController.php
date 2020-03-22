@@ -18,7 +18,7 @@ class DatabasesController extends Controller
     public function index(Server $server, string $databaseType)
     {
         $this->authorize('view', $server);
-    
+
         switch ($databaseType) {
             case MYSQL8_DB:
                 return response()->json([

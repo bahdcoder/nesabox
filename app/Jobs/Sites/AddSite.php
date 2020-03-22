@@ -74,8 +74,14 @@ class AddSite implements ShouldQueue
             'status' => STATUS_ACTIVE
         ]);
 
-        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
-        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new ServerIsReady($this->server)
+        );
+        Notification::send(
+            $this->server->getAllMembers(),
+            new SiteUpdated($this->site)
+        );
     }
 
     public function failed($e)

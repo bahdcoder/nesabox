@@ -100,7 +100,10 @@ class InstallGitRepository implements ShouldQueue
             ]);
         }
 
-        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new SiteUpdated($this->site)
+        );
     }
 
     /**

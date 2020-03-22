@@ -28,7 +28,10 @@ class GithubWebhookController extends Controller
         ) {
             $site->triggerDeployment();
 
-            Notification::send($site->server->getAllMembers(), new SiteUpdated($site));
+            Notification::send(
+                $site->server->getAllMembers(),
+                new SiteUpdated($site)
+            );
 
             return response()->json([
                 'message' => 'Deployment triggered.'

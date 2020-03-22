@@ -258,7 +258,10 @@ class Server extends Model
      */
     public function alert($message, $output = null, $type = 'error')
     {
-        Notification::send($this->getAllMembers(), new Alert($this, $message, $output, $type));
+        Notification::send(
+            $this->getAllMembers(),
+            new Alert($this, $message, $output, $type)
+        );
     }
 
     public function teams()
@@ -266,21 +269,30 @@ class Server extends Model
         return $this->belongsToMany(Team::class);
     }
 
-    public function canBeAccessedBy(User $user) {
-        return (bool) TeamInvite::where('user_id', $user->id)->with('team.servers')->get()->first(function ($membership) {
-            return (bool) $membership->team->servers->first(function ($server) {
-                return $server->id === $this->id;
+    public function canBeAccessedBy(User $user)
+    {
+        return (bool) TeamInvite::where('user_id', $user->id)
+            ->with('team.servers')
+            ->get()
+            ->first(function ($membership) {
+                return (bool) $membership->team->servers->first(function (
+                    $server
+                ) {
+                    return $server->id === $this->id;
+                });
             });
-        });;
     }
 
-    public function getAllMembers() {
-        $teams = $this->teams()->with('invites.user')->get();
+    public function getAllMembers()
+    {
+        $teams = $this->teams()
+            ->with('invites.user')
+            ->get();
 
         $users = collect([$this->user]);
 
         $teams->each(function ($team) use ($users) {
-            $team->invites->each(function ($invite) use ($users)  {
+            $team->invites->each(function ($invite) use ($users) {
                 if ($invite->status === 'active') {
                     $users->push($invite->user);
                 }

@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\LoginController;
+// Route::on('/')->render('');
+
+use App\Http\Controllers\App\DashboardController;
+use App\Http\Controllers\App\WelcomeController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Servers\AwsController;
@@ -36,6 +36,19 @@ use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Http\Controllers\Servers\MongodbController;
 use App\Http\Controllers\Servers\UfwController;
 use App\Http\Controllers\Sites\SslCertificateController;
+use Illuminate\Support\Facades\Auth;
+
+Route::get('/', [WelcomeController::class, 'index']);
+
+Auth::routes([
+    'register' => true,
+    'reset' => true,
+    'verify' => true
+]);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -58,23 +71,12 @@ Route::post('auth/{provider}/callback', [
     'handleProviderCallback'
 ]);
 
-Route::post('auth/login', [LoginController::class, 'login']);
-
-Route::post('auth/register', [RegisterController::class, 'register']);
-
-Route::post('auth/forgot-password', [
-    ForgotPasswordController::class,
-    'sendResetLinkEmail'
-]);
-
-Route::post('auth/reset-password', [ResetPasswordController::class, 'reset']);
-
 Route::get(
     '/invites/{teamInvite}',
     '\App\Http\Controllers\Users\TeamInvitesController@show'
 );
 
-Route::middleware(['auth:api-jwt'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::patch(
         'subscription/update',
         '\App\Http\Controllers\Users\SubscriptionController@update'

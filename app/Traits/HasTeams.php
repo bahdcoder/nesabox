@@ -18,7 +18,7 @@ trait HasTeams
         return $this->hasMany(Team::class);
     }
 
-        /**
+    /**
      *
      * Has many relationship with teams
      *

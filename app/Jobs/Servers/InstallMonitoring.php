@@ -57,7 +57,10 @@ class InstallMonitoring implements ShouldQueue
             $this->handleFailed();
         }
 
-        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new ServerIsReady($this->server)
+        );
     }
 
     public function handleFailed($error = null)

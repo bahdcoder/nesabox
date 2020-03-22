@@ -12,8 +12,13 @@ use App\User;
 
 class TeamInvitesController extends Controller
 {
-    public function index() {
-        return auth()->user()->invites()->with(['team.user'])->get();
+    public function index()
+    {
+        return auth()
+            ->user()
+            ->invites()
+            ->with(['team.user'])
+            ->get();
     }
 
     public function store(CreateTeamInviteRequest $request, Team $team)
@@ -29,7 +34,7 @@ class TeamInvitesController extends Controller
 
         if ($user) {
             $data['user_id'] = $user->id;
-        
+
             if ((int) $user->id === (int) auth()->user()->id) {
                 abort(400, 'You cannot invite yourself to a team.');
             }
@@ -73,7 +78,8 @@ class TeamInvitesController extends Controller
         return response()->json([]);
     }
 
-    public function destroy(TeamInvite $teamInvite) {
+    public function destroy(TeamInvite $teamInvite)
+    {
         $team = $teamInvite->team;
         $this->authorize('destroy', $team);
 

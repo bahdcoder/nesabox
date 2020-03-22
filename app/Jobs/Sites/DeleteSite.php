@@ -60,7 +60,10 @@ class DeleteSite implements ShouldQueue
                 'deleting_site' => false
             ]);
 
-            Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+            Notification::send(
+                $this->server->getAllMembers(),
+                new SiteUpdated($this->site)
+            );
 
             $this->server->alert(
                 "Failed to delete site {$this->site->name}. View log for more details.",
