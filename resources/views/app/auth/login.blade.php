@@ -10,9 +10,9 @@
       </h2>
       <p class="mt-2 text-center text-sm leading-5 text-gray-600 max-w">
         Or
-        <inertia-link href="/auth/register" class="font-medium text-sha-green-500 hover:text-sha-green-400 focus:outline-none focus:underline transition ease-in-out duration-150">
+        <router-link to="/auth/register" class="font-medium text-sha-green-500 hover:text-sha-green-400 focus:outline-none focus:underline transition ease-in-out duration-150">
           sign up for a free account
-        </inertia-link>
+        </router-link>
       </p>
     </div>
 

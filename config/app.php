@@ -53,7 +53,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'client_url' => env('APP_CLIENT_URL', 'https://app.nesabox.com'),
+    'client_url' => env('APP_URL', 'https://app.nesabox.com'),
 
     'asset_url' => env('ASSET_URL', null),
 

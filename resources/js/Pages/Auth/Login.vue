@@ -16,12 +16,12 @@
             </h2>
             <p class="mt-2 text-center text-sm leading-5 text-gray-600 max-w">
                 Or
-                <inertia-link
-                    href="/register"
+                <router-link
+                    to="/auth/register"
                     class="font-medium text-sha-green-500 hover:text-sha-green-400 focus:outline-none focus:underline transition ease-in-out duration-150"
                 >
                     sign up for a free account
-                </inertia-link>
+                </router-link>
             </p>
         </div>
 
@@ -29,17 +29,18 @@
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 <form @submit.prevent="submit" method="POST">
                     <text-input
-                        v-model="email"
-                        name='email'
+                        name="email"
+                        v-model="form.email"
                         label="Email Address"
                         :errors="errors.email"
                     />
 
                     <text-input
-                        v-model="password"
-                        label="Password"
                         class="mt-6"
-                        name='password'
+                        name="password"
+                        type="password"
+                        label="Password"
+                        v-model="form.password"
                         :errors="errors.password"
                     />
 
@@ -127,14 +128,6 @@
 
 <script>
 export default {
-    props: {
-        errors: {
-            type: Object,
-            default: {
-                email: []
-            }
-        }
-    },
     data() {
         return {
             sending: false,
@@ -142,15 +135,22 @@ export default {
                 email: '',
                 password: '',
                 remember: null
+            },
+            errors: {
+                email: []
             }
         }
     },
     methods: {
         submit() {
-            this.$inertia
+            axios
                 .post('/login', this.form)
-                .then(console.log)
-                .catch(console.log)
+                .then(() => {
+                    window.location.href = '/dashboard'
+                })
+                .catch(({ response }) => {
+                    this.errors = response.data.errors
+                })
         }
     }
 }

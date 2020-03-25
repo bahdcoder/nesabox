@@ -33,6 +33,7 @@
         "spatie/laravel-activitylog": "^3.7",
         "spatie/laravel-cors": "^1.5",
         "thomaswelton/laravel-gravatar": "^1.1",
+        "tightenco/ziggy": "^0.9.0",
         "tymon/jwt-auth": "^1.0.0"
     },
     "require-dev": {

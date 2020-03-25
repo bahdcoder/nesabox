@@ -6,10 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Nesabox</title>
   <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-  <link rel="stylesheet" href="https://unpkg.com/nprogress@0.2.0/nprogress.css">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
   <script src="{{ mix('js/main.js') }}" defer></script>
+
+  <script>
+    window.auth = '{!! $auth !!}'
+  </script>
 </head>
-<body class='bg-page'>
-    @inertia
+<body class='bg-page bg-gray-100'>
+    <div id="app">
+      <router-view></router-view>
+    </div>
 </body>
 </html>

@@ -136,15 +136,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    errors: {
-      type: Object,
-      "default": {
-        email: []
-      }
-    }
-  },
   data: function data() {
     return {
       sending: false,
@@ -152,12 +145,22 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         password: '',
         remember: null
+      },
+      errors: {
+        email: []
       }
     };
   },
   methods: {
     submit: function submit() {
-      this.$inertia.post('/login', this.form).then(console.log)["catch"](console.log);
+      var _this = this;
+
+      axios.post('/login', this.form).then(function () {
+        window.location.href = '/dashboard';
+      })["catch"](function (_ref) {
+        var response = _ref.response;
+        _this.errors = response.data.errors;
+      });
     }
   }
 });
@@ -210,11 +213,11 @@ var render = function() {
           [
             _vm._v("\n            Or\n            "),
             _c(
-              "inertia-link",
+              "router-link",
               {
                 staticClass:
                   "font-medium text-sha-green-500 hover:text-sha-green-400 focus:outline-none focus:underline transition ease-in-out duration-150",
-                attrs: { href: "/register" }
+                attrs: { to: "/auth/register" }
               },
               [
                 _vm._v(
@@ -251,27 +254,28 @@ var render = function() {
                     errors: _vm.errors.email
                   },
                   model: {
-                    value: _vm.email,
+                    value: _vm.form.email,
                     callback: function($$v) {
-                      _vm.email = $$v
+                      _vm.$set(_vm.form, "email", $$v)
                     },
-                    expression: "email"
+                    expression: "form.email"
                   }
                 }),
                 _vm._v(" "),
                 _c("text-input", {
                   staticClass: "mt-6",
                   attrs: {
-                    label: "Password",
                     name: "password",
+                    type: "password",
+                    label: "Password",
                     errors: _vm.errors.password
                   },
                   model: {
-                    value: _vm.password,
+                    value: _vm.form.password,
                     callback: function($$v) {
-                      _vm.password = $$v
+                      _vm.$set(_vm.form, "password", $$v)
                     },
-                    expression: "password"
+                    expression: "form.password"
                   }
                 }),
                 _vm._v(" "),

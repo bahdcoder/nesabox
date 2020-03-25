@@ -16,12 +16,12 @@
             </h2>
             <p class="mt-2 text-center text-sm leading-5 text-gray-600 max-w">
                 Or
-                <inertia-link
-                    href="/login"
+                <router-link
+                    to="/auth/login"
                     class="font-medium text-sha-green-500 hover:text-sha-green-400 focus:outline-none focus:underline transition ease-in-out duration-150"
                 >
                     sign in to your account
-                </inertia-link>
+                </router-link>
             </p>
         </div>
 
@@ -30,14 +30,14 @@
                 <form @submit.prevent="submit">
                     <text-input
                         label="Full name"
-                        name='name'
+                        name="name"
                         v-model="form.name"
                         :errors="errors.name"
                     />
 
                     <text-input
                         class="mt-6"
-                        name='email'
+                        name="email"
                         label="Email Address"
                         v-model="form.email"
                         :errors="errors.email"
@@ -46,7 +46,8 @@
                     <text-input
                         class="mt-6"
                         label="Password"
-                        name='password'
+                        name="password"
+                        type="password"
                         v-model="form.password"
                         :errors="errors.password"
                     />
@@ -113,10 +114,10 @@ export default {
         errors: {
             type: Object,
             required: false,
-            default: {
+            default: () => ({
                 email: [],
                 name: []
-            }
+            })
         }
     },
     data() {

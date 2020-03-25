@@ -74,10 +74,11 @@
         <!-- End of Async Drift Code -->
 
         <link rel="stylesheet" href="/css/app.css">
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
             </head>
 
-    <body class='antialiased'>
+    <body class='font-sans antialiased'>
 
             <div class="bg-hero-background relative overflow-hidden">
         <div class="hidden absolute right-0 top-0 bottom-0 flex items-center -mr-10">
@@ -92,7 +93,7 @@
     <div class="text-sm md:text-lg font-semibold">
         <a class="ml-10 text-gray-700" href="/docs/getting-started">Guides</a>
         
-        <a class="ml-10 text-gray-700" href="https://app.nesabox.com" target='_blank'>Login</a>
+        <a class="ml-10 text-gray-700" href="/auth/login">Login</a>
     </div>
 </nav>
         <div class="pt-10 lg:pt-32 pb-32 lg:pb-40 max-w-6xl mx-auto px-6 md:px-12">
@@ -113,7 +114,7 @@
                         <img src="/assets/images/illustration.svg">
                     </div>
                     <div class="mt-6 lg:mt-12 lg:block flex flex-col">
-                        <a href="https://app.nesabox.com" target='_blank' class="text-center w-full sm:w-auto mb-5 sm:mb-0 bg-svg-green rounded px-5 py-4 shadow text-white hover:bg-svg-green-light">Get started for free</a>
+                        <a href="/auth/login" class="text-center w-full sm:w-auto mb-5 sm:mb-0 bg-svg-green rounded px-5 py-4 shadow text-white hover:bg-svg-green-light">Get started for free</a>
                         <a class="w-full block sm:inline text-center text-lg sm:w-auto sm:ml-5 text-svg-green hover:text-svg-green-light" href="#learn-more">Learn more</a>
                     </div>
                 </div>

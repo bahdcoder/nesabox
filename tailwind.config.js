@@ -2,7 +2,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Graphik'],
+                sans: ['Inter var'],
                 mono: ['monospace']
             },
             lineHeight: {

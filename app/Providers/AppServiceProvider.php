@@ -22,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
             return new Process($params['command']);
         });
 
+        Inertia::version(function () {
+            return md5_file(public_path('mix-manifest.json'));
+        });
+
         Inertia::share([
             'auth' => function () {
                 return [

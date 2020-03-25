@@ -415,7 +415,7 @@ ul {
  */
 
 html {
-  font-family: Graphik; /* 1 */
+  font-family: Inter var; /* 1 */
   line-height: 1.5; /* 2 */
 }
 
@@ -886,86 +886,6 @@ video {
 
 .form-radio:checked:focus {
   border-color: transparent;
-}
-
-/* 
-@import '~highlight.js/styles/a11y-light.css'; */
-
-@font-face {
-  font-weight: 100;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890249/GraphikExtralight_lnjhvw.otf')
-}
-
-@font-face {
-  font-weight: 200;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890249/GraphikLight_xdkwe6.otf')
-}
-
-@font-face {
-  font-weight: 300;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890250/GraphikThin_bctens.otf')
-}
-
-@font-face {
-  font-weight: 400;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890249/GraphikRegular_dp2oom.otf')
-}
-
-@font-face {
-  font-weight: 500;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890249/GraphikMedium_j3aslf.otf')
-}
-
-@font-face {
-  font-weight: 600;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890829/GraphikSemibold_oefgxo.otf')
-}
-
-@font-face {
-  font-weight: 700;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890249/GraphikBold_rtgqmz.otf')
-}
-
-@font-face {
-  font-weight: 800;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890249/GraphikBlack_nldpkm.otf')
-}
-
-@font-face {
-  font-weight: 900;
-
-  font-family: 'Graphik';
-
-  src: url('https://res.cloudinary.com/bahdcoder/raw/upload/v1566890249/GraphikMedium_j3aslf.otf')
-}
-
-html {
-  font-family: 'Graphik' !important;
-  scroll-behavior: smooth;
 }
 
 button {
@@ -7871,7 +7791,7 @@ button {
 }
 
 .font-sans {
-  font-family: Graphik;
+  font-family: Inter var;
 }
 
 .font-serif {
@@ -38178,7 +38098,7 @@ button {
   }
 
   .sm\:font-sans {
-    font-family: Graphik;
+    font-family: Inter var;
   }
 
   .sm\:font-serif {
@@ -68478,7 +68398,7 @@ button {
   }
 
   .md\:font-sans {
-    font-family: Graphik;
+    font-family: Inter var;
   }
 
   .md\:font-serif {
@@ -98778,7 +98698,7 @@ button {
   }
 
   .lg\:font-sans {
-    font-family: Graphik;
+    font-family: Inter var;
   }
 
   .lg\:font-serif {
@@ -129078,7 +128998,7 @@ button {
   }
 
   .xl\:font-sans {
-    font-family: Graphik;
+    font-family: Inter var;
   }
 
   .xl\:font-serif {

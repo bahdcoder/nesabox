@@ -36,6 +36,7 @@ use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Http\Controllers\Servers\MongodbController;
 use App\Http\Controllers\Servers\UfwController;
 use App\Http\Controllers\Sites\SslCertificateController;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [WelcomeController::class, 'index']);
@@ -45,10 +46,6 @@ Auth::routes([
     'reset' => true,
     'verify' => true
 ]);
-
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -76,312 +73,329 @@ Route::get(
     '\App\Http\Controllers\Users\TeamInvitesController@show'
 );
 
-Route::middleware(['auth'])->group(function () {
-    Route::patch(
-        'subscription/update',
-        '\App\Http\Controllers\Users\SubscriptionController@update'
-    );
+Route::middleware(['auth'])
+    ->prefix('api')
+    ->group(function () {
+        Route::patch(
+            'subscription/update',
+            '\App\Http\Controllers\Users\SubscriptionController@update'
+        );
 
-    Route::delete(
-        'subscription/cancel',
-        '\App\Http\Controllers\Users\SubscriptionController@destroy'
-    );
+        Route::delete(
+            'subscription/cancel',
+            '\App\Http\Controllers\Users\SubscriptionController@destroy'
+        );
 
-    Route::post('settings/server-providers', [
-        ServerProvidersController::class,
-        'store'
-    ]);
+        Route::post('settings/server-providers', [
+            ServerProvidersController::class,
+            'store'
+        ]);
 
-    Route::delete('servers/{server}', [
-        DeleteServerController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}', [
+            DeleteServerController::class,
+            'destroy'
+        ]);
 
-    Route::post('servers/{server}/databases/{database}/mongodb/add-users', [
-        MongodbController::class,
-        'users'
-    ]);
+        Route::post('servers/{server}/databases/{database}/mongodb/add-users', [
+            MongodbController::class,
+            'users'
+        ]);
 
-    Route::delete(
-        'servers/{server}/databases/{database}/mongodb/delete-databases',
-        [MongodbController::class, 'deleteDatabases']
-    );
+        Route::delete(
+            'servers/{server}/databases/{database}/mongodb/delete-databases',
+            [MongodbController::class, 'deleteDatabases']
+        );
 
-    Route::delete(
-        'servers/{server}/databases/{database}/mongodb/delete-users/{databaseUser}',
-        [MongodbController::class, 'deleteUsers']
-    );
+        Route::delete(
+            'servers/{server}/databases/{database}/mongodb/delete-users/{databaseUser}',
+            [MongodbController::class, 'deleteUsers']
+        );
 
-    Route::post('servers/{server}/databases/mongodb/add', [
-        MongodbController::class,
-        'databases'
-    ]);
+        Route::post('servers/{server}/databases/mongodb/add', [
+            MongodbController::class,
+            'databases'
+        ]);
 
-    Route::get('notifications', [NotificationsController::class, 'index']);
+        Route::get('notifications', [NotificationsController::class, 'index']);
 
-    Route::post('notifications/{notification}', [
-        NotificationsController::class,
-        'markAsRead'
-    ]);
+        Route::post('notifications/{notification}', [
+            NotificationsController::class,
+            'markAsRead'
+        ]);
 
-    Route::get('entities/search', [SearchController::class, 'index']);
+        Route::get('entities/search', [SearchController::class, 'index']);
 
-    Route::delete('settings/server-providers/{credentialId}', [
-        ServerProvidersController::class,
-        'destroy'
-    ]);
+        Route::delete('settings/server-providers/{credentialId}', [
+            ServerProvidersController::class,
+            'destroy'
+        ]);
 
-    Route::get('servers', [GetServersController::class, 'index']);
-    Route::get('servers/own', [GetServersController::class, 'ownServers']);
+        Route::get('servers', [GetServersController::class, 'index']);
+        Route::get('servers/own', [GetServersController::class, 'ownServers']);
 
-    Route::get('me', [UserController::class, 'show']);
-    Route::put('me', [UserController::class, 'update']);
-    Route::post('me/apitoken', [UserController::class, 'apiToken']);
-    Route::post('me/sshkeys', [UserSshkeysController::class, 'store']);
-    Route::put('me/password', [UserController::class, 'changePassword']);
-    Route::delete('me/sshkeys/{sshkey}', [
-        UserSshkeysController::class,
-        'destroy'
-    ]);
+        Route::get('me', [UserController::class, 'show']);
+        Route::put('me', [UserController::class, 'update']);
+        Route::post('me/apitoken', [UserController::class, 'apiToken']);
+        Route::post('me/sshkeys', [UserSshkeysController::class, 'store']);
+        Route::put('me/password', [UserController::class, 'changePassword']);
+        Route::delete('me/sshkeys/{sshkey}', [
+            UserSshkeysController::class,
+            'destroy'
+        ]);
 
-    Route::get('servers/regions', [RegionAndSizeController::class, 'index']);
+        Route::get('servers/regions', [
+            RegionAndSizeController::class,
+            'index'
+        ]);
 
-    Route::get('aws/vpc', [AwsController::class, 'vpc']);
-    Route::get('digital-ocean/sizes', [DigitalOceanController::class, 'sizes']);
+        Route::get('aws/vpc', [AwsController::class, 'vpc']);
+        Route::get('digital-ocean/sizes', [
+            DigitalOceanController::class,
+            'sizes'
+        ]);
 
-    Route::get('settings/source-control/{provider}/callback', [
-        SourceControlProvidersController::class,
-        'handleProviderCallback'
-    ]);
+        Route::get('settings/source-control/{provider}/callback', [
+            SourceControlProvidersController::class,
+            'handleProviderCallback'
+        ]);
 
-    Route::post('settings/source-control/{provider}/unlink', [
-        SourceControlProvidersController::class,
-        'unlinkProvider'
-    ]);
+        Route::post('settings/source-control/{provider}/unlink', [
+            SourceControlProvidersController::class,
+            'unlinkProvider'
+        ]);
 
-    Route::post('servers', [
-        CreateServersController::class,
-        'store'
-    ])->middleware(['check-create-more-servers']);
+        Route::post('servers', [
+            CreateServersController::class,
+            'store'
+        ])->middleware(['check-create-more-servers']);
 
-    Route::get('servers/{server}', [GetServerController::class, 'show']);
+        Route::get('servers/{server}', [GetServerController::class, 'show']);
 
-    Route::post('servers/{server}/sshkeys', [
-        SshKeysController::class,
-        'store'
-    ]);
+        Route::post('servers/{server}/sshkeys', [
+            SshKeysController::class,
+            'store'
+        ]);
 
-    Route::delete('servers/{server}/sshkeys/{sshkey}', [
-        SshKeysController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}/sshkeys/{sshkey}', [
+            SshKeysController::class,
+            'destroy'
+        ]);
 
-    Route::post('servers/{server}/databases', [
-        DatabasesController::class,
-        'store'
-    ]);
+        Route::post('servers/{server}/databases', [
+            DatabasesController::class,
+            'store'
+        ]);
 
-    Route::get('servers/{server}/databases/{databaseType}', [
-        DatabasesController::class,
-        'index'
-    ]);
+        Route::get('servers/{server}/databases/{databaseType}', [
+            DatabasesController::class,
+            'index'
+        ]);
 
-    Route::post('servers/{server}/database-users', [
-        DatabaseUserController::class,
-        'store'
-    ]);
+        Route::post('servers/{server}/database-users', [
+            DatabaseUserController::class,
+            'store'
+        ]);
 
-    Route::delete('servers/{server}/database-users/{databaseUser}', [
-        DatabaseUserController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}/database-users/{databaseUser}', [
+            DatabaseUserController::class,
+            'destroy'
+        ]);
 
-    Route::delete('servers/{server}/databases/{database}', [
-        DatabasesController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}/databases/{database}', [
+            DatabasesController::class,
+            'destroy'
+        ]);
 
-    Route::post('servers/{server}/sites', [SitesController::class, 'store']);
+        Route::post('servers/{server}/sites', [
+            SitesController::class,
+            'store'
+        ]);
 
-    Route::get('servers/{server}/sites/{site}', [
-        SitesController::class,
-        'show'
-    ]);
+        Route::get('servers/{server}/sites/{site}', [
+            SitesController::class,
+            'show'
+        ]);
 
-    Route::put('servers/{server}/sites/{site}', [
-        SitesController::class,
-        'update'
-    ]);
+        Route::put('servers/{server}/sites/{site}', [
+            SitesController::class,
+            'update'
+        ]);
 
-    Route::delete('servers/{server}/sites/{site}', [
-        SitesController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}/sites/{site}', [
+            SitesController::class,
+            'destroy'
+        ]);
 
-    Route::post('servers/{server}/daemons', [DaemonController::class, 'store']);
+        Route::post('servers/{server}/daemons', [
+            DaemonController::class,
+            'store'
+        ]);
 
-    Route::delete('servers/{server}/daemons/{daemon}', [
-        DaemonController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}/daemons/{daemon}', [
+            DaemonController::class,
+            'destroy'
+        ]);
 
-    Route::get('servers/{server}/daemons/{daemon}/status', [
-        DaemonController::class,
-        'status'
-    ]);
+        Route::get('servers/{server}/daemons/{daemon}/status', [
+            DaemonController::class,
+            'status'
+        ]);
 
-    Route::post('servers/{server}/daemons/{daemon}/restart', [
-        DaemonController::class,
-        'restart'
-    ]);
+        Route::post('servers/{server}/daemons/{daemon}/restart', [
+            DaemonController::class,
+            'restart'
+        ]);
 
-    Route::post('servers/{server}/cron-jobs', [
-        CronJobController::class,
-        'store'
-    ]);
-    Route::post('servers/{server}/cron-jobs/{job}/log', [
-        CronJobController::class,
-        'log'
-    ]);
-    Route::delete('servers/{server}/cron-jobs/{job}', [
-        CronJobController::class,
-        'destroy'
-    ]);
+        Route::post('servers/{server}/cron-jobs', [
+            CronJobController::class,
+            'store'
+        ]);
+        Route::post('servers/{server}/cron-jobs/{job}/log', [
+            CronJobController::class,
+            'log'
+        ]);
+        Route::delete('servers/{server}/cron-jobs/{job}', [
+            CronJobController::class,
+            'destroy'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/install-ghost', [
-        GhostController::class,
-        'store'
-    ]);
+        Route::post('servers/{server}/sites/{site}/install-ghost', [
+            GhostController::class,
+            'store'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/uninstall-ghost', [
-        GhostController::class,
-        'destroy'
-    ]);
+        Route::post('servers/{server}/sites/{site}/uninstall-ghost', [
+            GhostController::class,
+            'destroy'
+        ]);
 
-    Route::get('servers/{server}/sites/{site}/ghost-config', [
-        GhostController::class,
-        'getConfig'
-    ]);
+        Route::get('servers/{server}/sites/{site}/ghost-config', [
+            GhostController::class,
+            'getConfig'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/ghost-config', [
-        GhostController::class,
-        'setConfig'
-    ]);
+        Route::post('servers/{server}/sites/{site}/ghost-config', [
+            GhostController::class,
+            'setConfig'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/install-repository', [
-        GitRepositoryController::class,
-        'store'
-    ]);
+        Route::post('servers/{server}/sites/{site}/install-repository', [
+            GitRepositoryController::class,
+            'store'
+        ]);
 
-    Route::get('servers/{server}/sites/{site}/env-variables', [
-        EnvController::class,
-        'index'
-    ]);
+        Route::get('servers/{server}/sites/{site}/env-variables', [
+            EnvController::class,
+            'index'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/env-variables', [
-        EnvController::class,
-        'store'
-    ]);
+        Route::post('servers/{server}/sites/{site}/env-variables', [
+            EnvController::class,
+            'store'
+        ]);
 
-    Route::delete('servers/{server}/sites/{site}/env-variables/{key}', [
-        EnvController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}/sites/{site}/env-variables/{key}', [
+            EnvController::class,
+            'destroy'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/deployments', [
-        DeploymentController::class,
-        'deploy'
-    ]);
+        Route::post('servers/{server}/sites/{site}/deployments', [
+            DeploymentController::class,
+            'deploy'
+        ]);
 
-    Route::get('servers/{server}/sites/{site}/ecosystem-file', [
-        Pm2Controller::class,
-        'show'
-    ]);
+        Route::get('servers/{server}/sites/{site}/ecosystem-file', [
+            Pm2Controller::class,
+            'show'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/ecosystem-file', [
-        Pm2Controller::class,
-        'update'
-    ]);
+        Route::post('servers/{server}/sites/{site}/ecosystem-file', [
+            Pm2Controller::class,
+            'update'
+        ]);
 
-    Route::get('servers/{server}/sites/{site}/nginx-config', [
-        NginxController::class,
-        'show'
-    ]);
+        Route::get('servers/{server}/sites/{site}/nginx-config', [
+            NginxController::class,
+            'show'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/nginx-config', [
-        NginxController::class,
-        'update'
-    ]);
+        Route::post('servers/{server}/sites/{site}/nginx-config', [
+            NginxController::class,
+            'update'
+        ]);
 
-    Route::post('servers/{server}/firewall-rules', [
-        UfwController::class,
-        'store'
-    ]);
+        Route::post('servers/{server}/firewall-rules', [
+            UfwController::class,
+            'store'
+        ]);
 
-    Route::delete('servers/{server}/firewall-rules/{firewallRule}', [
-        UfwController::class,
-        'destroy'
-    ]);
+        Route::delete('servers/{server}/firewall-rules/{firewallRule}', [
+            UfwController::class,
+            'destroy'
+        ]);
 
-    Route::post('servers/{server}/sites/{site}/lets-encrypt', [
-        SslCertificateController::class,
-        'letsEncrypt'
-    ]);
-
-    Route::post(
-        'servers/{server}/sites/{site}/push-to-deploy',
-        '\App\Http\Controllers\Sites\PushToDeployController'
-    );
-
-    Route::patch(
-        'servers/{server}/sites/{site}/upstream',
-        '\App\Http\Controllers\Sites\UpdateBalancedServersController'
-    );
-
-    Route::patch(
-        'servers/{server}/network',
-        '\App\Http\Controllers\Network\UpdateServerNetworkController'
-    );
-
-    Route::get(
-        'teams/memberships',
-        '\App\Http\Controllers\Users\TeamController@memberships'
-    );
-
-    Route::get(
-        'invites',
-        '\App\Http\Controllers\Users\TeamInvitesController@index'
-    );
-
-    Route::middleware(['subscribed:business'])->group(function () {
-        Route::resource('teams', '\App\Http\Controllers\Users\TeamController');
+        Route::post('servers/{server}/sites/{site}/lets-encrypt', [
+            SslCertificateController::class,
+            'letsEncrypt'
+        ]);
 
         Route::post(
-            'teams/{team}/invites',
-            '\App\Http\Controllers\Users\TeamInvitesController@store'
+            'servers/{server}/sites/{site}/push-to-deploy',
+            '\App\Http\Controllers\Sites\PushToDeployController'
         );
 
         Route::patch(
-            'teams/{team}/servers',
-            '\App\Http\Controllers\Users\TeamServersController@update'
+            'servers/{server}/sites/{site}/upstream',
+            '\App\Http\Controllers\Sites\UpdateBalancedServersController'
+        );
+
+        Route::patch(
+            'servers/{server}/network',
+            '\App\Http\Controllers\Network\UpdateServerNetworkController'
         );
 
         Route::get(
-            'teams/{team}/servers',
-            '\App\Http\Controllers\Users\TeamServersController@index'
+            'teams/memberships',
+            '\App\Http\Controllers\Users\TeamController@memberships'
+        );
+
+        Route::get(
+            'invites',
+            '\App\Http\Controllers\Users\TeamInvitesController@index'
+        );
+
+        Route::middleware(['subscribed:business'])->group(function () {
+            Route::resource(
+                'teams',
+                '\App\Http\Controllers\Users\TeamController'
+            );
+
+            Route::post(
+                'teams/{team}/invites',
+                '\App\Http\Controllers\Users\TeamInvitesController@store'
+            );
+
+            Route::patch(
+                'teams/{team}/servers',
+                '\App\Http\Controllers\Users\TeamServersController@update'
+            );
+
+            Route::get(
+                'teams/{team}/servers',
+                '\App\Http\Controllers\Users\TeamServersController@index'
+            );
+        });
+
+        Route::patch(
+            '/invites/{teamInvite}/{status}',
+            '\App\Http\Controllers\Users\TeamInvitesController@update'
+        );
+
+        Route::delete(
+            '/invites/{teamInvite}',
+            '\App\Http\Controllers\Users\TeamInvitesController@destroy'
         );
     });
-
-    Route::patch(
-        '/invites/{teamInvite}/{status}',
-        '\App\Http\Controllers\Users\TeamInvitesController@update'
-    );
-
-    Route::delete(
-        '/invites/{teamInvite}',
-        '\App\Http\Controllers\Users\TeamInvitesController@destroy'
-    );
-});
 
 Route::get('get-update-nginx-config/{hash}', [
     NginxController::class,
@@ -419,3 +433,11 @@ Route::middleware(['auth:api'])->group(function () {
         '\App\Http\Controllers\Sites\GithubWebhookController'
     )->name('github-webhooks');
 });
+
+Route::get('/{any}', function ($request) {
+    return view('app')->with([
+        'auth' => auth()->user()
+            ? json_encode((new UserResource(auth()->user()))->toArray($request))
+            : null
+    ]);
+})->where('any', '.*');

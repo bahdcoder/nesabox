@@ -118,14 +118,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     errors: {
       type: Object,
       required: false,
-      "default": {
-        email: [],
-        name: []
+      "default": function _default() {
+        return {
+          email: [],
+          name: []
+        };
       }
     }
   },
@@ -193,11 +196,11 @@ var render = function() {
           [
             _vm._v("\n            Or\n            "),
             _c(
-              "inertia-link",
+              "router-link",
               {
                 staticClass:
                   "font-medium text-sha-green-500 hover:text-sha-green-400 focus:outline-none focus:underline transition ease-in-out duration-150",
-                attrs: { href: "/login" }
+                attrs: { to: "/auth/login" }
               },
               [
                 _vm._v(
@@ -262,6 +265,7 @@ var render = function() {
                   attrs: {
                     label: "Password",
                     name: "password",
+                    type: "password",
                     errors: _vm.errors.password
                   },
                   model: {
