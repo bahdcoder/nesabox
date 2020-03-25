@@ -34,7 +34,11 @@
                 </div>
 
                 <div class="flex justify-end w-full w-full mt-5">
-                    <v-button type="submit" label="Add site" class="w-full md:w-1/5" />
+                    <v-button
+                        type="submit"
+                        label="Add site"
+                        class="w-full md:w-1/5"
+                    />
                 </div>
             </div>
         </div>

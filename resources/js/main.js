@@ -7,6 +7,7 @@ window.axios = Axios
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 import Svg from '@/Shared/Svg'
+import Table from '@/Shared/Table'
 import Layout from '@/Shared/Layout'
 import Button from '@/Shared/Button'
 import TextInput from '@/Shared/TextInput'
@@ -16,6 +17,7 @@ import ButtonTransparent from '@/Shared/ButtonTransparent'
 Vue.use(VueRouter)
 Vue.component('v-svg', Svg)
 Vue.component('layout', Layout)
+Vue.component('v-table', Table)
 Vue.component('v-button', Button)
 Vue.component('text-input', TextInput)
 Vue.directive('click-outside', ClickOutside)

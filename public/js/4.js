@@ -321,6 +321,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -573,7 +589,7 @@ var render = function() {
                           { staticClass: "text-gray-600 inline-block" },
                           [
                             _vm._v(
-                              "Select your server provider. Nesabox will connect\n                            using your provider's API and provision a server\n                            with the specs you select. If you have already\n                            provisioned a server on any provider, select custom\n                            provider. Nesabox will connect to your already\n                            provisioned server.\n                        "
+                              "Select your server provider. Nesabox will\n                            connect using your provider's API and provision\n                            a server with the specs you select. If you have\n                            already provisioned a server on any provider,\n                            select custom provider. Nesabox will connect to\n                            your already provisioned server.\n                        "
                             )
                           ]
                         )
@@ -661,7 +677,7 @@ var render = function() {
                                         _vm._v(
                                           "\n                                    Select the " +
                                             _vm._s(_vm.form.provider) +
-                                            " api key to be\n                                    used to create this server.\n                                    "
+                                            " api key\n                                    to be used to create this server.\n                                    "
                                         ),
                                         _vm.credentials.length === 0
                                           ? _c(
@@ -1106,7 +1122,7 @@ var render = function() {
                 [
                   _c("p", { staticClass: "w-full mb-4 text-gray-900" }, [
                     _vm._v(
-                      "\n                    Almost there! Login to your server as root and run the following command. This would provision your server so that it can be managed by us. Once done, your server will become active on this dashboard.\n                "
+                      "\n                    Almost there! Login to your server as root and run the\n                    following command. This would provision your server so\n                    that it can be managed by us. Once done, your server\n                    will become active on this dashboard.\n                "
                     )
                   ]),
                   _vm._v(" "),

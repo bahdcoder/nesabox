@@ -10,12 +10,12 @@
                                 >Server provider</label
                             >
                             <small class="text-gray-600 inline-block"
-                                >Select your server provider. Nesabox will connect
-                                using your provider's API and provision a server
-                                with the specs you select. If you have already
-                                provisioned a server on any provider, select custom
-                                provider. Nesabox will connect to your already
-                                provisioned server.
+                                >Select your server provider. Nesabox will
+                                connect using your provider's API and provision
+                                a server with the specs you select. If you have
+                                already provisioned a server on any provider,
+                                select custom provider. Nesabox will connect to
+                                your already provisioned server.
                             </small>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -58,8 +58,8 @@
                             >
                                 <template slot="help">
                                     <small class="text-gray-600">
-                                        Select the {{ form.provider }} api key to be
-                                        used to create this server.
+                                        Select the {{ form.provider }} api key
+                                        to be used to create this server.
                                         <span v-if="credentials.length === 0">
                                             You do not have any
                                             {{ form.provider }} credentials yet.
@@ -134,8 +134,8 @@
                             <text-input
                                 name="size"
                                 label="Size"
-                                type='number'
-                                placeholder='4'
+                                type="number"
+                                placeholder="4"
                                 v-model="form.size"
                                 :errors="errors.size"
                                 help="Provide the RAM of your server in GB. It'll be used to set the SWAP size."
@@ -151,7 +151,7 @@
                                 label="Region"
                                 v-model="form.region"
                                 :errors="errors.region"
-                                placeholder='New York 1'
+                                placeholder="New York 1"
                                 help="Provide the region of your custom server. This can help you identify the location of the server in future."
                             />
                         </div>
@@ -272,12 +272,28 @@
             <div class="shadow sm:rounded-md sm:overflow-hidden">
                 <div class="p-5 bg-white">
                     <p class="w-full mb-4 text-gray-900">
-                        Almost there! Login to your server as root and run the following command. This would provision your server so that it can be managed by us. Once done, your server will become active on this dashboard.
+                        Almost there! Login to your server as root and run the
+                        following command. This would provision your server so
+                        that it can be managed by us. Once done, your server
+                        will become active on this dashboard.
                     </p>
-                    <textarea id="command" readonly class="w-full bg-gray-100 shadow-sm px-4 py-3 text-xs text-gray-600 border border-gray-200 rounded" v-model="deployCommand" />
+                    <textarea
+                        id="command"
+                        readonly
+                        class="w-full bg-gray-100 shadow-sm px-4 py-3 text-xs text-gray-600 border border-gray-200 rounded"
+                        v-model="deployCommand"
+                    />
 
-                    <v-button @click="copyCommand" label='Copy command' class="mt-4" />
-                    <v-trans-button @click="$router.push('/dashboard')" label='Go to dashboard' class="mt-4" />
+                    <v-button
+                        @click="copyCommand"
+                        label="Copy command"
+                        class="mt-4"
+                    />
+                    <v-trans-button
+                        @click="$router.push('/dashboard')"
+                        label="Go to dashboard"
+                        class="mt-4"
+                    />
                 </div>
             </div>
         </div>
