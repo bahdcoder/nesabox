@@ -18,10 +18,6 @@ var render = function() {
   return _c(
     "account-layout",
     [
-      _c("template", { slot: "header" }, [
-        _vm._v("\n        Your profile\n    ")
-      ]),
-      _vm._v(" "),
       _c("template", { slot: "content" }, [
         _vm._v("\n        MY CONTENT account profile\n    ")
       ])

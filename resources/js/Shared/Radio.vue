@@ -12,11 +12,11 @@
             :key="option.value"
         >
             <input
-                :id="option.value"
-                name="form-input"
                 type="radio"
+                name="form-input"
+                :id="option.value"
+                :value="option.value"
                 :checked="value === option.value"
-                :value="value"
                 @input="$emit('input', $event.target.value)"
                 class="form-radio h-4 w-4 text-sha-green-500 transition duration-150 ease-in-out"
             />

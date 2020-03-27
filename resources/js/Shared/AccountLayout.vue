@@ -1,14 +1,11 @@
 <template>
     <div>
         <sidebar-layout :nav="nav" :showNav="true" :active="active">
-            <div>
-                <template slot="header">
-                    <!-- <div class="h-12 w-full mb-5"></div> -->
-                    <slot name="header" />
-                </template>
+            <template slot="header">
+                <h3 class="text-lg mb-3">Your Account</h3>
+            </template>
 
-                <slot name="content" />
-            </div>
+            <slot name="content" />
         </sidebar-layout>
     </div>
 </template>

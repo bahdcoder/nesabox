@@ -8,8 +8,11 @@
             </h3>
         </div>
 
-        <slot v-if="table" />
-        <div v-else class="w-full bg-gray-50 p-4 md:p-6 pb-8">
+        <slot v-if="table && rowsCount > 0" />
+        <div class="w-full flex px-6 py-12 justify-center items-center bg-white shadow" v-if="table && rowsCount === 0">
+            {{ emptyTableMessage }}
+        </div>
+        <div v-if="!table" class="w-full bg-gray-50 p-4 md:p-6 pb-8">
             <slot />
         </div>
     </div>
@@ -25,6 +28,16 @@ export default {
             type: Boolean,
             default: false,
             required: false
+        },
+        rowsCount: {
+            type: Number,
+            default: 0,
+            required: false
+        },
+        emptyTableMessage: {
+            type: String,
+            required: false,
+            default: 'No items yet.'
         }
     }
 }

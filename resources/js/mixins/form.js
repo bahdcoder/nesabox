@@ -15,7 +15,7 @@ export default {
             this.submitting = true
 
             return axios
-                .post(this.formUrl)
+                .post(this.formUrl, this.form)
                 .then(({ data }) => {
                     return data
                 })
@@ -24,7 +24,7 @@ export default {
                         this.formErrors = response.data.errors
                     }
 
-                    failure(response)
+                    return Promise.reject(response)
                 })
                 .finally(() => {
                     this.submitting = false

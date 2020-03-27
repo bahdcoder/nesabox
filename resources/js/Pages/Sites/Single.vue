@@ -4,7 +4,6 @@
             <card v-if="!site.repository" title="Install Repository">
                 <form v-if="repoOptions.length > 0" @submit.prevent="submit">
                     <v-radio
-                        class="mt-4"
                         id="provider"
                         :options="repoOptions"
                         label="Provider"

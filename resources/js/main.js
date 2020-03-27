@@ -10,6 +10,7 @@ import formMixin from '@/mixins/form'
 
 import Svg from '@/Shared/Svg'
 import Card from '@/Shared/Card'
+import Pulse from '@/Shared/Pulse'
 import Table from '@/Shared/Table'
 import Flash from '@/Shared/Flash'
 import Radio from '@/Shared/Radio'
@@ -19,6 +20,7 @@ import Spinner from '@/Shared/Spinner'
 import TextInput from '@/Shared/TextInput'
 import SiteLayout from '@/Shared/Sitelayout'
 import SelectInput from '@/Shared/SelectInput'
+import ConfirmModal from '@/Shared/ConfirmModal'
 import Serverlayout from '@/Shared/Serverlayout'
 import AccountLayout from '@/Shared/AccountLayout'
 import SidebarLayout from '@/Shared/SidebarLayout'
@@ -28,6 +30,7 @@ Vue.use(VueRouter)
 Vue.mixin(formMixin)
 Vue.component('v-svg', Svg)
 Vue.component('card', Card)
+Vue.component('pulse', Pulse)
 Vue.component('flash', Flash)
 Vue.component('v-radio', Radio)
 Vue.component('layout', Layout)
@@ -38,6 +41,7 @@ Vue.component('text-input', TextInput)
 Vue.component('site-layout', SiteLayout)
 Vue.component('select-input', SelectInput)
 Vue.directive('click-outside', ClickOutside)
+Vue.component('confirm-modal', ConfirmModal)
 Vue.component('server-layout', Serverlayout)
 Vue.component('sidebar-layout', SidebarLayout)
 Vue.component('account-layout', AccountLayout)
