@@ -7,11 +7,13 @@
   <title>Nesabox</title>
   <link rel="stylesheet" href="{{ mix('css/app.css') }}">
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-  <script src="{{ mix('js/main.js') }}" defer></script>
-
   <script>
     window.auth = '{!! $auth !!}'
+    window.Laravel = {
+        csrfToken: "{{ csrf_token() }}"
+    }
   </script>
+  <script src="{{ mix('js/main.js') }}" defer></script>
 </head>
 <body class='bg-page bg-gray-100'>
     <div id="app">

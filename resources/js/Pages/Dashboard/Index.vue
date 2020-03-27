@@ -158,57 +158,53 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            loading: true,
-            showOnlyOwnServers: false,
-            allServers: {
-                servers: [],
-                team_servers: []
+    export default {
+        data() {
+            return {
+                loading: true,
+                showOnlyOwnServers: false,
+                table: {
+                    headers: [
+                        {
+                            label: 'Name',
+                            value: 'name'
+                        },
+                        {
+                            label: 'IP Address',
+                            value: 'ip_address'
+                        },
+                        {
+                            label: 'Status',
+                            value: 'status'
+                        },
+                        {
+                            label: 'Type',
+                            value: 'type'
+                        }
+                    ]
+                }
+            }
+        },
+        computed: {
+            servers() {
+                return this.showOnlyOwnServers
+                    ? this.$root.allServers.servers
+                    : this.$root.allServers.servers.concat(this.$root.allServers.team_servers)
+            }
+        },
+        mounted() {
+            axios.get('/api/servers').then(({ data }) => {
+                this.loading = false
+                this.$root.allServers = data
+            })
+        },
+        methods: {
+            routeToServer(server) {
+                this.$router.push(`/servers/${server.id}`)
             },
-            table: {
-                headers: [
-                    {
-                        label: 'Name',
-                        value: 'name'
-                    },
-                    {
-                        label: 'IP Address',
-                        value: 'ip_address'
-                    },
-                    {
-                        label: 'Status',
-                        value: 'status'
-                    },
-                    {
-                        label: 'Type',
-                        value: 'type'
-                    }
-                ]
+            toggleShowOwnServers() {
+                this.showOnlyOwnServers = !this.showOnlyOwnServers
             }
         }
-    },
-    computed: {
-        servers() {
-            return this.showOnlyOwnServers
-                ? this.allServers.servers
-                : this.allServers.servers.concat(this.allServers.team_servers)
-        }
-    },
-    mounted() {
-        axios.get('/api/servers').then(({ data }) => {
-            this.loading = false
-            this.allServers = data
-        })
-    },
-    methods: {
-        routeToServer(server) {
-            this.$router.push(`/servers/${server.id}`)
-        },
-        toggleShowOwnServers() {
-            this.showOnlyOwnServers = !this.showOnlyOwnServers
-        }
     }
-}
 </script>

@@ -1,7 +1,16 @@
 import Vue from 'vue'
 import Axios from 'axios'
+import Pusher from 'pusher-js'
 import VueRouter from 'vue-router'
+import LaravelEcho from "laravel-echo"
 import ClickOutside from 'vue-click-outside'
+
+window.Echo = new LaravelEcho({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY,
+    cluster: 'mt1',
+    forceTLS: true
+})
 
 window.axios = Axios
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
@@ -142,6 +151,10 @@ const app = new Vue({
                 message: '',
                 type: ''
             },
+            allServers: {
+                servers: [],
+                team_servers: []
+            },
             sites: {}
         }
     },
@@ -159,5 +172,37 @@ const app = new Vue({
                 }
             }, timeout)
         }
+    },
+    mounted() {
+        Echo.private(`App.User.${this.auth.id}`)
+            .notification((notification) => {
+                if (notification.type === 'App\\Notifications\\Servers\\ServerIsReady') {
+                    this.servers = {
+                        ...this.servers,
+                        [notification.server.id]: notification.server
+                    }
+
+                    const servers = this.allServers.servers.map(server => {
+                        if (server.id !== notification.server.id) {
+                            return server
+                        }
+
+                        return notification.server
+                    })
+
+                    const team_servers = this.allServers.team_servers.map(server => {
+                        if (server.id !== notification.server.id) {
+                            return server
+                        }
+
+                        return notification.server
+                    })
+
+                    this.allServers = {
+                        servers,
+                        team_servers
+                    }
+                }
+            })
     }
 })
