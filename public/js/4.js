@@ -333,6 +333,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1083,6 +1084,7 @@ var render = function() {
                             attrs: {
                               type: "submit",
                               disabled: _vm.loading,
+                              loading: _vm.loading,
                               label: "Deploy Server"
                             }
                           })

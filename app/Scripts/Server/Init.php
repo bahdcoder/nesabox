@@ -35,10 +35,10 @@ class Init extends BaseScript
     {
         $user = SSH_USER;
 
-        $callbackEndpoint = route('servers.initialization-callback', [
+        $callbackEndpoint = config('app.url') . route('servers.initialization-callback', [
             $this->server->id,
             'api_token' => $this->server->user->api_token
-        ]);
+        ], false);
 
         $nesaboxIp = config('nesa.ip');
 

@@ -14,10 +14,10 @@ class ServerResource extends JsonResource
      */
     public function toArray($request)
     {
-        $deploy_script_route = route('servers.custom-deploy-script', [
+        $deploy_script_route = config('app.url') . route('servers.custom-deploy-script', [
             $this->id,
             'api_token' => $this->resource->user->api_token
-        ]);
+        ], false);
 
         return [
             'id' => $this->id,
@@ -63,7 +63,7 @@ class ServerResource extends JsonResource
                     ];
                 }),
             'sshkeys' => SshkeyResource::collection($this->personalSshkeys),
-            $this->mergeWhen($this->provider === CUSTOM_PROVIDER, [
+            $this->mergeWhen($this->provider !== CUSTOM_PROVIDER, [
                 'deploy_script' => $deploy_script_route,
                 'deploy_command' => "curl -Ss '{$deploy_script_route}' >/tmp/nesabox.sh && bash /tmp/nesabox.sh"
             ]),

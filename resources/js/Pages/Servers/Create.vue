@@ -256,6 +256,7 @@
                             <v-button
                                 type="submit"
                                 :disabled="loading"
+                                :loading="loading"
                                 label="Deploy Server"
                             />
                         </span>

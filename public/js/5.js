@@ -309,7 +309,13 @@ var render = function() {
           _vm._v(" "),
           _c(
             "card",
-            { attrs: { title: "Active Sites", table: true } },
+            {
+              attrs: {
+                title: "Active Sites",
+                table: true,
+                emptyTableMessage: "No sites on this server yet."
+              }
+            },
             [
               _c("v-table", {
                 attrs: { headers: _vm.table.headers, rows: _vm.sites },

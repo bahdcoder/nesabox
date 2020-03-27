@@ -42,10 +42,10 @@ class SiteResource extends JsonResource
                 $isReadyStatus[$this->resource->app_type ?? 'None'],
             'updating_slug' =>
                 $this->resource->updating_slug_status === STATUS_UPDATING,
-            'deployment_trigger_url' => route('sites.trigger-deployment', [
+            'deployment_trigger_url' => config('app.url') . route('sites.trigger-deployment', [
                 $this->resource->id,
                 'api_token' => $this->resource->server->user->api_token
-            ]),
+            ], false),
             'installing_repository' =>
                 $this->resource->repository_status === STATUS_INSTALLING,
             'installing_ghost' =>

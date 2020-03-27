@@ -49,7 +49,7 @@
                 </form>
             </card>
 
-            <card title="Active Sites" :table="true">
+            <card title="Active Sites" :table="true" emptyTableMessage='No sites on this server yet.'>
                 <v-table
                     :headers="table.headers"
                     :rows="sites"
