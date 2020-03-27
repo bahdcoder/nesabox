@@ -49,9 +49,8 @@
                             class="w-full mt-5"
                             v-if="form.provider && form.provider !== 'custom'"
                         >
-                            <text-input
+                            <select-input
                                 name="credential"
-                                component="select"
                                 :options="credentials"
                                 label="Provider Credential"
                                 v-model="form.credential_id"
@@ -64,14 +63,14 @@
                                             You do not have any
                                             {{ form.provider }} credentials yet.
                                             <router-link
-                                                to="/account/credentials"
+                                                to="/account/server-providers"
                                                 class="rounded text-white bg-sha-green-500 p-1 text-xs px-2"
                                                 >Add one here</router-link
                                             >
                                         </span>
                                     </small>
                                 </template>
-                            </text-input>
+                            </select-input>
                         </div>
 
                         <div v-if="showServerName" class="w-full mt-8">
@@ -86,9 +85,8 @@
                         </div>
 
                         <div v-if="showServerName" class="w-full mt-8">
-                            <text-input
+                            <select-input
                                 name="type"
-                                component="select"
                                 label="Server type"
                                 v-model="form.type"
                                 :errors="errors.type"
@@ -101,9 +99,8 @@
                             v-if="showServerName && form.provider !== 'custom'"
                             class="w-full mt-8"
                         >
-                            <text-input
+                            <select-input
                                 name="region"
-                                component="select"
                                 label="Region"
                                 :options="regions"
                                 v-model="form.region"
@@ -116,9 +113,8 @@
                             v-if="showServerName && form.provider !== 'custom'"
                             class="w-full mt-8"
                         >
-                            <text-input
+                            <select-input
                                 name="size"
-                                component="select"
                                 label="Size"
                                 :options="sizes"
                                 v-model="form.size"

@@ -1,0 +1,129 @@
+<template>
+    <div>
+        <sidebar-layout
+            :showNav="server.status === 'active'"
+            :nav="nav"
+            :active="active"
+        >
+            <div v-if="server.status === 'active' && !loading">
+                <template slot="header">
+                    <!-- <div class="h-12 w-full mb-5"></div> -->
+                    <slot name="header" />
+                </template>
+                <slot name="content" />
+            </div>
+        </sidebar-layout>
+
+        <main class="px-3">
+            <div class="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div
+                    class="w-full flex items-center justify-center"
+                    v-if="loading"
+                ></div>
+                <div
+                    class="w-full bg-white rounded shadow p-4 md:p-6"
+                    v-if="!loading && server.status === 'initializing'"
+                >
+                    <p
+                        class="text-center text-gray-700"
+                        v-if="server.provider !== 'custom'"
+                    >
+                        Your server has been provisioned on
+                        {{ server.provider }}. We are currently installing all
+                        necessary software. This process should take about 10
+                        minutes or less on average.
+                    </p>
+                    <p class="text-center text-gray-700" v-else>
+                        Your custom server is still initializing. Once the
+                        installing script is done running, it'll become active.
+                    </p>
+
+                    <p class="w-full py-4 flex justify-center">
+                        <spinner class="w-10 h-10" />
+                    </p>
+                </div>
+
+                <div
+                    class="w-full bg-white rounded shadow p-4 md:p-6"
+                    v-if="!loading && server.status === 'new'"
+                >
+                    <p class="text-center text-gray-700">
+                        Your server is still being created on
+                        {{ server.provider }}. It'll take about a minute. Once
+                        we confirmed the server is active on
+                        {{ server.provider }}, we'll begin running the
+                        installation script.
+                    </p>
+
+                    <p class="w-full py-4 flex justify-center">
+                        <spinner class="w-10 h-10" />
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        const route = path =>
+            `/servers/${this.$route.params.server}${path ? '/' : ''}${path}`
+
+        return {
+            nav: [
+                {
+                    label: 'Sites',
+                    value: 'sites',
+                    to: route('')
+                },
+                {
+                    label: 'Databases',
+                    value: 'databases',
+                    to: route('databases')
+                },
+                {
+                    label: 'Scheduler',
+                    value: 'scheduler',
+                    to: route('scheduler')
+                },
+                {
+                    label: 'Network',
+                    value: 'network',
+                    to: route('network')
+                }
+            ],
+            loading: true
+        }
+    },
+    mounted() {
+        if (this.$root.servers[this.$route.params.server]) {
+            this.loading = false
+
+            return
+        }
+
+        axios
+            .get(`/api/servers/${this.$route.params.server}`)
+            .then(({ data }) => {
+                this.$root.servers = {
+                    ...this.$root.servers,
+                    [this.$route.params.server]: data
+                }
+
+                this.loading = false
+            })
+            .catch(() => {
+                this.$router.push('/dashboard')
+            })
+    },
+    computed: {
+        active() {
+            return this.$route.path
+        },
+        server() {
+            return this.$root.servers[this.$route.params.server] || {}
+        }
+    }
+}
+</script>

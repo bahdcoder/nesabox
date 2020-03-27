@@ -333,10 +333,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -652,11 +648,10 @@ var render = function() {
                             { staticClass: "w-full mt-5" },
                             [
                               _c(
-                                "text-input",
+                                "select-input",
                                 {
                                   attrs: {
                                     name: "credential",
-                                    component: "select",
                                     options: _vm.credentials,
                                     label: "Provider Credential"
                                   },
@@ -694,7 +689,8 @@ var render = function() {
                                                     staticClass:
                                                       "rounded text-white bg-sha-green-500 p-1 text-xs px-2",
                                                     attrs: {
-                                                      to: "/account/credentials"
+                                                      to:
+                                                        "/account/server-providers"
                                                     }
                                                   },
                                                   [_vm._v("Add one here")]
@@ -746,10 +742,9 @@ var render = function() {
                             "div",
                             { staticClass: "w-full mt-8" },
                             [
-                              _c("text-input", {
+                              _c("select-input", {
                                 attrs: {
                                   name: "type",
-                                  component: "select",
                                   label: "Server type",
                                   errors: _vm.errors.type,
                                   options: _vm.serverTypes,
@@ -774,10 +769,9 @@ var render = function() {
                             "div",
                             { staticClass: "w-full mt-8" },
                             [
-                              _c("text-input", {
+                              _c("select-input", {
                                 attrs: {
                                   name: "region",
-                                  component: "select",
                                   label: "Region",
                                   options: _vm.regions,
                                   errors: _vm.errors.region,
@@ -802,10 +796,9 @@ var render = function() {
                             "div",
                             { staticClass: "w-full mt-8" },
                             [
-                              _c("text-input", {
+                              _c("select-input", {
                                 attrs: {
                                   name: "size",
-                                  component: "select",
                                   label: "Size",
                                   options: _vm.sizes,
                                   errors: _vm.errors.size,

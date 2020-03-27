@@ -6,22 +6,41 @@ import ClickOutside from 'vue-click-outside'
 window.axios = Axios
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
+import formMixin from '@/mixins/form'
+
 import Svg from '@/Shared/Svg'
+import Card from '@/Shared/Card'
 import Table from '@/Shared/Table'
+import Flash from '@/Shared/Flash'
+import Radio from '@/Shared/Radio'
 import Layout from '@/Shared/Layout'
 import Button from '@/Shared/Button'
+import Spinner from '@/Shared/Spinner'
 import TextInput from '@/Shared/TextInput'
+import SiteLayout from '@/Shared/Sitelayout'
+import SelectInput from '@/Shared/SelectInput'
+import Serverlayout from '@/Shared/Serverlayout'
+import AccountLayout from '@/Shared/AccountLayout'
 import SidebarLayout from '@/Shared/SidebarLayout'
 import ButtonTransparent from '@/Shared/ButtonTransparent'
 
 Vue.use(VueRouter)
+Vue.mixin(formMixin)
 Vue.component('v-svg', Svg)
+Vue.component('card', Card)
+Vue.component('flash', Flash)
+Vue.component('v-radio', Radio)
 Vue.component('layout', Layout)
 Vue.component('v-table', Table)
 Vue.component('v-button', Button)
+Vue.component('spinner', Spinner)
 Vue.component('text-input', TextInput)
+Vue.component('site-layout', SiteLayout)
+Vue.component('select-input', SelectInput)
 Vue.directive('click-outside', ClickOutside)
+Vue.component('server-layout', Serverlayout)
 Vue.component('sidebar-layout', SidebarLayout)
+Vue.component('account-layout', AccountLayout)
 Vue.component('v-trans-button', ButtonTransparent)
 
 const router = new VueRouter({
@@ -56,6 +75,34 @@ const router = new VueRouter({
             name: 'server.single',
             component: () =>
                 import(`@/Pages/Servers/Single`).then(module => module.default)
+        },
+        {
+            path: '/servers/:server/databases',
+            name: 'server.databases',
+            component: () =>
+                import(`@/Pages/Servers/Databases`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/servers/:server/sites/:site',
+            name: 'server.site',
+            component: () =>
+                import(`@/Pages/Sites/Single`).then(module => module.default)
+        },
+        {
+            path: '/account',
+            name: 'account.profile',
+            component: () =>
+                import(`@/Pages/Account/Index`).then(module => module.default)
+        },
+        {
+            path: '/account/server-providers',
+            name: 'account.server-providers',
+            component: () =>
+                import(`@/Pages/Account/ServerProvider`).then(
+                    module => module.default
+                )
         }
     ]
 })
@@ -85,7 +132,28 @@ const app = new Vue({
     router,
     data() {
         return {
-            auth: window.auth ? JSON.parse(window.auth) : null
+            auth: window.auth ? JSON.parse(window.auth) : null,
+            servers: {},
+            flash: {
+                message: '',
+                type: ''
+            },
+            sites: {}
+        }
+    },
+    methods: {
+        flashMessage(message, type = 'success', timeout = 3000) {
+            this.flash = {
+                type,
+                message
+            }
+
+            setTimeout(() => {
+                this.flash = {
+                    message: '',
+                    type: ''
+                }
+            }, timeout)
         }
     }
 })

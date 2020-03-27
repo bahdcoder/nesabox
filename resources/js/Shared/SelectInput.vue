@@ -20,22 +20,25 @@
             </slot>
         </div>
         <div class="mt-1 rounded-md shadow-sm">
-            <input
+            <select
+                :id="name"
                 ref="input"
-                :type="type"
+                :name="name"
                 :value="value"
                 :placeholder="placeholder"
                 @input="$emit('input', $event.target.value)"
-                :class="{
-                    'appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5': true,
-                    'border-gray-300 focus:border-blue-300 focus:shadow-outline-blue placeholder-gray-400':
-                        errors.length === 0,
-                    'border-red-300 focus:shadow-outline-red focus:border-red-300 placeholder-red-300':
-                        errors.length > 0
-                }"
-                :name="name"
-                :id="name"
-            />
+                class="form-select block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+            >
+                <option value="">Select a {{ name }}</option>
+                <option
+                    v-for="option in options"
+                    :value="option.value"
+                    :key="option.value"
+                    :selected="option.value === value"
+                >
+                    {{ option.label }}
+                </option>
+            </select>
         </div>
 
         <p v-if="errors.length > 0" class="mt-2 text-sm text-red-600">
@@ -66,11 +69,6 @@ export default {
         name: {
             type: String,
             required: true
-        },
-        type: {
-            type: String,
-            required: false,
-            default: 'text'
         },
         options: {
             type: Array,

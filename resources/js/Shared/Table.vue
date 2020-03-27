@@ -19,13 +19,18 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white">
-                        <tr class="cursor-pointer hover:bg-gray-100" @click="$emit('row-clicked', row)" v-for="row in rows" :key="row.id">
+                        <tr
+                            class="cursor-pointer hover:bg-gray-100"
+                            @click="$emit('row-clicked', row)"
+                            v-for="row in rows"
+                            :key="row.id"
+                        >
                             <td
                                 :key="header.value"
                                 v-for="header in headers"
                                 class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
                             >
-                                <slot name='row' :row="row" :header="header">
+                                <slot name="row" :row="row" :header="header">
                                     {{ row[header.value] }}
                                 </slot>
                             </td>
@@ -38,18 +43,18 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            headers: {
-                type: Array,
-                required: true,
-                default: () => []
-            },
-            rows: {
-                type: Array,
-                required: true,
-                default: () => []
-            }
+export default {
+    props: {
+        headers: {
+            type: Array,
+            required: true,
+            default: () => []
+        },
+        rows: {
+            type: Array,
+            required: true,
+            default: () => []
         }
     }
+}
 </script>

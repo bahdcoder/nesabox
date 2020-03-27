@@ -57,6 +57,7 @@ class ServerResource extends JsonResource
                         'id' => $site->id,
                         'name' => $site->name,
                         'status' => $site->status,
+                        'repository' => $site->repository,
                         'app_type' => $site->app_type ?? 'None',
                         'repository_provider' => $site->repository_provider
                     ];

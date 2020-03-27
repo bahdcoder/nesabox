@@ -57,7 +57,9 @@ class SiteResource extends JsonResource
                 $this->resource->installing_certificate_status ===
                 STATUS_INSTALLING,
             'ssl_certificate_installed' =>
-                $this->resource->installing_certificate_status === STATUS_ACTIVE
+                $this->resource->installing_certificate_status ===
+                STATUS_ACTIVE,
+            'server' => new ServerResource($this->server)
         ];
     }
 }

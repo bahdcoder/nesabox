@@ -138,12 +138,23 @@ __webpack_require__.r(__webpack_exports__);
         name: '',
         email: '',
         password: ''
-      }
+      },
+      errors: {}
     };
   },
   methods: {
     submit: function submit() {
-      this.$inertia.post('/register', this.form);
+      var _this = this;
+
+      axios.post('/register', this.form).then(function () {
+        window.location.href = '/dashboard';
+      })["catch"](function (_ref) {
+        var response = _ref.response;
+
+        if (response.status === 422) {
+          _this.errors = response.data.errors;
+        }
+      });
     }
   }
 });

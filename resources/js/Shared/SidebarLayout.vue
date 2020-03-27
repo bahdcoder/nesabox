@@ -2,16 +2,28 @@
     <layout>
         <slot name="header" />
         <div class="w-full flex flex-wrap">
-            <div class="w-full md:w-1/5">
+            <div v-if="showNav" class="w-full md:w-1/5">
                 <nav>
-                    <a
-                        href="#"
+                    <router-link
+                        :to="item.to"
                         :key="item.value"
                         v-for="item in nav"
-                        class="mt-1 group flex items-center px-3 py-2 text-sm leading-5 font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:bg-gray-100 transition ease-in-out duration-150"
+                        class="mt-1 group flex items-center px-3 py-2 text-sm leading-5 font-medium rounded-md focus:outline-none transition ease-in-out duration-150"
+                        :class="{
+                            'bg-gray-200 focus:bg-gray-100 text-gray-900 hover:text-gray-900':
+                                active === item.to,
+                            'hover:bg-gray-50 text-gray-600': active !== item.to
+                        }"
                     >
                         <svg
-                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150"
+                            v-if="item.value === 'sites'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
                             stroke="currentColor"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -23,13 +35,128 @@
                                 d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
                             />
                         </svg>
+
+                        <svg
+                            v-if="item.value === 'account'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                                stroke="#4A5568"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z"
+                                stroke="#4A5568"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <svg
+                            v-if="item.value === 'server-providers'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M8 16C5.23858 16 3 13.7614 3 11C3 8.55154 4.75992 6.51413 7.08376 6.08376C7.51412 3.75992 9.55154 2 12 2C14.4485 2 16.4859 3.75992 16.9162 6.08376C19.2401 6.51413 21 8.55154 21 11C21 13.7614 18.7614 16 16 16M9 19L12 22M12 22L15 19M12 22V10"
+                                stroke="#4A5568"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <svg
+                            v-if="item.value === 'databases'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
+                            stroke="currentColor"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                            />
+                        </svg>
+
+                        <svg
+                            v-if="item.value === 'scheduler'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
+                            stroke="currentColor"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
+
+                        <svg
+                            v-if="item.value === 'network'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M21 12C21 16.9706 16.9706 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12H3M12 21C7.02944 21 3 16.9706 3 12M12 21C13.6569 21 15 16.9706 15 12C15 7.02944 13.6569 3 12 3M12 21C10.3431 21 9 16.9706 9 12C9 7.02944 10.3431 3 12 3M3 12C3 7.02944 7.02944 3 12 3"
+                                stroke="#4A5568"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
                         <span class="truncate">
                             {{ item.label }}
                         </span>
-                    </a>
+                    </router-link>
                 </nav>
             </div>
-            <div class="w-full md:w-4/5">
+            <div class="w-full md:w-4/5 md:pl-6">
                 <slot />
             </div>
         </div>
@@ -43,6 +170,15 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        showNav: {
+            required: false,
+            type: Boolean,
+            default: false
+        },
+        active: {
+            type: String,
+            required: false
         }
     }
 }

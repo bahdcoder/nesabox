@@ -126,12 +126,22 @@ export default {
                 name: '',
                 email: '',
                 password: ''
-            }
+            },
+            errors: {}
         }
     },
     methods: {
         submit() {
-            this.$inertia.post('/register', this.form)
+            axios
+                .post('/register', this.form)
+                .then(() => {
+                    window.location.href = '/dashboard'
+                })
+                .catch(({ response }) => {
+                    if (response.status === 422) {
+                        this.errors = response.data.errors
+                    }
+                })
         }
     }
 }

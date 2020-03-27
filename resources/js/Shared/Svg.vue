@@ -47,9 +47,9 @@
         <img
             :width="width"
             :height="height"
-            alt='ubuntu-logo'
+            alt="ubuntu-logo"
             v-if="icon === 'custom'"
-            src='https://res.cloudinary.com/bahdcoder/image/upload/v1563480490/ubuntu_ymonj9.png'
+            src="https://res.cloudinary.com/bahdcoder/image/upload/v1563480490/ubuntu_ymonj9.png"
         />
     </div>
 </template>
