@@ -33,10 +33,16 @@ class InitLoadBalancerServer extends BaseScript
     {
         $user = SSH_USER;
 
-        $callbackEndpoint = config('app.url') . route('servers.initialization-callback', [
-            $this->server->id,
-            'api_token' => $this->server->user->api_token
-        ], false);
+        $callbackEndpoint =
+            config('app.url') .
+            route(
+                'servers.initialization-callback',
+                [
+                    $this->server->id,
+                    'api_token' => $this->server->user->api_token
+                ],
+                false
+            );
 
         $nesaboxIp = config('nesa.ip');
 

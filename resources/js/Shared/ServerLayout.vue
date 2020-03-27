@@ -38,8 +38,16 @@
                         installing script is done running, it'll become active.
                     </p>
 
-                    <p class="w-full py-4 flex justify-center">
+                    <p
+                        class="w-full py-4 flex flex-col items-center justify-center"
+                    >
                         <spinner class="w-10 h-10" />
+
+                        <red-button
+                            @click="deleteServer"
+                            label="Delete server"
+                            class="w-full md:w-1/5 mt-5"
+                        />
                     </p>
                 </div>
 
@@ -55,8 +63,15 @@
                         installation script.
                     </p>
 
-                    <p class="w-full py-4 flex justify-center">
+                    <p
+                        class="w-full py-4 flex items-center flex-col justify-center"
+                    >
                         <spinner class="w-10 h-10" />
+
+                        <red-button
+                            @click="deleteServer"
+                            label="Delete server"
+                        />
                     </p>
                 </div>
             </div>
@@ -123,6 +138,13 @@ export default {
         },
         server() {
             return this.$root.servers[this.$route.params.server] || {}
+        }
+    },
+    methods: {
+        deleteServer() {
+            axios.delete(`/api/servers/${this.server.id}`).then(() => {
+                this.$router.push('/dashboard')
+            })
         }
     }
 }

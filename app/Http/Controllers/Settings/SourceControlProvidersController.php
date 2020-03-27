@@ -14,14 +14,23 @@ class SourceControlProvidersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRedirectUrl(string $provider)
+    public function getRedirectUrls()
     {
+        $github = Socialite::driver('github')
+            ->stateless()
+            ->scopes($this->getProviderScopes('github'))
+            ->redirect()
+            ->getTargetUrl();
+
+        $gitlab = Socialite::driver('gitlab')
+            ->stateless()
+            ->scopes($this->getProviderScopes('gitlab'))
+            ->redirect()
+            ->getTargetUrl();
+
         return response()->json([
-            'url' => Socialite::driver($provider)
-                ->stateless()
-                ->scopes($this->getProviderScopes($provider))
-                ->redirect()
-                ->getTargetUrl()
+            'github' => $github,
+            'gitlab' => $gitlab
         ]);
     }
 
@@ -64,7 +73,7 @@ class SourceControlProvidersController extends Controller
             'source_control' => array_merge($user->source_control, $data)
         ]);
 
-        return new UserResource($user->refresh());
+        return redirect('/account/source-control');
     }
 
     /**

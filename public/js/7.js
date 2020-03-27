@@ -9,6 +9,26 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -101,11 +121,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submit: function submit() {
-      this.submitForm();
+      var _this = this;
+
+      this.submitForm().then(function (site) {
+        _this.$root.sites = _objectSpread({}, _this.$root.sites, _defineProperty({}, _this.siteId, site));
+      });
     }
   },
   mounted: function mounted() {
     this.initializeForm("/api/servers/".concat(this.serverId, "/sites/").concat(this.siteId, "/install-repository"));
+
+    if (this.repoOptions.length === 1) {
+      this.form = _objectSpread({}, this.form, {
+        provider: this.repoOptions[0].value
+      });
+    }
   }
 });
 
@@ -138,7 +168,7 @@ var render = function() {
                 "card",
                 { attrs: { title: "Install Repository" } },
                 [
-                  _vm.repoOptions.length > 0
+                  _vm.repoOptions.length > 0 && !_vm.site.installing_repository
                     ? _c(
                         "form",
                         {
@@ -225,6 +255,7 @@ var render = function() {
                                 staticClass: "w-full md:w-1/5",
                                 attrs: {
                                   type: "submit",
+                                  loading: _vm.submitting,
                                   disabled: _vm.submitting,
                                   label: "Install repository"
                                 }
@@ -235,12 +266,16 @@ var render = function() {
                         ],
                         1
                       )
-                    : _c(
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.repoOptions.length === 0 &&
+                  !_vm.site.installing_repository
+                    ? _c(
                         "router-link",
                         {
                           staticClass:
                             "w-full border border-blue-500 bg-blue-100 flex items-center rounded text-blue-900 px-2 py-3 text-sm",
-                          attrs: { to: "/" }
+                          attrs: { to: "/account/source-control" }
                         },
                         [
                           _vm._v(
@@ -248,6 +283,26 @@ var render = function() {
                           )
                         ]
                       )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.site.installing_repository
+                    ? _c(
+                        "div",
+                        {
+                          staticClass:
+                            "w-full border border-blue-500 bg-blue-100 flex items-center rounded text-blue-900 px-2 py-3 text-sm"
+                        },
+                        [
+                          _vm._v(
+                            "\n                Installing repository\n                "
+                          ),
+                          _c("spinner", {
+                            staticClass: "ml-3 text-blue-800 w-4 h-4"
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               )

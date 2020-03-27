@@ -26,6 +26,11 @@ export default {
                     label: 'Server providers',
                     value: 'server-providers',
                     to: route('server-providers')
+                },
+                {
+                    label: 'Source control',
+                    value: 'source-control',
+                    to: route('source-control')
                 }
             ],
             loading: true

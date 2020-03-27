@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Axios from 'axios'
 import Pusher from 'pusher-js'
 import VueRouter from 'vue-router'
-import LaravelEcho from "laravel-echo"
+import LaravelEcho from 'laravel-echo'
 import ClickOutside from 'vue-click-outside'
 
 window.Echo = new LaravelEcho({
@@ -23,9 +23,11 @@ import Pulse from '@/Shared/Pulse'
 import Table from '@/Shared/Table'
 import Flash from '@/Shared/Flash'
 import Radio from '@/Shared/Radio'
+import Status from '@/Shared/Status'
 import Layout from '@/Shared/Layout'
 import Button from '@/Shared/Button'
 import Spinner from '@/Shared/Spinner'
+import RedButton from '@/Shared/RedButton'
 import TextInput from '@/Shared/TextInput'
 import SiteLayout from '@/Shared/Sitelayout'
 import SelectInput from '@/Shared/SelectInput'
@@ -46,6 +48,8 @@ Vue.component('layout', Layout)
 Vue.component('v-table', Table)
 Vue.component('v-button', Button)
 Vue.component('spinner', Spinner)
+Vue.component('table-status', Status)
+Vue.component('red-button', RedButton)
 Vue.component('text-input', TextInput)
 Vue.component('site-layout', SiteLayout)
 Vue.component('select-input', SelectInput)
@@ -104,6 +108,12 @@ const router = new VueRouter({
                 import(`@/Pages/Sites/Single`).then(module => module.default)
         },
         {
+            path: '/servers/:server/sites/:site/settings',
+            name: 'server.site.settings',
+            component: () =>
+                import(`@/Pages/Sites/Settings`).then(module => module.default)
+        },
+        {
             path: '/account',
             name: 'account.profile',
             component: () =>
@@ -114,6 +124,14 @@ const router = new VueRouter({
             name: 'account.server-providers',
             component: () =>
                 import(`@/Pages/Account/ServerProvider`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/account/source-control',
+            name: 'account.source-control',
+            component: () =>
+                import(`@/Pages/Account/SourceControl`).then(
                     module => module.default
                 )
         }
@@ -174,35 +192,39 @@ const app = new Vue({
         }
     },
     mounted() {
-        Echo.private(`App.User.${this.auth.id}`)
-            .notification((notification) => {
-                if (notification.type === 'App\\Notifications\\Servers\\ServerIsReady') {
-                    this.servers = {
-                        ...this.servers,
-                        [notification.server.id]: notification.server
-                    }
-
-                    const servers = this.allServers.servers.map(server => {
-                        if (server.id !== notification.server.id) {
-                            return server
-                        }
-
-                        return notification.server
-                    })
-
-                    const team_servers = this.allServers.team_servers.map(server => {
-                        if (server.id !== notification.server.id) {
-                            return server
-                        }
-
-                        return notification.server
-                    })
-
-                    this.allServers = {
-                        servers,
-                        team_servers
-                    }
+        Echo.private(`App.User.${this.auth.id}`).notification(notification => {
+            if (
+                notification.type ===
+                'App\\Notifications\\Servers\\ServerIsReady'
+            ) {
+                this.servers = {
+                    ...this.servers,
+                    [notification.server.id]: notification.server
                 }
-            })
+
+                const servers = this.allServers.servers.map(server => {
+                    if (server.id !== notification.server.id) {
+                        return server
+                    }
+
+                    return notification.server
+                })
+
+                const team_servers = this.allServers.team_servers.map(
+                    server => {
+                        if (server.id !== notification.server.id) {
+                            return server
+                        }
+
+                        return notification.server
+                    }
+                )
+
+                this.allServers = {
+                    servers,
+                    team_servers
+                }
+            }
+        })
     }
 })

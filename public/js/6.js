@@ -104,6 +104,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -126,6 +140,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, {
           label: 'Repository',
           value: 'repository'
+        }, {
+          label: 'Type',
+          value: 'type'
+        }, {
+          label: 'Status',
+          value: 'status'
         }]
       }
     };
@@ -149,6 +169,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     routeToSite: function routeToSite(site) {
+      if (site.status !== 'active') {
+        return;
+      }
+
       this.$router.push("/servers/".concat(this.serverId, "/sites/").concat(site.id));
     }
   },
@@ -312,6 +336,7 @@ var render = function() {
             {
               attrs: {
                 title: "Active Sites",
+                rowsCount: _vm.sites.length,
                 table: true,
                 emptyTableMessage: "No sites on this server yet."
               }
@@ -335,6 +360,22 @@ var render = function() {
                                   "\n                    "
                               )
                             ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        header.value === "type"
+                          ? _c("span", { staticClass: "capitalize" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(row.type) +
+                                  "\n                    "
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        header.value === "status"
+                          ? _c("table-status", {
+                              attrs: { status: row.status }
+                            })
                           : _vm._e(),
                         _vm._v(" "),
                         header.value === "repository"

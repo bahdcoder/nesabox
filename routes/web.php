@@ -58,9 +58,9 @@ Auth::routes([
 |
 */
 
-Route::get('settings/source-control/{provider}', [
+Route::get('settings/source-control', [
     SourceControlProvidersController::class,
-    'getRedirectUrl'
+    'getRedirectUrls'
 ]);
 
 Route::post('auth/{provider}/callback', [
@@ -72,6 +72,13 @@ Route::get(
     '/invites/{teamInvite}',
     '\App\Http\Controllers\Users\TeamInvitesController@show'
 );
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('settings/source-control/{provider}/callback', [
+        SourceControlProvidersController::class,
+        'handleProviderCallback'
+    ]);
+});
 
 Route::middleware(['auth'])
     ->prefix('api')
@@ -152,11 +159,6 @@ Route::middleware(['auth'])
         Route::get('digital-ocean/sizes', [
             DigitalOceanController::class,
             'sizes'
-        ]);
-
-        Route::get('settings/source-control/{provider}/callback', [
-            SourceControlProvidersController::class,
-            'handleProviderCallback'
         ]);
 
         Route::post('settings/source-control/{provider}/unlink', [

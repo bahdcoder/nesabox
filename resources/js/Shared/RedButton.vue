@@ -1,20 +1,17 @@
 <template>
-    <component
+    <button
         :to="to"
         :type="type"
-        :href="href"
-        :target="target"
-        :is="component"
         :disabled="disabled"
         @click="$emit('click')"
+        class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
         :class="{
             'cursor-not-allowed': loading
         }"
-        class="capitalize inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-sha-green-500 hover:bg-sha-green-400 focus:outline-none focus:border-sha-green-600 focus:shadow-outline-sha-green active:bg-sha-green-600 transition duration-150 ease-in-out"
     >
-        <pulse class="py-1" v-if="loading" />
+        <pulse class="px-4 py-1" v-if="loading" />
         <span v-else>{{ label }}</span>
-    </component>
+    </button>
 </template>
 
 <script>
@@ -26,14 +23,6 @@ export default {
             default: 'button'
         },
         label: {
-            type: String,
-            required: false
-        },
-        href: {
-            type: String,
-            required: false
-        },
-        target: {
             type: String,
             required: false
         },

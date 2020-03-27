@@ -152,22 +152,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -458,44 +442,9 @@ var render = function() {
                           : _vm._e(),
                         _vm._v(" "),
                         header.value === "status"
-                          ? _c("div", { staticClass: "flex items-center" }, [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "px-2 inline-flex text-xs leading-5 font-semibold rounded-full capitalize",
-                                  class: {
-                                    "bg-green-100 text-green-800":
-                                      row.status === "active",
-                                    "bg-blue-100 text-blue-800": [
-                                      "new",
-                                      "initializing",
-                                      "installing"
-                                    ].includes(row.status)
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                        " +
-                                      _vm._s(row.status) +
-                                      "\n                    "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              row.status !== "active"
-                                ? _c(
-                                    "span",
-                                    { staticClass: "ml-3" },
-                                    [
-                                      _c("spinner", {
-                                        staticClass: "w-4 h-4 text-blue-800"
-                                      })
-                                    ],
-                                    1
-                                  )
-                                : _vm._e()
-                            ])
+                          ? _c("table-status", {
+                              attrs: { status: row.status }
+                            })
                           : _vm._e(),
                         _vm._v(" "),
                         header.value === "name"
@@ -536,7 +485,7 @@ var render = function() {
                 ],
                 null,
                 false,
-                3554745201
+                1748287423
               )
             })
           ],

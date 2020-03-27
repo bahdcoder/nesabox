@@ -58,6 +58,11 @@ export default {
                     label: 'App',
                     value: 'sites',
                     to: route('')
+                },
+                {
+                    label: 'Settings',
+                    value: 'settings',
+                    to: route('settings')
                 }
             ],
             loading: true

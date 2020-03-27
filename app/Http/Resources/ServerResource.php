@@ -14,10 +14,13 @@ class ServerResource extends JsonResource
      */
     public function toArray($request)
     {
-        $deploy_script_route = config('app.url') . route('servers.custom-deploy-script', [
-            $this->id,
-            'api_token' => $this->resource->user->api_token
-        ], false);
+        $deploy_script_route =
+            config('app.url') .
+            route(
+                'servers.custom-deploy-script',
+                [$this->id, 'api_token' => $this->resource->user->api_token],
+                false
+            );
 
         return [
             'id' => $this->id,
@@ -49,6 +52,7 @@ class ServerResource extends JsonResource
                     'name',
                     'app_type',
                     'status',
+                    'type',
                     'repository_provider'
                 ])
                 ->get()
@@ -56,6 +60,7 @@ class ServerResource extends JsonResource
                     return [
                         'id' => $site->id,
                         'name' => $site->name,
+                        'type' => $site->type,
                         'status' => $site->status,
                         'repository' => $site->repository,
                         'app_type' => $site->app_type ?? 'None',

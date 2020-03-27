@@ -1,7 +1,18 @@
 <template>
     <account-layout>
         <template slot="content">
-            <confirm-modal :confirming="deleting" @confirm="deleteProfile" @close="closeConfirmDelete" :open="!!deletingProvider" confirmHeading='Delete provider profile' :confirmText='`Are you sure you want to delete your ${deletingProvider && deletingProvider.profileName} profile for ${deletingProvider && deletingProvider.provider} ?`' />
+            <confirm-modal
+                :confirming="deleting"
+                @confirm="deleteProfile"
+                @close="closeConfirmDelete"
+                :open="!!deletingProvider"
+                confirmHeading="Delete provider profile"
+                :confirmText="
+                    `Are you sure you want to delete your ${deletingProvider &&
+                        deletingProvider.profileName} profile for ${deletingProvider &&
+                        deletingProvider.provider} ?`
+                "
+            />
             <card title="New Server Provider" class="mb-5">
                 <flash class="my-2" />
                 <form @submit.prevent="submit">
@@ -58,7 +69,12 @@
                 </form>
             </card>
 
-            <card title="Active Providers" :table="true" :rowsCount="credentials.length" emptyTableMessage='No providers yet.'>
+            <card
+                title="Active Providers"
+                :table="true"
+                :rowsCount="credentials.length"
+                emptyTableMessage="No providers yet."
+            >
                 <v-table :headers="table.headers" :rows="credentials">
                     <template slot="row" slot-scope="{ row, header }">
                         <span
@@ -71,24 +87,27 @@
                             {{ row[header.value] }}
                         </span>
 
-                        <button @click="setDeletingProvider(row)" class="border-2 border-red-500 p-2 rounded hover:bg-red-100 shadow" v-if="header.value === 'actions'">
-                                <svg
-                                    width="20"
-                                    height="20"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    class="cursor-pointer"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M10 14L12 12M12 12L14 10M12 12L10 10M12 12L14 14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                                        stroke="#f05252"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                                
+                        <button
+                            @click="setDeletingProvider(row)"
+                            class="border-2 border-red-500 p-2 rounded hover:bg-red-100 shadow"
+                            v-if="header.value === 'actions'"
+                        >
+                            <svg
+                                width="20"
+                                height="20"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                class="cursor-pointer"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M10 14L12 12M12 12L14 10M12 12L10 10M12 12L14 14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                    stroke="#f05252"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
                         </button>
                     </template>
                 </v-table>
@@ -189,7 +208,7 @@ export default {
     },
     methods: {
         submit() {
-            this.submitForm().then((data) => {
+            this.submitForm().then(data => {
                 this.form = {
                     profileName: '',
                     accessToken: '',
@@ -209,7 +228,10 @@ export default {
         deleteProfile() {
             this.deleting = true
 
-            axios.delete(`/api/settings/server-providers/${this.deletingProvider.id}`)
+            axios
+                .delete(
+                    `/api/settings/server-providers/${this.deletingProvider.id}`
+                )
                 .then(({ data: user }) => {
                     this.$root.flashMessage(`Profile has been deleted.`)
 

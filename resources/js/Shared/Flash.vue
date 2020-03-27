@@ -1,12 +1,14 @@
 <template>
     <div
         v-if="message"
-        class="w-full px-3 py-5 h-12 rounded flex items-center justify-between text-white"
-        :class="{ 'bg-green-400': type === 'success' }"
+        class="w-full px-3 py-5 h-12 rounded flex items-center justify-between text-white my-3"
+        :class="{ 'bg-green-400': type === 'success', 'bg-red-600': type === 'error' }"
     >
         <span class="inline-block">
             {{ message }}
         </span>
+
+        <v-svg icon='cross-circle' width='24' height='24' />
 
         <svg
             v-if="type === 'success'"

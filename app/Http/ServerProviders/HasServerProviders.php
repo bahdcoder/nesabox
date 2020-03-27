@@ -27,9 +27,11 @@ trait HasServerProviders
     {
         $provider = $this->getCredentialProvider($credentialId);
 
-        $newCredentials = collect($this->providers[$provider])->filter(function ($credential) use ($credentialId) {
-            return $credential['id'] !== $credentialId;
-        });
+        $newCredentials = collect($this->providers[$provider])->filter(
+            function ($credential) use ($credentialId) {
+                return $credential['id'] !== $credentialId;
+            }
+        );
 
         $updatedProviders = $this->providers;
         $updatedProviders[$provider] = $newCredentials->all();

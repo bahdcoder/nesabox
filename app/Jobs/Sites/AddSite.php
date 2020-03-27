@@ -76,7 +76,7 @@ class AddSite implements ShouldQueue
 
         Notification::send(
             $this->server->getAllMembers(),
-            new ServerIsReady($this->server)
+            new ServerIsReady($this->server->fresh())
         );
         Notification::send(
             $this->server->getAllMembers(),

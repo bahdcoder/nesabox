@@ -286,10 +286,13 @@ trait HandlesProcesses
      */
     public function getUserData(Server $server)
     {
-        $deploy_script_route = config('app.url') . route('servers.custom-deploy-script', [
-            $server->id,
-            'api_token' => $server->user->api_token
-        ], false);
+        $deploy_script_route =
+            config('app.url') .
+            route(
+                'servers.custom-deploy-script',
+                [$server->id, 'api_token' => $server->user->api_token],
+                false
+            );
 
         return <<<EOD
 #!/bin/bash

@@ -49,7 +49,12 @@
                 </form>
             </card>
 
-            <card title="Active Sites" :table="true" emptyTableMessage='No sites on this server yet.'>
+            <card
+                title="Active Sites"
+                :rowsCount="sites.length"
+                :table="true"
+                emptyTableMessage="No sites on this server yet."
+            >
                 <v-table
                     :headers="table.headers"
                     :rows="sites"
@@ -59,6 +64,15 @@
                         <span v-if="header.value === 'name'">
                             {{ row.name }}
                         </span>
+
+                        <span v-if="header.value === 'type'" class="capitalize">
+                            {{ row.type }}
+                        </span>
+
+                        <table-status
+                            v-if="header.value === 'status'"
+                            :status="row.status"
+                        />
 
                         <div class="flex " v-if="header.value === 'repository'">
                             <svg
@@ -115,6 +129,14 @@ export default {
                     {
                         label: 'Repository',
                         value: 'repository'
+                    },
+                    {
+                        label: 'Type',
+                        value: 'type'
+                    },
+                    {
+                        label: 'Status',
+                        value: 'status'
                     }
                 ]
             }
@@ -141,6 +163,10 @@ export default {
             })
         },
         routeToSite(site) {
+            if (site.status !== 'active') {
+                return
+            }
+
             this.$router.push(`/servers/${this.serverId}/sites/${site.id}`)
         }
     },

@@ -20,6 +20,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'servers/*/initialization-callback',
-        'sites/*/github-webhooks',
+        'sites/*/github-webhooks'
     ];
 }

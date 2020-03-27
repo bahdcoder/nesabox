@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Sites;
 
 use App\Site;
 use App\Server;
-use App\Rules\Subdomain;
 use App\Jobs\Sites\AddSite;
 use Illuminate\Http\Request;
-use App\Jobs\Sites\UpdateSiteSlug;
-use App\Scripts\Sites\DeleteSite;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Sites\CreateSiteRequest;
@@ -34,7 +31,8 @@ class SitesController extends Controller
     {
         $site = $server->sites()->create([
             'name' => $request->name,
-            'status' => STATUS_INSTALLING
+            'status' => STATUS_INSTALLING,
+            'type' => $request->type
         ]);
 
         AddSite::dispatch($server, $site);
@@ -85,6 +83,6 @@ class SitesController extends Controller
             'deleting_site' => true
         ]);
 
-        return new ServerResource($server);
+        return new ServerResource($server->fresh());
     }
 }

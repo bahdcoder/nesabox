@@ -116,26 +116,10 @@
                     >
                         {{ row.type }}
                     </span>
-                    <div class="flex items-center" v-if="header.value === 'status'">
-                        <span
-                            
-                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full capitalize"
-                            :class="{
-                                'bg-green-100 text-green-800':
-                                    row.status === 'active',
-                                'bg-blue-100 text-blue-800': [
-                                'new',
-                                    'initializing',
-                                    'installing'
-                                ].includes(row.status)
-                            }"
-                        >
-                            {{ row.status }}
-                        </span>
-                        <span v-if="row.status !== 'active'" class="ml-3">
-                            <spinner class="w-4 h-4 text-blue-800" />
-                        </span>
-                    </div>
+                    <table-status
+                        v-if="header.value === 'status'"
+                        :status="row.status"
+                    />
                     <div
                         v-if="header.value === 'name'"
                         class="flex items-center"
@@ -158,53 +142,55 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                loading: true,
-                showOnlyOwnServers: false,
-                table: {
-                    headers: [
-                        {
-                            label: 'Name',
-                            value: 'name'
-                        },
-                        {
-                            label: 'IP Address',
-                            value: 'ip_address'
-                        },
-                        {
-                            label: 'Status',
-                            value: 'status'
-                        },
-                        {
-                            label: 'Type',
-                            value: 'type'
-                        }
-                    ]
-                }
-            }
-        },
-        computed: {
-            servers() {
-                return this.showOnlyOwnServers
-                    ? this.$root.allServers.servers
-                    : this.$root.allServers.servers.concat(this.$root.allServers.team_servers)
-            }
-        },
-        mounted() {
-            axios.get('/api/servers').then(({ data }) => {
-                this.loading = false
-                this.$root.allServers = data
-            })
-        },
-        methods: {
-            routeToServer(server) {
-                this.$router.push(`/servers/${server.id}`)
-            },
-            toggleShowOwnServers() {
-                this.showOnlyOwnServers = !this.showOnlyOwnServers
+export default {
+    data() {
+        return {
+            loading: true,
+            showOnlyOwnServers: false,
+            table: {
+                headers: [
+                    {
+                        label: 'Name',
+                        value: 'name'
+                    },
+                    {
+                        label: 'IP Address',
+                        value: 'ip_address'
+                    },
+                    {
+                        label: 'Status',
+                        value: 'status'
+                    },
+                    {
+                        label: 'Type',
+                        value: 'type'
+                    }
+                ]
             }
         }
+    },
+    computed: {
+        servers() {
+            return this.showOnlyOwnServers
+                ? this.$root.allServers.servers
+                : this.$root.allServers.servers.concat(
+                      this.$root.allServers.team_servers
+                  )
+        }
+    },
+    mounted() {
+        axios.get('/api/servers').then(({ data }) => {
+            this.loading = false
+            this.$root.allServers = data
+        })
+    },
+    methods: {
+        routeToServer(server) {
+            this.$router.push(`/servers/${server.id}`)
+        },
+        toggleShowOwnServers() {
+            this.showOnlyOwnServers = !this.showOnlyOwnServers
+        }
     }
+}
 </script>
