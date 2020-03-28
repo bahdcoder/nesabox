@@ -54,7 +54,7 @@ class SiteUpdated extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return (new BroadcastMessage([
-            'site' => (new SiteResource($this->site))->resolve()
+            'site' => (new SiteResource($this->site->fresh()))->resolve()
         ]))
             ->onConnection('redis')
             ->onQueue('broadcasts');

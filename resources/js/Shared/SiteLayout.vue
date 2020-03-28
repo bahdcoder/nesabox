@@ -60,6 +60,11 @@ export default {
                     to: route('')
                 },
                 {
+                    label: 'Files',
+                    value: 'files',
+                    to: route('files')
+                },
+                {
                     label: 'Settings',
                     value: 'settings',
                     to: route('settings')
@@ -71,6 +76,8 @@ export default {
     mounted() {
         if (this.$root.sites[this.$route.params.site]) {
             this.loading = false
+
+            this.$emit('mounted')
 
             return
         }
@@ -89,6 +96,8 @@ export default {
                     ...this.$root.sites,
                     [site.id]: site
                 }
+
+                this.$emit('mounted')
 
                 this.loading = false
             })

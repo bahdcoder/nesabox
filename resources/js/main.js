@@ -5,6 +5,8 @@ import VueRouter from 'vue-router'
 import LaravelEcho from 'laravel-echo'
 import ClickOutside from 'vue-click-outside'
 
+window.Pusher = Pusher
+
 window.Echo = new LaravelEcho({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
@@ -19,6 +21,7 @@ import formMixin from '@/mixins/form'
 
 import Svg from '@/Shared/Svg'
 import Card from '@/Shared/Card'
+import Info from '@/Shared/Info'
 import Pulse from '@/Shared/Pulse'
 import Table from '@/Shared/Table'
 import Flash from '@/Shared/Flash'
@@ -39,6 +42,7 @@ import ButtonTransparent from '@/Shared/ButtonTransparent'
 
 Vue.use(VueRouter)
 Vue.mixin(formMixin)
+Vue.component('info', Info)
 Vue.component('v-svg', Svg)
 Vue.component('card', Card)
 Vue.component('pulse', Pulse)
@@ -112,6 +116,12 @@ const router = new VueRouter({
             name: 'server.site.settings',
             component: () =>
                 import(`@/Pages/Sites/Settings`).then(module => module.default)
+        },
+        {
+            path: '/servers/:server/sites/:site/files',
+            name: 'server.site.files',
+            component: () =>
+                import(`@/Pages/Sites/Files`).then(module => module.default)
         },
         {
             path: '/account',
@@ -193,6 +203,15 @@ const app = new Vue({
     },
     mounted() {
         Echo.private(`App.User.${this.auth.id}`).notification(notification => {
+            if (
+                notification.type === 'App\\Notifications\\Sites\\SiteUpdated'
+            ) {
+                this.sites = {
+                    ...this.sites,
+                    [notification.site.id]: notification.site
+                }
+            }
+
             if (
                 notification.type ===
                 'App\\Notifications\\Servers\\ServerIsReady'

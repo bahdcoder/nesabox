@@ -1,4 +1,4 @@
-/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap);/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document
    ========================================================================== */
@@ -894,6 +894,23 @@ button {
 
 .rotate-180 {
   transform: rotate(180deg);
+}
+
+.CodeMirror {
+  padding: 0.5rem;
+  font-size: 14px;
+  height: auto !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+  border-radius: 5px;
+}
+
+.remove-bottom-border-radius .CodeMirror {
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.cm-s-dracula.CodeMirror, .cm-s-dracula .CodeMirror-gutters {
+  background: #2D3748 !important;
 }
 
 .text-xxs {

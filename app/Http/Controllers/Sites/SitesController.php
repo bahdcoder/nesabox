@@ -18,7 +18,7 @@ class SitesController extends Controller
     {
         $this->authorize($server, 'view');
 
-        return new SiteResource($site);
+        return new SiteResource($site, true);
     }
 
     /**
@@ -51,7 +51,7 @@ class SitesController extends Controller
     {
         $site->update($request->only(['before_deploy_script']));
 
-        return new ServerResource($server->fresh());
+        return new SiteResource($site->fresh());
     }
 
     /**

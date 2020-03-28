@@ -2,7 +2,7 @@
     <svg
         :width="width"
         :height="height"
-        class="rotate animated infinite fill-current text-gray-700"
+        :class="`rotate animated infinite fill-current ${fill}`"
         data-icon="social-media"
         viewBox="0 0 16 16"
     >
@@ -23,6 +23,11 @@ export default {
         height: {
             required: false,
             default: 20
+        },
+        fill: {
+            type: String,
+            required: false,
+            default: 'text-gray-700'
         }
     }
 }

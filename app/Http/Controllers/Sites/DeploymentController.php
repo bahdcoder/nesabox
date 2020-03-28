@@ -41,12 +41,12 @@ class DeploymentController extends Controller
             return new SiteResource($site->fresh());
         }
 
+        $site->triggerDeployment();
+
         Notification::send(
             $site->server->getAllMembers(),
             new SiteUpdated($site)
         );
-
-        $site->triggerDeployment();
 
         return new SiteResource($site->fresh());
     }

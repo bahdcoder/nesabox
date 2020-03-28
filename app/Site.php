@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Jobs\Sites\Deploy as AppDeploy;
 use App\Scripts\Site\Deploy;
+use App\Jobs\Sites\Deploy as AppDeploy;
 
 class Site extends Model
 {
@@ -30,6 +30,14 @@ class Site extends Model
             ->where('description', 'Deployment')
             ->latest()
             ->paginate();
+    }
+
+    public function getLatestDeploymentAttribute()
+    {
+        return Activity::forSubject($this)
+            ->where('description', 'Deployment')
+            ->latest()
+            ->first();
     }
 
     /**
@@ -105,16 +113,14 @@ class Site extends Model
             'deploying' => true
         ]);
 
-        AppDeploy::dispatch(
-            $this->server,
-            $this,
-            activity()
-                ->causedBy(auth()->user())
-                ->performedOn($this)
-                ->withProperty('log', '')
-                ->withProperty('status', 'pending')
-                ->log('Deployment')
-        );
+        $deployment = activity()
+            ->causedBy(auth()->user())
+            ->performedOn($this)
+            ->withProperty('log', '')
+            ->withProperty('status', 'pending')
+            ->log('Deployment');
+
+        AppDeploy::dispatch($this->server, $this, $deployment);
     }
 
     /**
@@ -129,5 +135,10 @@ class Site extends Model
         } while ($this->where('slug', $this->slug)->exists());
 
         $this->save();
+    }
+
+    public function toTinyArray()
+    {
+        return [];
     }
 }

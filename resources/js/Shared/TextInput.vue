@@ -24,6 +24,7 @@
                 ref="input"
                 :type="type"
                 :value="value"
+                :readonly="readonly"
                 :placeholder="placeholder"
                 @input="$emit('input', $event.target.value)"
                 :class="{
@@ -81,6 +82,11 @@ export default {
             type: String,
             default: '',
             required: false
+        },
+        readonly: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     }
 }
