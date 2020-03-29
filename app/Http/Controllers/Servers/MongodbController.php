@@ -26,7 +26,7 @@ class MongodbController extends Controller
 
         DeleteMongodbDatabaseUser::dispatch($server, $database, $databaseUser);
 
-        new ServerResource($server->fresh());
+        return new ServerResource($server->fresh());
     }
 
     public function deleteDatabases(Server $server, Database $database)

@@ -4,6 +4,7 @@ namespace App\Jobs\Servers;
 
 use App\Server;
 use App\Database;
+use App\DatabaseUser;
 use App\Notifications\Servers\ServerIsReady;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -51,10 +52,11 @@ class DeleteMongodbDatabase implements ShouldQueue
         ))->run();
 
         if ($process->isSuccessful()) {
+            $databaseUsers = $this->database->databaseUsers->pluck('id')->all();
+
             $this->database->databaseUsers()->detach();
-            foreach ($this->database->databaseUsers as $databaseUser):
-                $databaseUser->delete();
-            endforeach;
+
+            DatabaseUser::whereIn('id', $databaseUsers)->delete();
 
             $this->database->delete();
 

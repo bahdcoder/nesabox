@@ -202,13 +202,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       form: {
         name: ''
       },
+      deleteUser: null,
       addingDatabase: false,
+      deletingDatabaseUser: false,
       errors: {},
       databasesTable: {
         headers: [{
@@ -268,7 +280,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     databaseUsers: function databaseUsers() {
       return this.server.database_users_instances.filter(function (db) {
-        return db.type === 'mongodb';
+        return db.type === 'mongodb' && db.databases.length !== 0;
       }).map(function (db) {
         return _objectSpread({}, db, {
           label: db.name,
@@ -280,80 +292,103 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   methods: {
-    deleteDb: function deleteDb() {
+    deleteDbUser: function deleteDbUser() {
       var _this = this;
 
-      this.deletingDatabase = true;
-      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteDatabase.id, "/mongodb/delete-databases")).then(function (_ref) {
+      this.deletingDatabaseUser = true;
+      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteUser.databases[0].id, "/mongodb/delete-users/").concat(this.deleteUser.id)).then(function (_ref) {
         var server = _ref.data;
         _this.$root.servers = _objectSpread({}, _this.$root.servers, _defineProperty({}, server.id, server));
 
-        _this.$root.flashMessage('Database has been queued for deleting.');
+        _this.$root.flashMessage('Database user has been queued for deleting.');
       })["catch"](function () {
-        _this.$root.flashMessage('Failed to delete database.');
+        _this.$root.flashMessage('Failed to delete database user.');
       })["finally"](function () {
-        _this.deletingDatabase = false;
-        _this.deleteDatabase = null;
+        _this.deletingDatabaseUser = false;
+        _this.deleteUser = null;
+      });
+    },
+    closeConfirmDeleteDatabaseUser: function closeConfirmDeleteDatabaseUser() {
+      this.deleteUser = null;
+      this.deletingDatabaseUser = false;
+    },
+    deleteDb: function deleteDb() {
+      var _this2 = this;
+
+      this.deletingDatabase = true;
+      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteDatabase.id, "/mongodb/delete-databases")).then(function (_ref2) {
+        var server = _ref2.data;
+        _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, server.id, server));
+
+        _this2.$root.flashMessage('Database has been queued for deleting.');
+      })["catch"](function () {
+        _this2.$root.flashMessage('Failed to delete database.');
+      })["finally"](function () {
+        _this2.deletingDatabase = false;
+        _this2.deleteDatabase = null;
       });
     },
     setDeletingDatabase: function setDeletingDatabase(database) {
       this.deleteDatabase = database;
+    },
+    setDeletingDatabaseUser: function setDeletingDatabaseUser(user) {
+      this.deleteUser = user;
     },
     closeConfirmDeleteDatabase: function closeConfirmDeleteDatabase() {
       this.deleteDatabase = null;
       this.deletingDatabase = false;
     },
     addDatabase: function addDatabase() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.addingDatabase = true;
-      axios.post("/api/servers/".concat(this.server.id, "/databases/mongodb/add"), this.form).then(function (_ref2) {
-        var server = _ref2.data;
-        _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, server.id, server));
-        _this2.form = {
+      axios.post("/api/servers/".concat(this.server.id, "/databases/mongodb/add"), this.form).then(function (_ref3) {
+        var server = _ref3.data;
+        _this3.$root.servers = _objectSpread({}, _this3.$root.servers, _defineProperty({}, server.id, server));
+        _this3.form = {
           name: ''
         };
-        _this2.errors = {};
+        _this3.errors = {};
 
-        _this2.$root.flashMessage('Database has been added successfully.');
-      })["catch"](function (_ref3) {
-        var response = _ref3.response;
+        _this3.$root.flashMessage('Database has been added successfully.');
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
 
         if (response.status === 422) {
-          _this2.errors = response.data.errors;
+          _this3.errors = response.data.errors;
         } else {
-          _this2.$root.flashMessage('Failed to add database to server.', 'error');
+          _this3.$root.flashMessage('Failed to add database to server.', 'error');
         }
       })["finally"](function () {
-        _this2.addingDatabase = false;
+        _this3.addingDatabase = false;
       });
     },
     addDatabaseUser: function addDatabaseUser() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.addingDatabaseUser = true;
-      axios.post("/api/servers/".concat(this.server.id, "/databases/").concat(this.addUserForm.database, "/mongodb/add-users"), this.addUserForm).then(function (_ref4) {
-        var server = _ref4.data;
-        _this3.$root.servers = _objectSpread({}, _this3.$root.servers, _defineProperty({}, server.id, server));
-        _this3.addUserForm = {
+      axios.post("/api/servers/".concat(this.server.id, "/databases/").concat(this.addUserForm.database, "/mongodb/add-users"), this.addUserForm).then(function (_ref5) {
+        var server = _ref5.data;
+        _this4.$root.servers = _objectSpread({}, _this4.$root.servers, _defineProperty({}, server.id, server));
+        _this4.addUserForm = {
           database: '',
           name: '',
           password: '',
           readonly: false
         };
-        _this3.errors = {};
+        _this4.errors = {};
 
-        _this3.$root.flashMessage('Database user has been queued.');
-      })["catch"](function (_ref5) {
-        var response = _ref5.response;
+        _this4.$root.flashMessage('Database user has been queued.');
+      })["catch"](function (_ref6) {
+        var response = _ref6.response;
 
         if (response.status === 422) {
-          _this3.databaseUserErrors = response.data.errors;
+          _this4.databaseUserErrors = response.data.errors;
         } else {
-          _this3.$root.flashMessage('Failed to add database user to server.', 'error');
+          _this4.$root.flashMessage('Failed to add database user to server.', 'error');
         }
       })["finally"](function () {
-        _this3.addingDatabaseUser = false;
+        _this4.addingDatabaseUser = false;
       });
     }
   }
@@ -427,6 +462,22 @@ var render = function() {
             " ? All data will be lost, with all users."
         },
         on: { confirm: _vm.deleteDb, close: _vm.closeConfirmDeleteDatabase }
+      }),
+      _vm._v(" "),
+      _c("confirm-modal", {
+        attrs: {
+          confirming: _vm.deletingDatabaseUser,
+          open: !!_vm.deleteUser,
+          confirmHeading: "Delete database user",
+          confirmText:
+            "Are you sure you want to delete your database user " +
+            (_vm.deleteUser && _vm.deleteUser.name) +
+            " ? This user would lose access to this database."
+        },
+        on: {
+          confirm: _vm.deleteDbUser,
+          close: _vm.closeConfirmDeleteDatabaseUser
+        }
       }),
       _vm._v(" "),
       _c(
@@ -641,8 +692,7 @@ var render = function() {
                       label: "Add database user",
                       type: "submit",
                       loading: _vm.addingDatabaseUser
-                    },
-                    on: { click: _vm.addDatabaseUser }
+                    }
                   })
                 ],
                 1
@@ -683,7 +733,15 @@ var render = function() {
                       ? _c("table-status", { attrs: { status: row.status } })
                       : _vm._e(),
                     _vm._v(" "),
-                    header.value === "actions" ? _c("delete-button") : _vm._e(),
+                    header.value === "actions"
+                      ? _c("delete-button", {
+                          on: {
+                            click: function($event) {
+                              return _vm.setDeletingDatabaseUser(row)
+                            }
+                          }
+                        })
+                      : _vm._e(),
                     _vm._v(" "),
                     ["name", "database"].includes(header.value)
                       ? _c("span", [

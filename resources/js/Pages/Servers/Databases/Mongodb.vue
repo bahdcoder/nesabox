@@ -12,6 +12,17 @@
                     deleteDatabase.name} ? All data will be lost, with all users.`
             "
         />
+        <confirm-modal
+            :confirming="deletingDatabaseUser"
+            @confirm="deleteDbUser"
+            :open="!!deleteUser"
+            @close="closeConfirmDeleteDatabaseUser"
+            confirmHeading="Delete database user"
+            :confirmText="
+                `Are you sure you want to delete your database user ${deleteUser &&
+                    deleteUser.name} ? This user would lose access to this database.`
+            "
+        />
         <card title="Add Mongodb Database" class="mb-6">
             <form @submit.prevent="addDatabase">
                 <text-input
@@ -102,7 +113,6 @@
                     class="mt-6"
                     type='submit'
                     :loading="addingDatabaseUser"
-                    @click="addDatabaseUser"
                 />
             </form>
             <info v-else>
@@ -126,7 +136,7 @@
                         :status="row.status"
                     />
 
-                    <delete-button v-if="header.value === 'actions'" />
+                    <delete-button v-if="header.value === 'actions'" @click="setDeletingDatabaseUser(row)" />
 
                     <span
                         v-if="['name', 'database'].includes(header.value)
@@ -145,200 +155,234 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            form: {
-                name: ''
-            },
-            addingDatabase: false,
-            errors: {},
-            databasesTable: {
-                headers: [
-                    {
-                        label: 'Name',
-                        value: 'name'
-                    },
-                    {
-                        label: 'Status',
-                        value: 'status'
-                    },
-                    {
-                        label: '',
-                        value: 'actions'
-                    }
-                ]
-            },
-            databasesUsersTable: {
-                headers: [
-                    {
-                        label: 'Name',
-                        value: 'name'
-                    },
-                    {
-                        label: 'Database',
-                        value: 'database'
-                    },
-                    {
-                        label: 'Permission',
-                        value: 'permission'
-                    },
-                    {
-                        label: 'Status',
-                        value: 'status'
-                    },
-                    {
-                        label: '',
-                        value: 'actions'
-                    }
-                ]
-            },
-            addUserForm: {
-                database: '',
-                name: '',
-                password: '',
-                readonly: false
-            },
-            deletingDatabase: false,
-            deleteDatabase: null,
-            addingDatabaseUser: false,
-            databaseUserErrors: {}
-        }
-    },
-    computed: {
-        server() {
-            return this.$root.servers[this.$route.params.server] || {}
+    export default {
+        data() {
+            return {
+                form: {
+                    name: ''
+                },
+                deleteUser: null,
+                addingDatabase: false,
+                deletingDatabaseUser: false,
+                errors: {},
+                databasesTable: {
+                    headers: [
+                        {
+                            label: 'Name',
+                            value: 'name'
+                        },
+                        {
+                            label: 'Status',
+                            value: 'status'
+                        },
+                        {
+                            label: '',
+                            value: 'actions'
+                        }
+                    ]
+                },
+                databasesUsersTable: {
+                    headers: [
+                        {
+                            label: 'Name',
+                            value: 'name'
+                        },
+                        {
+                            label: 'Database',
+                            value: 'database'
+                        },
+                        {
+                            label: 'Permission',
+                            value: 'permission'
+                        },
+                        {
+                            label: 'Status',
+                            value: 'status'
+                        },
+                        {
+                            label: '',
+                            value: 'actions'
+                        }
+                    ]
+                },
+                addUserForm: {
+                    database: '',
+                    name: '',
+                    password: '',
+                    readonly: false
+                },
+                deletingDatabase: false,
+                deleteDatabase: null,
+                addingDatabaseUser: false,
+                databaseUserErrors: {}
+            }
         },
-        databases() {
-            return this.server.database_instances
-                .filter(db => db.type === 'mongodb')
-                .map(db => ({
-                    ...db,
-                    label: db.name,
-                    value: db.id,
-                }))
+        computed: {
+            server() {
+                return this.$root.servers[this.$route.params.server] || {}
+            },
+            databases() {
+                return this.server.database_instances
+                    .filter(db => db.type === 'mongodb')
+                    .map(db => ({
+                        ...db,
+                        label: db.name,
+                        value: db.id,
+                    }))
+            },
+            databaseUsers() {
+                return this.server.database_users_instances
+                    .filter(db => db.type === 'mongodb' && db.databases.length !== 0)
+                    .map(db => ({
+                        ...db,
+                        label: db.name,
+                        value: db.id,
+                        database: db.databases[0] ? db.databases[0].name : null,
+                        permission: db.read_only ? 'READ' : 'READ/WRITE'
+                    }))
+            }
         },
-        databaseUsers() {
-            return this.server.database_users_instances
-                .filter(db => db.type === 'mongodb')
-                .map(db => ({
-                    ...db,
-                    label: db.name,
-                    value: db.id,
-                    database: db.databases[0] ? db.databases[0].name : null,
-                    permission: db.read_only ? 'READ' : 'READ/WRITE'
-                }))
-        }
-    },
-    methods: {
-        deleteDb() {
-            this.deletingDatabase = true
-            axios
-                .delete(
-                    `/api/servers/${this.server.id}/databases/${this.deleteDatabase.id}/mongodb/delete-databases`
-                )
-                .then(({ data: server }) => {
-                    this.$root.servers = {
-                        ...this.$root.servers,
-                        [server.id]: server
-                    }
+        methods: {
+            deleteDbUser() {
+                this.deletingDatabaseUser = true
 
-                    this.$root.flashMessage(
-                        'Database has been queued for deleting.'
+                axios
+                    .delete(
+                        `/api/servers/${this.server.id}/databases/${this.deleteUser.databases[0].id}/mongodb/delete-users/${this.deleteUser.id}`
                     )
-                })
-                .catch(() => {
-                    this.$root.flashMessage('Failed to delete database.')
-                })
-                .finally(() => {
-                    this.deletingDatabase = false
-                    this.deleteDatabase = null
-                })
-        },
-        setDeletingDatabase(database) {
-            this.deleteDatabase = database
-        },
-        closeConfirmDeleteDatabase() {
-            this.deleteDatabase = null
-            this.deletingDatabase = false
-        },
-        addDatabase() {
-            this.addingDatabase = true
+                    .then(({ data: server }) => {
+                        this.$root.servers = {
+                            ...this.$root.servers,
+                            [server.id]: server
+                        }
 
-            axios
-                .post(
-                    `/api/servers/${this.server.id}/databases/mongodb/add`,
-                    this.form
-                )
-                .then(({ data: server }) => {
-                    this.$root.servers = {
-                        ...this.$root.servers,
-                        [server.id]: server
-                    }
-
-                    this.form = {
-                        name: ''
-                    }
-
-                    this.errors = {}
-
-                    this.$root.flashMessage(
-                        'Database has been added successfully.'
+                        this.$root.flashMessage(
+                            'Database user has been queued for deleting.'
+                        )
+                    })
+                    .catch(() => {
+                        this.$root.flashMessage('Failed to delete database user.')
+                    })
+                    .finally(() => {
+                        this.deletingDatabaseUser = false
+                        this.deleteUser = null
+                    })
+            },
+            closeConfirmDeleteDatabaseUser() {
+                this.deleteUser = null
+                this.deletingDatabaseUser = false
+            },
+            deleteDb() {
+                this.deletingDatabase = true
+                axios
+                    .delete(
+                        `/api/servers/${this.server.id}/databases/${this.deleteDatabase.id}/mongodb/delete-databases`
                     )
-                })
-                .catch(({ response }) => {
-                    if (response.status === 422) {
-                        this.errors = response.data.errors
-                    } else {
+                    .then(({ data: server }) => {
+                        this.$root.servers = {
+                            ...this.$root.servers,
+                            [server.id]: server
+                        }
+
                         this.$root.flashMessage(
-                            'Failed to add database to server.',
-                            'error'
+                            'Database has been queued for deleting.'
                         )
-                    }
-                })
-                .finally(() => {
-                    this.addingDatabase = false
-                })
-        },
-        addDatabaseUser() {
-            this.addingDatabaseUser = true
+                    })
+                    .catch(() => {
+                        this.$root.flashMessage('Failed to delete database.')
+                    })
+                    .finally(() => {
+                        this.deletingDatabase = false
+                        this.deleteDatabase = null
+                    })
+            },
+            setDeletingDatabase(database) {
+                this.deleteDatabase = database
+            },
+            setDeletingDatabaseUser(user) {
+                this.deleteUser = user
+            },
+            closeConfirmDeleteDatabase() {
+                this.deleteDatabase = null
+                this.deletingDatabase = false
+            },
+            addDatabase() {
+                this.addingDatabase = true
 
-            axios
-                .post(
-                    `/api/servers/${this.server.id}/databases/${this.addUserForm.database}/mongodb/add-users`,
-                    this.addUserForm
-                )
-                .then(({ data: server }) => {
-                    this.$root.servers = {
-                        ...this.$root.servers,
-                        [server.id]: server
-                    }
+                axios
+                    .post(
+                        `/api/servers/${this.server.id}/databases/mongodb/add`,
+                        this.form
+                    )
+                    .then(({ data: server }) => {
+                        this.$root.servers = {
+                            ...this.$root.servers,
+                            [server.id]: server
+                        }
 
-                    this.addUserForm = {
-                        database: '',
-                        name: '',
-                        password: '',
-                        readonly: false
-                    }
+                        this.form = {
+                            name: ''
+                        }
 
-                    this.errors = {}
+                        this.errors = {}
 
-                    this.$root.flashMessage('Database user has been queued.')
-                })
-                .catch(({ response }) => {
-                    if (response.status === 422) {
-                        this.databaseUserErrors = response.data.errors
-                    } else {
                         this.$root.flashMessage(
-                            'Failed to add database user to server.',
-                            'error'
+                            'Database has been added successfully.'
                         )
-                    }
-                })
-                .finally(() => {
-                    this.addingDatabaseUser = false
-                })
+                    })
+                    .catch(({ response }) => {
+                        if (response.status === 422) {
+                            this.errors = response.data.errors
+                        } else {
+                            this.$root.flashMessage(
+                                'Failed to add database to server.',
+                                'error'
+                            )
+                        }
+                    })
+                    .finally(() => {
+                        this.addingDatabase = false
+                    })
+            },
+            addDatabaseUser() {
+                this.addingDatabaseUser = true
+
+                axios
+                    .post(
+                        `/api/servers/${this.server.id}/databases/${this.addUserForm.database}/mongodb/add-users`,
+                        this.addUserForm
+                    )
+                    .then(({ data: server }) => {
+                        this.$root.servers = {
+                            ...this.$root.servers,
+                            [server.id]: server
+                        }
+
+                        this.addUserForm = {
+                            database: '',
+                            name: '',
+                            password: '',
+                            readonly: false
+                        }
+
+                        this.errors = {}
+
+                        this.$root.flashMessage('Database user has been queued.')
+                    })
+                    .catch(({ response }) => {
+                        if (response.status === 422) {
+                            this.databaseUserErrors = response.data.errors
+                        } else {
+                            this.$root.flashMessage(
+                                'Failed to add database user to server.',
+                                'error'
+                            )
+                        }
+                    })
+                    .finally(() => {
+                        this.addingDatabaseUser = false
+                    })
+            }
         }
     }
-}
 </script>
