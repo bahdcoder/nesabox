@@ -80,10 +80,9 @@ Route::middleware(['auth'])->group(function () {
     ]);
 });
 
-Route::post('sites/{site}/pm2-logs', [
-    Pm2Controller::class,
-    'logs'
-])->name('pm2-logs');
+Route::post('sites/{site}/pm2-logs', [Pm2Controller::class, 'logs'])->name(
+    'pm2-logs'
+);
 
 Route::middleware(['auth'])
     ->prefix('api')

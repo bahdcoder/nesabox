@@ -85,7 +85,6 @@ export default {
         const route = path =>
             `/servers/${this.$route.params.server}${path ? '/' : ''}${path}`
 
-
         return {
             nav: [
                 {

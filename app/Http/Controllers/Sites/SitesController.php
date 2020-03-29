@@ -21,7 +21,8 @@ class SitesController extends Controller
         return new SiteResource($site, true);
     }
 
-    public function logs(Server $server, Site $site) {
+    public function logs(Server $server, Site $site)
+    {
         // $this->authorize($server, 'view');
 
         return $site->logs;

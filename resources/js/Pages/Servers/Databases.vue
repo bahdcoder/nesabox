@@ -7,25 +7,25 @@
 </template>
 
 <script>
-    import Mongodb from '@/Pages/Servers/Databases/Mongodb'
+import Mongodb from '@/Pages/Servers/Databases/Mongodb'
 
-    export default {
-        components: {
-            Mongodb
-        },
-        data() {
-            return {}
-        },
-        computed: {
-            server() {
-                return this.$root.servers[this.$route.params.server] || {}
-            }
-        },
-        methods: {
-            mounted(server) {
-                this.loading = false
-                this.server = server
-            }
+export default {
+    components: {
+        Mongodb
+    },
+    data() {
+        return {}
+    },
+    computed: {
+        server() {
+            return this.$root.servers[this.$route.params.server] || {}
+        }
+    },
+    methods: {
+        mounted(server) {
+            this.loading = false
+            this.server = server
         }
     }
+}
 </script>

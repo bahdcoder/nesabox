@@ -87,7 +87,7 @@
                             {{ row[header.value] }}
                         </span>
 
-                        <delete-button 
+                        <delete-button
                             @click="setDeletingProvider(row)"
                             v-if="header.value === 'actions'"
                         />

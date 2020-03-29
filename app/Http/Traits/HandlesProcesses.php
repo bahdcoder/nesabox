@@ -162,7 +162,9 @@ trait HandlesProcesses
         $scriptPath = base_path(
             $server->type === 'load_balancer'
                 ? 'scripts/sites/add-load-balancing-site.sh'
-                : ($site->type === 'nodejs' ? 'scripts/sites/add-site.sh' : 'scripts/sites/add-html-site.sh')
+                : ($site->type === 'nodejs'
+                    ? 'scripts/sites/add-site.sh'
+                    : 'scripts/sites/add-html-site.sh')
         );
 
         $user = SSH_USER;
@@ -209,7 +211,7 @@ trait HandlesProcesses
 
         if ($site->type === 'nodejs') {
             $scriptPath = base_path('scripts/sites/install-repository.sh');
-        } else if ($site->type === 'html') {
+        } elseif ($site->type === 'html') {
             $scriptPath = base_path('scripts/sites/install-html-repository.sh');
         }
 
@@ -217,9 +219,13 @@ trait HandlesProcesses
 
         $user = SSH_USER;
 
-        $updateLogsEndpoint = route('pm2-logs', [
-            'site' => $site->id 
-        ], false);
+        $updateLogsEndpoint = route(
+            'pm2-logs',
+            [
+                'site' => $site->id
+            ],
+            false
+        );
 
         $hostname = config('app.hostname');
 

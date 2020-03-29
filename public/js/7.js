@@ -114,6 +114,94 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -134,8 +222,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           value: 'actions'
         }]
       },
+      databasesUsersTable: {
+        headers: [{
+          label: 'Name',
+          value: 'name'
+        }, {
+          label: 'Database',
+          value: 'database'
+        }, {
+          label: 'Permission',
+          value: 'permission'
+        }, {
+          label: 'Status',
+          value: 'status'
+        }, {
+          label: '',
+          value: 'actions'
+        }]
+      },
+      addUserForm: {
+        database: '',
+        name: '',
+        password: '',
+        readonly: false
+      },
       deletingDatabase: false,
-      deleteDatabase: null
+      deleteDatabase: null,
+      addingDatabaseUser: false,
+      databaseUserErrors: {}
     };
   },
   computed: {
@@ -145,6 +259,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     databases: function databases() {
       return this.server.database_instances.filter(function (db) {
         return db.type === 'mongodb';
+      }).map(function (db) {
+        return _objectSpread({}, db, {
+          label: db.name,
+          value: db.id
+        });
+      });
+    },
+    databaseUsers: function databaseUsers() {
+      return this.server.database_users_instances.filter(function (db) {
+        return db.type === 'mongodb';
+      }).map(function (db) {
+        return _objectSpread({}, db, {
+          label: db.name,
+          value: db.id,
+          database: db.databases[0] ? db.databases[0].name : null,
+          permission: db.read_only ? 'READ' : 'READ/WRITE'
+        });
       });
     }
   },
@@ -195,6 +326,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       })["finally"](function () {
         _this2.addingDatabase = false;
+      });
+    },
+    addDatabaseUser: function addDatabaseUser() {
+      var _this3 = this;
+
+      this.addingDatabaseUser = true;
+      axios.post("/api/servers/".concat(this.server.id, "/databases/").concat(this.addUserForm.database, "/mongodb/add-users"), this.addUserForm).then(function (_ref4) {
+        var server = _ref4.data;
+        _this3.$root.servers = _objectSpread({}, _this3.$root.servers, _defineProperty({}, server.id, server));
+        _this3.addUserForm = {
+          database: '',
+          name: '',
+          password: '',
+          readonly: false
+        };
+        _this3.errors = {};
+
+        _this3.$root.flashMessage('Database user has been queued.');
+      })["catch"](function (_ref5) {
+        var response = _ref5.response;
+
+        if (response.status === 422) {
+          _this3.databaseUserErrors = response.data.errors;
+        } else {
+          _this3.$root.flashMessage('Failed to add database user to server.', 'error');
+        }
+      })["finally"](function () {
+        _this3.addingDatabaseUser = false;
       });
     }
   }
@@ -369,7 +528,190 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("card", { attrs: { title: "Add MongoDB users" } })
+      _c(
+        "card",
+        { staticClass: "mb-6", attrs: { title: "Add Mongodb users" } },
+        [
+          _vm.databases.length > 0
+            ? _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.addDatabaseUser($event)
+                    }
+                  }
+                },
+                [
+                  _c("select-input", {
+                    attrs: {
+                      name: "database",
+                      label: "Database",
+                      options: _vm.databases,
+                      help:
+                        "Select the database this user would be stored in. This user would also be able to access the selected database."
+                    },
+                    model: {
+                      value: _vm.addUserForm.database,
+                      callback: function($$v) {
+                        _vm.$set(_vm.addUserForm, "database", $$v)
+                      },
+                      expression: "addUserForm.database"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("text-input", {
+                        attrs: {
+                          name: "name",
+                          label: "Name",
+                          errors: _vm.databaseUserErrors.name,
+                          help:
+                            "This would be the username for the database user."
+                        },
+                        model: {
+                          value: _vm.addUserForm.name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.addUserForm, "name", $$v)
+                          },
+                          expression: "addUserForm.name"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-4" },
+                    [
+                      _c("text-input", {
+                        attrs: {
+                          name: "password",
+                          label: "Password",
+                          errors: _vm.databaseUserErrors.password,
+                          help:
+                            "This would be the password for the database user. The password and username would be required to authenticate as this user."
+                        },
+                        model: {
+                          value: _vm.addUserForm.password,
+                          callback: function($$v) {
+                            _vm.$set(_vm.addUserForm, "password", $$v)
+                          },
+                          expression: "addUserForm.password"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-6" },
+                    [
+                      _c("checkbox", {
+                        attrs: {
+                          name: "readonly",
+                          label: "Readonly",
+                          checked: _vm.addUserForm.readonly,
+                          help:
+                            "This user would have READ and WRITE access to the selected database. Check this if you want to grant only read access."
+                        },
+                        on: {
+                          input: function($event) {
+                            _vm.addUserForm = Object.assign(
+                              {},
+                              _vm.addUserForm,
+                              { readonly: !_vm.addUserForm.readonly }
+                            )
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-button", {
+                    staticClass: "mt-6",
+                    attrs: {
+                      label: "Add database user",
+                      type: "submit",
+                      loading: _vm.addingDatabaseUser
+                    },
+                    on: { click: _vm.addDatabaseUser }
+                  })
+                ],
+                1
+              )
+            : _c("info", [
+                _vm._v(
+                  "\n            To add MongoDB users, create a database.\n        "
+                )
+              ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "card",
+        {
+          attrs: {
+            title: "Mongodb users",
+            table: true,
+            rowsCount: _vm.databaseUsers.length,
+            emptyTableMessage: "No database users yet."
+          }
+        },
+        [
+          _c("v-table", {
+            attrs: {
+              headers: _vm.databasesUsersTable.headers,
+              rows: _vm.databaseUsers
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "row",
+                fn: function(ref) {
+                  var row = ref.row
+                  var header = ref.header
+                  return [
+                    header.value === "status"
+                      ? _c("table-status", { attrs: { status: row.status } })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    header.value === "actions" ? _c("delete-button") : _vm._e(),
+                    _vm._v(" "),
+                    ["name", "database"].includes(header.value)
+                      ? _c("span", [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(row[header.value]) +
+                              "\n                "
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    header.value === "permission"
+                      ? _c("span", { staticClass: "text-xs text-gray-700" }, [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(row.permission) +
+                              "\n                "
+                          )
+                        ])
+                      : _vm._e()
+                  ]
+                }
+              }
+            ])
+          })
+        ],
+        1
+      )
     ],
     1
   )

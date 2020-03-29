@@ -47,9 +47,9 @@
                     <div class="mt-6 flex items-center justify-between">
                         <div class="flex items-center">
                             <input
-                                v-model="form.remember"
-                                id="remember_me"
                                 type="checkbox"
+                                id="remember_me"
+                                v-model="form.remember"
                                 class="form-checkbox h-4 w-4 text-sha-green-500 transition duration-150 ease-in-out"
                             />
                             <label

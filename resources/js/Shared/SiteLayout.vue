@@ -84,7 +84,9 @@ export default {
             this.loading = false
 
             if (site && site.type !== 'nodejs') {
-                this.nav = this.nav.filter(item => !['logs'].includes(item.value))
+                this.nav = this.nav.filter(
+                    item => !['logs'].includes(item.value)
+                )
             }
 
             this.$emit('mounted')
@@ -108,7 +110,9 @@ export default {
                 }
 
                 if (site.type !== 'nodejs') {
-                    this.nav = this.nav.filter(item => !['logs'].includes(item.value))
+                    this.nav = this.nav.filter(
+                        item => !['logs'].includes(item.value)
+                    )
                 }
 
                 this.$emit('mounted')

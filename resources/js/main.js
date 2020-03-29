@@ -30,6 +30,7 @@ import Status from '@/Shared/Status'
 import Layout from '@/Shared/Layout'
 import Button from '@/Shared/Button'
 import Spinner from '@/Shared/Spinner'
+import Checkbox from '@/Shared/Checkbox'
 import RedButton from '@/Shared/RedButton'
 import TextInput from '@/Shared/TextInput'
 import SiteLayout from '@/Shared/Sitelayout'
@@ -53,6 +54,7 @@ Vue.component('layout', Layout)
 Vue.component('v-table', Table)
 Vue.component('v-button', Button)
 Vue.component('spinner', Spinner)
+Vue.component('checkbox', Checkbox)
 Vue.component('table-status', Status)
 Vue.component('red-button', RedButton)
 Vue.component('text-input', TextInput)
@@ -209,7 +211,8 @@ const app = new Vue({
             }, timeout)
         },
         fetchSite(serverId, siteId) {
-            axios.get(`/api/servers/${serverId}/sites/${siteId}`)
+            axios
+                .get(`/api/servers/${serverId}/sites/${siteId}`)
                 .then(({ data }) => {
                     this.sites = {
                         ...this.sites,
@@ -218,44 +221,47 @@ const app = new Vue({
                 })
         },
         fetchServer(serverId) {
-            axios.get(`/api/servers/${serverId}`)
-                .then(({ data }) => {
-                    this.servers = {
-                        ...this.servers,
-                        [serverId]: data
+            axios.get(`/api/servers/${serverId}`).then(({ data }) => {
+                this.servers = {
+                    ...this.servers,
+                    [serverId]: data
+                }
+
+                this.servers = {
+                    ...this.servers,
+                    [serverId]: data
+                }
+
+                const servers = this.allServers.servers.map(server => {
+                    if (server.id !== serverid) {
+                        return server
                     }
 
-                    this.servers = {
-                        ...this.servers,
-                        [serverId]: data
-                    }
+                    return data
+                })
 
-                    const servers = this.allServers.servers.map(server => {
-                        if (server.id !== serverid) {
+                const team_servers = this.allServers.team_servers.map(
+                    server => {
+                        if (server.id !== serverId) {
                             return server
                         }
 
                         return data
-                    })
-
-                    const team_servers = this.allServers.team_servers.map(
-                        server => {
-                            if (server.id !== serverId) {
-                                return server
-                            }
-
-                            return data
-                        }
-                    )
-
-                    this.allServers = {
-                        servers,
-                        team_servers
                     }
-                })
+                )
+
+                this.allServers = {
+                    servers,
+                    team_servers
+                }
+            })
         }
     },
     mounted() {
+        if (! this.auth) {
+            return
+        }
+
         Echo.private(`App.User.${this.auth.id}`).notification(notification => {
             if (
                 notification.type === 'App\\Notifications\\Sites\\SiteUpdated'

@@ -295,7 +295,7 @@ var render = function() {
                         ],
                         staticClass:
                           "form-checkbox h-4 w-4 text-sha-green-500 transition duration-150 ease-in-out",
-                        attrs: { id: "remember_me", type: "checkbox" },
+                        attrs: { type: "checkbox", id: "remember_me" },
                         domProps: {
                           checked: Array.isArray(_vm.form.remember)
                             ? _vm._i(_vm.form.remember, null) > -1

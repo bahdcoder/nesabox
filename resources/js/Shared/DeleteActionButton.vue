@@ -1,6 +1,6 @@
 <template>
     <button
-        type='button'
+        type="button"
         @click="$emit('click')"
         class="border-2 border-red-500 p-2 rounded hover:bg-red-100 shadow"
     >
@@ -24,7 +24,5 @@
 </template>
 
 <script>
-    export default {
-        
-    }
+export default {}
 </script>

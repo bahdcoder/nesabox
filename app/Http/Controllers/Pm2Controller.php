@@ -30,7 +30,8 @@ class Pm2Controller extends Controller
         return $process->getOutput();
     }
 
-    public function logs(Site $site) {
+    public function logs(Site $site)
+    {
         Log::info(request()->ip());
         Log::info(strlen($site->logs));
 
@@ -46,7 +47,7 @@ class Pm2Controller extends Controller
 $site->logs
 {$logs}
 EOF
-        ]);
+            ]);
         }
 
         Notification::send(

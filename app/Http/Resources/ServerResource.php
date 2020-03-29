@@ -38,8 +38,12 @@ class ServerResource extends JsonResource
             'node_version' => $this->node_version,
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
-            'database_instances' => $this->databaseInstances()->with('databaseUsers')->get(),
-            'database_users_instances' => $this->databaseUsers()->with('databases')->get(),
+            'database_instances' => $this->databaseInstances()
+                ->with('databaseUsers')
+                ->get(),
+            'database_users_instances' => $this->databaseUsers()
+                ->with('databases')
+                ->get(),
             'daemons' => DaemonsResource::collection($this->daemons),
             'firewall_rules' => FirewallRuleResource::collection(
                 $this->resource->firewallRules

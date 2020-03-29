@@ -3,7 +3,7 @@
 namespace App\Jobs\Servers;
 
 use App\DatabaseUser;
-use App\Notifications\Servers\DatabasesUpdated;
+use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\DeleteDatabaseUser as AppDeleteDatabaseUser;
 use App\Server;
 use Illuminate\Bus\Queueable;
@@ -59,7 +59,7 @@ class DeleteDatabaseUser implements ShouldQueue
                 $process->getErrorOutput()
             );
 
-            $this->server->user->notify(new DatabasesUpdated($this->server));
+            $this->server->user->notify(new ServerIsReady($this->server));
         }
     }
 }

@@ -66,11 +66,12 @@ export default {
     },
     methods: {
         fetchLogs() {
-            axios.get(`/api/servers/${this.serverId}/sites/${this.siteId}/logs`)
+            axios
+                .get(`/api/servers/${this.serverId}/sites/${this.siteId}/logs`)
                 .then(({ data: logs }) => {
                     this.fetchingLogs = false
                     this.logs = logs
-            })
+                })
         }
     },
     mounted() {
