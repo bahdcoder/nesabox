@@ -17,8 +17,13 @@
                     >
                         <svg
                             v-if="
-                                item.value === 'mongodb' ||
-                                    item.value === 'mysql'
+                                [
+                                    'mongodb',
+                                    'mysql',
+                                    'mysql8',
+                                    'mariadb',
+                                    'postgresql'
+                                ].includes(item.value)
                             "
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
@@ -282,22 +287,22 @@
 </template>
 
 <script>
-export default {
-    props: {
-        nav: {
-            type: Array,
-            required: false,
-            default: () => []
-        },
-        showNav: {
-            required: false,
-            type: Boolean,
-            default: false
-        },
-        active: {
-            type: String,
-            required: false
+    export default {
+        props: {
+            nav: {
+                type: Array,
+                required: false,
+                default: () => []
+            },
+            showNav: {
+                required: false,
+                type: Boolean,
+                default: false
+            },
+            active: {
+                type: String,
+                required: false
+            }
         }
     }
-}
 </script>

@@ -44,7 +44,7 @@ export default {
     methods: {
         toggle(event) {
             this.$emit('input', !this.checked)
-        },
-    },
+        }
+    }
 }
 </script>

@@ -39,6 +39,8 @@ import ConfirmModal from '@/Shared/ConfirmModal'
 import Serverlayout from '@/Shared/Serverlayout'
 import AccountLayout from '@/Shared/AccountLayout'
 import SidebarLayout from '@/Shared/SidebarLayout'
+import Mysql from '@/Pages/Servers/Databases/Mysql'
+import Mongodb from '@/Pages/Servers/Databases/Mongodb'
 import ButtonTransparent from '@/Shared/ButtonTransparent'
 import DeleteActionButton from '@/Shared/DeleteActionButton'
 
@@ -102,10 +104,42 @@ const router = new VueRouter({
                 import(`@/Pages/Servers/Single`).then(module => module.default)
         },
         {
-            path: '/servers/:server/databases/:database',
-            name: 'server.databases',
+            path: '/servers/:server/databases/mysql8',
+            name: 'server.databases.mysql8',
             component: () =>
-                import(`@/Pages/Servers/Databases`).then(
+                import(`@/Pages/Servers/Databases/Mysql`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/servers/:server/databases/mysql',
+            name: 'server.databases.mysql',
+            component: () =>
+                import(`@/Pages/Servers/Databases/Mysql`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/servers/:server/databases/mariadb',
+            name: 'server.databases.mariadb',
+            component: () =>
+                import(`@/Pages/Servers/Databases/Mysql`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/servers/:server/databases/postgresql',
+            name: 'server.databases.postgresql',
+            component: () =>
+                import(`@/Pages/Servers/Databases/Postgres`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/servers/:server/databases/mongodb',
+            name: 'server.databases.mongodb',
+            component: () =>
+                import(`@/Pages/Servers/Databases/Mongodb`).then(
                     module => module.default
                 )
         },
@@ -258,7 +292,7 @@ const app = new Vue({
         }
     },
     mounted() {
-        if (! this.auth) {
+        if (!this.auth) {
             return
         }
 

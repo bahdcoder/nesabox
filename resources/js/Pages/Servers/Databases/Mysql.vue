@@ -1,7 +1,7 @@
 <template>
     <server-layout>
         <template slot="content">
-                    <flash />
+        <flash />
         <confirm-modal
             :confirming="deletingDatabase"
             @confirm="deleteDb"
