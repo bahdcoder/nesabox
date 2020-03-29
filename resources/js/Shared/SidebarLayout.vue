@@ -16,6 +16,17 @@
                         }"
                     >
 
+                    <svg
+                    v-if="item.value === 'mongodb' || item.value === 'mysql'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
+                     fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+
 <svg
 v-if="item.value === 'logs'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
@@ -213,8 +224,8 @@ v-if="item.value === 'logs'"
                             />
                         </svg>
 
-                        <svg
-                            v-if="item.value === 'network'"
+                        <svg 
+                        v-if="item.value === 'network'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
                                 'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
@@ -222,19 +233,9 @@ v-if="item.value === 'logs'"
                                 'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
                                     active === item.to
                             }"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M21 12C21 16.9706 16.9706 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12H3M12 21C7.02944 21 3 16.9706 3 12M12 21C13.6569 21 15 16.9706 15 12C15 7.02944 13.6569 3 12 3M12 21C10.3431 21 9 16.9706 9 12C9 7.02944 10.3431 3 12 3M3 12C3 7.02944 7.02944 3 12 3"
-                                stroke="#4A5568"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
-                        <span class="truncate">
+                        fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+
+                        <span class="capitalize truncate">
                             {{ item.label }}
                         </span>
                     </router-link>

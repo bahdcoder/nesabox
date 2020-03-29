@@ -15,6 +15,8 @@ class CheckIfUserCanCreateMoreServers
      */
     public function handle($request, Closure $next)
     {
+        // THIS IS FOR THE BETA PERIOD:
+        return $next($request);
         $user = auth()->user();
 
         if (

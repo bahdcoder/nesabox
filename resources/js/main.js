@@ -39,6 +39,7 @@ import Serverlayout from '@/Shared/Serverlayout'
 import AccountLayout from '@/Shared/AccountLayout'
 import SidebarLayout from '@/Shared/SidebarLayout'
 import ButtonTransparent from '@/Shared/ButtonTransparent'
+import DeleteActionButton from '@/Shared/DeleteActionButton'
 
 Vue.use(VueRouter)
 Vue.mixin(formMixin)
@@ -63,6 +64,7 @@ Vue.component('server-layout', Serverlayout)
 Vue.component('sidebar-layout', SidebarLayout)
 Vue.component('account-layout', AccountLayout)
 Vue.component('v-trans-button', ButtonTransparent)
+Vue.component('delete-button', DeleteActionButton)
 
 const router = new VueRouter({
     mode: 'history',
@@ -98,7 +100,7 @@ const router = new VueRouter({
                 import(`@/Pages/Servers/Single`).then(module => module.default)
         },
         {
-            path: '/servers/:server/databases',
+            path: '/servers/:server/databases/:database',
             name: 'server.databases',
             component: () =>
                 import(`@/Pages/Servers/Databases`).then(

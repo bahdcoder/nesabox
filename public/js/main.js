@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"97cca9224ec146c3b89d","1":"93c3b51d6345659ef7cd","2":"fbbb664c99ce9263a6f9","3":"927738eb767fe892d222","4":"c9894795390412525b1a","5":"670189d8dbdbfe7a2fb0","6":"6a8d9fafa787abe32595","7":"238740704f3977d411a7","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","10":"9ebda27730b7561731eb","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","13":"661e12f45fef5eec0c77","14":"bc4c4b0996e17a5ce0cb"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"97cca9224ec146c3b89d","1":"04541345315fb86cef9a","2":"fbbb664c99ce9263a6f9","3":"927738eb767fe892d222","4":"c9894795390412525b1a","5":"670189d8dbdbfe7a2fb0","6":"6a8d9fafa787abe32595","7":"080e0a2af5185a48c274","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","10":"9ebda27730b7561731eb","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","13":"661e12f45fef5eec0c77","14":"bc4c4b0996e17a5ce0cb"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2374,6 +2374,44 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Shared/DeleteActionButton.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Shared/DeleteActionButton.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Shared/Flash.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Shared/Flash.vue?vue&type=script&lang=js& ***!
@@ -2903,6 +2941,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3004,10 +3054,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: 'sites',
         to: route('')
       }, {
-        label: 'Databases',
-        value: 'databases',
-        to: route('databases')
-      }, {
         label: 'Scheduler',
         value: 'scheduler',
         to: route('scheduler')
@@ -3024,12 +3070,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     if (this.$root.servers[this.$route.params.server]) {
       this.loading = false;
+      this.addDatabasesToNav();
       return;
     }
 
     axios.get("/api/servers/".concat(this.$route.params.server)).then(function (_ref) {
       var data = _ref.data;
       _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, _this2.$route.params.server, data));
+
+      _this2.addDatabasesToNav();
+
       _this2.loading = false;
     })["catch"](function () {
       _this2.$router.push('/dashboard');
@@ -3050,6 +3100,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios["delete"]("/api/servers/".concat(this.server.id)).then(function () {
         _this3.$router.push('/dashboard');
       });
+    },
+    addDatabasesToNav: function addDatabasesToNav() {
+      var _this4 = this;
+
+      this.nav = [].concat(_toConsumableArray(this.nav), _toConsumableArray(this.server.databases.map(function (db) {
+        return {
+          label: db,
+          value: db,
+          to: "/servers/".concat(_this4.server.id, "/databases/").concat(db)
+        };
+      })));
     }
   }
 });
@@ -3065,6 +3126,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -15437,6 +15499,69 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Shared/DeleteActionButton.vue?vue&type=template&id=6afd052f&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Shared/DeleteActionButton.vue?vue&type=template&id=6afd052f& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "button",
+    {
+      staticClass:
+        "border-2 border-red-500 p-2 rounded hover:bg-red-100 shadow",
+      attrs: { type: "button" },
+      on: {
+        click: function($event) {
+          return _vm.$emit("click")
+        }
+      }
+    },
+    [
+      _c(
+        "svg",
+        {
+          staticClass: "cursor-pointer",
+          attrs: {
+            width: "20",
+            height: "20",
+            fill: "none",
+            viewBox: "0 0 24 24",
+            xmlns: "http://www.w3.org/2000/svg"
+          }
+        },
+        [
+          _c("path", {
+            attrs: {
+              d:
+                "M10 14L12 12M12 12L14 10M12 12L10 10M12 12L14 14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z",
+              stroke: "#f05252",
+              "stroke-width": "2",
+              "stroke-linecap": "round",
+              "stroke-linejoin": "round"
+            }
+          })
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Shared/Flash.vue?vue&type=template&id=53062a44&":
 /*!****************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Shared/Flash.vue?vue&type=template&id=53062a44& ***!
@@ -16391,6 +16516,38 @@ var render = function() {
                       attrs: { to: item.to }
                     },
                     [
+                      item.value === "mongodb" || item.value === "mysql"
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass:
+                                "flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150",
+                              class: {
+                                "text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500":
+                                  _vm.active !== item.to,
+                                "text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700":
+                                  _vm.active === item.to
+                              },
+                              attrs: {
+                                fill: "none",
+                                stroke: "currentColor",
+                                "stroke-linecap": "round",
+                                "stroke-linejoin": "round",
+                                "stroke-width": "2",
+                                viewBox: "0 0 24 24"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       item.value === "logs"
                         ? _c(
                             "svg",
@@ -16722,27 +16879,26 @@ var render = function() {
                                   _vm.active === item.to
                               },
                               attrs: {
-                                viewBox: "0 0 24 24",
                                 fill: "none",
-                                xmlns: "http://www.w3.org/2000/svg"
+                                stroke: "currentColor",
+                                "stroke-linecap": "round",
+                                "stroke-linejoin": "round",
+                                "stroke-width": "2",
+                                viewBox: "0 0 24 24"
                               }
                             },
                             [
                               _c("path", {
                                 attrs: {
                                   d:
-                                    "M21 12C21 16.9706 16.9706 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12H3M12 21C7.02944 21 3 16.9706 3 12M12 21C13.6569 21 15 16.9706 15 12C15 7.02944 13.6569 3 12 3M12 21C10.3431 21 9 16.9706 9 12C9 7.02944 10.3431 3 12 3M3 12C3 7.02944 7.02944 3 12 3",
-                                  stroke: "#4A5568",
-                                  "stroke-width": "2",
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round"
+                                    "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
                                 }
                               })
                             ]
                           )
                         : _vm._e(),
                       _vm._v(" "),
-                      _c("span", { staticClass: "truncate" }, [
+                      _c("span", { staticClass: "capitalize truncate" }, [
                         _vm._v(
                           "\n                            " +
                             _vm._s(item.label) +
@@ -32733,6 +32889,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Shared/DeleteActionButton.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/Shared/DeleteActionButton.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DeleteActionButton_vue_vue_type_template_id_6afd052f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DeleteActionButton.vue?vue&type=template&id=6afd052f& */ "./resources/js/Shared/DeleteActionButton.vue?vue&type=template&id=6afd052f&");
+/* harmony import */ var _DeleteActionButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeleteActionButton.vue?vue&type=script&lang=js& */ "./resources/js/Shared/DeleteActionButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DeleteActionButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DeleteActionButton_vue_vue_type_template_id_6afd052f___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DeleteActionButton_vue_vue_type_template_id_6afd052f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Shared/DeleteActionButton.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Shared/DeleteActionButton.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/Shared/DeleteActionButton.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteActionButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./DeleteActionButton.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Shared/DeleteActionButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteActionButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/Shared/DeleteActionButton.vue?vue&type=template&id=6afd052f&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/Shared/DeleteActionButton.vue?vue&type=template&id=6afd052f& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteActionButton_vue_vue_type_template_id_6afd052f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./DeleteActionButton.vue?vue&type=template&id=6afd052f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Shared/DeleteActionButton.vue?vue&type=template&id=6afd052f&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteActionButton_vue_vue_type_template_id_6afd052f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteActionButton_vue_vue_type_template_id_6afd052f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/Shared/Flash.vue":
 /*!***************************************!*\
   !*** ./resources/js/Shared/Flash.vue ***!
@@ -33812,6 +34037,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Shared_AccountLayout__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @/Shared/AccountLayout */ "./resources/js/Shared/AccountLayout.vue");
 /* harmony import */ var _Shared_SidebarLayout__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @/Shared/SidebarLayout */ "./resources/js/Shared/SidebarLayout.vue");
 /* harmony import */ var _Shared_ButtonTransparent__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @/Shared/ButtonTransparent */ "./resources/js/Shared/ButtonTransparent.vue");
+/* harmony import */ var _Shared_DeleteActionButton__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @/Shared/DeleteActionButton */ "./resources/js/Shared/DeleteActionButton.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -33833,6 +34059,7 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_4__["default"]({
 });
 window.axios = axios__WEBPACK_IMPORTED_MODULE_1___default.a;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 
 
 
@@ -33877,6 +34104,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('server-layout', _Shared_Se
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('sidebar-layout', _Shared_SidebarLayout__WEBPACK_IMPORTED_MODULE_25__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('account-layout', _Shared_AccountLayout__WEBPACK_IMPORTED_MODULE_24__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('v-trans-button', _Shared_ButtonTransparent__WEBPACK_IMPORTED_MODULE_26__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('delete-button', _Shared_DeleteActionButton__WEBPACK_IMPORTED_MODULE_27__["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   mode: 'history',
   routes: [{
@@ -33920,7 +34148,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
       });
     }
   }, {
-    path: '/servers/:server/databases',
+    path: '/servers/:server/databases/:database',
     name: 'server.databases',
     component: function component() {
       return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases */ "./resources/js/Pages/Servers/Databases.vue")).then(function (module) {

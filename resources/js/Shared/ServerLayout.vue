@@ -85,17 +85,13 @@ export default {
         const route = path =>
             `/servers/${this.$route.params.server}${path ? '/' : ''}${path}`
 
+
         return {
             nav: [
                 {
                     label: 'Sites',
                     value: 'sites',
                     to: route('')
-                },
-                {
-                    label: 'Databases',
-                    value: 'databases',
-                    to: route('databases')
                 },
                 {
                     label: 'Scheduler',
@@ -114,6 +110,7 @@ export default {
     mounted() {
         if (this.$root.servers[this.$route.params.server]) {
             this.loading = false
+            this.addDatabasesToNav()
 
             return
         }
@@ -125,6 +122,8 @@ export default {
                     ...this.$root.servers,
                     [this.$route.params.server]: data
                 }
+
+                this.addDatabasesToNav()
 
                 this.loading = false
             })
@@ -145,6 +144,16 @@ export default {
             axios.delete(`/api/servers/${this.server.id}`).then(() => {
                 this.$router.push('/dashboard')
             })
+        },
+        addDatabasesToNav() {
+            this.nav = [
+                ...this.nav,
+                ...this.server.databases.map(db => ({
+                    label: db,
+                    value: db,
+                    to: `/servers/${this.server.id}/databases/${db}`
+                }))
+            ]
         }
     }
 }

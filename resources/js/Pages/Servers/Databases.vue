@@ -1,24 +1,31 @@
 <template>
     <server-layout>
         <template slot="content">
-            <card title="Databases"></card>
+            <component :is="$route.params.database" />
         </template>
     </server-layout>
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            loading: true,
-            server: {}
-        }
-    },
-    methods: {
-        mounted(server) {
-            this.loading = false
-            this.server = server
+    import Mongodb from '@/Pages/Servers/Databases/Mongodb'
+
+    export default {
+        components: {
+            Mongodb
+        },
+        data() {
+            return {}
+        },
+        computed: {
+            server() {
+                return this.$root.servers[this.$route.params.server] || {}
+            }
+        },
+        methods: {
+            mounted(server) {
+                this.loading = false
+                this.server = server
+            }
         }
     }
-}
 </script>

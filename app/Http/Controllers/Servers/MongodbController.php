@@ -26,7 +26,7 @@ class MongodbController extends Controller
 
         DeleteMongodbDatabaseUser::dispatch($server, $database, $databaseUser);
 
-        return response()->json([]);
+        new ServerResource($server->fresh());
     }
 
     public function deleteDatabases(Server $server, Database $database)
@@ -37,7 +37,7 @@ class MongodbController extends Controller
 
         DeleteMongodbDatabase::dispatch($server, $database);
 
-        return response()->json([]);
+        return new ServerResource($server->fresh());
     }
 
     public function databases(
@@ -50,7 +50,7 @@ class MongodbController extends Controller
             'name' => $request->name
         ]);
 
-        return response()->json([]);
+        return new ServerResource($server->fresh());
     }
 
     public function users(
