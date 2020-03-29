@@ -267,7 +267,7 @@ const app = new Vue({
                 }
 
                 const servers = this.allServers.servers.map(server => {
-                    if (server.id !== serverid) {
+                    if (server.id !== serverId) {
                         return server
                     }
 

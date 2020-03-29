@@ -233,6 +233,8 @@
                                         </div>
                                     </div>
                                 </fieldset>
+
+                                <flash class="my-4" />
                             </div>
                         </div>
                     </div>
@@ -438,6 +440,14 @@ export default {
                     if (response.status === 422) {
                         this.errors = response.data.errors
                     }
+
+                    this.$root.flashMessage(
+                        response.data.message || this.provider !== 'custom'
+                            ? 'Failed to create your server. Please check your provider to make sure you can create servers. Also, check to see if your API token credentials are still valid.'
+                            : 'Failed to create server.',
+                        'error',
+                        8000
+                    )
                 })
                 .finally(() => {
                     this.loading = false

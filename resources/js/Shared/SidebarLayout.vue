@@ -287,22 +287,22 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            nav: {
-                type: Array,
-                required: false,
-                default: () => []
-            },
-            showNav: {
-                required: false,
-                type: Boolean,
-                default: false
-            },
-            active: {
-                type: String,
-                required: false
-            }
+export default {
+    props: {
+        nav: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
+        showNav: {
+            required: false,
+            type: Boolean,
+            default: false
+        },
+        active: {
+            type: String,
+            required: false
         }
     }
+}
 </script>

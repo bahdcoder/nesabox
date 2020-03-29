@@ -69,7 +69,9 @@
                         <spinner class="w-10 h-10" />
 
                         <red-button
+                            class="mt-4"
                             @click="deleteServer"
+                            :loading="deletingServer"
                             label="Delete server"
                         />
                     </p>
@@ -103,7 +105,8 @@ export default {
                     to: route('network')
                 }
             ],
-            loading: true
+            loading: true,
+            deletingServer: false
         }
     },
     mounted() {
@@ -140,6 +143,7 @@ export default {
     },
     methods: {
         deleteServer() {
+            this.deletingServer = true
             axios.delete(`/api/servers/${this.server.id}`).then(() => {
                 this.$router.push('/dashboard')
             })

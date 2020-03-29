@@ -152,6 +152,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -453,10 +463,22 @@ var render = function() {
                                 "div",
                                 { staticClass: "flex-shrink-0 h-6 w-6" },
                                 [
-                                  _c("v-svg", {
-                                    staticClass: "w-6 h-6",
-                                    attrs: { icon: row.provider }
-                                  })
+                                  row.provider !== "linode"
+                                    ? _c("v-svg", {
+                                        staticClass: "w-6 h-6",
+                                        attrs: { icon: row.provider }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  row.provider === "linode"
+                                    ? _c("v-svg", {
+                                        attrs: {
+                                          icon: row.provider,
+                                          width: 30,
+                                          height: 30
+                                        }
+                                      })
+                                    : _vm._e()
                                 ],
                                 1
                               ),
@@ -485,7 +507,7 @@ var render = function() {
                 ],
                 null,
                 false,
-                1748287423
+                3869922580
               )
             })
           ],

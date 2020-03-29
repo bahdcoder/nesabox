@@ -125,7 +125,17 @@
                         class="flex items-center"
                     >
                         <div class="flex-shrink-0 h-6 w-6">
-                            <v-svg :icon="row.provider" class="w-6 h-6" />
+                            <v-svg
+                                :icon="row.provider"
+                                v-if="row.provider !== 'linode'"
+                                class="w-6 h-6"
+                            />
+                            <v-svg
+                                :icon="row.provider"
+                                v-if="row.provider === 'linode'"
+                                :width="30"
+                                :height="30"
+                            />
                         </div>
                         <div class="ml-4">
                             <div

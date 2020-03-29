@@ -1,165 +1,170 @@
 <template>
     <server-layout>
         <template slot="content">
-        <flash />
-        <confirm-modal
-            :confirming="deletingDatabase"
-            @confirm="deleteDb"
-            :open="!!deleteDatabase"
-            @close="closeConfirmDeleteDatabase"
-            confirmHeading="Delete database"
-            :confirmText="
-                `Are you sure you want to delete your database ${deleteDatabase &&
-                    deleteDatabase.name} ? All data will be lost, with all users.`
-            "
-        />
-        <confirm-modal
-            :confirming="deletingDatabaseUser"
-            @confirm="deleteDbUser"
-            :open="!!deleteUser"
-            @close="closeConfirmDeleteDatabaseUser"
-            confirmHeading="Delete database user"
-            :confirmText="
-                `Are you sure you want to delete your database user ${deleteUser &&
-                    deleteUser.name} ? This user would lose access to this database.`
-            "
-        />
-        <card title="Add Mongodb Database" class="mb-6">
-            <form @submit.prevent="addDatabase">
-                <text-input
-                    name="name"
-                    label="Database name"
-                    v-model="form.name"
-                    :errors="errors.name"
-                    help="When you add a database, you can then add users to that database for authentication."
-                />
-
-                <v-button
-                    type="submit"
-                    class="mt-4"
-                    label="Add database"
-                    :loading="addingDatabase"
-                />
-            </form>
-        </card>
-
-        <card
-            title="Mongodb databases"
-            class="mb-6"
-            :table="true"
-            emptyTableMessage="No databases have been added yet."
-            :rowsCount="databases.length"
-        >
-            <v-table :headers="databasesTable.headers" :rows="databases">
-                <template slot="row" slot-scope="{ row, header }">
-                    <table-status
-                        v-if="header.value === 'status'"
-                        :status="row.status"
-                    />
-
-                    <delete-button
-                        @click="setDeletingDatabase(row)"
-                        v-if="header.value === 'actions'"
-                    />
-
-                    <span v-if="header.value === 'name'">
-                        {{ row.name }}
-                    </span>
-                </template>
-            </v-table>
-        </card>
-
-        <card title="Add Mongodb users" class="mb-6">
-            <form v-if="databases.length > 0" @submit.prevent="addDatabaseUser">
-                <select-input
-                    name="database"
-                    label="Database"
-                    :options="databases"
-                    v-model="addUserForm.database"
-                    help="Select the database this user would be stored in. This user would also be able to access the selected database."
-                />
-
-                <div class="mt-4">
+            <flash />
+            <confirm-modal
+                :confirming="deletingDatabase"
+                @confirm="deleteDb"
+                :open="!!deleteDatabase"
+                @close="closeConfirmDeleteDatabase"
+                confirmHeading="Delete database"
+                :confirmText="
+                    `Are you sure you want to delete your database ${deleteDatabase &&
+                        deleteDatabase.name} ? All data will be lost, with all users.`
+                "
+            />
+            <confirm-modal
+                :confirming="deletingDatabaseUser"
+                @confirm="deleteDbUser"
+                :open="!!deleteUser"
+                @close="closeConfirmDeleteDatabaseUser"
+                confirmHeading="Delete database user"
+                :confirmText="
+                    `Are you sure you want to delete your database user ${deleteUser &&
+                        deleteUser.name} ? This user would lose access to this database.`
+                "
+            />
+            <card :title="`Add ${dbType} Database`" class="mb-6">
+                <form @submit.prevent="addDatabase">
                     <text-input
                         name="name"
-                        label="Name"
-                        v-model="addUserForm.name"
-                        :errors="databaseUserErrors.name"
-                        help="This would be the username for the database user."
+                        label="Database name"
+                        v-model="form.name"
+                        :errors="errors.name"
                     />
-                </div>
 
-                <div class="mt-4">
                     <text-input
+                        name="user"
+                        class="mt-4"
+                        label="User name"
+                        v-model="form.user"
+                        :errors="errors.user"
+                        help="You can optionally add a user that will have access to this database. To do so, provide a user name, and provide a password."
+                    />
+
+                    <text-input
+                        class="mt-4"
                         name="password"
-                        label="Password"
-                        v-model="addUserForm.password"
-                        :errors="databaseUserErrors.password"
-                        help="This would be the password for the database user. The password and username would be required to authenticate as this user."
+                        label="User password"
+                        v-model="form.password"
+                        :errors="errors.password"
                     />
-                </div>
 
-                <div class="mt-6">
-                    <checkbox
-                        name="readonly"
-                        label="Readonly"
-                        :checked="addUserForm.readonly"
-                        @input="
-                            addUserForm = {
-                                ...addUserForm,
-                                readonly: !addUserForm.readonly
-                            }
-                        "
-                        help="This user would have READ and WRITE access to the selected database. Check this if you want to grant only read access."
+                    <v-button
+                        type="submit"
+                        class="mt-4"
+                        label="Add database"
+                        :loading="addingDatabase"
                     />
-                </div>
+                </form>
+            </card>
 
-                <v-button
-                    label="Add database user"
-                    class="mt-6"
-                    type="submit"
-                    :loading="addingDatabaseUser"
-                />
-            </form>
-            <info v-else>
-                To add MongoDB users, create a database.
-            </info>
-        </card>
-
-        <card
-            title="Mongodb users"
-            :table="true"
-            :rowsCount="databaseUsers.length"
-            emptyTableMessage="No database users yet."
-        >
-            <v-table
-                :headers="databasesUsersTable.headers"
-                :rows="databaseUsers"
+            <card
+                class="mb-6"
+                :table="true"
+                :title="`${dbType} databases`"
+                emptyTableMessage="No databases have been added yet."
+                :rowsCount="databases.length"
             >
-                <template slot="row" slot-scope="{ row, header }">
-                    <table-status
-                        v-if="header.value === 'status'"
-                        :status="row.status"
+                <v-table :headers="databasesTable.headers" :rows="databases">
+                    <template slot="row" slot-scope="{ row, header }">
+                        <table-status
+                            v-if="header.value === 'status'"
+                            :status="row.status"
+                        />
+
+                        <delete-button
+                            @click="setDeletingDatabase(row)"
+                            v-if="header.value === 'actions'"
+                        />
+
+                        <span v-if="header.value === 'name'">
+                            {{ row.name }}
+                        </span>
+                    </template>
+                </v-table>
+            </card>
+
+            <card :title="`Add ${dbType} users`" class="mb-6">
+                <form
+                    v-if="databases.length > 0"
+                    @submit.prevent="addDatabaseUser"
+                >
+                    <div class="mt-4">
+                        <text-input
+                            name="name"
+                            label="Name"
+                            v-model="addUserForm.name"
+                            :errors="databaseUserErrors.name"
+                            help="This would be the username for the database user."
+                        />
+                    </div>
+
+                    <div class="mt-4">
+                        <text-input
+                            name="password"
+                            label="Password"
+                            v-model="addUserForm.password"
+                            :errors="databaseUserErrors.password"
+                            help="This would be the password for the database user. The password and username would be required to authenticate as this user."
+                        />
+                    </div>
+
+                    <div class="mt-6">
+                        <checkbox
+                            class="mt-4"
+                            :key="database.id"
+                            :name="database.id"
+                            :label="database.name"
+                            v-for="database in databases"
+                            @input="selectDatabase($event, database)"
+                            :checked="
+                                addUserForm.databases.includes(database.id)
+                            "
+                        />
+                    </div>
+
+                    <v-button
+                        label="Add database user"
+                        class="mt-6"
+                        type="submit"
+                        :loading="addingDatabaseUser"
                     />
+                </form>
+                <info v-else>
+                    To add {{ dbType }} users, create a database.
+                </info>
+            </card>
 
-                    <delete-button
-                        v-if="header.value === 'actions'"
-                        @click="setDeletingDatabaseUser(row)"
-                    />
+            <card
+                :table="true"
+                :title="`${dbType} users`"
+                :rowsCount="databaseUsers.length"
+                emptyTableMessage="No database users yet."
+            >
+                <v-table
+                    :headers="databasesUsersTable.headers"
+                    :rows="databaseUsers"
+                >
+                    <template slot="row" slot-scope="{ row, header }">
+                        <table-status
+                            v-if="header.value === 'status'"
+                            :status="row.status"
+                        />
 
-                    <span v-if="['name', 'database'].includes(header.value)">
-                        {{ row[header.value] }}
-                    </span>
+                        <delete-button
+                            v-if="header.value === 'actions'"
+                            @click="setDeletingDatabaseUser(row)"
+                        />
 
-                    <span
-                        class="text-xs text-gray-700"
-                        v-if="header.value === 'permission'"
-                    >
-                        {{ row.permission }}
-                    </span>
-                </template>
-            </v-table>
-        </card>
+                        <span
+                            v-if="['name', 'databases'].includes(header.value)"
+                        >
+                            {{ row[header.value] }}
+                        </span>
+                    </template>
+                </v-table>
+            </card>
         </template>
     </server-layout>
 </template>
@@ -169,7 +174,9 @@ export default {
     data() {
         return {
             form: {
-                name: ''
+                name: '',
+                user: '',
+                password: ''
             },
             deleteUser: null,
             addingDatabase: false,
@@ -198,13 +205,10 @@ export default {
                         value: 'name'
                     },
                     {
-                        label: 'Database',
-                        value: 'database'
+                        label: 'Databases',
+                        value: 'databases'
                     },
-                    {
-                        label: 'Permission',
-                        value: 'permission'
-                    },
+
                     {
                         label: 'Status',
                         value: 'status'
@@ -219,7 +223,7 @@ export default {
                 database: '',
                 name: '',
                 password: '',
-                readonly: false
+                databases: []
             },
             deletingDatabase: false,
             deleteDatabase: null,
@@ -232,35 +236,66 @@ export default {
             return this.$root.servers[this.$route.params.server] || {}
         },
         databases() {
+            if (!this.server || !this.server.id) {
+                return []
+            }
             return this.server.database_instances
-                .filter(db => db.type === 'mongodb')
+                .filter(db => db.type === this.dbType)
                 .map(db => ({
                     ...db,
                     label: db.name,
                     value: db.id
                 }))
         },
+        dbType() {
+            if (!this.server || !this.server.id) return
+
+            const sqlDatabase = this.server.databases.filter(
+                _ => !['postgresql', 'mongodb'].includes(_)
+            )
+
+            return sqlDatabase[0]
+        },
         databaseUsers() {
+            if (!this.server || !this.server.id) {
+                return []
+            }
             return this.server.database_users_instances
                 .filter(
-                    db => db.type === 'mongodb' && db.databases.length !== 0
+                    db => db.type === this.dbType && db.databases.length !== 0
                 )
                 .map(db => ({
                     ...db,
                     label: db.name,
                     value: db.id,
-                    database: db.databases[0] ? db.databases[0].name : null,
-                    permission: db.read_only ? 'READ' : 'READ/WRITE'
+                    databases: db.databases
+                        .reduce((acc, db) => `${acc},${db.name}`, '')
+                        .substr(1)
                 }))
         }
     },
     methods: {
+        selectDatabase(checked, database) {
+            if (checked) {
+                this.addUserForm = {
+                    ...this.addUserForm,
+                    databases: [...this.addUserForm.databases, database.id]
+                }
+            } else {
+                this.addUserForm = {
+                    ...this.addUserForm,
+                    databases: this.addUserForm.databases.filter(
+                        db => db !== database.id
+                    )
+                }
+            }
+        },
         deleteDbUser() {
             this.deletingDatabaseUser = true
 
             axios
                 .delete(
-                    `/api/servers/${this.server.id}/databases/${this.deleteUser.databases[0].id}/mongodb/delete-users/${this.deleteUser.id}`
+                    `/api/servers/${this.server.id}/database-users/${this.deleteUser.id}`
                 )
                 .then(({ data: server }) => {
                     this.$root.servers = {
@@ -272,8 +307,12 @@ export default {
                         'Database user has been queued for deleting.'
                     )
                 })
-                .catch(() => {
-                    this.$root.flashMessage('Failed to delete database user.')
+                .catch(({ response }) => {
+                    this.$root.flashMessage(
+                        response.data.message ||
+                            'Failed to delete database user.',
+                        'error'
+                    )
                 })
                 .finally(() => {
                     this.deletingDatabaseUser = false
@@ -288,7 +327,7 @@ export default {
             this.deletingDatabase = true
             axios
                 .delete(
-                    `/api/servers/${this.server.id}/databases/${this.deleteDatabase.id}/mongodb/delete-databases`
+                    `/api/servers/${this.server.id}/databases/${this.deleteDatabase.id}`
                 )
                 .then(({ data: server }) => {
                     this.$root.servers = {
@@ -300,8 +339,11 @@ export default {
                         'Database has been queued for deleting.'
                     )
                 })
-                .catch(() => {
-                    this.$root.flashMessage('Failed to delete database.')
+                .catch(({ response }) => {
+                    this.$root.flashMessage(
+                        response.data.message || 'Failed to delete database.',
+                        'error'
+                    )
                 })
                 .finally(() => {
                     this.deletingDatabase = false
@@ -322,10 +364,10 @@ export default {
             this.addingDatabase = true
 
             axios
-                .post(
-                    `/api/servers/${this.server.id}/databases/mongodb/add`,
-                    this.form
-                )
+                .post(`/api/servers/${this.server.id}/databases`, {
+                    ...this.form,
+                    type: this.dbType
+                })
                 .then(({ data: server }) => {
                     this.$root.servers = {
                         ...this.$root.servers,
@@ -339,7 +381,7 @@ export default {
                     this.errors = {}
 
                     this.$root.flashMessage(
-                        'Database has been added successfully.'
+                        'Database creation has been queued.'
                     )
                 })
                 .catch(({ response }) => {
@@ -361,8 +403,11 @@ export default {
 
             axios
                 .post(
-                    `/api/servers/${this.server.id}/databases/${this.addUserForm.database}/mongodb/add-users`,
-                    this.addUserForm
+                    `/api/servers/${this.server.id}/database-users`,
+                    {
+                        ...this.addUserForm,
+                        type: this.dbType
+                    }
                 )
                 .then(({ data: server }) => {
                     this.$root.servers = {
@@ -371,10 +416,9 @@ export default {
                     }
 
                     this.addUserForm = {
-                        database: '',
                         name: '',
                         password: '',
-                        readonly: false
+                        databases: []
                     }
 
                     this.errors = {}

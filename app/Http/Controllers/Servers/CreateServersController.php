@@ -6,12 +6,11 @@ use App\Exceptions\CredentialsExpiredException;
 use App\Server;
 use App\Jobs\Servers\Initialize;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ServerResource;
-use App\Exceptions\FailedCreatingServer;
-use App\Jobs\Servers\CreateServerARecord;
-use GuzzleHttp\Exception\GuzzleException;
-use App\Http\Requests\Servers\CreateServerRequest;
 use App\Notifications\Servers\Alert;
+use App\Http\Resources\ServerResource;
+use GuzzleHttp\Exception\GuzzleException;
+use App\Exceptions\FailedToCreateServerException;
+use App\Http\Requests\Servers\CreateServerRequest;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CreateServersController extends Controller
@@ -167,7 +166,7 @@ class CreateServersController extends Controller
 
             return $server;
         } catch (GuzzleException | ProcessFailedException $e) {
-            throw new FailedCreatingServer($server, $e);
+            throw new FailedToCreateServerException($server, null);
         }
     }
 
@@ -203,7 +202,7 @@ class CreateServersController extends Controller
             ]);
             return $server;
         } catch (GuzzleException | ProcessFailedException $e) {
-            throw new FailedCreatingServer($server, $e);
+            throw new FailedToCreateServerException($server, null);
         }
     }
 

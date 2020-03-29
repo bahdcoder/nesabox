@@ -103,6 +103,15 @@ class DatabasesController extends Controller
     {
         $this->authorize('view', $server);
 
+        if ($database->status !== STATUS_ACTIVE) {
+            return response()->json(
+                [
+                    'message' => 'Cannot deleted a database that is not active.'
+                ],
+                400
+            );
+        }
+
         $database->update([
             'status' => STATUS_DELETING
         ]);

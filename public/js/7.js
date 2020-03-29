@@ -28,7 +28,7 @@ var render = function() {
             [
               _c("info", [
                 _vm._v(
-                  "\n                Postgresql database management is coming soon. For now, please log\n                in to your server and use the command line.\n            "
+                  "\n                Postgresql database management is coming soon. For now,\n                please log in to your server and use the command line.\n            "
                 )
               ])
             ],

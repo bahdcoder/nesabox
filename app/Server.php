@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Http\Traits\HandlesProcesses;
 use GuzzleHttp\Client;
 use App\Notifications\Servers\Alert;
-use Notification;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class Server extends Model
 {
+    use HandlesProcesses;
     /**
      * Fields to cast to native types
      *
@@ -110,6 +112,40 @@ class Server extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function explode()
+    {
+        // clean up pivot relations
+        $this->hasMany(DatabaseUser::class)
+            ->get()
+            ->map(function ($database) {
+                $database->databaseUsers()->sync([]);
+            });
+        // clean up database users pivot relations
+        $this->hasMany(Database::class)
+            ->get()
+            ->map(function ($database) {
+                $database->databases()->sync([]);
+            });
+        // databases and database users
+        $this->hasMany(DatabaseUser::class)->delete();
+        // sites
+        $this->hasMany(Site::class)->delete();
+        // sshkeys
+        $this->hasMany(Sshkey::class)->delete();
+        // daemons
+        $this->hasMany(Daemon::class)->delete();
+        // cron jobs
+        $this->hasMany(Job::class)->delete();
+        // firewallRules
+        $this->hasMany(FirewallRule::class)->delete();
+        // delete ssh keys of server on system
+        $this->execProcess("rm ~/.ssh/{$this->slug}");
+        $this->execProcess("rm ~/.ssh/{$this->slug}.pub");
+
+        $this->teams()->sync([]);
+
+        $this->delete();
     }
 
     /**
@@ -258,7 +294,7 @@ class Server extends Model
      */
     public function alert($message, $output = null, $type = 'error')
     {
-        Notification::send(
+        FacadesNotification::send(
             $this->getAllMembers(),
             new Alert($this, $message, $output, $type)
         );

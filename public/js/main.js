@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"97cca9224ec146c3b89d","1":"04541345315fb86cef9a","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"670189d8dbdbfe7a2fb0","6":"6a8d9fafa787abe32595","7":"fabf0a3688a257c97fb8","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","10":"9ebda27730b7561731eb","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","13":"661e12f45fef5eec0c77","14":"73688a1f9b0778c046a7"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"97cca9224ec146c3b89d","1":"04541345315fb86cef9a","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"d3be19e0046eb11403ac","6":"66b5b92d32855e6f5986","7":"4783efe1d692946f31f8","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","10":"9ebda27730b7561731eb","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","13":"661e12f45fef5eec0c77","14":"73688a1f9b0778c046a7"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2195,6 +2195,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2252,6 +2257,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.$root.servers[this.$route.params.server] || {};
     },
     databases: function databases() {
+      if (!this.server || !this.server.id) {
+        return [];
+      }
+
       return this.server.database_instances.filter(function (db) {
         return db.type === 'mongodb';
       }).map(function (db) {
@@ -2262,6 +2271,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     databaseUsers: function databaseUsers() {
+      if (!this.server || !this.server.id) {
+        return [];
+      }
+
       return this.server.database_users_instances.filter(function (db) {
         return db.type === 'mongodb' && db.databases.length !== 0;
       }).map(function (db) {
@@ -2284,8 +2297,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.$root.servers = _objectSpread({}, _this.$root.servers, _defineProperty({}, server.id, server));
 
         _this.$root.flashMessage('Database user has been queued for deleting.');
-      })["catch"](function () {
-        _this.$root.flashMessage('Failed to delete database user.');
+      })["catch"](function (_ref2) {
+        var response = _ref2.response;
+
+        _this.$root.flashMessage(response.data.message || 'Failed to delete database user.', 'error');
       })["finally"](function () {
         _this.deletingDatabaseUser = false;
         _this.deleteUser = null;
@@ -2299,13 +2314,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       this.deletingDatabase = true;
-      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteDatabase.id, "/mongodb/delete-databases")).then(function (_ref2) {
-        var server = _ref2.data;
+      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteDatabase.id, "/mongodb/delete-databases")).then(function (_ref3) {
+        var server = _ref3.data;
         _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, server.id, server));
 
         _this2.$root.flashMessage('Database has been queued for deleting.');
-      })["catch"](function () {
-        _this2.$root.flashMessage('Failed to delete database.');
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+
+        _this2.$root.flashMessage(response.data.message || 'Failed to delete database.', 'error');
       })["finally"](function () {
         _this2.deletingDatabase = false;
         _this2.deleteDatabase = null;
@@ -2325,8 +2342,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this3 = this;
 
       this.addingDatabase = true;
-      axios.post("/api/servers/".concat(this.server.id, "/databases/mongodb/add"), this.form).then(function (_ref3) {
-        var server = _ref3.data;
+      axios.post("/api/servers/".concat(this.server.id, "/databases/mongodb/add"), this.form).then(function (_ref5) {
+        var server = _ref5.data;
         _this3.$root.servers = _objectSpread({}, _this3.$root.servers, _defineProperty({}, server.id, server));
         _this3.form = {
           name: ''
@@ -2334,8 +2351,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this3.errors = {};
 
         _this3.$root.flashMessage('Database has been added successfully.');
-      })["catch"](function (_ref4) {
-        var response = _ref4.response;
+      })["catch"](function (_ref6) {
+        var response = _ref6.response;
 
         if (response.status === 422) {
           _this3.errors = response.data.errors;
@@ -2350,8 +2367,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this4 = this;
 
       this.addingDatabaseUser = true;
-      axios.post("/api/servers/".concat(this.server.id, "/databases/").concat(this.addUserForm.database, "/mongodb/add-users"), this.addUserForm).then(function (_ref5) {
-        var server = _ref5.data;
+      axios.post("/api/servers/".concat(this.server.id, "/databases/").concat(this.addUserForm.database, "/mongodb/add-users"), this.addUserForm).then(function (_ref7) {
+        var server = _ref7.data;
         _this4.$root.servers = _objectSpread({}, _this4.$root.servers, _defineProperty({}, server.id, server));
         _this4.addUserForm = {
           database: '',
@@ -2362,8 +2379,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this4.errors = {};
 
         _this4.$root.flashMessage('Database user has been queued.');
-      })["catch"](function (_ref6) {
-        var response = _ref6.response;
+      })["catch"](function (_ref8) {
+        var response = _ref8.response;
 
         if (response.status === 422) {
           _this4.databaseUserErrors = response.data.errors;
@@ -2388,6 +2405,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2560,11 +2589,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       form: {
-        name: ''
+        name: '',
+        user: '',
+        password: ''
       },
       deleteUser: null,
       addingDatabase: false,
@@ -2587,11 +2623,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           label: 'Name',
           value: 'name'
         }, {
-          label: 'Database',
-          value: 'database'
-        }, {
-          label: 'Permission',
-          value: 'permission'
+          label: 'Databases',
+          value: 'databases'
         }, {
           label: 'Status',
           value: 'status'
@@ -2604,7 +2637,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         database: '',
         name: '',
         password: '',
-        readonly: false
+        databases: []
       },
       deletingDatabase: false,
       deleteDatabase: null,
@@ -2617,8 +2650,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.$root.servers[this.$route.params.server] || {};
     },
     databases: function databases() {
+      var _this = this;
+
+      if (!this.server || !this.server.id) {
+        return [];
+      }
+
       return this.server.database_instances.filter(function (db) {
-        return db.type === 'mongodb';
+        return db.type === _this.dbType;
       }).map(function (db) {
         return _objectSpread({}, db, {
           label: db.name,
@@ -2626,34 +2665,63 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+    dbType: function dbType() {
+      if (!this.server || !this.server.id) return;
+      var sqlDatabase = this.server.databases.filter(function (_) {
+        return !['postgresql', 'mongodb'].includes(_);
+      });
+      return sqlDatabase[0];
+    },
     databaseUsers: function databaseUsers() {
+      var _this2 = this;
+
+      if (!this.server || !this.server.id) {
+        return [];
+      }
+
       return this.server.database_users_instances.filter(function (db) {
-        return db.type === 'mongodb' && db.databases.length !== 0;
+        return db.type === _this2.dbType && db.databases.length !== 0;
       }).map(function (db) {
         return _objectSpread({}, db, {
           label: db.name,
           value: db.id,
-          database: db.databases[0] ? db.databases[0].name : null,
-          permission: db.read_only ? 'READ' : 'READ/WRITE'
+          databases: db.databases.reduce(function (acc, db) {
+            return "".concat(acc, ",").concat(db.name);
+          }, '').substr(1)
         });
       });
     }
   },
   methods: {
+    selectDatabase: function selectDatabase(checked, database) {
+      if (checked) {
+        this.addUserForm = _objectSpread({}, this.addUserForm, {
+          databases: [].concat(_toConsumableArray(this.addUserForm.databases), [database.id])
+        });
+      } else {
+        this.addUserForm = _objectSpread({}, this.addUserForm, {
+          databases: this.addUserForm.databases.filter(function (db) {
+            return db !== database.id;
+          })
+        });
+      }
+    },
     deleteDbUser: function deleteDbUser() {
-      var _this = this;
+      var _this3 = this;
 
       this.deletingDatabaseUser = true;
-      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteUser.databases[0].id, "/mongodb/delete-users/").concat(this.deleteUser.id)).then(function (_ref) {
+      axios["delete"]("/api/servers/".concat(this.server.id, "/database-users/").concat(this.deleteUser.id)).then(function (_ref) {
         var server = _ref.data;
-        _this.$root.servers = _objectSpread({}, _this.$root.servers, _defineProperty({}, server.id, server));
+        _this3.$root.servers = _objectSpread({}, _this3.$root.servers, _defineProperty({}, server.id, server));
 
-        _this.$root.flashMessage('Database user has been queued for deleting.');
-      })["catch"](function () {
-        _this.$root.flashMessage('Failed to delete database user.');
+        _this3.$root.flashMessage('Database user has been queued for deleting.');
+      })["catch"](function (_ref2) {
+        var response = _ref2.response;
+
+        _this3.$root.flashMessage(response.data.message || 'Failed to delete database user.', 'error');
       })["finally"](function () {
-        _this.deletingDatabaseUser = false;
-        _this.deleteUser = null;
+        _this3.deletingDatabaseUser = false;
+        _this3.deleteUser = null;
       });
     },
     closeConfirmDeleteDatabaseUser: function closeConfirmDeleteDatabaseUser() {
@@ -2661,19 +2729,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.deletingDatabaseUser = false;
     },
     deleteDb: function deleteDb() {
-      var _this2 = this;
+      var _this4 = this;
 
       this.deletingDatabase = true;
-      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteDatabase.id, "/mongodb/delete-databases")).then(function (_ref2) {
-        var server = _ref2.data;
-        _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, server.id, server));
+      axios["delete"]("/api/servers/".concat(this.server.id, "/databases/").concat(this.deleteDatabase.id)).then(function (_ref3) {
+        var server = _ref3.data;
+        _this4.$root.servers = _objectSpread({}, _this4.$root.servers, _defineProperty({}, server.id, server));
 
-        _this2.$root.flashMessage('Database has been queued for deleting.');
-      })["catch"](function () {
-        _this2.$root.flashMessage('Failed to delete database.');
+        _this4.$root.flashMessage('Database has been queued for deleting.');
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+
+        _this4.$root.flashMessage(response.data.message || 'Failed to delete database.', 'error');
       })["finally"](function () {
-        _this2.deletingDatabase = false;
-        _this2.deleteDatabase = null;
+        _this4.deletingDatabase = false;
+        _this4.deleteDatabase = null;
       });
     },
     setDeletingDatabase: function setDeletingDatabase(database) {
@@ -2687,56 +2757,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.deletingDatabase = false;
     },
     addDatabase: function addDatabase() {
-      var _this3 = this;
+      var _this5 = this;
 
       this.addingDatabase = true;
-      axios.post("/api/servers/".concat(this.server.id, "/databases/mongodb/add"), this.form).then(function (_ref3) {
-        var server = _ref3.data;
-        _this3.$root.servers = _objectSpread({}, _this3.$root.servers, _defineProperty({}, server.id, server));
-        _this3.form = {
+      axios.post("/api/servers/".concat(this.server.id, "/databases"), _objectSpread({}, this.form, {
+        type: this.dbType
+      })).then(function (_ref5) {
+        var server = _ref5.data;
+        _this5.$root.servers = _objectSpread({}, _this5.$root.servers, _defineProperty({}, server.id, server));
+        _this5.form = {
           name: ''
         };
-        _this3.errors = {};
+        _this5.errors = {};
 
-        _this3.$root.flashMessage('Database has been added successfully.');
-      })["catch"](function (_ref4) {
-        var response = _ref4.response;
-
-        if (response.status === 422) {
-          _this3.errors = response.data.errors;
-        } else {
-          _this3.$root.flashMessage('Failed to add database to server.', 'error');
-        }
-      })["finally"](function () {
-        _this3.addingDatabase = false;
-      });
-    },
-    addDatabaseUser: function addDatabaseUser() {
-      var _this4 = this;
-
-      this.addingDatabaseUser = true;
-      axios.post("/api/servers/".concat(this.server.id, "/databases/").concat(this.addUserForm.database, "/mongodb/add-users"), this.addUserForm).then(function (_ref5) {
-        var server = _ref5.data;
-        _this4.$root.servers = _objectSpread({}, _this4.$root.servers, _defineProperty({}, server.id, server));
-        _this4.addUserForm = {
-          database: '',
-          name: '',
-          password: '',
-          readonly: false
-        };
-        _this4.errors = {};
-
-        _this4.$root.flashMessage('Database user has been queued.');
+        _this5.$root.flashMessage('Database creation has been queued.');
       })["catch"](function (_ref6) {
         var response = _ref6.response;
 
         if (response.status === 422) {
-          _this4.databaseUserErrors = response.data.errors;
+          _this5.errors = response.data.errors;
         } else {
-          _this4.$root.flashMessage('Failed to add database user to server.', 'error');
+          _this5.$root.flashMessage('Failed to add database to server.', 'error');
         }
       })["finally"](function () {
-        _this4.addingDatabaseUser = false;
+        _this5.addingDatabase = false;
+      });
+    },
+    addDatabaseUser: function addDatabaseUser() {
+      var _this6 = this;
+
+      this.addingDatabaseUser = true;
+      axios.post("/api/servers/".concat(this.server.id, "/database-users"), _objectSpread({}, this.addUserForm, {
+        type: this.dbType
+      })).then(function (_ref7) {
+        var server = _ref7.data;
+        _this6.$root.servers = _objectSpread({}, _this6.$root.servers, _defineProperty({}, server.id, server));
+        _this6.addUserForm = {
+          name: '',
+          password: '',
+          databases: []
+        };
+        _this6.errors = {};
+
+        _this6.$root.flashMessage('Database user has been queued.');
+      })["catch"](function (_ref8) {
+        var response = _ref8.response;
+
+        if (response.status === 422) {
+          _this6.databaseUserErrors = response.data.errors;
+        } else {
+          _this6.$root.flashMessage('Failed to add database user to server.', 'error');
+        }
+      })["finally"](function () {
+        _this6.addingDatabaseUser = false;
       });
     }
   }
@@ -3830,6 +3903,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this = this;
@@ -3852,7 +3927,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: 'network',
         to: route('network')
       }],
-      loading: true
+      loading: true,
+      deletingServer: false
     };
   },
   mounted: function mounted() {
@@ -3887,6 +3963,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     deleteServer: function deleteServer() {
       var _this3 = this;
 
+      this.deletingServer = true;
       axios["delete"]("/api/servers/".concat(this.server.id)).then(function () {
         _this3.$router.push('/dashboard');
       });
@@ -16040,9 +16117,9 @@ var render = function() {
                         header.value === "name"
                           ? _c("span", [
                               _vm._v(
-                                "\n                    " +
+                                "\n                        " +
                                   _vm._s(row.name) +
-                                  "\n                "
+                                  "\n                    "
                               )
                             ])
                           : _vm._e()
@@ -16175,7 +16252,7 @@ var render = function() {
                   )
                 : _c("info", [
                     _vm._v(
-                      "\n            To add MongoDB users, create a database.\n        "
+                      "\n                To add MongoDB users, create a database.\n            "
                     )
                   ])
             ],
@@ -16224,9 +16301,9 @@ var render = function() {
                         ["name", "database"].includes(header.value)
                           ? _c("span", [
                               _vm._v(
-                                "\n                    " +
+                                "\n                        " +
                                   _vm._s(row[header.value]) +
-                                  "\n                "
+                                  "\n                    "
                               )
                             ])
                           : _vm._e(),
@@ -16237,9 +16314,9 @@ var render = function() {
                               { staticClass: "text-xs text-gray-700" },
                               [
                                 _vm._v(
-                                  "\n                    " +
+                                  "\n                        " +
                                     _vm._s(row.permission) +
-                                    "\n                "
+                                    "\n                    "
                                 )
                               ]
                             )
@@ -16321,7 +16398,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "card",
-            { staticClass: "mb-6", attrs: { title: "Add Mongodb Database" } },
+            {
+              staticClass: "mb-6",
+              attrs: { title: "Add " + _vm.dbType + " Database" }
+            },
             [
               _c(
                 "form",
@@ -16338,9 +16418,7 @@ var render = function() {
                     attrs: {
                       name: "name",
                       label: "Database name",
-                      errors: _vm.errors.name,
-                      help:
-                        "When you add a database, you can then add users to that database for authentication."
+                      errors: _vm.errors.name
                     },
                     model: {
                       value: _vm.form.name,
@@ -16348,6 +16426,40 @@ var render = function() {
                         _vm.$set(_vm.form, "name", $$v)
                       },
                       expression: "form.name"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("text-input", {
+                    staticClass: "mt-4",
+                    attrs: {
+                      name: "user",
+                      label: "User name",
+                      errors: _vm.errors.user,
+                      help:
+                        "You can optionally add a user that will have access to this database. To do so, provide a user name, and provide a password."
+                    },
+                    model: {
+                      value: _vm.form.user,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "user", $$v)
+                      },
+                      expression: "form.user"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("text-input", {
+                    staticClass: "mt-4",
+                    attrs: {
+                      name: "password",
+                      label: "User password",
+                      errors: _vm.errors.password
+                    },
+                    model: {
+                      value: _vm.form.password,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "password", $$v)
+                      },
+                      expression: "form.password"
                     }
                   }),
                   _vm._v(" "),
@@ -16370,8 +16482,8 @@ var render = function() {
             {
               staticClass: "mb-6",
               attrs: {
-                title: "Mongodb databases",
                 table: true,
+                title: _vm.dbType + " databases",
                 emptyTableMessage: "No databases have been added yet.",
                 rowsCount: _vm.databases.length
               }
@@ -16408,9 +16520,9 @@ var render = function() {
                         header.value === "name"
                           ? _c("span", [
                               _vm._v(
-                                "\n                    " +
+                                "\n                        " +
                                   _vm._s(row.name) +
-                                  "\n                "
+                                  "\n                    "
                               )
                             ])
                           : _vm._e()
@@ -16425,7 +16537,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "card",
-            { staticClass: "mb-6", attrs: { title: "Add Mongodb users" } },
+            {
+              staticClass: "mb-6",
+              attrs: { title: "Add " + _vm.dbType + " users" }
+            },
             [
               _vm.databases.length > 0
                 ? _c(
@@ -16439,23 +16554,6 @@ var render = function() {
                       }
                     },
                     [
-                      _c("select-input", {
-                        attrs: {
-                          name: "database",
-                          label: "Database",
-                          options: _vm.databases,
-                          help:
-                            "Select the database this user would be stored in. This user would also be able to access the selected database."
-                        },
-                        model: {
-                          value: _vm.addUserForm.database,
-                          callback: function($$v) {
-                            _vm.$set(_vm.addUserForm, "database", $$v)
-                          },
-                          expression: "addUserForm.database"
-                        }
-                      }),
-                      _vm._v(" "),
                       _c(
                         "div",
                         { staticClass: "mt-4" },
@@ -16507,26 +16605,24 @@ var render = function() {
                       _c(
                         "div",
                         { staticClass: "mt-6" },
-                        [
-                          _c("checkbox", {
+                        _vm._l(_vm.databases, function(database) {
+                          return _c("checkbox", {
+                            key: database.id,
+                            staticClass: "mt-4",
                             attrs: {
-                              name: "readonly",
-                              label: "Readonly",
-                              checked: _vm.addUserForm.readonly,
-                              help:
-                                "This user would have READ and WRITE access to the selected database. Check this if you want to grant only read access."
+                              name: database.id,
+                              label: database.name,
+                              checked: _vm.addUserForm.databases.includes(
+                                database.id
+                              )
                             },
                             on: {
                               input: function($event) {
-                                _vm.addUserForm = Object.assign(
-                                  {},
-                                  _vm.addUserForm,
-                                  { readonly: !_vm.addUserForm.readonly }
-                                )
+                                return _vm.selectDatabase($event, database)
                               }
                             }
                           })
-                        ],
+                        }),
                         1
                       ),
                       _vm._v(" "),
@@ -16543,7 +16639,9 @@ var render = function() {
                   )
                 : _c("info", [
                     _vm._v(
-                      "\n            To add MongoDB users, create a database.\n        "
+                      "\n                To add " +
+                        _vm._s(_vm.dbType) +
+                        " users, create a database.\n            "
                     )
                   ])
             ],
@@ -16554,8 +16652,8 @@ var render = function() {
             "card",
             {
               attrs: {
-                title: "Mongodb users",
                 table: true,
+                title: _vm.dbType + " users",
                 rowsCount: _vm.databaseUsers.length,
                 emptyTableMessage: "No database users yet."
               }
@@ -16589,28 +16687,14 @@ var render = function() {
                             })
                           : _vm._e(),
                         _vm._v(" "),
-                        ["name", "database"].includes(header.value)
+                        ["name", "databases"].includes(header.value)
                           ? _c("span", [
                               _vm._v(
-                                "\n                    " +
+                                "\n                        " +
                                   _vm._s(row[header.value]) +
-                                  "\n                "
+                                  "\n                    "
                               )
                             ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        header.value === "permission"
-                          ? _c(
-                              "span",
-                              { staticClass: "text-xs text-gray-700" },
-                              [
-                                _vm._v(
-                                  "\n                    " +
-                                    _vm._s(row.permission) +
-                                    "\n                "
-                                )
-                              ]
-                            )
                           : _vm._e()
                       ]
                     }
@@ -17197,7 +17281,7 @@ var render = function() {
         "div",
         {
           staticClass:
-            "w-full px-3 py-5 h-12 rounded flex items-center justify-between text-white my-3",
+            "w-full px-3 py-5 rounded flex items-center justify-between text-white my-3",
           class: {
             "bg-green-400": _vm.type === "success",
             "bg-red-600": _vm.type === "error"
@@ -18069,7 +18153,11 @@ var render = function() {
                       _c("spinner", { staticClass: "w-10 h-10" }),
                       _vm._v(" "),
                       _c("red-button", {
-                        attrs: { label: "Delete server" },
+                        staticClass: "mt-4",
+                        attrs: {
+                          loading: _vm.deletingServer,
+                          label: "Delete server"
+                        },
                         on: { click: _vm.deleteServer }
                       })
                     ],
@@ -36155,7 +36243,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this3.servers = _objectSpread({}, _this3.servers, _defineProperty({}, serverId, data));
 
         var servers = _this3.allServers.servers.map(function (server) {
-          if (server.id !== serverid) {
+          if (server.id !== serverId) {
             return server;
           }
 

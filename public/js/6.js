@@ -334,6 +334,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -461,6 +463,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         if (response.status === 422) {
           _this.errors = response.data.errors;
         }
+
+        _this.$root.flashMessage(response.data.message || _this.provider !== 'custom' ? 'Failed to create your server. Please check your provider to make sure you can create servers. Also, check to see if your API token credentials are still valid.' : 'Failed to create server.', 'error', 8000);
       })["finally"](function () {
         _this.loading = false;
       });
@@ -957,86 +961,95 @@ var render = function() {
                               )
                             ]),
                             _vm._v(" "),
-                            _c("div", { staticClass: "mt-4" }, [
-                              _c(
-                                "fieldset",
-                                _vm._l(_vm.databases, function(database) {
-                                  return _c(
-                                    "div",
-                                    {
-                                      key: database.value,
-                                      staticClass: "mt-4"
-                                    },
-                                    [
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "relative flex items-start"
-                                        },
-                                        [
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass:
-                                                "absolute flex items-center h-5"
-                                            },
-                                            [
-                                              _c("input", {
+                            _c(
+                              "div",
+                              { staticClass: "mt-4" },
+                              [
+                                _c(
+                                  "fieldset",
+                                  _vm._l(_vm.databases, function(database) {
+                                    return _c(
+                                      "div",
+                                      {
+                                        key: database.value,
+                                        staticClass: "mt-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "relative flex items-start"
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
                                                 staticClass:
-                                                  "form-checkbox h-4 w-4 text-sha-green-600 transition duration-150 ease-in-out",
-                                                attrs: {
-                                                  type: "checkbox",
-                                                  id: database.value
-                                                },
-                                                domProps: {
-                                                  checked: _vm.form.databases.includes(
-                                                    database.value
-                                                  )
-                                                },
-                                                on: {
-                                                  change: function($event) {
-                                                    return _vm.selectDatabase(
-                                                      database
-                                                    )
-                                                  }
-                                                }
-                                              })
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass:
-                                                "pl-7 text-sm leading-5"
-                                            },
-                                            [
-                                              _c(
-                                                "label",
-                                                {
+                                                  "absolute flex items-center h-5"
+                                              },
+                                              [
+                                                _c("input", {
                                                   staticClass:
-                                                    "font-medium text-gray-700",
-                                                  attrs: { for: database.value }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                " +
-                                                      _vm._s(database.label) +
-                                                      "\n                                            "
-                                                  )
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                }),
-                                0
-                              )
-                            ])
+                                                    "form-checkbox h-4 w-4 text-sha-green-600 transition duration-150 ease-in-out",
+                                                  attrs: {
+                                                    type: "checkbox",
+                                                    id: database.value
+                                                  },
+                                                  domProps: {
+                                                    checked: _vm.form.databases.includes(
+                                                      database.value
+                                                    )
+                                                  },
+                                                  on: {
+                                                    change: function($event) {
+                                                      return _vm.selectDatabase(
+                                                        database
+                                                      )
+                                                    }
+                                                  }
+                                                })
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "pl-7 text-sm leading-5"
+                                              },
+                                              [
+                                                _c(
+                                                  "label",
+                                                  {
+                                                    staticClass:
+                                                      "font-medium text-gray-700",
+                                                    attrs: {
+                                                      for: database.value
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                " +
+                                                        _vm._s(database.label) +
+                                                        "\n                                            "
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  }),
+                                  0
+                                ),
+                                _vm._v(" "),
+                                _c("flash", { staticClass: "my-4" })
+                              ],
+                              1
+                            )
                           ])
                         : _vm._e()
                     ]

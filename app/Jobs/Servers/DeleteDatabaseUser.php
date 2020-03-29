@@ -59,6 +59,8 @@ class DeleteDatabaseUser implements ShouldQueue
                 $process->getErrorOutput()
             );
 
+            echo $process->getErrorOutput();
+
             $this->server->user->notify(new ServerIsReady($this->server));
         }
     }

@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="message"
-        class="w-full px-3 py-5 h-12 rounded flex items-center justify-between text-white my-3"
+        class="w-full px-3 py-5 rounded flex items-center justify-between text-white my-3"
         :class="{
             'bg-green-400': type === 'success',
             'bg-red-600': type === 'error'

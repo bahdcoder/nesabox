@@ -31,6 +31,24 @@ class MongodbController extends Controller
 
     public function deleteDatabases(Server $server, Database $database)
     {
+        if ($database->type !== MONGO_DB) {
+            return response()->json(
+                [
+                    'message' => 'Database was not found.'
+                ],
+                400
+            );
+        }
+
+        if ($database->status !== STATUS_ACTIVE) {
+            return response()->json(
+                [
+                    'message' => 'Cannot deleted a database that is not active.'
+                ],
+                400
+            );
+        }
+
         $database->update([
             'status' => STATUS_DELETING
         ]);
