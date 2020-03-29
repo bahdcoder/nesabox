@@ -211,54 +211,56 @@ var render = function() {
         [
           _c("flash"),
           _vm._v(" "),
-          _c(
-            "card",
-            { staticClass: "mb-6", attrs: { title: "PM2 Ecosystem file" } },
-            [
-              _c("info", [
-                _vm._v(
-                  "\n                This is the PM2 configuration for your site. Here you can\n                define environment secrets. The content of this file is\n                never saved on our servers.\n            "
-                )
-              ]),
-              _vm._v(" "),
-              !_vm.ecosystemFile
-                ? _c("v-button", {
-                    staticClass: "w-full md:w-auto mt-4",
-                    attrs: {
-                      loading: _vm.fetchingEcosystemFile,
-                      label: "Edit Ecosystem file"
-                    },
-                    on: { click: _vm.fetchPm2File }
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.ecosystemFile
-                ? _c("codemirror", {
-                    staticClass: "my-4",
-                    attrs: { options: _vm.codeMirrorOptions },
-                    model: {
-                      value: _vm.ecosystemFile,
-                      callback: function($$v) {
-                        _vm.ecosystemFile = $$v
-                      },
-                      expression: "ecosystemFile"
-                    }
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.ecosystemFile
-                ? _c("v-button", {
-                    staticClass: "w-full md:w-auto mt-4",
-                    attrs: {
-                      loading: _vm.updatingEcosystemFile,
-                      label: "Update Ecosystem file"
-                    },
-                    on: { click: _vm.updatePm2File }
-                  })
-                : _vm._e()
-            ],
-            1
-          ),
+          _vm.site.type === "nodejs"
+            ? _c(
+                "card",
+                { staticClass: "mb-6", attrs: { title: "PM2 Ecosystem file" } },
+                [
+                  _c("info", [
+                    _vm._v(
+                      "\n                This is the PM2 configuration for your site. Here you can\n                define environment secrets. The content of this file is\n                never saved on our servers.\n            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  !_vm.ecosystemFile
+                    ? _c("v-button", {
+                        staticClass: "w-full md:w-auto mt-4",
+                        attrs: {
+                          loading: _vm.fetchingEcosystemFile,
+                          label: "Edit Ecosystem file"
+                        },
+                        on: { click: _vm.fetchPm2File }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.ecosystemFile
+                    ? _c("codemirror", {
+                        staticClass: "my-4",
+                        attrs: { options: _vm.codeMirrorOptions },
+                        model: {
+                          value: _vm.ecosystemFile,
+                          callback: function($$v) {
+                            _vm.ecosystemFile = $$v
+                          },
+                          expression: "ecosystemFile"
+                        }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.ecosystemFile
+                    ? _c("v-button", {
+                        staticClass: "w-full md:w-auto mt-4",
+                        attrs: {
+                          loading: _vm.updatingEcosystemFile,
+                          label: "Update Ecosystem file"
+                        },
+                        on: { click: _vm.updatePm2File }
+                      })
+                    : _vm._e()
+                ],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "card",

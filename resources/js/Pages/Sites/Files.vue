@@ -2,7 +2,7 @@
     <site-layout>
         <template slot="content">
             <flash />
-            <card title="PM2 Ecosystem file" class="mb-6">
+            <card title="PM2 Ecosystem file" class="mb-6" v-if="site.type === 'nodejs'">
                 <info>
                     This is the PM2 configuration for your site. Here you can
                     define environment secrets. The content of this file is

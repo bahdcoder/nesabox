@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"97cca9224ec146c3b89d","1":"93c3b51d6345659ef7cd","2":"fbbb664c99ce9263a6f9","3":"927738eb767fe892d222","4":"c9894795390412525b1a","5":"670189d8dbdbfe7a2fb0","6":"6a8d9fafa787abe32595","7":"238740704f3977d411a7","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","10":"3136c10bc79b7993336a","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","14":"665bde068f9437ed31b9"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"97cca9224ec146c3b89d","1":"93c3b51d6345659ef7cd","2":"fbbb664c99ce9263a6f9","3":"927738eb767fe892d222","4":"c9894795390412525b1a","5":"670189d8dbdbfe7a2fb0","6":"6a8d9fafa787abe32595","7":"238740704f3977d411a7","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","10":"9ebda27730b7561731eb","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","13":"661e12f45fef5eec0c77","14":"bc4c4b0996e17a5ce0cb"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -3300,6 +3300,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     nav: {
@@ -3402,6 +3416,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: 'files',
         to: route('files')
       }, {
+        label: 'Logs',
+        value: 'logs',
+        to: route('logs')
+      }, {
         label: 'Settings',
         value: 'settings',
         to: route('settings')
@@ -3412,8 +3430,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     var _this2 = this;
 
-    if (this.$root.sites[this.$route.params.site]) {
+    var site = this.$root.sites[this.$route.params.site];
+
+    if (site) {
       this.loading = false;
+
+      if (site && site.type !== 'nodejs') {
+        this.nav = this.nav.filter(function (item) {
+          return !['logs'].includes(item.value);
+        });
+      }
+
       this.$emit('mounted');
       return;
     }
@@ -3422,6 +3449,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var site = _ref.data;
       _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, _this2.$route.params.server, site.server));
       _this2.$root.sites = _objectSpread({}, _this2.$root.sites, _defineProperty({}, site.id, site));
+
+      if (site.type !== 'nodejs') {
+        _this2.nav = _this2.nav.filter(function (item) {
+          return !['logs'].includes(item.value);
+        });
+      }
 
       _this2.$emit('mounted');
 
@@ -16358,6 +16391,46 @@ var render = function() {
                       attrs: { to: item.to }
                     },
                     [
+                      item.value === "logs"
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass:
+                                "flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150",
+                              class: {
+                                "text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500":
+                                  _vm.active !== item.to,
+                                "text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700":
+                                  _vm.active === item.to
+                              },
+                              attrs: {
+                                viewBox: "0 0 20 20",
+                                fill: "none",
+                                xmlns: "http://www.w3.org/2000/svg"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M9 2C8.44772 2 8 2.44772 8 3C8 3.55228 8.44772 4 9 4H11C11.5523 4 12 3.55228 12 3C12 2.44772 11.5523 2 11 2H9Z",
+                                  fill: "#4A5568"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("path", {
+                                attrs: {
+                                  "fill-rule": "evenodd",
+                                  "clip-rule": "evenodd",
+                                  d:
+                                    "M4 5C4 3.89543 4.89543 3 6 3C6 4.65685 7.34315 6 9 6H11C12.6569 6 14 4.65685 14 3C15.1046 3 16 3.89543 16 5V16C16 17.1046 15.1046 18 14 18H6C4.89543 18 4 17.1046 4 16V5ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H7.01C7.56228 11 8.01 10.5523 8.01 10C8.01 9.44772 7.56228 9 7.01 9H7ZM10 9C9.44772 9 9 9.44772 9 10C9 10.5523 9.44772 11 10 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H10ZM7 13C6.44772 13 6 13.4477 6 14C6 14.5523 6.44772 15 7 15H7.01C7.56228 15 8.01 14.5523 8.01 14C8.01 13.4477 7.56228 13 7.01 13H7ZM10 13C9.44772 13 9 13.4477 9 14C9 14.5523 9.44772 15 10 15H13C13.5523 15 14 14.5523 14 14C14 13.4477 13.5523 13 13 13H10Z",
+                                  fill: "#4A5568"
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       item.value === "sites"
                         ? _c(
                             "svg",
@@ -16671,9 +16744,9 @@ var render = function() {
                       _vm._v(" "),
                       _c("span", { staticClass: "truncate" }, [
                         _vm._v(
-                          "\n                        " +
+                          "\n                            " +
                             _vm._s(item.label) +
-                            "\n                    "
+                            "\n                        "
                         )
                       ])
                     ]
@@ -33879,6 +33952,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
       });
     }
   }, {
+    path: '/servers/:server/sites/:site/logs',
+    name: 'server.site.logs',
+    component: function component() {
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Logs */ "./resources/js/Pages/Sites/Logs.vue")).then(function (module) {
+        return module["default"];
+      });
+    }
+  }, {
     path: '/account',
     name: 'account.profile',
     component: function component() {
@@ -33961,39 +34042,56 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           type: ''
         };
       }, timeout);
-    }
-  },
-  mounted: function mounted() {
-    var _this2 = this;
+    },
+    fetchSite: function fetchSite(serverId, siteId) {
+      var _this2 = this;
 
-    Echo["private"]("App.User.".concat(this.auth.id)).notification(function (notification) {
-      if (notification.type === 'App\\Notifications\\Sites\\SiteUpdated') {
-        _this2.sites = _objectSpread({}, _this2.sites, _defineProperty({}, notification.site.id, notification.site));
-      }
+      axios.get("/api/servers/".concat(serverId, "/sites/").concat(siteId)).then(function (_ref) {
+        var data = _ref.data;
+        _this2.sites = _objectSpread({}, _this2.sites, _defineProperty({}, siteId, data));
+      });
+    },
+    fetchServer: function fetchServer(serverId) {
+      var _this3 = this;
 
-      if (notification.type === 'App\\Notifications\\Servers\\ServerIsReady') {
-        _this2.servers = _objectSpread({}, _this2.servers, _defineProperty({}, notification.server.id, notification.server));
+      axios.get("/api/servers/".concat(serverId)).then(function (_ref2) {
+        var data = _ref2.data;
+        _this3.servers = _objectSpread({}, _this3.servers, _defineProperty({}, serverId, data));
+        _this3.servers = _objectSpread({}, _this3.servers, _defineProperty({}, serverId, data));
 
-        var servers = _this2.allServers.servers.map(function (server) {
-          if (server.id !== notification.server.id) {
+        var servers = _this3.allServers.servers.map(function (server) {
+          if (server.id !== serverid) {
             return server;
           }
 
-          return notification.server;
+          return data;
         });
 
-        var team_servers = _this2.allServers.team_servers.map(function (server) {
-          if (server.id !== notification.server.id) {
+        var team_servers = _this3.allServers.team_servers.map(function (server) {
+          if (server.id !== serverId) {
             return server;
           }
 
-          return notification.server;
+          return data;
         });
 
-        _this2.allServers = {
+        _this3.allServers = {
           servers: servers,
           team_servers: team_servers
         };
+      });
+    }
+  },
+  mounted: function mounted() {
+    var _this4 = this;
+
+    Echo["private"]("App.User.".concat(this.auth.id)).notification(function (notification) {
+      if (notification.type === 'App\\Notifications\\Sites\\SiteUpdated') {
+        _this4.fetchSite(notification.server, notification.site);
+      }
+
+      if (notification.type === 'App\\Notifications\\Servers\\ServerIsReady') {
+        _this4.fetchServer(notification.server);
       }
     });
   }

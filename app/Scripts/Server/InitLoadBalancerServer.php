@@ -98,7 +98,6 @@ fi
 useradd {$user}
 mkdir -p /home/{$user}/.ssh
 mkdir -p /home/{$user}/.{$user}
-mkdir -p /home/{$user}/.{$user}/ecosystems
 adduser {$user} sudo
 
 chsh -s /bin/bash {$user}

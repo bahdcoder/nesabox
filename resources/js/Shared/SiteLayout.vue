@@ -65,6 +65,11 @@ export default {
                     to: route('files')
                 },
                 {
+                    label: 'Logs',
+                    value: 'logs',
+                    to: route('logs')
+                },
+                {
                     label: 'Settings',
                     value: 'settings',
                     to: route('settings')
@@ -74,8 +79,13 @@ export default {
         }
     },
     mounted() {
-        if (this.$root.sites[this.$route.params.site]) {
+        let site = this.$root.sites[this.$route.params.site]
+        if (site) {
             this.loading = false
+
+            if (site && site.type !== 'nodejs') {
+                this.nav = this.nav.filter(item => !['logs'].includes(item.value))
+            }
 
             this.$emit('mounted')
 
@@ -95,6 +105,10 @@ export default {
                 this.$root.sites = {
                     ...this.$root.sites,
                     [site.id]: site
+                }
+
+                if (site.type !== 'nodejs') {
+                    this.nav = this.nav.filter(item => !['logs'].includes(item.value))
                 }
 
                 this.$emit('mounted')

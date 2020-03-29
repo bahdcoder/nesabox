@@ -6,8 +6,8 @@ use App\Site;
 use App\Server;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-use App\Notifications\Sites\SiteUpdated;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\Servers\ServerIsReady;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -62,7 +62,7 @@ class DeleteSite implements ShouldQueue
 
             Notification::send(
                 $this->server->getAllMembers(),
-                new SiteUpdated($this->site)
+                new ServerIsReady($this->server)
             );
 
             $this->server->alert(

@@ -127,9 +127,7 @@
                             @click="toggleViewLatestDeploymentLogs"
                             class="text-sha-green-500 cursor-pointer hover:text-sha-green-400 transition ease-in-out duration-50 mt-3 md:mt-0"
                         >
-                            {{
-                                viewLatestDeploymentLogs ? 'Hide' : 'View'
-                            }}
+                            {{ viewLatestDeploymentLogs ? 'Hide' : 'View' }}
                             latest deployment logs
                         </span>
                     </div>

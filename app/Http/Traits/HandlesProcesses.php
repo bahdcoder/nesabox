@@ -162,12 +162,12 @@ trait HandlesProcesses
         $scriptPath = base_path(
             $server->type === 'load_balancer'
                 ? 'scripts/sites/add-load-balancing-site.sh'
-                : 'scripts/sites/add-site.sh'
+                : ($site->type === 'nodejs' ? 'scripts/sites/add-site.sh' : 'scripts/sites/add-html-site.sh')
         );
 
         $user = SSH_USER;
 
-        $arguments = "{$site->name} {$user}";
+        $arguments = "{$site->name} {$user} {$site->directory}";
 
         return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments)
@@ -205,13 +205,28 @@ trait HandlesProcesses
      */
     public function runInstallGitRepositoryScript(Server $server, Site $site)
     {
-        $scriptPath = base_path('scripts/sites/install-repository.sh');
+        $scriptPath = '';
+
+        if ($site->type === 'nodejs') {
+            $scriptPath = base_path('scripts/sites/install-repository.sh');
+        } else if ($site->type === 'html') {
+            $scriptPath = base_path('scripts/sites/install-html-repository.sh');
+        }
 
         $repoUrl = $site->getSshUrl();
 
         $user = SSH_USER;
 
-        $arguments = "{$site->name} {$site->repository_branch} {$repoUrl} {$user} {$site->environment['PORT']}";
+        $updateLogsEndpoint = route('pm2-logs', [
+            'site' => $site->id 
+        ], false);
+
+        $hostname = config('app.hostname');
+
+        // LOG_WATCHER_NAME
+        $logWatcher = "{$site->name}-log-watcher";
+
+        $arguments = "{$site->name} {$site->repository_branch} {$repoUrl} {$user} {$site->environment['PORT']} {$updateLogsEndpoint} {$hostname} {$logWatcher} {$site->directory}";
 
         return $this->execProcessAsync(
             $this->sshScript($server, $scriptPath, $arguments, false),

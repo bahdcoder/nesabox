@@ -21,6 +21,12 @@ class SitesController extends Controller
         return new SiteResource($site, true);
     }
 
+    public function logs(Server $server, Site $site) {
+        // $this->authorize($server, 'view');
+
+        return $site->logs;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -32,7 +38,8 @@ class SitesController extends Controller
         $site = $server->sites()->create([
             'name' => $request->name,
             'status' => STATUS_INSTALLING,
-            'type' => $request->type
+            'type' => $request->type,
+            'directory' => $request->directory
         ]);
 
         AddSite::dispatch($server, $site);

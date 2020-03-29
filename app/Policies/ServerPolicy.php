@@ -31,7 +31,7 @@ class ServerPolicy
      */
     public function view(User $user, Server $server)
     {
-        if ($server->user_id === $user->id) {
+        if ((int) $server->user_id === (int) $user->id) {
             return true;
         }
 

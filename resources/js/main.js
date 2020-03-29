@@ -124,6 +124,12 @@ const router = new VueRouter({
                 import(`@/Pages/Sites/Files`).then(module => module.default)
         },
         {
+            path: '/servers/:server/sites/:site/logs',
+            name: 'server.site.logs',
+            component: () =>
+                import(`@/Pages/Sites/Logs`).then(module => module.default)
+        },
+        {
             path: '/account',
             name: 'account.profile',
             component: () =>
@@ -199,6 +205,52 @@ const app = new Vue({
                     type: ''
                 }
             }, timeout)
+        },
+        fetchSite(serverId, siteId) {
+            axios.get(`/api/servers/${serverId}/sites/${siteId}`)
+                .then(({ data }) => {
+                    this.sites = {
+                        ...this.sites,
+                        [siteId]: data
+                    }
+                })
+        },
+        fetchServer(serverId) {
+            axios.get(`/api/servers/${serverId}`)
+                .then(({ data }) => {
+                    this.servers = {
+                        ...this.servers,
+                        [serverId]: data
+                    }
+
+                    this.servers = {
+                        ...this.servers,
+                        [serverId]: data
+                    }
+
+                    const servers = this.allServers.servers.map(server => {
+                        if (server.id !== serverid) {
+                            return server
+                        }
+
+                        return data
+                    })
+
+                    const team_servers = this.allServers.team_servers.map(
+                        server => {
+                            if (server.id !== serverId) {
+                                return server
+                            }
+
+                            return data
+                        }
+                    )
+
+                    this.allServers = {
+                        servers,
+                        team_servers
+                    }
+                })
         }
     },
     mounted() {
@@ -206,43 +258,14 @@ const app = new Vue({
             if (
                 notification.type === 'App\\Notifications\\Sites\\SiteUpdated'
             ) {
-                this.sites = {
-                    ...this.sites,
-                    [notification.site.id]: notification.site
-                }
+                this.fetchSite(notification.server, notification.site)
             }
 
             if (
                 notification.type ===
                 'App\\Notifications\\Servers\\ServerIsReady'
             ) {
-                this.servers = {
-                    ...this.servers,
-                    [notification.server.id]: notification.server
-                }
-
-                const servers = this.allServers.servers.map(server => {
-                    if (server.id !== notification.server.id) {
-                        return server
-                    }
-
-                    return notification.server
-                })
-
-                const team_servers = this.allServers.team_servers.map(
-                    server => {
-                        if (server.id !== notification.server.id) {
-                            return server
-                        }
-
-                        return notification.server
-                    }
-                )
-
-                this.allServers = {
-                    servers,
-                    team_servers
-                }
+                this.fetchServer(notification.server)
             }
         })
     }

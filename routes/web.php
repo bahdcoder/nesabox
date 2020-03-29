@@ -80,6 +80,11 @@ Route::middleware(['auth'])->group(function () {
     ]);
 });
 
+Route::post('sites/{site}/pm2-logs', [
+    Pm2Controller::class,
+    'logs'
+])->name('pm2-logs');
+
 Route::middleware(['auth'])
     ->prefix('api')
     ->group(function () {
@@ -216,6 +221,11 @@ Route::middleware(['auth'])
         Route::get('servers/{server}/sites/{site}', [
             SitesController::class,
             'show'
+        ]);
+
+        Route::get('servers/{server}/sites/{site}/logs', [
+            SitesController::class,
+            'logs'
         ]);
 
         Route::put('servers/{server}/sites/{site}', [

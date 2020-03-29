@@ -117,6 +117,7 @@ useradd {$user}
 mkdir -p /home/{$user}/.ssh
 mkdir -p /home/{$user}/.{$user}
 mkdir -p /home/{$user}/.{$user}/ecosystems
+mkdir -p /home/{$user}/.{$user}/log-watchers
 adduser {$user} sudo
 
 chsh -s /bin/bash {$user}
