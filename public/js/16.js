@@ -522,13 +522,17 @@ var render = function() {
                           : _vm._e(),
                         _vm._v(" "),
                         header.value === "name"
-                          ? _c("span", [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(row.name) +
-                                  "\n                    "
-                              )
-                            ])
+                          ? _c(
+                              "span",
+                              { staticClass: "text-gray-800 text-sm" },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(row.name) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
                           : _vm._e()
                       ]
                     }

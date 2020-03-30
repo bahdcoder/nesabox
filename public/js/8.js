@@ -353,23 +353,33 @@ var render = function() {
                       var header = ref.header
                       return [
                         header.value === "name"
-                          ? _c("span", [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(row.name) +
-                                  "\n                    "
-                              )
-                            ])
+                          ? _c(
+                              "span",
+                              { staticClass: "text-gray-800 text-sm" },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(row.name) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
                           : _vm._e(),
                         _vm._v(" "),
                         header.value === "type"
-                          ? _c("span", { staticClass: "capitalize" }, [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(row.type) +
-                                  "\n                    "
-                              )
-                            ])
+                          ? _c(
+                              "span",
+                              {
+                                staticClass: "text-gray-800 text-sm capitalize"
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(row.type) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
                           : _vm._e(),
                         _vm._v(" "),
                         header.value === "status"

@@ -83,6 +83,7 @@
                                     header.value
                                 )
                             "
+                            class="text-gray-800 text-sm"
                         >
                             {{ row[header.value] }}
                         </span>

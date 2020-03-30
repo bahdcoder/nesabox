@@ -61,11 +61,11 @@
                     @row-clicked="routeToSite"
                 >
                     <template slot="row" slot-scope="{ row, header }">
-                        <span v-if="header.value === 'name'">
+                        <span class="text-gray-800 text-sm" v-if="header.value === 'name'">
                             {{ row.name }}
                         </span>
 
-                        <span v-if="header.value === 'type'" class="capitalize">
+                        <span v-if="header.value === 'type'" class="text-gray-800 text-sm capitalize">
                             {{ row.type }}
                         </span>
 

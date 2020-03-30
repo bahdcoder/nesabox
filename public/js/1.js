@@ -115,6 +115,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -430,13 +431,17 @@ var render = function() {
                       var header = ref.header
                       return [
                         ["profileName", "provider"].includes(header.value)
-                          ? _c("span", [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(row[header.value]) +
-                                  "\n                    "
-                              )
-                            ])
+                          ? _c(
+                              "span",
+                              { staticClass: "text-gray-800 text-sm" },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(row[header.value]) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
                           : _vm._e(),
                         _vm._v(" "),
                         header.value === "actions"

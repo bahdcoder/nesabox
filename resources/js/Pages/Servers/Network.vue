@@ -2,7 +2,17 @@
     <server-layout @mounted="serverMounted">
         <template slot='content'>
             <flash />
-            <card title='Server network' v-if="server.provider === 'digital-ocean'">
+            <confirm-modal
+                :confirming="deleting"
+                @confirm="deleteRule"
+                :open="!!deletingRule"
+                @close="closeConfirmDelete"
+                confirmHeading="Delete firewall rule"
+                :confirmText="
+                    `Are you sure you want to delete the firewall rule ${deletingRule && deletingRule.name}?`
+                "
+            />
+            <card class="mb-6" title='Server network' v-if="server.provider === 'digital-ocean'">
                 <info>
                     Below is a list of all of the other servers this server may access. With a server's network, you can use a server as a separate database, cache or queue worker. Only servers from the same provider, and in the same region as this server would be listed here. 
                 </info>
@@ -29,6 +39,73 @@
 
                 <v-button label='Update network' class="mt-4" :disabled="familyServers.length === 0" @click="updateNetwork" :loading="updatingNetwork" />
             </card>
+
+            <card class="mb-6" title='New firewall rule'>
+                <form @submit.prevent="addRule">
+                    <info>
+                        If you do not provide a "FROM IP ADDRESS", the specified port will be open to any IP address on the internet.
+                    </info>
+
+                    <text-input
+                        name='name'
+                        label='Name'
+                        class="mt-4"
+                        :errors="errors.name"
+                        v-model="firewallForm.name"
+                        placeholder='Websockets app'
+                        help='Give this firewall rule a memorable name.'
+                    />
+
+                    <text-input
+                        name='port'
+                        label='Port'
+                        class="mt-4"
+                        placeholder='6001'
+                        :errors="errors.port"
+                        v-model="firewallForm.port"
+                    />
+
+                    <text-input
+                        name='from'
+                        class="mt-4"
+                        :errors="errors.from"
+                        label='From IP Address'
+                        v-model="firewallForm.from"
+                        placeholder='196.50.6.1,196.520.16.31'
+                        help='You can add multiple IP addresses separated by commas'
+                    />
+
+                    <v-button
+                        type='submit'
+                        class="mt-5"
+                        label='Add rule'
+                        :loading="addingRule"
+                    />
+                </form>
+            </card>
+
+            <card title='Firewall rules' :table="true" :rowsCount="rules.length" emptyTableMessage='No rules added to this server.'>
+                <v-table :headers="headers" :rows="rules" >
+                    <template slot='row' slot-scope='{ row, header }'>
+                        <table-status
+                            v-if="header.value === 'status'"
+                            :status="row.status"
+                        />
+
+                        <delete-button
+                            @click="deletingRule = row"
+                            v-if="header.value === 'actions'"
+                        />
+
+                        <span
+                            class="text-gray-800 text-sm"
+                            v-if="['name', 'port', 'from'].includes(header.value)"
+                        >
+                            {{ row[header.value] }}
+                        </span>
+                    </template>
+                </v-table>
+            </card>
         </template>
     </server-layout>
 </template>
@@ -40,6 +117,31 @@
                 form: {
                     servers: []
                 },
+                deleting: false,
+                deletingRule: null,
+                headers: [{
+                    label: 'Name',
+                    value: 'name'
+                }, {
+                    label: 'Port',
+                    value: 'port'
+                }, {
+                    label: 'From IP Address',
+                    value: 'from'
+                }, {
+                    label: 'Status',
+                    value: 'status'
+                }, {
+                    label: '',
+                    value: 'actions'
+                }],
+                firewallForm: {
+                    name: '',
+                    from: '',
+                    port: ''
+                },
+                addingRule: false,
+                errors: {},
                 updatingNetwork: false
             }
         },
@@ -51,9 +153,32 @@
                 if (! this.server || ! this.server.id) return []
 
                 return this.server.family_servers
+            },
+            rules() {
+                return this.server.firewall_rules || []
             }
         },
         methods: {
+            closeConfirmDelete() {
+                this.deleting = false
+                this.deletingRule = null
+            },
+            deleteRule() {
+                axios.delete(`/api/servers/${this.server.id}/firewall-rules/${this.deletingRule.id}`)
+                    .then(({ data: server }) => {
+                        this.$root.servers = {
+                            ...this.$root.servers,
+                            [server.id]: server
+                        }
+                    })
+                    .catch(({ response }) => {
+                        this.$root.flashMessage(response.data.message || 'Failed deleting firewall rule.', 'error')
+                    })
+                    .finally(() => {
+                        this.deleting = false
+                        this.deletingRule = null
+                    })
+            },
             selectServer(checked, server) {
                 if (checked) {
                     
@@ -95,6 +220,48 @@
                     ...this.form,
                     servers: this.server.friend_servers || []
                 }
+            },
+            addRule() {
+                this.addingRule = true
+
+                axios.post(`/api/servers/${this.server.id}/firewall-rules`, {
+                    ...this.firewallForm,
+                    from: this.firewallForm.from.split(',')
+                })
+                .then(({ data: server }) => {
+                    this.firewallForm = {
+                        name: '',
+                        port: '',
+                        from: ''
+                    }
+
+                    this.$root.servers = {
+                        ...this.$root.servers,
+                        [server.id]: server
+                    }
+                })
+                .catch(({ response }) => {
+                    if (response.status === 422) {
+                        this.errors = response.data.errors
+
+                        let invalidIpAddresses = false
+
+                        Object.keys(response.data.errors).forEach((error) => {
+                            if (error.match(/from/) && error !== 'from') {
+                                invalidIpAddresses = true
+                            }
+                        })
+
+                        if (invalidIpAddresses) {
+                            this.errors = {
+                                ...this.errors,
+                                from: ['Some of the ip addresses are invalid. Please check again.']
+                            }
+                        }
+                    }
+                }).finally(() => {
+                    this.addingRule = false
+                })
             }
         },
     }

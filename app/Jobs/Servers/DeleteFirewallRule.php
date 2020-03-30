@@ -8,10 +8,10 @@ use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\DeleteFirewallRule as AppDeleteFirewallRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-use Notification;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class DeleteFirewallRule implements ShouldQueue
 {
@@ -60,12 +60,10 @@ class DeleteFirewallRule implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->broadcastServerUpdated();
-
-            $this->alertServer($message, $process->getErrorOutput());
+            $this->server->alert($message, $process->getErrorOutput());
         }
 
-        Notification::send(
+        FacadesNotification::send(
             $this->server->getAllMembers(),
             new ServerIsReady($this->server)
         );
