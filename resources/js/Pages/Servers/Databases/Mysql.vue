@@ -111,6 +111,14 @@
                     </div>
 
                     <div class="mt-6">
+                        <label
+                            for=""
+                            class="block text-sm font-medium leading-5 text-gray-700"
+                            >Databases</label
+                        >
+                        <small class="text-gray-600"
+                            >Select all the databases users can access.</small
+                        >
                         <checkbox
                             class="mt-4"
                             :key="database.id"
@@ -402,13 +410,10 @@ export default {
             this.addingDatabaseUser = true
 
             axios
-                .post(
-                    `/api/servers/${this.server.id}/database-users`,
-                    {
-                        ...this.addUserForm,
-                        type: this.dbType
-                    }
-                )
+                .post(`/api/servers/${this.server.id}/database-users`, {
+                    ...this.addUserForm,
+                    type: this.dbType
+                })
                 .then(({ data: server }) => {
                     this.$root.servers = {
                         ...this.$root.servers,

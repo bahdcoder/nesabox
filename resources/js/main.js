@@ -22,6 +22,7 @@ import formMixin from '@/mixins/form'
 import Svg from '@/Shared/Svg'
 import Card from '@/Shared/Card'
 import Info from '@/Shared/Info'
+import Modal from '@/Shared/Modal'
 import Pulse from '@/Shared/Pulse'
 import Table from '@/Shared/Table'
 import Flash from '@/Shared/Flash'
@@ -33,14 +34,13 @@ import Spinner from '@/Shared/Spinner'
 import Checkbox from '@/Shared/Checkbox'
 import RedButton from '@/Shared/RedButton'
 import TextInput from '@/Shared/TextInput'
+import Codemirror from '@/Shared/Codemirror'
 import SiteLayout from '@/Shared/Sitelayout'
 import SelectInput from '@/Shared/SelectInput'
 import ConfirmModal from '@/Shared/ConfirmModal'
 import Serverlayout from '@/Shared/Serverlayout'
 import AccountLayout from '@/Shared/AccountLayout'
 import SidebarLayout from '@/Shared/SidebarLayout'
-import Mysql from '@/Pages/Servers/Databases/Mysql'
-import Mongodb from '@/Pages/Servers/Databases/Mongodb'
 import ButtonTransparent from '@/Shared/ButtonTransparent'
 import DeleteActionButton from '@/Shared/DeleteActionButton'
 
@@ -49,6 +49,7 @@ Vue.mixin(formMixin)
 Vue.component('info', Info)
 Vue.component('v-svg', Svg)
 Vue.component('card', Card)
+Vue.component('modal', Modal)
 Vue.component('pulse', Pulse)
 Vue.component('flash', Flash)
 Vue.component('v-radio', Radio)
@@ -61,6 +62,7 @@ Vue.component('table-status', Status)
 Vue.component('red-button', RedButton)
 Vue.component('text-input', TextInput)
 Vue.component('site-layout', SiteLayout)
+Vue.component('v-codemirror', Codemirror)
 Vue.component('select-input', SelectInput)
 Vue.directive('click-outside', ClickOutside)
 Vue.component('confirm-modal', ConfirmModal)
@@ -102,6 +104,14 @@ const router = new VueRouter({
             name: 'server.single',
             component: () =>
                 import(`@/Pages/Servers/Single`).then(module => module.default)
+        },
+        {
+            path: '/servers/:server/scheduler',
+            name: 'server.scheduler',
+            component: () =>
+                import(`@/Pages/Servers/Scheduler`).then(
+                    module => module.default
+                )
         },
         {
             path: '/servers/:server/databases/mysql8',

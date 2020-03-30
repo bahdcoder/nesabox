@@ -65,11 +65,6 @@ class Base
     {
         $func = $callback ? 'execProcessAsync' : 'execProcess';
 
-        if (app()->environment('local')) {
-            echo $this->generate();
-            echo '\n';
-        }
-
         return $this->$func(
             "ssh -o StrictHostKeyChecking=no {$this->sshUser}@{$this->server->ip_address} -i ~/.ssh/{$this->server->slug} 'bash -se' <<  EOF-CUSTOM
 {$this->setE()}

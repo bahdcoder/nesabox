@@ -112,14 +112,12 @@
                             v-if="site.push_to_deploy"
                             :loading="quickDeploying"
                             label="Disable push to deploy"
-                            class="w-full md:w-auto"
                         />
                         <v-button
                             @click="quickDeploy"
                             v-else
                             :loading="quickDeploying"
                             label="Enable push to deploy"
-                            class="w-full md:w-auto"
                         />
 
                         <span
@@ -166,7 +164,7 @@
                     <v-button
                         @click="saveScript"
                         label="Save script"
-                        class="w-full md:w-auto mt-4"
+                        class="mt-4"
                         :loading="savingScript"
                     />
                 </card>
@@ -188,7 +186,7 @@
 
                     <v-button
                         label="Copy to Clipboard"
-                        class="w-full md:w-auto mt-4"
+                        class="mt-4"
                         @click="copyDeploymentTriggerUrl"
                     />
                 </card>

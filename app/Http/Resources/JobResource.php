@@ -17,6 +17,7 @@ class JobResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'status' => $this->status,
             'slug' => $this->resource->slug,
             'user' => $this->resource->user,
             'cron' => $this->resource->cron,

@@ -17,7 +17,7 @@
                     @click="fetchPm2File"
                     :loading="fetchingEcosystemFile"
                     label="Edit Ecosystem file"
-                    class="w-full md:w-auto mt-4"
+                    class="mt-4"
                     v-if="!ecosystemFile"
                 />
                 <codemirror
@@ -31,7 +31,7 @@
                     @click="updatePm2File"
                     :loading="updatingEcosystemFile"
                     label="Update Ecosystem file"
-                    class="w-full md:w-auto mt-4"
+                    class="mt-4"
                     v-if="ecosystemFile"
                 />
             </card>
@@ -49,7 +49,7 @@
                     @click="fetchNginxConfigFile"
                     :loading="fetchingNginxConfigFile"
                     label="Edit Nginx Configuration"
-                    class="w-full md:w-auto mt-4"
+                    class="mt-4"
                     v-if="!nginxConfigFile"
                 />
                 <codemirror
@@ -63,7 +63,7 @@
                     @click="updateNginxConfigFile"
                     :loading="updatingNginxConfigFile"
                     label="Update Nginx file"
-                    class="w-full md:w-auto mt-4"
+                    class="mt-4"
                     v-if="nginxConfigFile"
                 />
             </card>

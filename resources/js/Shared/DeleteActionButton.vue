@@ -2,7 +2,7 @@
     <button
         type="button"
         @click="$emit('click')"
-        class="border-2 border-red-500 p-2 rounded hover:bg-red-100 shadow"
+        class="border-2 border-red-500 p-1 rounded hover:bg-red-100 shadow"
     >
         <svg
             width="20"

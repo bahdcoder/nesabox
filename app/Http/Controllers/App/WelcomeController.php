@@ -8,6 +8,9 @@ class WelcomeController extends Controller
 {
     public function index()
     {
+        if (auth()->user()) {
+            return redirect('/dashboard');
+        }
         return view('app.welcome');
     }
 }

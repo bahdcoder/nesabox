@@ -228,7 +228,7 @@ var render = function() {
                   _vm._v(" "),
                   !_vm.ecosystemFile
                     ? _c("v-button", {
-                        staticClass: "w-full md:w-auto mt-4",
+                        staticClass: "mt-4",
                         attrs: {
                           loading: _vm.fetchingEcosystemFile,
                           label: "Edit Ecosystem file"
@@ -253,7 +253,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm.ecosystemFile
                     ? _c("v-button", {
-                        staticClass: "w-full md:w-auto mt-4",
+                        staticClass: "mt-4",
                         attrs: {
                           loading: _vm.updatingEcosystemFile,
                           label: "Update Ecosystem file"
@@ -285,7 +285,7 @@ var render = function() {
               _vm._v(" "),
               !_vm.nginxConfigFile
                 ? _c("v-button", {
-                    staticClass: "w-full md:w-auto mt-4",
+                    staticClass: "mt-4",
                     attrs: {
                       loading: _vm.fetchingNginxConfigFile,
                       label: "Edit Nginx Configuration"
@@ -310,7 +310,7 @@ var render = function() {
               _vm._v(" "),
               _vm.nginxConfigFile
                 ? _c("v-button", {
-                    staticClass: "w-full md:w-auto mt-4",
+                    staticClass: "mt-4",
                     attrs: {
                       loading: _vm.updatingNginxConfigFile,
                       label: "Update Nginx file"
