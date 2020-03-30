@@ -64,6 +64,6 @@ class UpdateServerNetworkController extends Controller
             ]);
         });
 
-        return response()->json(new ServerResource($server->fresh()));
+        return new ServerResource($server->fresh());
     }
 }

@@ -114,6 +114,14 @@ const router = new VueRouter({
                 )
         },
         {
+            path: '/servers/:server/network',
+            name: 'server.network',
+            component: () =>
+                import(`@/Pages/Servers/Network`).then(
+                    module => module.default
+                )
+        },
+        {
             path: '/servers/:server/databases/mysql8',
             name: 'server.databases.mysql8',
             component: () =>

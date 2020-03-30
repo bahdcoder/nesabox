@@ -113,6 +113,7 @@ export default {
         if (this.$root.servers[this.$route.params.server]) {
             this.loading = false
             this.addDatabasesToNav()
+            this.$emit('mounted')
 
             return
         }
@@ -126,6 +127,7 @@ export default {
                 }
 
                 this.addDatabasesToNav()
+                this.$emit('mounted')
 
                 this.loading = false
             })

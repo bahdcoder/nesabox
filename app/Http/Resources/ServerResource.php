@@ -35,9 +35,9 @@ class ServerResource extends JsonResource
             'provider' => $this->provider,
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
-            'node_version' => $this->node_version,
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
+            'private_ip_address' => $this->private_ip_address,
             'database_instances' => $this->databaseInstances()
                 ->with('databaseUsers')
                 ->get(),
@@ -84,9 +84,10 @@ class ServerResource extends JsonResource
                 ->where('region', $this->region)
                 ->where('provider', $this->provider)
                 ->whereNotNull('private_ip_address')
+                ->select(['id', 'name'])
                 ->get(),
             'balanced_servers' => $this->balancedServers,
-            'friend_servers' => $this->friendServers
+            'friend_servers' => $this->friendServers()->pluck('friend_server_id')->all()
         ];
     }
 }

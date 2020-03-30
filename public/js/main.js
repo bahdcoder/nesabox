@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"83fd54ada145dd05f051","1":"04541345315fb86cef9a","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"d3be19e0046eb11403ac","6":"66b5b92d32855e6f5986","7":"4783efe1d692946f31f8","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","15":"5b860f153763497d7cc6","16":"cce265810fa264c2ba6d","17":"dd4d53dd5bfae074a56e","18":"c4e5a6ad2983b03c25e0","19":"d1577c41a18b1de10319"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"83fd54ada145dd05f051","1":"04541345315fb86cef9a","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"d3be19e0046eb11403ac","6":"66b5b92d32855e6f5986","7":"4783efe1d692946f31f8","8":"38ac127ef8aae802b42e","9":"bc4984384bc37399af94","10":"e5619dd03da7b09c1da6","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","15":"5b860f153763497d7cc6","16":"cce265810fa264c2ba6d","17":"dd4d53dd5bfae074a56e","18":"c4e5a6ad2983b03c25e0","19":"d1577c41a18b1de10319"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -3246,6 +3246,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     if (this.$root.servers[this.$route.params.server]) {
       this.loading = false;
       this.addDatabasesToNav();
+      this.$emit('mounted');
       return;
     }
 
@@ -3254,6 +3255,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, _this2.$route.params.server, data));
 
       _this2.addDatabasesToNav();
+
+      _this2.$emit('mounted');
 
       _this2.loading = false;
     })["catch"](function () {
@@ -25369,7 +25372,7 @@ var render = function() {
       staticClass:
         "w-full md:w-auto capitalize inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-sha-green-500 hover:bg-sha-green-400 focus:outline-none focus:border-sha-green-600 focus:shadow-outline-sha-green active:bg-sha-green-600 transition duration-150 ease-in-out",
       class: {
-        "cursor-not-allowed": _vm.loading
+        "cursor-not-allowed": _vm.loading || _vm.disabled
       },
       attrs: {
         to: _vm.to,
@@ -44775,6 +44778,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     name: 'server.scheduler',
     component: function component() {
       return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Scheduler */ "./resources/js/Pages/Servers/Scheduler.vue")).then(function (module) {
+        return module["default"];
+      });
+    }
+  }, {
+    path: '/servers/:server/network',
+    name: 'server.network',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Network */ "./resources/js/Pages/Servers/Network.vue")).then(function (module) {
         return module["default"];
       });
     }
