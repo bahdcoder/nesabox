@@ -95,73 +95,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -253,123 +186,6 @@ var render = function() {
               { staticClass: "ml-4 mt-2 flex-shrink-0 flex items-center" },
               [
                 _c(
-                  "div",
-                  {
-                    staticClass:
-                      "hidden md:flex mr-3 items-center justify-center"
-                  },
-                  [
-                    _c(
-                      "span",
-                      {
-                        staticClass:
-                          "relative inline-block flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-50 focus:outline-none focus:shadow-outline",
-                        class: {
-                          "bg-gray-200": !_vm.showOnlyOwnServers,
-                          "bg-sha-green-600": _vm.showOnlyOwnServers
-                        },
-                        attrs: {
-                          role: "checkbox",
-                          tabindex: "0",
-                          "aria-checked": _vm.showOnlyOwnServers
-                        },
-                        on: { click: _vm.toggleShowOwnServers }
-                      },
-                      [
-                        _c(
-                          "span",
-                          {
-                            staticClass:
-                              "relative inline-block h-5 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200",
-                            class: {
-                              "translate-x-5": _vm.showOnlyOwnServers,
-                              "translate-x-0": !_vm.showOnlyOwnServers
-                            },
-                            attrs: { "aria-hidden": "true" }
-                          },
-                          [
-                            _c(
-                              "span",
-                              {
-                                staticClass:
-                                  "absolute inset-0 h-full w-full flex items-center justify-center transition-opacity",
-                                class: {
-                                  "opacity-0 ease-out duration-100":
-                                    _vm.showOnlyOwnServers,
-                                  "opacity-100 ease-in duration-200": !_vm.showOnlyOwnServers
-                                }
-                              },
-                              [
-                                _c(
-                                  "svg",
-                                  {
-                                    staticClass: "h-3 w-3 text-gray-400",
-                                    attrs: {
-                                      fill: "none",
-                                      viewBox: "0 0 12 12"
-                                    }
-                                  },
-                                  [
-                                    _c("path", {
-                                      attrs: {
-                                        d: "M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2",
-                                        stroke: "currentColor",
-                                        "stroke-width": "2",
-                                        "stroke-linecap": "round",
-                                        "stroke-linejoin": "round"
-                                      }
-                                    })
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "span",
-                              {
-                                staticClass:
-                                  "absolute inset-0 h-full w-full flex items-center justify-center transition-opacity",
-                                class: {
-                                  "opacity-100 ease-in duration-200":
-                                    _vm.showOnlyOwnServers,
-                                  "opacity-0 ease-out duration-100": !_vm.showOnlyOwnServers
-                                }
-                              },
-                              [
-                                _c(
-                                  "svg",
-                                  {
-                                    staticClass: "h-3 w-3 text-sha-green-500",
-                                    attrs: {
-                                      fill: "currentColor",
-                                      viewBox: "0 0 12 12"
-                                    }
-                                  },
-                                  [
-                                    _c("path", {
-                                      attrs: {
-                                        d:
-                                          "M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z"
-                                      }
-                                    })
-                                  ]
-                                )
-                              ]
-                            )
-                          ]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "span",
-                      { staticClass: "inline-block ml-3 text-gray-800" },
-                      [_vm._v("Show only own servers")]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
                   "span",
                   { staticClass: "inline-flex rounded-md shadow-sm" },
                   [
@@ -444,7 +260,7 @@ var render = function() {
                               [
                                 _vm._v(
                                   "\n                    " +
-                                    _vm._s(row.type) +
+                                    _vm._s(row.type.split("_").join(" ")) +
                                     "\n                "
                                 )
                               ]
@@ -507,7 +323,7 @@ var render = function() {
                 ],
                 null,
                 false,
-                3869922580
+                652408091
               )
             })
           ],

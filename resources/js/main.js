@@ -114,6 +114,14 @@ const router = new VueRouter({
                 )
         },
         {
+            path: '/servers/:server/meta',
+            name: 'server.meta',
+            component: () =>
+                import(`@/Pages/Servers/Meta`).then(
+                    module => module.default
+                )
+        },
+        {
             path: '/servers/:server/network',
             name: 'server.network',
             component: () =>

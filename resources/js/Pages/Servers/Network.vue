@@ -37,6 +37,16 @@
                     />
                 </div>
 
+                    <text-input
+                        name='from'
+                        class="mt-4"
+                        label='Ports'
+                        v-model="form.ports"
+                        :errors="errors.ports"
+                        placeholder='27017,6379'
+                        help='Provide which ports you want this server to have access to. You can add multiple ports separated by commas. For example, if you want this server to be able to access a Mongodb server and Redis server, provide ports 27017,6379'
+                    />
+
                 <v-button label='Update network' class="mt-4" :disabled="familyServers.length === 0" @click="updateNetwork" :loading="updatingNetwork" />
             </card>
 
@@ -115,7 +125,8 @@
         data() {
             return {
                 form: {
-                    servers: []
+                    servers: [],
+                    ports: ''
                 },
                 deleting: false,
                 deletingRule: null,
@@ -138,7 +149,7 @@
                 firewallForm: {
                     name: '',
                     from: '',
-                    port: ''
+                    port: '',
                 },
                 addingRule: false,
                 errors: {},
@@ -199,7 +210,10 @@
             updateNetwork() {
                 this.updatingNetwork = true
 
-                axios.patch(`/api/servers/${this.server.id}/network`, this.form)
+                axios.patch(`/api/servers/${this.server.id}/network`, {
+                    ...this.form,
+                    ports: this.form.ports.split(',')
+                })
                     .then(({ data: server }) => {
                         this.$root.flashMessage('Network has been updated.')
 
@@ -209,7 +223,7 @@
                         }
                     })
                     .catch(({ response }) => {
-                        this.$root.flashMessage(response.data.message || 'Failed updating network.')
+                        this.$root.flashMessage(response.data.message || 'Failed updating network.', 'error')
                     })
                     .finally(() => {
                         this.updatingNetwork = false

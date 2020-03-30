@@ -51,6 +51,8 @@ class UpdateBalancedServers extends Base
     {
         $serverScript = '';
 
+        $upstreamName = str_slug($this->site->name);
+
         foreach ($this->servers as $server):
             $serverScript .= <<<EOD
 \n
@@ -60,7 +62,7 @@ EOD;
 
         return <<<EOD
 cat > /etc/nginx/nesa-conf/{$this->site->name}/upstream.conf << EOF
-upstream app {
+upstream {$upstreamName} {
     {$serverScript}
 
 }

@@ -34,7 +34,12 @@ class CreateSiteRequest extends FormRequest
                 }),
                 new Domain()
             ],
-            'type' => 'required|in:nodejs,html',
+            'type' => [
+                Rule::requiredIf(function () {
+                    return $this->route('server')->type !== 'load_balancer';
+                }),
+                'in:nodejs,html'
+            ],
             'directory' => 'required'
         ];
     }

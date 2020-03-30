@@ -72,7 +72,8 @@ class SiteResource extends JsonResource
                 STATUS_ACTIVE,
             $this->mergeWhen($this->includeServer, [
                 'server' => new ServerResource($this->server)
-            ])
+            ]),
+            'balanced_servers' => $this->balancedServers()->pluck('balanced_server_id')->all(),
         ];
     }
 }

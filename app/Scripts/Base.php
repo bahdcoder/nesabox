@@ -3,6 +3,7 @@
 namespace App\Scripts;
 
 use App\Http\Traits\HandlesProcesses;
+use Illuminate\Support\Facades\Log;
 
 class Base
 {
@@ -64,6 +65,8 @@ class Base
     public function run($callback = null)
     {
         $func = $callback ? 'execProcessAsync' : 'execProcess';
+
+        Log::info($this->generate());
 
         return $this->$func(
             "ssh -o StrictHostKeyChecking=no {$this->sshUser}@{$this->server->ip_address} -i ~/.ssh/{$this->server->slug} 'bash -se' <<  EOF-CUSTOM

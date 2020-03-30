@@ -5,7 +5,7 @@
             <card
                 title="PM2 Ecosystem file"
                 class="mb-6"
-                v-if="site.type === 'nodejs'"
+                v-if="site.type === 'nodejs' && server.type !== 'load_balancer'"
             >
                 <info>
                     This is the PM2 configuration for your site. Here you can
@@ -104,6 +104,9 @@ export default {
     computed: {
         site() {
             return this.$root.sites[this.$route.params.site] || {}
+        },
+        server() {
+            return this.$root.servers[this.$route.params.server] || {}
         },
         serverId() {
             return this.$route.params.server

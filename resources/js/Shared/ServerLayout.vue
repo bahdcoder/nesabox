@@ -1,15 +1,27 @@
 <template>
     <div>
         <sidebar-layout
-            :showNav="server.status === 'active'"
             :nav="nav"
             :active="active"
+            :showNav="server.status === 'active'"
         >
+            <template slot="header">
+                <div class="w-full flex flex-wrap justify-between mb-5" v-if="!loading">
+                    <div class="w-full md:w-1/5">
+                        <h3 class="text-lg text-gray-800">Server details</h3>
+                    </div>
+                    <div class="w-full md:w-4/5 flex flex-wrap md:justify-end">
+                        <div class="w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide">
+                            <span class="w-full md:w-auto">{{ server.name }}</span>
+                            <span class="w-full md:w-auto md:ml-5">{{ server.region }}</span>
+                            <span class="w-full md:w-auto md:ml-5">{{ server.ip_address }}</span>
+                            <span class="w-full md:w-auto md:ml-2" v-if="server.private_ip_address">({{ server.private_ip_address }})</span>
+                            <table-status :status="server.status" />
+                        </div>
+                    </div>
+                </div>
+            </template>
             <div v-if="server.status === 'active' && !loading">
-                <template slot="header">
-                    <!-- <div class="h-12 w-full mb-5"></div> -->
-                    <slot name="header" />
-                </template>
                 <slot name="content" />
             </div>
         </sidebar-layout>
@@ -103,6 +115,11 @@ export default {
                     label: 'Network',
                     value: 'network',
                     to: route('network')
+                },
+                {
+                    label: 'Meta',
+                    value: 'meta',
+                    to: route('meta')
                 }
             ],
             loading: true,
@@ -159,6 +176,10 @@ export default {
                     to: `/servers/${this.server.id}/databases/${db}`
                 }))
             ]
+
+            if (this.server.type === 'load_balancer') {
+                this.nav = this.nav.filter(item => !['scheduler'].includes(item.value))
+            }
         }
     }
 }

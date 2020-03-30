@@ -69,11 +69,6 @@ class Server extends Model
         );
     }
 
-    public function balancedServers()
-    {
-        return $this->hasMany(BalancedServer::class);
-    }
-
     public function friendServers()
     {
         return $this->hasMany(FriendServer::class);
@@ -118,14 +113,14 @@ class Server extends Model
         // clean up pivot relations
         $this->hasMany(DatabaseUser::class)
             ->get()
-            ->map(function ($database) {
-                $database->databaseUsers()->sync([]);
+            ->map(function ($databaseUser) {
+                $databaseUser->databases()->sync([]);
             });
         // clean up database users pivot relations
         $this->hasMany(Database::class)
             ->get()
             ->map(function ($database) {
-                $database->databases()->sync([]);
+                $database->databaseUsers()->sync([]);
             });
         // databases and database users
         $this->hasMany(DatabaseUser::class)->delete();

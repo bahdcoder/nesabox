@@ -83,7 +83,7 @@ export default {
         if (site) {
             this.loading = false
 
-            if (site && site.type !== 'nodejs') {
+            if (site && site.type !== 'nodejs' || site.server.type === 'load_balancer') {
                 this.nav = this.nav.filter(
                     item => !['logs'].includes(item.value)
                 )
@@ -109,7 +109,7 @@ export default {
                     [site.id]: site
                 }
 
-                if (site.type !== 'nodejs') {
+                if (site.type !== 'nodejs' || site.server.type === 'load_balancer') {
                     this.nav = this.nav.filter(
                         item => !['logs'].includes(item.value)
                     )

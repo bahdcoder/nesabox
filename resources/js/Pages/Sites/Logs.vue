@@ -1,5 +1,5 @@
 <template>
-    <site-layout>
+    <site-layout @mounted="siteMounted">
         <template slot="content">
             <flash />
             <card title="PM2 Logs">
@@ -57,6 +57,9 @@ export default {
         site() {
             return this.$root.sites[this.$route.params.site] || {}
         },
+        server() {
+            return this.$root.servers[this.$route.params.server] || {}
+        },
         serverId() {
             return this.$route.params.server
         },
@@ -72,6 +75,12 @@ export default {
                     this.fetchingLogs = false
                     this.logs = logs
                 })
+        },
+        siteMounted() {
+            if (this.server && this.server.type === 'load_balancer') {
+                this.$router.push(`/servers/${this.server.id}`)
+                return
+            }
         }
     },
     mounted() {

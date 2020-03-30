@@ -38,8 +38,8 @@ class SitesController extends Controller
     {
         $site = $server->sites()->create([
             'name' => $request->name,
-            'status' => STATUS_INSTALLING,
             'type' => $request->type,
+            'status' => STATUS_INSTALLING,
             'directory' => $request->directory
         ]);
 

@@ -15,7 +15,7 @@
                         />
                     </div>
 
-                    <div class="w-full mt-5">
+                    <div class="w-full mt-5" v-if="server && server.type !== 'load_balancer'">
                         <select-input
                             name="type"
                             v-model="form.type"
@@ -27,7 +27,7 @@
                         />
                     </div>
 
-                    <div class="w-full mt-5">
+                    <div class="w-full mt-5" v-if="server && server.type !== 'load_balancer'">
                         <text-input
                             name="directory"
                             placeholder="/dist"
@@ -56,9 +56,9 @@
                 emptyTableMessage="No sites on this server yet."
             >
                 <v-table
-                    :headers="table.headers"
                     :rows="sites"
                     @row-clicked="routeToSite"
+                    :headers="server && server.type === 'load_balancer' ? table.loadBalancerHeaders :table.headers"
                 >
                     <template slot="row" slot-scope="{ row, header }">
                         <span class="text-gray-800 text-sm" v-if="header.value === 'name'">
@@ -138,6 +138,16 @@ export default {
                         label: 'Status',
                         value: 'status'
                     }
+                ],
+                loadBalancerHeaders: [
+                    {
+                        label: 'Domain',
+                        value: 'name'
+                    },
+                    {
+                        label: 'Status',
+                        value: 'status'
+                    }
                 ]
             }
         }
@@ -158,8 +168,6 @@ export default {
                     ...this.$root.servers,
                     [server.id]: server
                 }
-
-                this.$root.flashMessage('Server has been created.')
             })
         },
         routeToSite(site) {

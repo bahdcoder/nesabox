@@ -11,10 +11,10 @@
                 :confirmText="`Are you sure you want to delete this site ?`"
             />
             <card title="Delete site">
-                <span class="block text-gray-700">
+                <info>
                     This will permanently remove all files related to this site
                     from your server.
-                </span>
+                </info>
                 <red-button
                     @click="deletingModalOpen = true"
                     label="Delete site"

@@ -49,7 +49,8 @@ class UpdateServerNetworkController extends Controller
         $process = (new UpdateServerNetwork(
             $servers,
             $serversToDelete,
-            $server
+            $server,
+            $request->ports
         ))->run();
 
         if (!$process->isSuccessful()) {
@@ -58,9 +59,10 @@ class UpdateServerNetworkController extends Controller
 
         $server->friendServers()->delete();
 
-        $servers->each(function ($friendServer) use ($server) {
+        $servers->each(function ($friendServer) use ($server, $request) {
             $server->friendServers()->create([
-                'friend_server_id' => $friendServer->id
+                'friend_server_id' => $friendServer->id,
+                'ports' => implode(',', $request->ports)
             ]);
         });
 

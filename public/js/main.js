@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"83fd54ada145dd05f051","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"d3be19e0046eb11403ac","6":"66b5b92d32855e6f5986","7":"4783efe1d692946f31f8","8":"169aa08a97eb5f5531e2","9":"bc4984384bc37399af94","10":"c25c147b11cb3966532c","11":"7cae445bc28cae2a2e2d","12":"932edab5a30a50a6d9ad","15":"2d89a994001430839346","16":"139673c125db2c9c5442","17":"dd4d53dd5bfae074a56e","18":"c4e5a6ad2983b03c25e0","19":"d1577c41a18b1de10319"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"fb02d82fafa4d72d0895","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"9a2846a9ad17b285e834","6":"66b5b92d32855e6f5986","7":"6e4bb18df5a7faf998a0","8":"15bb7513140f6082b44e","9":"83c80c21301ebffa46df","10":"d5bf1b2adda5149ebadb","11":"b602aa69f663939b1350","12":"4a102d12e7f0feb4581c","13":"2476a095742567aa5556","14":"ca28802eab7dcb159cb7","15":"75d6ba1e7c5509d52557","16":"0d679592144c908c82c3","17":"83c33bde74b9dab04ac0","18":"301f2c056fb67b6e0489"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -3214,6 +3214,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this = this;
@@ -3235,6 +3247,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         label: 'Network',
         value: 'network',
         to: route('network')
+      }, {
+        label: 'Meta',
+        value: 'meta',
+        to: route('meta')
       }],
       loading: true,
       deletingServer: false
@@ -3290,6 +3306,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           to: "/servers/".concat(_this4.server.id, "/databases/").concat(db)
         };
       })));
+
+      if (this.server.type === 'load_balancer') {
+        this.nav = this.nav.filter(function (item) {
+          return !['scheduler'].includes(item.value);
+        });
+      }
     }
   }
 });
@@ -3305,6 +3327,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3714,7 +3747,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     if (site) {
       this.loading = false;
 
-      if (site && site.type !== 'nodejs') {
+      if (site && site.type !== 'nodejs' || site.server.type === 'load_balancer') {
         this.nav = this.nav.filter(function (item) {
           return !['logs'].includes(item.value);
         });
@@ -3729,7 +3762,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, _this2.$route.params.server, site.server));
       _this2.$root.sites = _objectSpread({}, _this2.$root.sites, _defineProperty({}, site.id, site));
 
-      if (site.type !== 'nodejs') {
+      if (site.type !== 'nodejs' || site.server.type === 'load_balancer') {
         _this2.nav = _this2.nav.filter(function (item) {
           return !['logs'].includes(item.value);
         });
@@ -26761,24 +26794,86 @@ var render = function() {
         "sidebar-layout",
         {
           attrs: {
-            showNav: _vm.server.status === "active",
             nav: _vm.nav,
-            active: _vm.active
+            active: _vm.active,
+            showNav: _vm.server.status === "active"
           }
         },
         [
+          _c("template", { slot: "header" }, [
+            !_vm.loading
+              ? _c(
+                  "div",
+                  { staticClass: "w-full flex flex-wrap justify-between mb-5" },
+                  [
+                    _c("div", { staticClass: "w-full md:w-1/5" }, [
+                      _c("h3", { staticClass: "text-lg text-gray-800" }, [
+                        _vm._v("Server details")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "w-full md:w-4/5 flex flex-wrap md:justify-end"
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide"
+                          },
+                          [
+                            _c("span", { staticClass: "w-full md:w-auto" }, [
+                              _vm._v(_vm._s(_vm.server.name))
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              { staticClass: "w-full md:w-auto md:ml-5" },
+                              [_vm._v(_vm._s(_vm.server.region))]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              { staticClass: "w-full md:w-auto md:ml-5" },
+                              [_vm._v(_vm._s(_vm.server.ip_address))]
+                            ),
+                            _vm._v(" "),
+                            _vm.server.private_ip_address
+                              ? _c(
+                                  "span",
+                                  { staticClass: "w-full md:w-auto md:ml-2" },
+                                  [
+                                    _vm._v(
+                                      "(" +
+                                        _vm._s(_vm.server.private_ip_address) +
+                                        ")"
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("table-status", {
+                              attrs: { status: _vm.server.status }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    )
+                  ]
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
           _vm.server.status === "active" && !_vm.loading
-            ? _c(
-                "div",
-                [
-                  _c("template", { slot: "header" }, [_vm._t("header")], 2),
-                  _vm._v(" "),
-                  _vm._t("content")
-                ],
-                2
-              )
+            ? _c("div", [_vm._t("content")], 2)
             : _vm._e()
-        ]
+        ],
+        2
       ),
       _vm._v(" "),
       _c("main", { staticClass: "px-3" }, [
@@ -27270,6 +27365,38 @@ var render = function() {
                                   "stroke-width": "2",
                                   d:
                                     "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      item.value === "meta"
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass:
+                                "flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150",
+                              class: {
+                                "text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500":
+                                  _vm.active !== item.to,
+                                "text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700":
+                                  _vm.active === item.to
+                              },
+                              attrs: {
+                                fill: "none",
+                                stroke: "currentColor",
+                                "stroke-linecap": "round",
+                                "stroke-linejoin": "round",
+                                "stroke-width": "2",
+                                viewBox: "0 0 24 24"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                                 }
                               })
                             ]
@@ -44761,7 +44888,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/create',
     name: 'server.create',
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(12), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Create */ "./resources/js/Pages/Servers/Create.vue")).then(function (module) {
+      return Promise.all(/*! import() */[__webpack_require__.e(18), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Create */ "./resources/js/Pages/Servers/Create.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44769,7 +44896,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server',
     name: 'server.single',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Single */ "./resources/js/Pages/Servers/Single.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Single */ "./resources/js/Pages/Servers/Single.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44777,7 +44904,15 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/scheduler',
     name: 'server.scheduler',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Scheduler */ "./resources/js/Pages/Servers/Scheduler.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Scheduler */ "./resources/js/Pages/Servers/Scheduler.vue")).then(function (module) {
+        return module["default"];
+      });
+    }
+  }, {
+    path: '/servers/:server/meta',
+    name: 'server.meta',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Meta */ "./resources/js/Pages/Servers/Meta.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44785,7 +44920,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/network',
     name: 'server.network',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Network */ "./resources/js/Pages/Servers/Network.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Network */ "./resources/js/Pages/Servers/Network.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44793,7 +44928,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/databases/mysql8',
     name: 'server.databases.mysql8',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mysql */ "./resources/js/Pages/Servers/Databases/Mysql.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mysql */ "./resources/js/Pages/Servers/Databases/Mysql.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44801,7 +44936,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/databases/mysql',
     name: 'server.databases.mysql',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mysql */ "./resources/js/Pages/Servers/Databases/Mysql.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mysql */ "./resources/js/Pages/Servers/Databases/Mysql.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44809,7 +44944,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/databases/mariadb',
     name: 'server.databases.mariadb',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mysql */ "./resources/js/Pages/Servers/Databases/Mysql.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mysql */ "./resources/js/Pages/Servers/Databases/Mysql.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44817,7 +44952,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/databases/postgresql',
     name: 'server.databases.postgresql',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Postgres */ "./resources/js/Pages/Servers/Databases/Postgres.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Postgres */ "./resources/js/Pages/Servers/Databases/Postgres.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44825,7 +44960,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/databases/mongodb',
     name: 'server.databases.mongodb',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mongodb */ "./resources/js/Pages/Servers/Databases/Mongodb.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mongodb */ "./resources/js/Pages/Servers/Databases/Mongodb.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44833,7 +44968,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site',
     name: 'server.site',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Single */ "./resources/js/Pages/Sites/Single.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Single */ "./resources/js/Pages/Sites/Single.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44841,7 +44976,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site/settings',
     name: 'server.site.settings',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Settings */ "./resources/js/Pages/Sites/Settings.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Settings */ "./resources/js/Pages/Sites/Settings.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44849,7 +44984,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site/files',
     name: 'server.site.files',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Files */ "./resources/js/Pages/Sites/Files.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Files */ "./resources/js/Pages/Sites/Files.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44857,7 +44992,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site/logs',
     name: 'server.site.logs',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Logs */ "./resources/js/Pages/Sites/Logs.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Logs */ "./resources/js/Pages/Sites/Logs.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -44865,7 +45000,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/account',
     name: 'account.profile',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! @/Pages/Account/Index */ "./resources/js/Pages/Account/Index.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! @/Pages/Account/Index */ "./resources/js/Pages/Account/Index.vue")).then(function (module) {
         return module["default"];
       });
     }

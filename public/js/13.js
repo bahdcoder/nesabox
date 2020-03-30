@@ -72,6 +72,9 @@ __webpack_require__.r(__webpack_exports__);
     site: function site() {
       return this.$root.sites[this.$route.params.site] || {};
     },
+    server: function server() {
+      return this.$root.servers[this.$route.params.server] || {};
+    },
     serverId: function serverId() {
       return this.$route.params.server;
     },
@@ -88,6 +91,12 @@ __webpack_require__.r(__webpack_exports__);
         _this.fetchingLogs = false;
         _this.logs = logs;
       });
+    },
+    siteMounted: function siteMounted() {
+      if (this.server && this.server.type === 'load_balancer') {
+        this.$router.push("/servers/".concat(this.server.id));
+        return;
+      }
     }
   },
   mounted: function mounted() {
@@ -119,6 +128,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "site-layout",
+    { on: { mounted: _vm.siteMounted } },
     [
       _c(
         "template",

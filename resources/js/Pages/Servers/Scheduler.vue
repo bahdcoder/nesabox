@@ -1,5 +1,5 @@
 <template>
-    <server-layout>
+    <server-layout @mounted="serverMounted">
         <template slot="content">
             <flash />
             <confirm-modal
@@ -234,6 +234,11 @@ export default {
             this.selectedJob = null
 
             this.showLogsModal = false
+        },
+        serverMounted() {
+            if (this.server.type === 'load_balancer') {
+                this.$router.push(`/servers/${this.server.id}`)
+            }
         },
         showConfirmDeleteModal(job) {
             this.showDeleteModal = true

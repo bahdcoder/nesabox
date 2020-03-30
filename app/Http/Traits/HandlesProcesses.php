@@ -169,7 +169,13 @@ trait HandlesProcesses
 
         $user = SSH_USER;
 
-        $arguments = "{$site->name} {$user} {$site->directory}";
+        $thirdArgument = $site->directory;
+
+        if ($server->type === 'load_balancer') {
+            $thirdArgument = str_slug($site->name);
+        }
+
+        $arguments = "{$site->name} {$user} {$thirdArgument}";
 
         return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments)

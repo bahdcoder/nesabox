@@ -32,6 +32,11 @@ class Site extends Model
             ->paginate();
     }
 
+    public function balancedServers()
+    {
+        return $this->hasMany(BalancedServer::class);
+    }
+
     public function getLatestDeploymentAttribute()
     {
         return Activity::forSubject($this)
@@ -66,15 +71,6 @@ class Site extends Model
     public function server()
     {
         return $this->belongsTo(Server::class);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDeployScript()
-    {
-        return (new Deploy($this->server, $this))->generate();
     }
 
     public function pm2Processes()

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Scripts\Sites\UpdateBalancedServers;
 use App\Http\Requests\Sites\UpdateBalancedServersRequest;
 use App\Http\Resources\ServerResource;
+use App\Http\Resources\SiteResource;
 
 class UpdateBalancedServersController extends Controller
 {
@@ -38,6 +39,7 @@ class UpdateBalancedServersController extends Controller
                     ->where('id', $serverId)
                     ->where('region', $server->region)
                     ->where('provider', $server->provider)
+                    ->whereNotNull('private_ip_address')
                     ->firstOrFail()
             );
         endforeach;
@@ -48,14 +50,14 @@ class UpdateBalancedServersController extends Controller
             return abort(400, $process->getErrorOutput());
         }
 
-        $server->balancedServers()->delete();
+        $site->balancedServers()->delete();
 
-        $servers->each(function ($balancedServer) use ($server) {
-            $server->balancedServers()->create([
+        $servers->each(function ($balancedServer) use ($site) {
+            $site->balancedServers()->create([
                 'balanced_server_id' => $balancedServer->id
             ]);
         });
 
-        return response()->json(new ServerResource($server->fresh()));
+        return new SiteResource($site->fresh());
     }
 }
