@@ -343,7 +343,7 @@ var render = function() {
                 [
                   _c("info", [
                     _vm._v(
-                      "\n                Below is a list of all of the other servers this server may access. With a server's network, you can use a server as a separate database, cache or queue worker. Only servers from the same provider, and in the same region as this server would be listed here. \n            "
+                      "\n                Below is a list of all of the other servers that can access this server. You can expose a specific port to a selected list of servers. This is really helpful when using a server as a separate database, cache, or queue worker.\n            "
                     )
                   ]),
                   _vm._v(" "),
