@@ -56,6 +56,8 @@ class Base
         return '';
     }
 
+    public function generate() {}
+
     /**
      *
      * Run this script over ssh

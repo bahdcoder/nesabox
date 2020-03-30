@@ -232,7 +232,8 @@
             serverMounted() {
                 this.form = {
                     ...this.form,
-                    servers: this.server.friend_servers || []
+                    ports: (this.server.friend_servers || []).length > 0 ? (this.server.friend_servers || [])[0].ports : '',
+                    servers: (this.server.friend_servers || []).map(server => server.friend_server_id)
                 }
             },
             addRule() {

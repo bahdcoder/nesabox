@@ -61,22 +61,28 @@ class UpdateServerNetwork extends Base
 
         foreach ($this->servers as $server):
             foreach($this->ports as $port):
+if ($port) {
 $firewallScript .= <<<EOD
 ufw allow from {$server->ip_address} to any port {$port};
 \n
 ufw allow from {$server->private_ip_address} to any port {$port};
 \n
 EOD;
+}
             endforeach;
         endforeach;
+
         foreach ($this->serversToDelete as $server):
-            foreach(explode(',', $server->ports) as $port):
-                $firewallDeleteScript .= <<<EOD
-ufw delete allow from {$server->ip_address} to any port {$port};
+            foreach(explode(',', $server['ports']) as $port):
+if ($port) {
+    $firewallDeleteScript .= <<<EOD
+ufw delete allow from {$server['ip_address']} to any port {$port};
 \n
-ufw delete allow from {$server->private_ip_address} to any port {$port};
+ufw delete allow from {$server['private_ip_address']} to any port {$port};
 \n
 EOD;
+
+}
             endforeach;
         endforeach;
 

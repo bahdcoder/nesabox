@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Network;
 
+use App\FriendServer;
 use App\Server;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Scripts\Server\UpdateServerNetwork;
 use App\Http\Requests\Network\UpdateServerNetworkRequest;
+use Illuminate\Support\Facades\Log;
 
 class UpdateServerNetworkController extends Controller
 {
@@ -42,7 +44,9 @@ class UpdateServerNetworkController extends Controller
 
         foreach ($server->friendServers as $friendServer):
             $serversToDelete->push(
-                Server::find($friendServer->friend_server_id)
+                collect(Server::find($friendServer->friend_server_id)->toArray())->merge(
+                    collect($friendServer->toArray())
+                )
             );
         endforeach;
 

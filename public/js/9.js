@@ -251,7 +251,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     serverMounted: function serverMounted() {
       this.form = _objectSpread({}, this.form, {
-        servers: this.server.friend_servers || []
+        ports: (this.server.friend_servers || []).length > 0 ? (this.server.friend_servers || [])[0].ports : '',
+        servers: (this.server.friend_servers || []).map(function (server) {
+          return server.friend_server_id;
+        })
       });
     },
     addRule: function addRule() {
