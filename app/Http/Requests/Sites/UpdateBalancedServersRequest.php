@@ -24,7 +24,8 @@ class UpdateBalancedServersRequest extends FormRequest
     public function rules()
     {
         return [
-            'servers' => 'required|array'
+            'servers' => 'required|array',
+            'port' => 'required|numeric'
         ];
     }
 }

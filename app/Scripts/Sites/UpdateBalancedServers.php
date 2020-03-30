@@ -30,14 +30,17 @@ class UpdateBalancedServers extends Base
      */
     public $site;
 
+    public $port;
+
     /**
      * Initialize this class
      *
      * @return void
      */
-    public function __construct(Collection $servers, Server $server, Site $site)
+    public function __construct(Collection $servers, Server $server, Site $site, $port)
     {
         $this->site = $site;
+        $this->port = $port;
         $this->server = $server;
         $this->servers = $servers;
     }
@@ -56,7 +59,7 @@ class UpdateBalancedServers extends Base
         foreach ($this->servers as $server):
             $serverScript .= <<<EOD
 \n
-server {$server->private_ip_address}:80;
+server {$server->private_ip_address}:{$this->port};
 EOD;
         endforeach;
 

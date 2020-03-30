@@ -217,6 +217,14 @@
                     />
                 </div>
 
+                <text-input
+                    name='port'
+                    label='Port'
+                    class="mt-5"
+                    v-model="balancedServersForm.port"
+                    help='By default, the load balancer will direct traffic to port 80. You can change the default port here.'
+                />
+
                 <v-button label='Update balanced servers' class="mt-4" :disabled="familyServers.length === 0" @click="updateBalancedServers" :loading="updatingBalancedServers" />
             </card>
         </template>
@@ -257,7 +265,8 @@ export default {
                 branch: 'master'
             },
             balancedServersForm: {
-                servers: []
+                servers: [],
+                port: '80'
             },
             deployScriptCodeMirrorOptions: {
                 ...codeMirrorOptions,
@@ -297,7 +306,6 @@ export default {
         }
     },
     methods: {
-
         updateBalancedServers() {
             this.updatingBalancedServers = true
 
@@ -399,7 +407,9 @@ export default {
             this.viewLatestDeploymentLogs = this.site.deploying
 
             this.balancedServersForm = {
-                servers: this.site.balanced_servers
+                ...this.balancedServersForm,
+                port: this.site.balanced_servers.length > 0 ? this.site.balanced_servers[0].port : '08',
+                servers: this.site.balanced_servers.map(server => server.balanced_server_id)
             }
         },
         saveScript() {

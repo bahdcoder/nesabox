@@ -260,6 +260,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -290,7 +298,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         branch: 'master'
       },
       balancedServersForm: {
-        servers: []
+        servers: [],
+        port: '80'
       },
       deployScriptCodeMirrorOptions: _objectSpread({}, codeMirrorOptions, {
         readOnly: false
@@ -401,9 +410,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     siteMounted: function siteMounted() {
       this.deployScript = this.site.before_deploy_script;
       this.viewLatestDeploymentLogs = this.site.deploying;
-      this.balancedServersForm = {
-        servers: this.site.balanced_servers
-      };
+      this.balancedServersForm = _objectSpread({}, this.balancedServersForm, {
+        port: this.site.balanced_servers.length > 0 ? this.site.balanced_servers[0].port : '08',
+        servers: this.site.balanced_servers.map(function (server) {
+          return server.balanced_server_id;
+        })
+      });
     },
     saveScript: function saveScript() {
       var _this5 = this;
@@ -892,6 +904,23 @@ var render = function() {
                     ],
                     2
                   ),
+                  _vm._v(" "),
+                  _c("text-input", {
+                    staticClass: "mt-5",
+                    attrs: {
+                      name: "port",
+                      label: "Port",
+                      help:
+                        "By default, the load balancer will direct traffic to port 80. You can change the default port here."
+                    },
+                    model: {
+                      value: _vm.balancedServersForm.port,
+                      callback: function($$v) {
+                        _vm.$set(_vm.balancedServersForm, "port", $$v)
+                      },
+                      expression: "balancedServersForm.port"
+                    }
+                  }),
                   _vm._v(" "),
                   _c("v-button", {
                     staticClass: "mt-4",

@@ -73,7 +73,7 @@ class SiteResource extends JsonResource
             $this->mergeWhen($this->includeServer, [
                 'server' => new ServerResource($this->server)
             ]),
-            'balanced_servers' => $this->balancedServers()->pluck('balanced_server_id')->all(),
+            'balanced_servers' => $this->balancedServers()->select(['balanced_server_id', 'port'])->get(),
         ];
     }
 }

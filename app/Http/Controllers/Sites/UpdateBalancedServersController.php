@@ -44,7 +44,7 @@ class UpdateBalancedServersController extends Controller
             );
         endforeach;
 
-        $process = (new UpdateBalancedServers($servers, $server, $site))->run();
+        $process = (new UpdateBalancedServers($servers, $server, $site, $request->port))->run();
 
         if (!$process->isSuccessful()) {
             return abort(400, $process->getErrorOutput());
@@ -52,9 +52,10 @@ class UpdateBalancedServersController extends Controller
 
         $site->balancedServers()->delete();
 
-        $servers->each(function ($balancedServer) use ($site) {
+        $servers->each(function ($balancedServer) use ($site, $request) {
             $site->balancedServers()->create([
-                'balanced_server_id' => $balancedServer->id
+                'balanced_server_id' => $balancedServer->id,
+                'port' => $request->port
             ]);
         });
 
