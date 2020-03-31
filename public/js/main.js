@@ -2795,6 +2795,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3328,6 +3352,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -26060,7 +26086,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "flex flex-col min-h-screen" }, [
     _c("nav", { staticClass: "bg-gray-800" }, [
       _c("div", { staticClass: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" }, [
         _c("div", { staticClass: "flex items-center justify-between h-16" }, [
@@ -26346,12 +26372,95 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("main", { staticClass: "px-3" }, [
+    _c("main", { staticClass: "px-3 flex-grow mb-12 md:mb-24" }, [
       _c(
         "div",
         { staticClass: "max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" },
         [_vm._t("default")],
         2
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "bg-gray-800" }, [
+      _c(
+        "div",
+        {
+          staticClass:
+            "max-w-screen-xl mx-auto py-8 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8"
+        },
+        [
+          _c("div", { staticClass: "flex justify-center md:order-2" }, [
+            _c(
+              "a",
+              {
+                staticClass: "ml-6 text-gray-400 hover:text-gray-500",
+                attrs: { href: "https://twitter.com/bahdcoder" }
+              },
+              [
+                _c("span", { staticClass: "sr-only" }, [_vm._v("Twitter")]),
+                _vm._v(" "),
+                _c(
+                  "svg",
+                  {
+                    staticClass: "h-6 w-6",
+                    attrs: { fill: "currentColor", viewBox: "0 0 24 24" }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                      }
+                    })
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "ml-6 text-gray-400 hover:text-gray-500",
+                attrs: { href: "https://github.com/bahdcoder" }
+              },
+              [
+                _c("span", { staticClass: "sr-only" }, [_vm._v("GitHub")]),
+                _vm._v(" "),
+                _c(
+                  "svg",
+                  {
+                    staticClass: "h-6 w-6",
+                    attrs: { fill: "currentColor", viewBox: "0 0 24 24" }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z",
+                        "clip-rule": "evenodd"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "mt-8 md:mt-0 md:order-1" }, [
+            _c(
+              "p",
+              { staticClass: "text-center text-base leading-6 text-gray-400" },
+              [
+                _vm._v(
+                  "\n                    © " +
+                    _vm._s(new Date().getFullYear()) +
+                    " A Project by Kati Frantz\n                "
+                )
+              ]
+            )
+          ])
+        ]
       )
     ])
   ])
@@ -26855,26 +26964,37 @@ var render = function() {
                               "w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide"
                           },
                           [
-                            _c("span", { staticClass: "w-full md:w-auto" }, [
-                              _vm._v(_vm._s(_vm.server.name))
-                            ]),
+                            _c(
+                              "span",
+                              { staticClass: "w-full mt-2 md:mt-0 md:w-auto" },
+                              [_vm._v(_vm._s(_vm.server.name))]
+                            ),
                             _vm._v(" "),
                             _c(
                               "span",
-                              { staticClass: "w-full md:w-auto md:ml-5" },
+                              {
+                                staticClass:
+                                  "w-full mt-2 md:mt-0 md:w-auto md:ml-5"
+                              },
                               [_vm._v(_vm._s(_vm.server.region))]
                             ),
                             _vm._v(" "),
                             _c(
                               "span",
-                              { staticClass: "w-full md:w-auto md:ml-5" },
+                              {
+                                staticClass:
+                                  "w-full mt-2 md:mt-0 md:w-auto md:ml-5"
+                              },
                               [_vm._v(_vm._s(_vm.server.ip_address))]
                             ),
                             _vm._v(" "),
                             _vm.server.private_ip_address
                               ? _c(
                                   "span",
-                                  { staticClass: "w-full md:w-auto md:ml-2" },
+                                  {
+                                    staticClass:
+                                      "w-full mt-2 md:mt-0 md:w-auto md:ml-2"
+                                  },
                                   [
                                     _vm._v(
                                       "(" +
@@ -26886,7 +27006,7 @@ var render = function() {
                               : _vm._e(),
                             _vm._v(" "),
                             _c("table-status", {
-                              staticClass: "md:ml-4",
+                              staticClass: "mt-2 md:mt-0 md:ml-4",
                               attrs: { status: _vm.server.status }
                             })
                           ],
@@ -26901,99 +27021,119 @@ var render = function() {
           _vm._v(" "),
           _vm.server.status === "active" && !_vm.loading
             ? _c("div", [_vm._t("content")], 2)
-            : _vm._e()
+            : _c("main", { staticClass: "px-3" }, [
+                _c(
+                  "div",
+                  { staticClass: "max-w-5xl mx-auto py-6 sm:px-6 lg:px-8" },
+                  [
+                    _vm.loading
+                      ? _c("div", {
+                          staticClass: "w-full flex items-center justify-center"
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !_vm.loading && _vm.server.status === "initializing"
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w-full bg-white rounded shadow p-4 md:p-6"
+                          },
+                          [
+                            _vm.server.provider !== "custom"
+                              ? _c(
+                                  "p",
+                                  { staticClass: "text-center text-gray-700" },
+                                  [
+                                    _vm._v(
+                                      "\n                        Your server has been provisioned on\n                        " +
+                                        _vm._s(_vm.server.provider) +
+                                        ". We are currently installing all\n                        necessary software. This process should take about 10\n                        minutes or less on average.\n                    "
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "p",
+                                  { staticClass: "text-center text-gray-700" },
+                                  [
+                                    _vm._v(
+                                      "\n                        Your custom server is still initializing. Once the\n                        installing script is done running, it'll become active.\n                    "
+                                    )
+                                  ]
+                                ),
+                            _vm._v(" "),
+                            _c(
+                              "p",
+                              {
+                                staticClass:
+                                  "w-full py-4 flex flex-col items-center justify-center"
+                              },
+                              [
+                                _c("spinner", { staticClass: "w-10 h-10" }),
+                                _vm._v(" "),
+                                _c("red-button", {
+                                  staticClass: "w-full md:w-1/5 mt-5",
+                                  attrs: { label: "Delete server" },
+                                  on: { click: _vm.deleteServer }
+                                })
+                              ],
+                              1
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !_vm.loading && _vm.server.status === "new"
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w-full bg-white rounded shadow p-4 md:p-6"
+                          },
+                          [
+                            _c(
+                              "p",
+                              { staticClass: "text-center text-gray-700" },
+                              [
+                                _vm._v(
+                                  "\n                        Your server is still being created on\n                        " +
+                                    _vm._s(_vm.server.provider) +
+                                    ". It'll take about a minute. Once\n                        we confirmed the server is active on\n                        " +
+                                    _vm._s(_vm.server.provider) +
+                                    ", we'll begin running the\n                        installation script.\n                    "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "p",
+                              {
+                                staticClass:
+                                  "w-full py-4 flex items-center flex-col justify-center"
+                              },
+                              [
+                                _c("spinner", { staticClass: "w-10 h-10" }),
+                                _vm._v(" "),
+                                _c("red-button", {
+                                  staticClass: "mt-4",
+                                  attrs: {
+                                    loading: _vm.deletingServer,
+                                    label: "Delete server"
+                                  },
+                                  on: { click: _vm.deleteServer }
+                                })
+                              ],
+                              1
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ]
+                )
+              ])
         ],
         2
-      ),
-      _vm._v(" "),
-      _c("main", { staticClass: "px-3" }, [
-        _c("div", { staticClass: "max-w-5xl mx-auto py-6 sm:px-6 lg:px-8" }, [
-          _vm.loading
-            ? _c("div", {
-                staticClass: "w-full flex items-center justify-center"
-              })
-            : _vm._e(),
-          _vm._v(" "),
-          !_vm.loading && _vm.server.status === "initializing"
-            ? _c(
-                "div",
-                { staticClass: "w-full bg-white rounded shadow p-4 md:p-6" },
-                [
-                  _vm.server.provider !== "custom"
-                    ? _c("p", { staticClass: "text-center text-gray-700" }, [
-                        _vm._v(
-                          "\n                    Your server has been provisioned on\n                    " +
-                            _vm._s(_vm.server.provider) +
-                            ". We are currently installing all\n                    necessary software. This process should take about 10\n                    minutes or less on average.\n                "
-                        )
-                      ])
-                    : _c("p", { staticClass: "text-center text-gray-700" }, [
-                        _vm._v(
-                          "\n                    Your custom server is still initializing. Once the\n                    installing script is done running, it'll become active.\n                "
-                        )
-                      ]),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    {
-                      staticClass:
-                        "w-full py-4 flex flex-col items-center justify-center"
-                    },
-                    [
-                      _c("spinner", { staticClass: "w-10 h-10" }),
-                      _vm._v(" "),
-                      _c("red-button", {
-                        staticClass: "w-full md:w-1/5 mt-5",
-                        attrs: { label: "Delete server" },
-                        on: { click: _vm.deleteServer }
-                      })
-                    ],
-                    1
-                  )
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          !_vm.loading && _vm.server.status === "new"
-            ? _c(
-                "div",
-                { staticClass: "w-full bg-white rounded shadow p-4 md:p-6" },
-                [
-                  _c("p", { staticClass: "text-center text-gray-700" }, [
-                    _vm._v(
-                      "\n                    Your server is still being created on\n                    " +
-                        _vm._s(_vm.server.provider) +
-                        ". It'll take about a minute. Once\n                    we confirmed the server is active on\n                    " +
-                        _vm._s(_vm.server.provider) +
-                        ", we'll begin running the\n                    installation script.\n                "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    {
-                      staticClass:
-                        "w-full py-4 flex items-center flex-col justify-center"
-                    },
-                    [
-                      _c("spinner", { staticClass: "w-10 h-10" }),
-                      _vm._v(" "),
-                      _c("red-button", {
-                        staticClass: "mt-4",
-                        attrs: {
-                          loading: _vm.deletingServer,
-                          label: "Delete server"
-                        },
-                        on: { click: _vm.deleteServer }
-                      })
-                    ],
-                    1
-                  )
-                ]
-              )
-            : _vm._e()
-        ])
-      ])
+      )
     ],
     1
   )
@@ -27482,7 +27622,12 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "w-full md:w-4/5 md:pl-6" },
+          {
+            staticClass: "w-full md:pl-6",
+            class: {
+              "md:w-4/5": _vm.showNav
+            }
+          },
           [_vm._t("default")],
           2
         )
@@ -27556,7 +27701,7 @@ var render = function() {
                               "span",
                               {
                                 staticClass:
-                                  "w-full md:w-auto text-sha-green-500 font-medium text-sm hover:text-sha-green-600 transition duration-50 ease-in-out"
+                                  "w-full mt-2 md:mt-0 md:w-auto text-sha-green-500 font-medium text-sm hover:text-sha-green-600 transition duration-50 ease-in-out"
                               },
                               [
                                 _c(
@@ -27574,7 +27719,7 @@ var render = function() {
                               "span",
                               {
                                 staticClass:
-                                  "w-full md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out"
+                                  "w-full mt-2 md:mt-0 md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out"
                               },
                               [
                                 _c(
@@ -27592,14 +27737,20 @@ var render = function() {
                             _vm._v(" "),
                             _c(
                               "span",
-                              { staticClass: "w-full md:w-auto md:ml-5" },
+                              {
+                                staticClass:
+                                  "w-full mt-2 md:mt-0 md:w-auto md:ml-5"
+                              },
                               [_vm._v(_vm._s(_vm.server.ip_address))]
                             ),
                             _vm._v(" "),
                             _vm.server.private_ip_address
                               ? _c(
                                   "span",
-                                  { staticClass: "w-full md:w-auto md:ml-2" },
+                                  {
+                                    staticClass:
+                                      "w-full mt-2 md:mt-0 md:w-auto md:ml-2"
+                                  },
                                   [
                                     _vm._v(
                                       "(" +
@@ -27611,7 +27762,7 @@ var render = function() {
                               : _vm._e(),
                             _vm._v(" "),
                             _c("table-status", {
-                              staticClass: "md:ml-4",
+                              staticClass: "mt-2 md:mt-0 md:ml-4",
                               attrs: { status: _vm.site.status }
                             })
                           ],
@@ -27624,7 +27775,7 @@ var render = function() {
               : _vm._e()
           ]),
           _vm._v(" "),
-          _vm.site.status === "active" && !_vm.loading
+          !_vm.loading
             ? _c(
                 "div",
                 [

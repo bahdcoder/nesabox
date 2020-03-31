@@ -290,7 +290,9 @@
                     </router-link>
                 </nav>
             </div>
-            <div class="w-full md:w-4/5 md:pl-6">
+            <div class="w-full md:pl-6" :class="{
+                'md:w-4/5': showNav
+            }">
                 <slot />
             </div>
         </div>

@@ -12,21 +12,21 @@
                     </div>
                     <div class="w-full md:w-4/5 flex flex-wrap md:justify-end">
                         <div class="w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide">
-                            <span class="w-full md:w-auto text-sha-green-500 font-medium text-sm hover:text-sha-green-600 transition duration-50 ease-in-out">
+                            <span class="w-full mt-2 md:mt-0 md:w-auto text-sha-green-500 font-medium text-sm hover:text-sha-green-600 transition duration-50 ease-in-out">
                                 <router-link :to="`/servers/${server.id}`">{{ server.name }}</router-link>
                             </span>
-                            <span class="w-full md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out">
+                            <span class="w-full mt-2 md:mt-0 md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out">
                                 <a :href="`http://${site.name}`" target='_blank'>{{ site.name }}</a>
                             </span>
                             
-                            <span class="w-full md:w-auto md:ml-5">{{ server.ip_address }}</span>
-                            <span class="w-full md:w-auto md:ml-2" v-if="server.private_ip_address">({{ server.private_ip_address }})</span>
-                            <table-status class="md:ml-4" :status="site.status" />
+                            <span class="w-full mt-2 md:mt-0 md:w-auto md:ml-5">{{ server.ip_address }}</span>
+                            <span class="w-full mt-2 md:mt-0 md:w-auto md:ml-2" v-if="server.private_ip_address">({{ server.private_ip_address }})</span>
+                            <table-status class="mt-2 md:mt-0 md:ml-4" :status="site.status" />
                         </div>
                     </div>
                 </div>
             </template>
-            <div v-if="site.status === 'active' && !loading">
+            <div v-if="!loading">
                 <template slot="header">
                     <!-- <div class="h-12 w-full mb-5"></div> -->
                     <slot name="header" />
