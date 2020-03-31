@@ -3,18 +3,10 @@
 namespace App\Scripts\Sites;
 
 use App\Site;
-use App\Server;
 use App\Scripts\Base;
 
-class UpdatePm2EcosystemFile extends Base
+class UpdateFileContent extends Base
 {
-    /**
-     * The server.
-     *
-     * @var \App\Server
-     */
-    public $server;
-
     /**
      * Site to install ghost on
      *
@@ -22,23 +14,28 @@ class UpdatePm2EcosystemFile extends Base
      */
     public $site;
 
+    public $server;
+
     /**
-     * The new ghost config
+     * The new content
      *
      * @var string
      */
-    public $config;
+    public $content;
+
+    public $path;
 
     /**
      * Initialize this class
      *
      * @return void
      */
-    public function __construct(Server $server, Site $site, string $config)
+    public function __construct(Site $site, string $path, string $content)
     {
         $this->site = $site;
-        $this->config = $config;
-        $this->server = $server;
+        $this->path = $path;
+        $this->content = $content;
+        $this->server = $site->server;
     }
 
     /**
@@ -50,8 +47,8 @@ class UpdatePm2EcosystemFile extends Base
     {
         $user = SSH_USER;
         return <<<EOD
-cat > /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js << EOF
-{$this->config}
+cat > {$this->path} << EOF
+{$this->content}
 EOF
 EOD;
     }

@@ -16,7 +16,7 @@
                             <span class="w-full md:w-auto md:ml-5">{{ server.region }}</span>
                             <span class="w-full md:w-auto md:ml-5">{{ server.ip_address }}</span>
                             <span class="w-full md:w-auto md:ml-2" v-if="server.private_ip_address">({{ server.private_ip_address }})</span>
-                            <table-status :status="server.status" />
+                            <table-status class="md:ml-4" :status="server.status" />
                         </div>
                     </div>
                 </div>

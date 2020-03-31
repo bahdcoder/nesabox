@@ -366,7 +366,7 @@ EOD;
      *
      * @return \Symphony\Process\Process
      */
-    public function getFileContent(Server $server, $pathToFile)
+    public function getFileContent(Server $server, $pathToFile, $root = true)
     {
         $scriptPath = 'scripts/server/get-file-contents.sh';
 
@@ -375,7 +375,26 @@ EOD;
         $arguments = "{$pathToFile}";
 
         return $this->execProcess(
-            $this->sshScript($server, $scriptName, $arguments)
+            $this->sshScript($server, $scriptName, $arguments, $root)
+        );
+    }
+
+
+    /**
+     * Update the contents of a file from the server
+     *
+     * @return \Symphony\Process\Process
+     */
+    public function updateFileContent(Server $server, $pathToFile, $content, $root = true)
+    {
+        $scriptPath = 'scripts/server/get-file-contents.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $arguments = "{$pathToFile} {$content}";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments, $root)
         );
     }
 

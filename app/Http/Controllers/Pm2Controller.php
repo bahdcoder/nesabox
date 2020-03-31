@@ -32,9 +32,6 @@ class Pm2Controller extends Controller
 
     public function logs(Site $site)
     {
-        Log::info(request()->ip());
-        Log::info(strlen($site->logs));
-
         $logs = request()->logs;
 
         if (strlen($site->logs) > 3000) {

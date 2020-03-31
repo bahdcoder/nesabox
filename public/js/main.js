@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"fb02d82fafa4d72d0895","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"9a2846a9ad17b285e834","6":"66b5b92d32855e6f5986","7":"6e4bb18df5a7faf998a0","8":"15bb7513140f6082b44e","9":"3f188e0d4634a232c40c","10":"d5bf1b2adda5149ebadb","11":"b602aa69f663939b1350","12":"4a102d12e7f0feb4581c","13":"2476a095742567aa5556","14":"ca28802eab7dcb159cb7","15":"05441ef3f9397be427f4","16":"0d679592144c908c82c3","17":"83c33bde74b9dab04ac0","18":"301f2c056fb67b6e0489"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"fb02d82fafa4d72d0895","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"9a2846a9ad17b285e834","6":"66b5b92d32855e6f5986","7":"6e4bb18df5a7faf998a0","8":"15bb7513140f6082b44e","9":"3f188e0d4634a232c40c","10":"d5bf1b2adda5149ebadb","11":"b602aa69f663939b1350","12":"12b6b741cb79ce11f376","13":"2476a095742567aa5556","14":"ca28802eab7dcb159cb7","15":"05441ef3f9397be427f4","16":"0d679592144c908c82c3","17":"83c33bde74b9dab04ac0","18":"301f2c056fb67b6e0489"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -3711,6 +3711,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this = this;
@@ -3748,7 +3769,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     if (site) {
       this.loading = false;
 
-      if (site && site.type !== 'nodejs' || site.server.type === 'load_balancer') {
+      if (site && site.type !== 'nodejs' || this.server && this.server.type === 'load_balancer') {
         this.nav = this.nav.filter(function (item) {
           return !['logs'].includes(item.value);
         });
@@ -26865,6 +26886,7 @@ var render = function() {
                               : _vm._e(),
                             _vm._v(" "),
                             _c("table-status", {
+                              staticClass: "md:ml-4",
                               attrs: { status: _vm.server.status }
                             })
                           ],
@@ -27504,6 +27526,104 @@ var render = function() {
           }
         },
         [
+          _c("template", { slot: "header" }, [
+            !_vm.loading
+              ? _c(
+                  "div",
+                  { staticClass: "w-full flex flex-wrap justify-between mb-5" },
+                  [
+                    _c("div", { staticClass: "w-full md:w-1/5" }, [
+                      _c("h3", { staticClass: "text-lg text-gray-800" }, [
+                        _vm._v("Site details")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "w-full md:w-4/5 flex flex-wrap md:justify-end"
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide"
+                          },
+                          [
+                            _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "w-full md:w-auto text-sha-green-500 font-medium text-sm hover:text-sha-green-600 transition duration-50 ease-in-out"
+                              },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    attrs: { to: "/servers/" + _vm.server.id }
+                                  },
+                                  [_vm._v(_vm._s(_vm.server.name))]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "w-full md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out"
+                              },
+                              [
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: {
+                                      href: "http://" + _vm.site.name,
+                                      target: "_blank"
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(_vm.site.name))]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              { staticClass: "w-full md:w-auto md:ml-5" },
+                              [_vm._v(_vm._s(_vm.server.ip_address))]
+                            ),
+                            _vm._v(" "),
+                            _vm.server.private_ip_address
+                              ? _c(
+                                  "span",
+                                  { staticClass: "w-full md:w-auto md:ml-2" },
+                                  [
+                                    _vm._v(
+                                      "(" +
+                                        _vm._s(_vm.server.private_ip_address) +
+                                        ")"
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("table-status", {
+                              staticClass: "md:ml-4",
+                              attrs: { status: _vm.site.status }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    )
+                  ]
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
           _vm.site.status === "active" && !_vm.loading
             ? _c(
                 "div",
@@ -27515,7 +27635,8 @@ var render = function() {
                 2
               )
             : _vm._e()
-        ]
+        ],
+        2
       ),
       _vm._v(" "),
       _c("main", { staticClass: "px-3" }, [

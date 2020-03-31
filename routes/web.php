@@ -35,6 +35,7 @@ use App\Http\Controllers\Sites\EnvController;
 use App\Http\Controllers\Servers\InitializationCallbackController;
 use App\Http\Controllers\Servers\MongodbController;
 use App\Http\Controllers\Servers\UfwController;
+use App\Http\Controllers\Sites\FileContentController;
 use App\Http\Controllers\Sites\SslCertificateController;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
@@ -343,6 +344,16 @@ Route::middleware(['auth'])
         Route::delete('servers/{server}/firewall-rules/{firewallRule}', [
             UfwController::class,
             'destroy'
+        ]);
+
+        Route::post('sites/{site}/get-file-contents', [
+            FileContentController::class,
+            'index'
+        ]);
+
+        Route::post('sites/{site}/update-file-contents', [
+            FileContentController::class,
+            'update'
         ]);
 
         Route::post('servers/{server}/sites/{site}/lets-encrypt', [

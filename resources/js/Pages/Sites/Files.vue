@@ -1,5 +1,5 @@
 <template>
-    <site-layout>
+    <site-layout @mounted="siteMounted">
         <template slot="content">
             <flash />
             <card
@@ -36,7 +36,7 @@
                 />
             </card>
 
-            <card title="Nginx configuration file">
+            <card class="mb-5" title="Nginx configuration file">
                 <info>
                     This is the Nginx configuration for your site.
                     <span v-if="site.type === 'nodejs'" class="ml-1"
@@ -66,6 +66,22 @@
                     class="mt-4"
                     v-if="nginxConfigFile"
                 />
+            </card>
+
+            <card v-if="server.type !== 'load_balancer'" title='Custom file'>
+                <div class="w-full" v-if="customFileFetched">
+                    <text-input name='path' :value="form.path" :readonly="true" class="mb-3" />
+                    <codemirror
+                        :options="codeMirrorOptions"
+                        v-model="fileContent"
+                    />
+                    <v-button label='Update file' class="mt-3" @click="updateFile" :loading="updatingCustomFile"  />
+                </div>
+                <form v-else @submit.prevent="fetchFile">
+                    <text-input name='path' label='Path to file'  v-model="form.path" help='Here you can edit a custom file on this site. Make sure this file is not version controlled, because editing it might break deployments.' />
+
+                    <v-button label='Fetch file' class="mt-3" type='submit' :loading="fetchingCustomFile"  />
+                </form>
             </card>
         </template>
     </site-layout>
@@ -98,6 +114,10 @@ export default {
             updatingNginxConfigFile: false,
             ecosystemFile: '',
             nginxConfigFile: '',
+            fetchingCustomFile: false,
+            customFileFetched: false,
+            fileContent: '',
+            updatingCustomFile: false,
             codeMirrorOptions
         }
     },
@@ -203,6 +223,48 @@ export default {
                 })
                 .finally(() => {
                     this.updatingEcosystemFile = false
+                })
+        },
+        siteMounted() {
+            this.form = {
+                path: `/home/nesa/${this.site.name}/.env`
+            }
+        },
+        fetchFile() {
+            this.fetchingCustomFile = true
+
+            axios.post(`/api/sites/${this.site.id}/get-file-contents`, this.form)
+                .then(({ data: fileContent }) => {
+                    this.customFileFetched = true
+
+                    this.fileContent = fileContent
+                })
+                .catch(({ response }) => {
+                    this.$root.flashMessage(response.data.message || 'Failed to fetch this file.')
+                })
+                .finally(() => {
+                    this.fetchingCustomFile = false
+                })
+        },
+        updateFile() {
+            this.updatingCustomFile = true
+
+            axios.post(`/api/sites/${this.site.id}/update-file-contents`, {
+                fileContent: this.fileContent,
+                path: this.form.path
+            })
+                .then(({ data: fileContent }) => {
+                    this.customFileFetched = false
+
+                    this.fileContent = ''
+
+                    this.$root.flashMessage('File content updated.')
+                })
+                .catch(({ response }) => {
+                    this.$root.flashMessage(response.data || 'Failed to update this file.')
+                })
+                .finally(() => {
+                    this.updatingCustomFile = false
                 })
         }
     }

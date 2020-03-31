@@ -90,6 +90,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -113,6 +129,10 @@ __webpack_require__.r(__webpack_exports__);
       updatingNginxConfigFile: false,
       ecosystemFile: '',
       nginxConfigFile: '',
+      fetchingCustomFile: false,
+      customFileFetched: false,
+      fileContent: '',
+      updatingCustomFile: false,
       codeMirrorOptions: codeMirrorOptions
     };
   },
@@ -188,6 +208,48 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {
         _this4.updatingEcosystemFile = false;
       });
+    },
+    siteMounted: function siteMounted() {
+      this.form = {
+        path: "/home/nesa/".concat(this.site.name, "/.env")
+      };
+    },
+    fetchFile: function fetchFile() {
+      var _this5 = this;
+
+      this.fetchingCustomFile = true;
+      axios.post("/api/sites/".concat(this.site.id, "/get-file-contents"), this.form).then(function (_ref3) {
+        var fileContent = _ref3.data;
+        _this5.customFileFetched = true;
+        _this5.fileContent = fileContent;
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+
+        _this5.$root.flashMessage(response.data.message || 'Failed to fetch this file.');
+      })["finally"](function () {
+        _this5.fetchingCustomFile = false;
+      });
+    },
+    updateFile: function updateFile() {
+      var _this6 = this;
+
+      this.updatingCustomFile = true;
+      axios.post("/api/sites/".concat(this.site.id, "/update-file-contents"), {
+        fileContent: this.fileContent,
+        path: this.form.path
+      }).then(function (_ref5) {
+        var fileContent = _ref5.data;
+        _this6.customFileFetched = false;
+        _this6.fileContent = '';
+
+        _this6.$root.flashMessage('File content updated.');
+      })["catch"](function (_ref6) {
+        var response = _ref6.response;
+
+        _this6.$root.flashMessage(response.data || 'Failed to update this file.');
+      })["finally"](function () {
+        _this6.updatingCustomFile = false;
+      });
     }
   }
 });
@@ -211,6 +273,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "site-layout",
+    { on: { mounted: _vm.siteMounted } },
     [
       _c(
         "template",
@@ -271,7 +334,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "card",
-            { attrs: { title: "Nginx configuration file" } },
+            {
+              staticClass: "mb-5",
+              attrs: { title: "Nginx configuration file" }
+            },
             [
               _c("info", [
                 _vm._v(
@@ -323,7 +389,86 @@ var render = function() {
                 : _vm._e()
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _vm.server.type !== "load_balancer"
+            ? _c("card", { attrs: { title: "Custom file" } }, [
+                _vm.customFileFetched
+                  ? _c(
+                      "div",
+                      { staticClass: "w-full" },
+                      [
+                        _c("text-input", {
+                          staticClass: "mb-3",
+                          attrs: {
+                            name: "path",
+                            value: _vm.form.path,
+                            readonly: true
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("codemirror", {
+                          attrs: { options: _vm.codeMirrorOptions },
+                          model: {
+                            value: _vm.fileContent,
+                            callback: function($$v) {
+                              _vm.fileContent = $$v
+                            },
+                            expression: "fileContent"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-button", {
+                          staticClass: "mt-3",
+                          attrs: {
+                            label: "Update file",
+                            loading: _vm.updatingCustomFile
+                          },
+                          on: { click: _vm.updateFile }
+                        })
+                      ],
+                      1
+                    )
+                  : _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.fetchFile($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("text-input", {
+                          attrs: {
+                            name: "path",
+                            label: "Path to file",
+                            help:
+                              "Here you can edit a custom file on this site. Make sure this file is not version controlled, because editing it might break deployments."
+                          },
+                          model: {
+                            value: _vm.form.path,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "path", $$v)
+                            },
+                            expression: "form.path"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-button", {
+                          staticClass: "mt-3",
+                          attrs: {
+                            label: "Fetch file",
+                            type: "submit",
+                            loading: _vm.fetchingCustomFile
+                          }
+                        })
+                      ],
+                      1
+                    )
+              ])
+            : _vm._e()
         ],
         1
       )

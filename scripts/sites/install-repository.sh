@@ -91,6 +91,8 @@ Fs.watchFile(filePath, () => {
 })
 EOF
 
-touch /home/$SSH_USER/.pm2/logs/$SITE_NAME
+cat > /home/$SSH_USER/.pm2/logs/$SITE_NAME << EOF
+<<<< PM2 Logs start >>>>
+EOF
 
 pm2 start /home/$SSH_USER/.$SSH_USER/log-watchers/$SITE_NAME.watcher.js --name=$LOG_WATCHER_NAME --interpreter /usr/local/n/versions/node/12.8.0/bin/node
