@@ -28,59 +28,68 @@
                             ></button>
                             <div class="ml-3 relative">
                                 <div class="flex items-center">
-                                    <span
-                                        class="inline-block mr-4 text-sm text-white"
-                                    >
-                                        {{ $root.auth.name }}
-                                    </span>
+                                    
                                     <button
                                         @click="open = !open"
-                                        class="max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid"
+                                        class="image-button max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid"
                                     >
                                         <img
-                                            class="h-8 w-8 rounded-full"
+                                            class="image-button h-8 w-8 rounded-full"
                                             :src="$root.auth.photo_url"
                                             :alt="$root.auth.name"
                                         />
                                     </button>
+                                    <span
+                                        @click="open = !open"
+                                        class="inline-block ml-4 cursor-pointer image-button text-sm text-white"
+                                    >
+                                        {{ $root.auth.name }}
+                                    </span>
+
+                                    <svg @click="open = !open" class="image-button w-3 ml-2 cursor-pointer h-3 fill-current" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                            viewBox="0 0 292.362 292.362" style="enable-background:new 0 0 292.362 292.362;"
+                                            xml:space="preserve">
+                                        <g>
+                                            <path fill="#fff" d="M286.935,69.377c-3.614-3.617-7.898-5.424-12.848-5.424H18.274c-4.952,0-9.233,1.807-12.85,5.424
+                                                C1.807,72.998,0,77.279,0,82.228c0,4.948,1.807,9.229,5.424,12.847l127.907,127.907c3.621,3.617,7.902,5.428,12.85,5.428
+                                                s9.233-1.811,12.847-5.428L286.935,95.074c3.613-3.617,5.427-7.898,5.427-12.847C292.362,77.279,290.548,72.998,286.935,69.377z"/>
+                                        </g>
+                                    </svg>
                                 </div>
-                                <div
-                                    v-if="open"
-                                    x-transition:enter="transition ease-out duration-100"
-                                    x-transition:enter-start="transform opacity-0 scale-95"
-                                    x-transition:enter-end="transform opacity-100 scale-100"
-                                    x-transition:leave="transition ease-in duration-75"
-                                    x-transition:leave-start="transform opacity-100 scale-100"
-                                    x-transition:leave-end="transform opacity-0 scale-95"
-                                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg"
-                                >
-                                    <div class="rounded-md bg-white shadow-xs">
-                                        <div class="py-1">
-                                            <router-link
-                                                to="/account"
-                                                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                                                >Account</router-link
-                                            >
-                                        </div>
-                                        <div class="py-1 cursor-pointer">
-                                            <a
-                                                @click.prevent="signout"
-                                                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                                                >Sign out</a
-                                            >
+                                <transition name='account-menu'>
+                                    <div
+                                        v-show="open"
+                                        v-click-outside="handleOutsideClick"
+                                        class="account-menu origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg"
+                                    >
+                                        <div class="rounded-md bg-white shadow-xs">
+                                            <div class="py-1">
+                                                <router-link
+                                                    to="/account"
+                                                    class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                                                    >Account</router-link
+                                                >
+                                            </div>
+                                            <div class="py-1 cursor-pointer">
+                                                <a
+                                                    @click.prevent="signout"
+                                                    class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                                                    >Sign out</a
+                                                >
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </transition>
                             </div>
                         </div>
                     </div>
                     <div class="-mr-2 flex md:hidden">
                         <button
                             @click="open = !open"
-                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white"
+                            class="image-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white"
                         >
                             <svg
-                                class="h-6 w-6"
+                                class="h-6 w-6 image-button"
                                 stroke="currentColor"
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -90,7 +99,7 @@
                                         hidden: open,
                                         'inline-flex': !open
                                     }"
-                                    class="inline-flex"
+                                    class="image-button"
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                     stroke-width="2"
@@ -143,17 +152,13 @@
                         </div>
                     </div>
                     <div class="mt-3 px-2">
-                        <a
-                            href="#"
+                        <router-link
+                            to='/account'
                             class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
-                            >Your Profile</a
+                            >Your account</router-link
                         >
                         <a
-                            href="#"
-                            class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
-                            >Settings</a
-                        >
-                        <a
+                            @click.prevent="signout"
                             class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
                             >Sign out</a
                         >
@@ -229,6 +234,23 @@ export default {
             axios.post('/logout').then(() => {
                 window.location.href = '/'
             })
+        },
+        handleOutsideClick(event) {
+            if (event.target.className) {
+                if (typeof event.target.className === 'string' && event.target.className.match(/image-button/)) {
+                    return
+                }
+
+                if (event.target.className.baseVal && event.target.className.baseVal.match(/image-button/)) {
+                    return
+                }
+            }
+
+            if (! this.open) {
+                return
+            }
+
+            this.open = !this.open
         }
     }
 }

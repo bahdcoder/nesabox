@@ -2,6 +2,8 @@
 
 namespace App\Jobs\Sites;
 
+use App\Http\SourceControlProviders\InteractsWithGithub;
+use App\Http\SourceControlProviders\InteractsWithGitlab;
 use App\Site;
 use App\Server;
 use Illuminate\Bus\Queueable;
@@ -15,7 +17,7 @@ use App\Scripts\Sites\DeleteSite as AppDeleteSite;
 
 class DeleteSite implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, InteractsWithGithub, InteractsWithGitlab;
 
     /**
      * The server to ssh into
@@ -54,6 +56,8 @@ class DeleteSite implements ShouldQueue
         $process = (new AppDeleteSite($this->server, $this->site))->run();
 
         if ($process->isSuccessful()) {
+            $this->removeWebhooks();
+
             $this->site->delete();
         } else {
             $this->site->update([
@@ -69,6 +73,18 @@ class DeleteSite implements ShouldQueue
                 "Failed to delete site {$this->site->name}. View log for more details.",
                 $process->getErrorOutput()
             );
+        }
+    }
+
+    public function removeWebhooks()
+    {
+        if ($this->site->push_to_deploy) {
+            switch ($this->site->repository_provider):
+                case 'github':
+                    $this->deleteGithubPushWebhook($this->site, $this->site->server->user);
+                default:
+                    break;
+            endswitch;
         }
     }
 }

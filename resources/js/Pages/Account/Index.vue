@@ -116,6 +116,8 @@ export default {
                 .put(`/api/me/password`, this.passwordForm)
                 .then(({ data: user }) => {
                     this.$root.flashMessage('Password updated.')
+
+                    this.passwordErrors = {}
                 })
                 .catch(({ response }) => {
                     if (response.status === 422) {
@@ -136,8 +138,6 @@ export default {
                         new_password: '',
                         new_password_confirmation: ''
                     }
-
-                    this.passwordErrors = {}
                 })
         }
     }

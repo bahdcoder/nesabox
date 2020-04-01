@@ -125,6 +125,8 @@ __webpack_require__.r(__webpack_exports__);
         var user = _ref3.data;
 
         _this2.$root.flashMessage('Password updated.');
+
+        _this2.passwordErrors = {};
       })["catch"](function (_ref4) {
         var response = _ref4.response;
 
@@ -140,7 +142,6 @@ __webpack_require__.r(__webpack_exports__);
           new_password: '',
           new_password_confirmation: ''
         };
-        _this2.passwordErrors = {};
       });
     }
   }

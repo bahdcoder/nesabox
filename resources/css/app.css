@@ -99,4 +99,15 @@ button {
     /* background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='72'%3E%3Cpath d='M2 6h12L8 18 2 6zm18 36h12l-6 12-6-12z' fill='%23e0e5ee' fill-opacity='.26' fill-rule='evenodd'/%3E%3C/svg%3E"); */
 }
 
+.account-menu-enter-active {
+  transition: all .3s ease;
+}
+.account-menu-leave-active {
+  transition: all .4s ease;
+}
+.account-menu-enter, .account-menu-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
 @tailwind utilities;

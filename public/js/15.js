@@ -323,6 +323,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         repository: '',
         branch: 'master'
       },
+      branch: '',
       balancedServersForm: {
         servers: [],
         port: '80'
@@ -434,6 +435,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     siteMounted: function siteMounted() {
+      this.branch = this.site.repository_branch;
       this.deployScript = this.site.before_deploy_script;
       this.viewLatestDeploymentLogs = this.site.deploying;
       this.balancedServersForm = _objectSpread({}, this.balancedServersForm, {

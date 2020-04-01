@@ -290,6 +290,7 @@ export default {
                 repository: '',
                 branch: 'master'
             },
+            branch: '',
             balancedServersForm: {
                 servers: [],
                 port: '80'
@@ -435,6 +436,7 @@ export default {
                 })
         },
         siteMounted() {
+            this.branch = this.site.repository_branch
             this.deployScript = this.site.before_deploy_script
             this.viewLatestDeploymentLogs = this.site.deploying
 

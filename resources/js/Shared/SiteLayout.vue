@@ -51,42 +51,41 @@
                     </div>
                 </div>
             </template>
-            <div v-if="!loading">
+            <div v-if="!loading && site && site.status === 'active'">
                 <template slot="header">
                     <!-- <div class="h-12 w-full mb-5"></div> -->
                     <slot name="header" />
                 </template>
                 <slot name="content" />
             </div>
+            <main v-else class="px-3">
+                <div class="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
+                    <div
+                        class="w-full flex items-center justify-center"
+                        v-if="loading"
+                    >
+                        <p class="w-full py-4 flex justify-center">
+                            <spinner class="w-10 h-10" />
+                        </p>
+                    </div>
+
+                    <div
+                        class="w-full bg-white rounded shadow p-4 md:p-6"
+                        v-if="!loading && site.status === 'installing'"
+                    >
+                        <p class="text-center text-gray-700">
+                            Your site is still being created. we are setting up
+                            nginx configuration files, PM2 ecosystem files, and log
+                            files for this site. This usually takes about 5 seconds.
+                        </p>
+
+                        <p class="w-full py-4 flex justify-center">
+                            <spinner class="w-10 h-10" />
+                        </p>
+                    </div>
+                </div>
+            </main>
         </sidebar-layout>
-
-        <main class="px-3">
-            <div class="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
-                <div
-                    class="w-full flex items-center justify-center"
-                    v-if="loading"
-                >
-                    <p class="w-full py-4 flex justify-center">
-                        <spinner class="w-10 h-10" />
-                    </p>
-                </div>
-
-                <div
-                    class="w-full bg-white rounded shadow p-4 md:p-6"
-                    v-if="!loading && server.status === 'new'"
-                >
-                    <p class="text-center text-gray-700">
-                        Your site is still being created. we are setting up
-                        nginx configuration files, PM2 ecosystem files, and log
-                        files for this site. This usually takes about 5 seconds.
-                    </p>
-
-                    <p class="w-full py-4 flex justify-center">
-                        <spinner class="w-10 h-10" />
-                    </p>
-                </div>
-            </div>
-        </main>
     </div>
 </template>
 

@@ -3,6 +3,7 @@ import Axios from 'axios'
 import Pusher from 'pusher-js'
 import VueRouter from 'vue-router'
 import LaravelEcho from 'laravel-echo'
+import vClickOutside from 'v-click-outside'
 import ClickOutside from 'vue-click-outside'
 
 window.Pusher = Pusher
@@ -47,6 +48,7 @@ import DeleteActionButton from '@/Shared/DeleteActionButton'
 
 Vue.use(VueRouter)
 Vue.mixin(formMixin)
+Vue.use(vClickOutside)
 Vue.component('info', Info)
 Vue.component('v-svg', Svg)
 Vue.component('card', Card)
