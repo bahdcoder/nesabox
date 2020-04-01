@@ -110,6 +110,11 @@ export default {
                     to: route('files')
                 },
                 {
+                    label: 'SSL',
+                    value: 'ssl',
+                    to: route('ssl')
+                },
+                {
                     label: 'Logs',
                     value: 'logs',
                     to: route('logs')

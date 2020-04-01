@@ -210,6 +210,12 @@ const router = new VueRouter({
                 import(`@/Pages/Sites/Files`).then(module => module.default)
         },
         {
+            path: '/servers/:server/sites/:site/ssl',
+            name: 'server.site.ssl',
+            component: () =>
+                import(`@/Pages/Sites/Ssl`).then(module => module.default)
+        },
+        {
             path: '/servers/:server/sites/:site/logs',
             name: 'server.site.logs',
             component: () =>

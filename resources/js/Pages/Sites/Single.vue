@@ -445,7 +445,7 @@ export default {
                 port:
                     this.site.balanced_servers.length > 0
                         ? this.site.balanced_servers[0].port
-                        : '08',
+                        : '80',
                 servers: this.site.balanced_servers.map(
                     server => server.balanced_server_id
                 )

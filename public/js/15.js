@@ -439,7 +439,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.deployScript = this.site.before_deploy_script;
       this.viewLatestDeploymentLogs = this.site.deploying;
       this.balancedServersForm = _objectSpread({}, this.balancedServersForm, {
-        port: this.site.balanced_servers.length > 0 ? this.site.balanced_servers[0].port : '08',
+        port: this.site.balanced_servers.length > 0 ? this.site.balanced_servers[0].port : '80',
         servers: this.site.balanced_servers.map(function (server) {
           return server.balanced_server_id;
         })

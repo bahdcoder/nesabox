@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"db39a4a515ef5233e805","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"4d01991760af2e1eca53","4":"c9894795390412525b1a","5":"9a2846a9ad17b285e834","6":"66b5b92d32855e6f5986","7":"30ee773083679d5e122c","8":"3934ee2019fa3ad9f119","9":"7af5d0a32aeb35130034","10":"6abf131c8acfa0854a33","11":"73364cea813a5eb2a2f5","12":"a931b170146c27d84f49","13":"2476a095742567aa5556","14":"ca28802eab7dcb159cb7","15":"18589e6fe8a118153c42","16":"562635fb3f6ee08c1e3a","17":"83c33bde74b9dab04ac0","18":"301f2c056fb67b6e0489","19":"0fbca24f4860ceb6f957","20":"a9d66a5efc6d04052a08","21":"6457ab3e6be58a437546"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"db39a4a515ef5233e805","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"4d01991760af2e1eca53","4":"c9894795390412525b1a","5":"9a2846a9ad17b285e834","6":"66b5b92d32855e6f5986","7":"30ee773083679d5e122c","8":"3934ee2019fa3ad9f119","9":"7af5d0a32aeb35130034","10":"6abf131c8acfa0854a33","11":"73364cea813a5eb2a2f5","12":"a931b170146c27d84f49","13":"2476a095742567aa5556","14":"ca28802eab7dcb159cb7","15":"1e6480b6728fef2749db","16":"562635fb3f6ee08c1e3a","17":"83c33bde74b9dab04ac0","18":"301f2c056fb67b6e0489","19":"0fbca24f4860ceb6f957","20":"a9d66a5efc6d04052a08","21":"6457ab3e6be58a437546","22":"905828d3f8854dc5336c"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -3733,6 +3733,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     nav: {
@@ -3879,6 +3890,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         label: 'Files',
         value: 'files',
         to: route('files')
+      }, {
+        label: 'SSL',
+        value: 'ssl',
+        to: route('ssl')
       }, {
         label: 'Logs',
         value: 'logs',
@@ -27758,6 +27773,38 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
+                      item.value === "ssl"
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass:
+                                "flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150",
+                              class: {
+                                "text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500":
+                                  _vm.active !== item.to,
+                                "text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700":
+                                  _vm.active === item.to
+                              },
+                              attrs: {
+                                fill: "none",
+                                stroke: "currentColor",
+                                "stroke-linecap": "round",
+                                "stroke-linejoin": "round",
+                                "stroke-width": "2",
+                                viewBox: "0 0 24 24"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       item.value === "scheduler"
                         ? _c(
                             "svg",
@@ -45716,6 +45763,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     name: 'server.site.files',
     component: function component() {
       return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Files */ "./resources/js/Pages/Sites/Files.vue")).then(function (module) {
+        return module["default"];
+      });
+    }
+  }, {
+    path: '/servers/:server/sites/:site/ssl',
+    name: 'server.site.ssl',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Ssl */ "./resources/js/Pages/Sites/Ssl.vue")).then(function (module) {
         return module["default"];
       });
     }
