@@ -91,7 +91,7 @@
     
 
     <div class="text-sm md:text-lg font-semibold">
-        <a class="ml-10 text-gray-700" href="/docs/getting-started">Guides</a>
+        {{-- <a class="ml-10 text-gray-700" href="/docs/getting-started">Guides</a> --}}
         
         <a class="ml-10 text-gray-700" href="/auth/login">Login</a>
     </div>

@@ -27,10 +27,9 @@
                                 class="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700"
                             ></button>
                             <div class="ml-3 relative">
-                                <div class="flex items-center">
+                                <div class="flex items-center image-button" @click="open = !open">
                                     
                                     <button
-                                        @click="open = !open"
                                         class="image-button max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid"
                                     >
                                         <img
@@ -40,13 +39,12 @@
                                         />
                                     </button>
                                     <span
-                                        @click="open = !open"
                                         class="inline-block ml-4 cursor-pointer image-button text-sm text-white"
                                     >
                                         {{ $root.auth.name }}
                                     </span>
 
-                                    <svg @click="open = !open" class="image-button w-3 ml-2 cursor-pointer h-3 fill-current" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    <svg class="image-button w-3 ml-2 cursor-pointer h-3 fill-current" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                             viewBox="0 0 292.362 292.362" style="enable-background:new 0 0 292.362 292.362;"
                                             xml:space="preserve">
                                         <g>

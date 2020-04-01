@@ -752,7 +752,7 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@fullhuman/postcss-purgecss@^2.0.5":
+"@fullhuman/postcss-purgecss@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-2.1.0.tgz#955fc2e3f69b0d0c84367eeee4f85c01238a65dc"
   integrity sha512-zmV+cK8pAo/suKMQk1fKzDdols5ltOy86Hk51qwkiJJt4olm3t1MaUrm4U4MlA9fiYeRpLqsNop2xNoEm8DV+w==
@@ -4447,13 +4447,6 @@ laravel-echo@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/laravel-echo/-/laravel-echo-1.6.1.tgz#7360a48782f606acd0e6cf6fd429905b59606ae6"
   integrity sha512-Nj+vg6IwnXh65Oe+HrIrjOFX5xwR1ln9YgdxPWzuYNOuvT4ZimhkmIe5jb7D3muBPVRUoOY9W4c6YgJ4L0L6+Q==
-
-laravel-mix-purgecss@^5.0.0-rc.1:
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/laravel-mix-purgecss/-/laravel-mix-purgecss-5.0.0-rc.1.tgz#e83fd2556353c9fd59a42274c8791d1216eab3fc"
-  integrity sha512-N80/4Jn/yHyKK/P1CbzGXC3tYQ9b7I/nYZw45rW2z0QXkXxnPWAWDMaIW1+Da74cz/cPWneRoDYg8ZSj4pvUcg==
-  dependencies:
-    "@fullhuman/postcss-purgecss" "^2.0.5"
 
 laravel-mix@^5.0.4:
   version "5.0.4"
