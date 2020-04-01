@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Servers;
 
 use App\Sshkey;
 use App\Server;
+use Illuminate\Support\Str;
 use App\Jobs\Servers\Initialize;
 use App\Http\Controllers\Controller;
 use App\Notifications\Servers\Alert;
@@ -273,9 +274,10 @@ class CreateServersController extends Controller
                     'name' => $key->name,
                     'status' => $key->status,
                     'key' => $key->key,
-                    'is_app_key' => false
+                    'is_app_key' => false,
+                    'id' => Str::uuid()
                 ];
-            })
+            })->toArray()
         );
     }
 
