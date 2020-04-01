@@ -44,7 +44,12 @@ class UpdateBalancedServersController extends Controller
             );
         endforeach;
 
-        $process = (new UpdateBalancedServers($servers, $server, $site, $request->port))->run();
+        $process = (new UpdateBalancedServers(
+            $servers,
+            $server,
+            $site,
+            $request->port
+        ))->run();
 
         if (!$process->isSuccessful()) {
             return abort(400, $process->getErrorOutput());

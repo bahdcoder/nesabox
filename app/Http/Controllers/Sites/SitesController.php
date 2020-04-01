@@ -23,8 +23,6 @@ class SitesController extends Controller
 
     public function logs(Server $server, Site $site)
     {
-        // $this->authorize($server, 'view');
-
         return $site->logs;
     }
 

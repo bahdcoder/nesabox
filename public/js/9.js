@@ -149,6 +149,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -343,7 +366,7 @@ var render = function() {
                 [
                   _c("info", [
                     _vm._v(
-                      "\n                Below is a list of all of the other servers that can access this server. You can expose a specific port to a selected list of servers. This is really helpful when using a server as a separate database, cache, or queue worker.\n            "
+                      "\n                Below is a list of all of the other servers that can access\n                this server. You can expose a specific port to a selected\n                list of servers. This is really helpful when using a server\n                as a separate database, cache, or queue worker.\n            "
                     )
                   ]),
                   _vm._v(" "),
@@ -363,7 +386,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("small", { staticClass: "text-gray-600" }, [
                         _vm._v(
-                          "Select all the servers this server would have access to."
+                          "Select all the servers this server would have access\n                    to."
                         )
                       ]),
                       _vm._v(" "),
@@ -437,7 +460,7 @@ var render = function() {
                 [
                   _c("info", [
                     _vm._v(
-                      '\n                    If you do not provide a "FROM IP ADDRESS", the specified port will be open to any IP address on the internet.\n                '
+                      '\n                    If you do not provide a "FROM IP ADDRESS", the specified\n                    port will be open to any IP address on the internet.\n                '
                     )
                   ]),
                   _vm._v(" "),

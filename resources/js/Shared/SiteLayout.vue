@@ -6,22 +6,47 @@
             :showNav="site.status === 'active'"
         >
             <template slot="header">
-                <div class="w-full flex flex-wrap justify-between mb-5" v-if="!loading">
+                <div
+                    class="w-full flex flex-wrap justify-between mb-5"
+                    v-if="!loading"
+                >
                     <div class="w-full md:w-1/5">
                         <h3 class="text-lg text-gray-800">Site details</h3>
                     </div>
                     <div class="w-full md:w-4/5 flex flex-wrap md:justify-end">
-                        <div class="w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide">
-                            <span class="w-full mt-2 md:mt-0 md:w-auto text-sha-green-500 font-medium text-sm hover:text-sha-green-600 transition duration-50 ease-in-out">
-                                <router-link :to="`/servers/${server.id}`">{{ server.name }}</router-link>
+                        <div
+                            class="w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide"
+                        >
+                            <span
+                                class="w-full mt-2 md:mt-0 md:w-auto text-sha-green-500 font-medium text-sm hover:text-sha-green-600 transition duration-50 ease-in-out"
+                            >
+                                <router-link :to="`/servers/${server.id}`">{{
+                                    server.name
+                                }}</router-link>
                             </span>
-                            <span class="w-full mt-2 md:mt-0 md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out">
-                                <a :href="`http://${site.name}`" target='_blank'>{{ site.name }}</a>
+                            <span
+                                class="w-full mt-2 md:mt-0 md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out"
+                            >
+                                <a
+                                    :href="`http://${site.name}`"
+                                    target="_blank"
+                                    >{{ site.name }}</a
+                                >
                             </span>
-                            
-                            <span class="w-full mt-2 md:mt-0 md:w-auto md:ml-5">{{ server.ip_address }}</span>
-                            <span class="w-full mt-2 md:mt-0 md:w-auto md:ml-2" v-if="server.private_ip_address">({{ server.private_ip_address }})</span>
-                            <table-status class="mt-2 md:mt-0 md:ml-4" :status="site.status" />
+
+                            <span
+                                class="w-full mt-2 md:mt-0 md:w-auto md:ml-5"
+                                >{{ server.ip_address }}</span
+                            >
+                            <span
+                                class="w-full mt-2 md:mt-0 md:w-auto md:ml-2"
+                                v-if="server.private_ip_address"
+                                >({{ server.private_ip_address }})</span
+                            >
+                            <table-status
+                                class="mt-2 md:mt-0 md:ml-4"
+                                :status="site.status"
+                            />
                         </div>
                     </div>
                 </div>
@@ -104,7 +129,10 @@ export default {
         if (site) {
             this.loading = false
 
-            if (site && site.type !== 'nodejs' || this.server && this.server.type === 'load_balancer') {
+            if (
+                (site && site.type !== 'nodejs') ||
+                (this.server && this.server.type === 'load_balancer')
+            ) {
                 this.nav = this.nav.filter(
                     item => !['logs'].includes(item.value)
                 )
@@ -130,7 +158,10 @@ export default {
                     [site.id]: site
                 }
 
-                if (site.type !== 'nodejs' || site.server.type === 'load_balancer') {
+                if (
+                    site.type !== 'nodejs' ||
+                    site.server.type === 'load_balancer'
+                ) {
                     this.nav = this.nav.filter(
                         item => !['logs'].includes(item.value)
                     )

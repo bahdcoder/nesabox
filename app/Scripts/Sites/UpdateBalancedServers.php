@@ -37,8 +37,12 @@ class UpdateBalancedServers extends Base
      *
      * @return void
      */
-    public function __construct(Collection $servers, Server $server, Site $site, $port)
-    {
+    public function __construct(
+        Collection $servers,
+        Server $server,
+        Site $site,
+        $port
+    ) {
         $this->site = $site;
         $this->port = $port;
         $this->server = $server;

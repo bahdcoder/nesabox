@@ -16,7 +16,7 @@
             <p v-if="help" class="text-gray-500">
                 {{ help }}
             </p>
-            <slot name='help' />
+            <slot name="help" />
         </div>
     </div>
 </template>

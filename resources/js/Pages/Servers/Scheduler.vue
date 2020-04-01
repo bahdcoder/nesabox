@@ -19,7 +19,7 @@
                         <h2 class="text-lg mb-3 text-gray-800">
                             Job logs ({{ selectedJob && selectedJob.slug }})
                         </h2>
-                        <v-codemirror :value='logs' />
+                        <v-codemirror :value="logs" />
                     </div>
 
                     <div
@@ -31,7 +31,11 @@
                     </div>
 
                     <div class="w-full md:flex md:justify-end">
-                        <v-trans-button @click="hideLogs" label='Close' class="mt-4" />
+                        <v-trans-button
+                            @click="hideLogs"
+                            label="Close"
+                            class="mt-4"
+                        />
                     </div>
                 </div>
             </modal>
@@ -108,13 +112,23 @@
                         </div>
                     </div>
 
-                    <v-button type='submit' label="Schedule Job" class="mt-5" :loading="submitting" />
+                    <v-button
+                        type="submit"
+                        label="Schedule Job"
+                        class="mt-5"
+                        :loading="submitting"
+                    />
                 </form>
             </card>
 
-            <card title='Scheduled jobs' :table="true" :rowsCount="jobs.length" emptyTableMessage='No scheduled jobs running on this server yet.'>
+            <card
+                title="Scheduled jobs"
+                :table="true"
+                :rowsCount="jobs.length"
+                emptyTableMessage="No scheduled jobs running on this server yet."
+            >
                 <v-table :headers="tableHeaders" :rows="jobs">
-                    <template slot='row' slot-scope='{ row, header }'>
+                    <template slot="row" slot-scope="{ row, header }">
                         <table-status
                             v-if="header.value === 'status'"
                             :status="row.status"
@@ -125,15 +139,42 @@
                             @click="showConfirmDeleteModal(row)"
                         />
 
-                        <button @click="showLogs(row)" class="border-2 border-gray-500 p-1 rounded hover:bg-gray-100 shadow" v-if="header.value === 'logs'">
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" height="20"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <button
+                            @click="showLogs(row)"
+                            class="border-2 border-gray-500 p-1 rounded hover:bg-gray-100 shadow"
+                            v-if="header.value === 'logs'"
+                        >
+                            <svg
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                ></path>
+                            </svg>
                         </button>
 
-                        <span class="text-gray-700 text-sm" v-if="['slug', 'user', 'cron', 'frequency'].includes(header.value)">
+                        <span
+                            class="text-gray-700 text-sm"
+                            v-if="
+                                ['slug', 'user', 'cron', 'frequency'].includes(
+                                    header.value
+                                )
+                            "
+                        >
                             {{ row[header.value] }}
                         </span>
 
-                        <code class="text-red-400" v-if="header.value === 'command'">
+                        <code
+                            class="text-red-400"
+                            v-if="header.value === 'command'"
+                        >
                             {{ row.command }}
                         </code>
                     </template>
@@ -157,7 +198,9 @@ export default {
             frequency: 'everyMinute'
         }
 
-        this.initializeForm(`/api/servers/${this.$route.params.server}/cron-jobs`)
+        this.initializeForm(
+            `/api/servers/${this.$route.params.server}/cron-jobs`
+        )
     },
     data() {
         return {
@@ -166,25 +209,32 @@ export default {
             selectedJob: null,
             showLogsModal: false,
             showDeleteModal: false,
-            tableHeaders: [{
-                label: 'Cron',
-                value: 'cron'
-            }, {
-                label: 'User',
-                value: 'user'
-            }, {
-                label: 'Status',
-                value: 'status'
-            }, {
-                label: 'Command',
-                value: 'command'
-            }, {
-                label: '',
-                value: 'logs'
-            }, {
-                label: '',
-                value: 'delete'
-            }],
+            tableHeaders: [
+                {
+                    label: 'Cron',
+                    value: 'cron'
+                },
+                {
+                    label: 'User',
+                    value: 'user'
+                },
+                {
+                    label: 'Status',
+                    value: 'status'
+                },
+                {
+                    label: 'Command',
+                    value: 'command'
+                },
+                {
+                    label: '',
+                    value: 'logs'
+                },
+                {
+                    label: '',
+                    value: 'delete'
+                }
+            ],
             frequencies: [
                 {
                     label: 'Every Minute',
@@ -248,7 +298,8 @@ export default {
         showLogs(job) {
             this.showLogsModal = true
 
-            axios.post(`/api/servers/${this.server.id}/cron-jobs/${job.id}/log`)
+            axios
+                .post(`/api/servers/${this.server.id}/cron-jobs/${job.id}/log`)
                 .then(({ data: logs }) => {
                     this.logs = logs
 
@@ -257,7 +308,11 @@ export default {
                 .catch(({ response }) => {
                     this.showLogsModal = false
 
-                    this.$root.flashMessage(response.data.message || 'Failed fetching logs for job.', 'error')
+                    this.$root.flashMessage(
+                        response.data.message ||
+                            'Failed fetching logs for job.',
+                        'error'
+                    )
                 })
         },
         submit() {
@@ -268,7 +323,7 @@ export default {
                 }
             }
 
-            this.submitForm().then((server) => {
+            this.submitForm().then(server => {
                 this.$root.servers = {
                     ...this.$root.servers,
                     [server.id]: server
@@ -286,7 +341,10 @@ export default {
         deleteJob() {
             this.deletingJob = true
 
-            axios.delete(`/api/servers/${this.server.id}/cron-jobs/${this.selectedJob.id}`)
+            axios
+                .delete(
+                    `/api/servers/${this.server.id}/cron-jobs/${this.selectedJob.id}`
+                )
                 .then(({ data: server }) => {
                     this.$root.servers = {
                         ...this.$root.servers,
@@ -296,7 +354,10 @@ export default {
                     this.$root.flashMessage('Cron job has been deleted.')
                 })
                 .catch(({ response }) => {
-                    this.$root.flashMessage(response.data.message || 'Failed deleting job.', 'error')
+                    this.$root.flashMessage(
+                        response.data.message || 'Failed deleting job.',
+                        'error'
+                    )
                 })
                 .finally(() => {
                     this.deletingJob = false

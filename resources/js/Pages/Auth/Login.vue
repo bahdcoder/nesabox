@@ -61,12 +61,12 @@
                         </div>
 
                         <div class="text-sm leading-5">
-                            <a
-                                href="#"
+                            <router-link
+                                to="/auth/forgot-password"
                                 class="font-medium text-sha-green-500 hover:text-sha-green-600 focus:outline-none focus:underline transition ease-in-out duration-150"
                             >
                                 Forgot your password?
-                            </a>
+                            </router-link>
                         </div>
                     </div>
 

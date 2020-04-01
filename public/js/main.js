@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"fb02d82fafa4d72d0895","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"0b558bc9b39d43f09f90","4":"c9894795390412525b1a","5":"9a2846a9ad17b285e834","6":"66b5b92d32855e6f5986","7":"6e4bb18df5a7faf998a0","8":"15bb7513140f6082b44e","9":"3f188e0d4634a232c40c","10":"d5bf1b2adda5149ebadb","11":"b602aa69f663939b1350","12":"12b6b741cb79ce11f376","13":"2476a095742567aa5556","14":"ca28802eab7dcb159cb7","15":"05441ef3f9397be427f4","16":"ff0e0edd79c11307426c","17":"83c33bde74b9dab04ac0","18":"301f2c056fb67b6e0489","19":"d82a61b46a2d6b22406d"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"db39a4a515ef5233e805","1":"e93b4ef2b1071db545d9","2":"fbbb664c99ce9263a6f9","3":"4d01991760af2e1eca53","4":"c9894795390412525b1a","5":"9a2846a9ad17b285e834","6":"66b5b92d32855e6f5986","7":"30ee773083679d5e122c","8":"3934ee2019fa3ad9f119","9":"7af5d0a32aeb35130034","10":"6abf131c8acfa0854a33","11":"73364cea813a5eb2a2f5","12":"a931b170146c27d84f49","13":"2476a095742567aa5556","14":"ca28802eab7dcb159cb7","15":"d45d5bd5a2af596d2a3c","16":"03a556cfd5c62351f019","17":"83c33bde74b9dab04ac0","18":"301f2c056fb67b6e0489","19":"0fbca24f4860ceb6f957","20":"a9d66a5efc6d04052a08","21":"6457ab3e6be58a437546"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2325,9 +2325,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -2603,8 +2600,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
 //
 //
 //
@@ -3255,6 +3250,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _this = this;
@@ -3672,6 +3688,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     nav: {
@@ -3710,6 +3749,31 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -26323,20 +26387,6 @@ var render = function() {
                               1
                             ),
                             _vm._v(" "),
-                            _c("div", {
-                              staticClass: "border-t border-gray-100"
-                            }),
-                            _vm._v(" "),
-                            _vm._m(1),
-                            _vm._v(" "),
-                            _c("div", {
-                              staticClass: "border-t border-gray-100"
-                            }),
-                            _vm._v(" "),
-                            _c("div", {
-                              staticClass: "border-t border-gray-100"
-                            }),
-                            _vm._v(" "),
                             _c("div", { staticClass: "py-1 cursor-pointer" }, [
                               _c(
                                 "a",
@@ -26489,7 +26539,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(1)
           ])
         ]
       )
@@ -26578,7 +26628,7 @@ var render = function() {
                 _vm._v(
                   "\n                    © " +
                     _vm._s(new Date().getFullYear()) +
-                    " A Project by Kati Frantz\n                "
+                    " A Project by Kati\n                    Frantz\n                "
                 )
               ]
             )
@@ -26598,41 +26648,6 @@ var staticRenderFns = [
         staticClass: "h-12 w-12",
         attrs: { src: "/assets/images/logo-light-small.svg", alt: "" }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "py-1" }, [
-      _c(
-        "span",
-        {
-          staticClass:
-            "w-full font-semibold inline-block mb-3 text-xs text-gray-900 px-4 py-3 border-b border-gray-100"
-        },
-        [_vm._v("Projects")]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass:
-            "block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900",
-          attrs: { href: "#" }
-        },
-        [_vm._v("Archive")]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass:
-            "block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900",
-          attrs: { href: "#" }
-        },
-        [_vm._v("Move")]
-      )
     ])
   },
   function() {
@@ -27171,7 +27186,7 @@ var render = function() {
                                     _vm._v(
                                       "\n                        Your server has been provisioned on\n                        " +
                                         _vm._s(_vm.server.provider) +
-                                        ". We are currently installing all\n                        necessary software. This process should take about 10\n                        minutes or less on average.\n                    "
+                                        ". We are currently installing\n                        all necessary software. This process should take\n                        about 10 minutes or less on average.\n                    "
                                     )
                                   ]
                                 )
@@ -27180,7 +27195,7 @@ var render = function() {
                                   { staticClass: "text-center text-gray-700" },
                                   [
                                     _vm._v(
-                                      "\n                        Your custom server is still initializing. Once the\n                        installing script is done running, it'll become active.\n                    "
+                                      "\n                        Your custom server is still initializing. Once the\n                        installing script is done running, it'll become\n                        active.\n                    "
                                     )
                                   ]
                                 ),
@@ -27221,7 +27236,7 @@ var render = function() {
                                 _vm._v(
                                   "\n                        Your server is still being created on\n                        " +
                                     _vm._s(_vm.server.provider) +
-                                    ". It'll take about a minute. Once\n                        we confirmed the server is active on\n                        " +
+                                    ". It'll take about a minute.\n                        Once we confirmed the server is active on\n                        " +
                                     _vm._s(_vm.server.provider) +
                                     ", we'll begin running the\n                        installation script.\n                    "
                                 )
@@ -27301,7 +27316,7 @@ var render = function() {
                       staticClass:
                         "mt-1 group flex items-center px-3 py-2 text-sm leading-5 font-medium rounded-md focus:outline-none transition ease-in-out duration-150",
                       class: {
-                        "bg-gray-200 focus:bg-gray-100 text-gray-900 hover:text-gray-900":
+                        "bg-gray-200 text-gray-900 hover:text-gray-900":
                           _vm.active === item.to,
                         "hover:bg-gray-50 text-gray-600": _vm.active !== item.to
                       },
@@ -45462,6 +45477,22 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
       });
     }
   }, {
+    path: '/auth/forgot-password',
+    name: 'forgot-password',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! @/Pages/Auth/ForgotPassword */ "./resources/js/Pages/Auth/ForgotPassword.vue")).then(function (module) {
+        return module["default"];
+      });
+    }
+  }, {
+    path: '/auth/reset-password/:token',
+    name: 'reset-password',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! @/Pages/Auth/ResetPassword */ "./resources/js/Pages/Auth/ResetPassword.vue")).then(function (module) {
+        return module["default"];
+      });
+    }
+  }, {
     path: '/auth/register',
     name: 'register',
     component: function component() {
@@ -45632,7 +45663,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   }]
 });
 router.beforeEach(function (to, from, next) {
-  var nonAuthRoutes = ['login', 'register'];
+  var nonAuthRoutes = ['login', 'register', 'forgot-password', 'reset-password'];
 
   if (nonAuthRoutes.includes(to.name)) {
     if (window.auth) {

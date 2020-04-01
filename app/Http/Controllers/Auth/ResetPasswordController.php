@@ -66,18 +66,4 @@ class ResetPasswordController extends Controller
                 400
             );
     }
-
-    /**
-     * Get the password reset validation rules.
-     *
-     * @return array
-     */
-    protected function rules()
-    {
-        return [
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:8'
-        ];
-    }
 }

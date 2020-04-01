@@ -83,6 +83,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -229,7 +245,7 @@ var render = function() {
                 _vm.wrapper === "account-layout"
                   ? _c("info", { staticClass: "mb-5" }, [
                       _vm._v(
-                        "\n                    These keys would be added to every new server you provision.\n                "
+                        "\n                    These keys would be added to every new server you\n                    provision.\n                "
                       )
                     ])
                   : _vm._e(),

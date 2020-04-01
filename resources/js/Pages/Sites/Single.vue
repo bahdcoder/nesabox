@@ -4,7 +4,10 @@
             <flash />
             <card
                 title="Installing repository"
-                v-if="server.type !== 'load_balancer' && site.installing_repository"
+                v-if="
+                    server.type !== 'load_balancer' &&
+                        site.installing_repository
+                "
             >
                 <div
                     class="w-full border border-blue-500 bg-blue-100 flex items-center rounded text-blue-900 px-2 py-3 text-sm"
@@ -13,7 +16,10 @@
                     <spinner class="ml-3 text-blue-800 w-4 h-4" />
                 </div>
             </card>
-            <card v-if="server.type !== 'load_balancer' &&  !site.repository" title="Install Repository">
+            <card
+                v-if="server.type !== 'load_balancer' && !site.repository"
+                title="Install Repository"
+            >
                 <form
                     v-if="
                         !site.repository &&
@@ -74,7 +80,13 @@
                 </router-link>
             </card>
 
-            <div v-if="server.type !== 'load_balancer' &&  site.repository && !site.installing_repository">
+            <div
+                v-if="
+                    server.type !== 'load_balancer' &&
+                        site.repository &&
+                        !site.installing_repository
+                "
+            >
                 <card class="mb-6" title="Deployment">
                     <template slot="header">
                         <div class="flex justify-between items-center">
@@ -192,9 +204,14 @@
                 </card>
             </div>
 
-            <card title='Balancing servers' v-if="server.type === 'load_balancer'">
+            <card
+                title="Balancing servers"
+                v-if="server.type === 'load_balancer'"
+            >
                 <info>
-                    Below is a list of all of the servers this load balancer will distribute traffic to. Only servers in the same region as the load balancer are shown here.
+                    Below is a list of all of the servers this load balancer
+                    will distribute traffic to. Only servers in the same region
+                    as the load balancer are shown here.
                 </info>
 
                 <div class="mt-6">
@@ -204,7 +221,8 @@
                         >Balanced servers:</label
                     >
                     <small class="text-gray-600"
-                        >Select all the servers this load balancer would distribute traffic to:</small
+                        >Select all the servers this load balancer would
+                        distribute traffic to:</small
                     >
                     <checkbox
                         class="mt-4"
@@ -213,19 +231,27 @@
                         :label="server.name"
                         v-for="server in familyServers"
                         @input="selectServer($event, server.id)"
-                        :checked="balancedServersForm.servers.includes(server.id)"
+                        :checked="
+                            balancedServersForm.servers.includes(server.id)
+                        "
                     />
                 </div>
 
                 <text-input
-                    name='port'
-                    label='Port'
+                    name="port"
+                    label="Port"
                     class="mt-5"
                     v-model="balancedServersForm.port"
-                    help='By default, the load balancer will direct traffic to port 80. You can change the default port here.'
+                    help="By default, the load balancer will direct traffic to port 80. You can change the default port here."
                 />
 
-                <v-button label='Update balanced servers' class="mt-4" :disabled="familyServers.length === 0" @click="updateBalancedServers" :loading="updatingBalancedServers" />
+                <v-button
+                    label="Update balanced servers"
+                    class="mt-4"
+                    :disabled="familyServers.length === 0"
+                    @click="updateBalancedServers"
+                    :loading="updatingBalancedServers"
+                />
             </card>
         </template>
     </site-layout>
@@ -280,7 +306,7 @@ export default {
             return this.$root.sites[this.$route.params.site] || {}
         },
         familyServers() {
-            if (! this.server || ! this.server.id) return []
+            if (!this.server || !this.server.id) return []
 
             return this.server.family_servers
         },
@@ -309,7 +335,11 @@ export default {
         updateBalancedServers() {
             this.updatingBalancedServers = true
 
-            axios.patch(`/api/servers/${this.server.id}/sites/${this.site.id}/upstream`, this.balancedServersForm)
+            axios
+                .patch(
+                    `/api/servers/${this.server.id}/sites/${this.site.id}/upstream`,
+                    this.balancedServersForm
+                )
                 .then(({ data: server }) => {
                     this.$root.servers = {
                         ...this.$root.servers,
@@ -319,9 +349,12 @@ export default {
                     this.$root.flashMessage('Balanced servers updated.')
                 })
                 .catch(() => {
-                    this.$root.flashMessage('Failed to update balanced servers', 'error')
-                
-                }).finally(() => {
+                    this.$root.flashMessage(
+                        'Failed to update balanced servers',
+                        'error'
+                    )
+                })
+                .finally(() => {
                     this.updatingBalancedServers = false
                 })
         },
@@ -334,21 +367,20 @@ export default {
             })
         },
         selectServer(checked, server) {
-                if (checked) {
-                    this.balancedServersForm = {
-                        ...this.balancedServersForm,
-                        servers: [
-                            ...this.balancedServersForm.servers,
-                            server
-                        ]
-                    }
-                } else {
-                    this.balancedServersForm = {
-                        ...this.balancedServersForm,
-                        servers: this.balancedServersForm.servers.filter(s => s !== server)
-                    }
+            if (checked) {
+                this.balancedServersForm = {
+                    ...this.balancedServersForm,
+                    servers: [...this.balancedServersForm.servers, server]
                 }
-            },
+            } else {
+                this.balancedServersForm = {
+                    ...this.balancedServersForm,
+                    servers: this.balancedServersForm.servers.filter(
+                        s => s !== server
+                    )
+                }
+            }
+        },
         copyDeploymentTriggerUrl() {
             const command = document.getElementById('deployment_trigger_url')
 
@@ -408,8 +440,13 @@ export default {
 
             this.balancedServersForm = {
                 ...this.balancedServersForm,
-                port: this.site.balanced_servers.length > 0 ? this.site.balanced_servers[0].port : '08',
-                servers: this.site.balanced_servers.map(server => server.balanced_server_id)
+                port:
+                    this.site.balanced_servers.length > 0
+                        ? this.site.balanced_servers[0].port
+                        : '08',
+                servers: this.site.balanced_servers.map(
+                    server => server.balanced_server_id
+                )
             }
         },
         saveScript() {

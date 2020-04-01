@@ -268,6 +268,32 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -859,7 +885,7 @@ var render = function() {
                 [
                   _c("info", [
                     _vm._v(
-                      "\n                Below is a list of all of the servers this load balancer will distribute traffic to. Only servers in the same region as the load balancer are shown here.\n            "
+                      "\n                Below is a list of all of the servers this load balancer\n                will distribute traffic to. Only servers in the same region\n                as the load balancer are shown here.\n            "
                     )
                   ]),
                   _vm._v(" "),
@@ -879,7 +905,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("small", { staticClass: "text-gray-600" }, [
                         _vm._v(
-                          "Select all the servers this load balancer would distribute traffic to:"
+                          "Select all the servers this load balancer would\n                    distribute traffic to:"
                         )
                       ]),
                       _vm._v(" "),

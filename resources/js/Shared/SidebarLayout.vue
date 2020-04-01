@@ -10,7 +10,7 @@
                         v-for="item in nav"
                         class="mt-1 group flex items-center px-3 py-2 text-sm leading-5 font-medium rounded-md focus:outline-none transition ease-in-out duration-150"
                         :class="{
-                            'bg-gray-200 focus:bg-gray-100 text-gray-900 hover:text-gray-900':
+                            'bg-gray-200 text-gray-900 hover:text-gray-900':
                                 active === item.to,
                             'hover:bg-gray-50 text-gray-600': active !== item.to
                         }"
@@ -90,8 +90,14 @@
                             />
                         </svg>
 
-                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" 
-                        v-if="item.value === 'sshkeys'"
+                        <svg
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            v-if="item.value === 'sshkeys'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
                                 'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
@@ -99,7 +105,11 @@
                                 'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
                                     active === item.to
                             }"
-                        ><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                        >
+                            <path
+                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                            ></path>
+                        </svg>
 
                         <svg
                             v-if="item.value === 'files'"
@@ -263,8 +273,8 @@
                             />
                         </svg>
 
-                        <svg 
-                        v-if="item.value === 'meta'"
+                        <svg
+                            v-if="item.value === 'meta'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
                                 'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
@@ -272,7 +282,17 @@
                                 'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
                                     active === item.to
                             }"
-                        fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                            ></path>
+                        </svg>
 
                         <svg
                             v-if="item.value === 'network'"
@@ -301,9 +321,12 @@
                     </router-link>
                 </nav>
             </div>
-            <div class="w-full md:pl-6" :class="{
-                'md:w-4/5': showNav
-            }">
+            <div
+                class="w-full md:pl-6"
+                :class="{
+                    'md:w-4/5': showNav
+                }"
+            >
                 <slot />
             </div>
         </div>

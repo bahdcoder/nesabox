@@ -266,18 +266,21 @@ class CreateServersController extends Controller
         }
     }
 
-    public function copyUserSshkeysToServer(Server $server) {
+    public function copyUserSshkeysToServer(Server $server)
+    {
         Sshkey::insert(
-            $server->user->sshkeys->map(function ($key) use ($server) {
-                return [
-                    'server_id' => $server->id,
-                    'name' => $key->name,
-                    'status' => $key->status,
-                    'key' => $key->key,
-                    'is_app_key' => false,
-                    'id' => Str::uuid()
-                ];
-            })->toArray()
+            $server->user->sshkeys
+                ->map(function ($key) use ($server) {
+                    return [
+                        'server_id' => $server->id,
+                        'name' => $key->name,
+                        'status' => $key->status,
+                        'key' => $key->key,
+                        'is_app_key' => false,
+                        'id' => Str::uuid()
+                    ];
+                })
+                ->toArray()
         );
     }
 

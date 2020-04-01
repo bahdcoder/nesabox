@@ -111,7 +111,8 @@ class Initialize implements ShouldQueue
                 if ($droplet->status === 'active') {
                     $server->update([
                         'ip_address' => $droplet->networks->v4[0]->ip_address,
-                        'private_ip_address' => $droplet->networks->v4[1]->ip_address,
+                        'private_ip_address' =>
+                            $droplet->networks->v4[1]->ip_address,
                         'status' => STATUS_INITIALIZING
                     ]);
 

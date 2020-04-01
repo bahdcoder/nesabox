@@ -36,6 +36,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -120,7 +125,7 @@ var render = function() {
                 _vm.server.provider !== "custom"
                   ? _c("span", [
                       _vm._v(
-                        "We won't delete this server from your " +
+                        "We won't delete this server from your\n                    " +
                           _vm._s(_vm.server.provider) +
                           " account."
                       )

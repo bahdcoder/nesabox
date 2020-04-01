@@ -35,6 +35,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -42,7 +79,14 @@ __webpack_require__.r(__webpack_exports__);
         name: '',
         email: ''
       },
-      submitting: false
+      passwordForm: {
+        current_password: '',
+        new_password: '',
+        new_password_confirmation: ''
+      },
+      passwordErrors: {},
+      submitting: false,
+      updating: false
     };
   },
   mounted: function mounted() {
@@ -64,9 +108,39 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (_ref2) {
         var response = _ref2.response;
 
-        _this.$root.flashMessage(response.data.message || 'Failed updating profile.', 'error');
+        if (response.status === 422) {
+          _this.errors = response.data.errors;
+        } else {
+          _this.$root.flashMessage(response.data.message || 'Failed updating profile.', 'error');
+        }
       })["finally"](function () {
         _this.submitting = false;
+      });
+    },
+    update: function update() {
+      var _this2 = this;
+
+      this.updating = true;
+      axios.put("/api/me/password", this.passwordForm).then(function (_ref3) {
+        var user = _ref3.data;
+
+        _this2.$root.flashMessage('Password updated.');
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+
+        if (response.status === 422) {
+          _this2.passwordErrors = response.data.errors;
+        } else {
+          _this2.$root.flashMessage(response.data.message || 'Failed updating password.', 'error');
+        }
+      })["finally"](function () {
+        _this2.updating = false;
+        _this2.passwordForm = {
+          current_password: '',
+          new_password: '',
+          new_password_confirmation: ''
+        };
+        _this2.passwordErrors = {};
       });
     }
   }
@@ -151,7 +225,85 @@ var render = function() {
                 1
               )
             ]
-          )
+          ),
+          _vm._v(" "),
+          _c("card", { attrs: { title: "Change your password" } }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.update($event)
+                  }
+                }
+              },
+              [
+                _c("text-input", {
+                  attrs: {
+                    type: "password",
+                    name: "current_password",
+                    label: "Current password",
+                    errors: _vm.passwordErrors.current_password
+                  },
+                  model: {
+                    value: _vm.passwordForm.current_password,
+                    callback: function($$v) {
+                      _vm.$set(_vm.passwordForm, "current_password", $$v)
+                    },
+                    expression: "passwordForm.current_password"
+                  }
+                }),
+                _vm._v(" "),
+                _c("text-input", {
+                  staticClass: "mt-5",
+                  attrs: {
+                    type: "password",
+                    name: "new_password",
+                    label: "New password",
+                    errors: _vm.passwordErrors.new_password
+                  },
+                  model: {
+                    value: _vm.passwordForm.new_password,
+                    callback: function($$v) {
+                      _vm.$set(_vm.passwordForm, "new_password", $$v)
+                    },
+                    expression: "passwordForm.new_password"
+                  }
+                }),
+                _vm._v(" "),
+                _c("text-input", {
+                  staticClass: "mt-5",
+                  attrs: {
+                    type: "password",
+                    name: "new_password_confirmation",
+                    label: "New password confirmation"
+                  },
+                  model: {
+                    value: _vm.passwordForm.new_password_confirmation,
+                    callback: function($$v) {
+                      _vm.$set(
+                        _vm.passwordForm,
+                        "new_password_confirmation",
+                        $$v
+                      )
+                    },
+                    expression: "passwordForm.new_password_confirmation"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-button", {
+                  staticClass: "mt-5",
+                  attrs: {
+                    label: "Update password",
+                    type: "submit",
+                    loading: _vm.updating
+                  }
+                })
+              ],
+              1
+            )
+          ])
         ],
         1
       )

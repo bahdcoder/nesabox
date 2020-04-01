@@ -379,14 +379,17 @@ EOD;
         );
     }
 
-
     /**
      * Update the contents of a file from the server
      *
      * @return \Symphony\Process\Process
      */
-    public function updateFileContent(Server $server, $pathToFile, $content, $root = true)
-    {
+    public function updateFileContent(
+        Server $server,
+        $pathToFile,
+        $content,
+        $root = true
+    ) {
         $scriptPath = 'scripts/server/get-file-contents.sh';
 
         $scriptName = base_path($scriptPath);

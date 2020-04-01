@@ -8,12 +8,17 @@
                 :open="deletingModalOpen"
                 @close="deletingModalOpen = false"
                 confirmHeading="Delete server"
-                :confirmText="`Are you sure you want to delete your server ${server.name}?`"
+                :confirmText="
+                    `Are you sure you want to delete your server ${server.name}?`
+                "
             />
             <card title="Delete server">
                 <info>
                     This will permanently delete this server from our records.
-                    <span v-if="server.provider !== 'custom'">We won't delete this server from your {{ server.provider }} account.</span>
+                    <span v-if="server.provider !== 'custom'"
+                        >We won't delete this server from your
+                        {{ server.provider }} account.</span
+                    >
                 </info>
                 <red-button
                     @click="deletingModalOpen = true"
@@ -48,10 +53,7 @@ export default {
                     this.$router.push(`/dashboard`)
                 })
                 .catch(() => {
-                    this.$root.flashMessage(
-                        'Failed deleting server.',
-                        'error',
-                    )
+                    this.$root.flashMessage('Failed deleting server.', 'error')
                 })
                 .finally(() => {
                     this.deleting = false

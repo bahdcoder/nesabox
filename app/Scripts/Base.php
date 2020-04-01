@@ -56,7 +56,9 @@ class Base
         return '';
     }
 
-    public function generate() {}
+    public function generate()
+    {
+    }
 
     /**
      *

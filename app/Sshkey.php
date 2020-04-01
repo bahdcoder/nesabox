@@ -4,5 +4,4 @@ namespace App;
 
 class Sshkey extends Model
 {
-
 }

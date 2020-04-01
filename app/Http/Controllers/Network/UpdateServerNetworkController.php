@@ -44,9 +44,9 @@ class UpdateServerNetworkController extends Controller
 
         foreach ($server->friendServers as $friendServer):
             $serversToDelete->push(
-                collect(Server::find($friendServer->friend_server_id)->toArray())->merge(
-                    collect($friendServer->toArray())
-                )
+                collect(
+                    Server::find($friendServer->friend_server_id)->toArray()
+                )->merge(collect($friendServer->toArray()))
             );
         endforeach;
 

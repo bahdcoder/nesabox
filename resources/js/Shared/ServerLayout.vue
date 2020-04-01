@@ -6,17 +6,37 @@
             :showNav="server.status === 'active'"
         >
             <template slot="header">
-                <div class="w-full flex flex-wrap justify-between mb-5" v-if="!loading">
+                <div
+                    class="w-full flex flex-wrap justify-between mb-5"
+                    v-if="!loading"
+                >
                     <div class="w-full md:w-1/5">
                         <h3 class="text-lg text-gray-800">Server details</h3>
                     </div>
                     <div class="w-full md:w-4/5 flex flex-wrap md:justify-end">
-                        <div class="w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide">
-                            <span class="w-full mt-2 md:mt-0 md:w-auto">{{ server.name }}</span>
-                            <span class="w-full mt-2 md:mt-0 md:w-auto md:ml-5">{{ server.region }}</span>
-                            <span class="w-full mt-2 md:mt-0 md:w-auto md:ml-5">{{ server.ip_address }}</span>
-                            <span class="w-full mt-2 md:mt-0 md:w-auto md:ml-2" v-if="server.private_ip_address">({{ server.private_ip_address }})</span>
-                            <table-status class="mt-2 md:mt-0 md:ml-4" :status="server.status" />
+                        <div
+                            class="w-full md:w-auto flex items-center flex-wrap md:pl-6 uppercase text-gray-700 tracking-wide"
+                        >
+                            <span class="w-full mt-2 md:mt-0 md:w-auto">{{
+                                server.name
+                            }}</span>
+                            <span
+                                class="w-full mt-2 md:mt-0 md:w-auto md:ml-5"
+                                >{{ server.region }}</span
+                            >
+                            <span
+                                class="w-full mt-2 md:mt-0 md:w-auto md:ml-5"
+                                >{{ server.ip_address }}</span
+                            >
+                            <span
+                                class="w-full mt-2 md:mt-0 md:w-auto md:ml-2"
+                                v-if="server.private_ip_address"
+                                >({{ server.private_ip_address }})</span
+                            >
+                            <table-status
+                                class="mt-2 md:mt-0 md:ml-4"
+                                :status="server.status"
+                            />
                         </div>
                     </div>
                 </div>
@@ -40,13 +60,14 @@
                             v-if="server.provider !== 'custom'"
                         >
                             Your server has been provisioned on
-                            {{ server.provider }}. We are currently installing all
-                            necessary software. This process should take about 10
-                            minutes or less on average.
+                            {{ server.provider }}. We are currently installing
+                            all necessary software. This process should take
+                            about 10 minutes or less on average.
                         </p>
                         <p class="text-center text-gray-700" v-else>
                             Your custom server is still initializing. Once the
-                            installing script is done running, it'll become active.
+                            installing script is done running, it'll become
+                            active.
                         </p>
 
                         <p
@@ -68,8 +89,8 @@
                     >
                         <p class="text-center text-gray-700">
                             Your server is still being created on
-                            {{ server.provider }}. It'll take about a minute. Once
-                            we confirmed the server is active on
+                            {{ server.provider }}. It'll take about a minute.
+                            Once we confirmed the server is active on
                             {{ server.provider }}, we'll begin running the
                             installation script.
                         </p>
@@ -183,7 +204,9 @@ export default {
             ]
 
             if (this.server.type === 'load_balancer') {
-                this.nav = this.nav.filter(item => !['scheduler'].includes(item.value))
+                this.nav = this.nav.filter(
+                    item => !['scheduler'].includes(item.value)
+                )
             }
         }
     }

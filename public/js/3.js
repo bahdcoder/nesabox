@@ -346,17 +346,36 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _vm._m(0)
+                    _c(
+                      "div",
+                      { staticClass: "text-sm leading-5" },
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass:
+                              "font-medium text-sha-green-500 hover:text-sha-green-600 focus:outline-none focus:underline transition ease-in-out duration-150",
+                            attrs: { to: "/auth/forgot-password" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            Forgot your password?\n                        "
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(1)
+                _vm._m(0)
               ],
               1
             ),
             _vm._v(" "),
             _c("div", { staticClass: "mt-6" }, [
-              _vm._m(2),
+              _vm._m(1),
               _vm._v(" "),
               _c("div", { staticClass: "mt-6 flex justify-center w-full" }, [
                 _c("div", { staticClass: "w-full md:w-1/3" }, [
@@ -406,26 +425,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "text-sm leading-5" }, [
-      _c(
-        "a",
-        {
-          staticClass:
-            "font-medium text-sha-green-500 hover:text-sha-green-600 focus:outline-none focus:underline transition ease-in-out duration-150",
-          attrs: { href: "#" }
-        },
-        [
-          _vm._v(
-            "\n                            Forgot your password?\n                        "
-          )
-        ]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

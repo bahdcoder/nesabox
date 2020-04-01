@@ -64,7 +64,9 @@ class CronJobController extends Controller
 
         $process = (new CronJobOutput($server, $job))->run();
 
-        return $process->isSuccessful() ? $process->getOutput() : $process->getErrorOutput();
+        return $process->isSuccessful()
+            ? $process->getOutput()
+            : $process->getErrorOutput();
     }
 
     /**

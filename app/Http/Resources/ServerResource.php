@@ -86,7 +86,9 @@ class ServerResource extends JsonResource
                 ->whereNotNull('private_ip_address')
                 ->select(['id', 'name'])
                 ->get(),
-            'friend_servers' => $this->friendServers()->select(['friend_server_id', 'ports'])->get()
+            'friend_servers' => $this->friendServers()
+                ->select(['friend_server_id', 'ports'])
+                ->get()
         ];
     }
 }

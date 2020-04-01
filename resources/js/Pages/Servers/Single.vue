@@ -15,7 +15,10 @@
                         />
                     </div>
 
-                    <div class="w-full mt-5" v-if="server && server.type !== 'load_balancer'">
+                    <div
+                        class="w-full mt-5"
+                        v-if="server && server.type !== 'load_balancer'"
+                    >
                         <select-input
                             name="type"
                             v-model="form.type"
@@ -27,7 +30,10 @@
                         />
                     </div>
 
-                    <div class="w-full mt-5" v-if="server && server.type !== 'load_balancer'">
+                    <div
+                        class="w-full mt-5"
+                        v-if="server && server.type !== 'load_balancer'"
+                    >
                         <text-input
                             name="directory"
                             placeholder="/dist"
@@ -58,14 +64,24 @@
                 <v-table
                     :rows="sites"
                     @row-clicked="routeToSite"
-                    :headers="server && server.type === 'load_balancer' ? table.loadBalancerHeaders :table.headers"
+                    :headers="
+                        server && server.type === 'load_balancer'
+                            ? table.loadBalancerHeaders
+                            : table.headers
+                    "
                 >
                     <template slot="row" slot-scope="{ row, header }">
-                        <span class="text-gray-800 text-sm" v-if="header.value === 'name'">
+                        <span
+                            class="text-gray-800 text-sm"
+                            v-if="header.value === 'name'"
+                        >
                             {{ row.name }}
                         </span>
 
-                        <span v-if="header.value === 'type'" class="text-gray-800 text-sm capitalize">
+                        <span
+                            v-if="header.value === 'type'"
+                            class="text-gray-800 text-sm capitalize"
+                        >
                             {{ row.type }}
                         </span>
 

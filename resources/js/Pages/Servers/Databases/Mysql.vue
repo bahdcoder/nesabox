@@ -78,7 +78,10 @@
                             v-if="header.value === 'actions'"
                         />
 
-                        <span class="text-gray-800 text-sm" v-if="header.value === 'name'">
+                        <span
+                            class="text-gray-800 text-sm"
+                            v-if="header.value === 'name'"
+                        >
                             {{ row.name }}
                         </span>
                     </template>

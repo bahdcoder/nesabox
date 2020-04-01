@@ -84,6 +84,22 @@ const router = new VueRouter({
                 import(`@/Pages/Auth/Login`).then(module => module.default)
         },
         {
+            path: '/auth/forgot-password',
+            name: 'forgot-password',
+            component: () =>
+                import(`@/Pages/Auth/ForgotPassword`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/auth/reset-password/:token',
+            name: 'reset-password',
+            component: () =>
+                import(`@/Pages/Auth/ResetPassword`).then(
+                    module => module.default
+                )
+        },
+        {
             path: '/auth/register',
             name: 'register',
             component: () =>
@@ -119,25 +135,19 @@ const router = new VueRouter({
             path: '/servers/:server/ssh-keys',
             name: 'server.ssh-keys',
             component: () =>
-                import(`@/Pages/Account/SshKeys`).then(
-                    module => module.default
-                )
+                import(`@/Pages/Account/SshKeys`).then(module => module.default)
         },
         {
             path: '/servers/:server/meta',
             name: 'server.meta',
             component: () =>
-                import(`@/Pages/Servers/Meta`).then(
-                    module => module.default
-                )
+                import(`@/Pages/Servers/Meta`).then(module => module.default)
         },
         {
             path: '/servers/:server/network',
             name: 'server.network',
             component: () =>
-                import(`@/Pages/Servers/Network`).then(
-                    module => module.default
-                )
+                import(`@/Pages/Servers/Network`).then(module => module.default)
         },
         {
             path: '/servers/:server/databases/mysql8',
@@ -229,15 +239,18 @@ const router = new VueRouter({
             path: '/account/ssh-keys',
             name: 'account.ssh-keys',
             component: () =>
-                import(`@/Pages/Account/SshKeys`).then(
-                    module => module.default
-                )
+                import(`@/Pages/Account/SshKeys`).then(module => module.default)
         }
     ]
 })
 
 router.beforeEach((to, from, next) => {
-    const nonAuthRoutes = ['login', 'register']
+    const nonAuthRoutes = [
+        'login',
+        'register',
+        'forgot-password',
+        'reset-password'
+    ]
 
     if (nonAuthRoutes.includes(to.name)) {
         if (window.auth) {
