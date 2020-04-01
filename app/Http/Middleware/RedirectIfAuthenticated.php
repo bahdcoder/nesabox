@@ -19,7 +19,11 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return new UserResource(auth()->user());
+            if ($request->wantsJson() || $request->ajax()) {
+                return new UserResource(auth()->user());
+            }
+
+            return redirect('/dashboard');
         }
 
         return $next($request);

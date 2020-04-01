@@ -74,7 +74,7 @@ class DeleteDatabase extends Base
     public function generateMariadbScript($rootPassword)
     {
         return <<<EOD
-mysql --user="root" --password="{$rootPassword}" -e "DROP DATABASE {$this->database->name}";
+mysql --user="root" --password="{$rootPassword}" -e "DROP DATABASE IF EXISTS {$this->database->name}";
 EOD;
     }
 }

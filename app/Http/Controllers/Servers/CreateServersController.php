@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Servers;
 
-use App\Exceptions\CredentialsExpiredException;
+use App\Sshkey;
 use App\Server;
+use Illuminate\Support\Str;
 use App\Jobs\Servers\Initialize;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ServerResource;
-use App\Exceptions\FailedCreatingServer;
-use App\Jobs\Servers\CreateServerARecord;
-use GuzzleHttp\Exception\GuzzleException;
-use App\Http\Requests\Servers\CreateServerRequest;
 use App\Notifications\Servers\Alert;
+use App\Http\Resources\ServerResource;
+use GuzzleHttp\Exception\GuzzleException;
+use App\Exceptions\FailedToCreateServerException;
+use App\Http\Requests\Servers\CreateServerRequest;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CreateServersController extends Controller
@@ -38,6 +38,8 @@ class CreateServersController extends Controller
         endswitch;
 
         $this->createServerDatabases($server);
+
+        $this->copyUserSshkeysToServer($server);
 
         if (!$server) {
             return response()->json(
@@ -167,7 +169,7 @@ class CreateServersController extends Controller
 
             return $server;
         } catch (GuzzleException | ProcessFailedException $e) {
-            throw new FailedCreatingServer($server, $e);
+            throw new FailedToCreateServerException($server, null);
         }
     }
 
@@ -203,7 +205,7 @@ class CreateServersController extends Controller
             ]);
             return $server;
         } catch (GuzzleException | ProcessFailedException $e) {
-            throw new FailedCreatingServer($server, $e);
+            throw new FailedToCreateServerException($server, null);
         }
     }
 
@@ -262,6 +264,24 @@ class CreateServersController extends Controller
                 "We couldn't create your server. This is most likely because your credentials have expired or do not have write access. Please update your credentials and try again."
             );
         }
+    }
+
+    public function copyUserSshkeysToServer(Server $server)
+    {
+        Sshkey::insert(
+            $server->user->sshkeys
+                ->map(function ($key) use ($server) {
+                    return [
+                        'server_id' => $server->id,
+                        'name' => $key->name,
+                        'status' => $key->status,
+                        'key' => $key->key,
+                        'is_app_key' => false,
+                        'id' => Str::uuid()
+                    ];
+                })
+                ->toArray()
+        );
     }
 
     /**

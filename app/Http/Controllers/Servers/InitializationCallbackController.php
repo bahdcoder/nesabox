@@ -25,7 +25,10 @@ class InitializationCallbackController extends Controller
 
         $server->user->notify(new ServerProvisioned($server));
 
-        Notification::send($server->getAllMembers(), new ServerIsReady($server->fresh()));
+        Notification::send(
+            $server->getAllMembers(),
+            new ServerIsReady($server->fresh())
+        );
 
         return response()->json([
             'message' => 'Great ! Server is now active.'

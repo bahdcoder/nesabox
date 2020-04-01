@@ -35,10 +35,16 @@ class Init extends BaseScript
     {
         $user = SSH_USER;
 
-        $callbackEndpoint = route('servers.initialization-callback', [
-            $this->server->id,
-            'api_token' => $this->server->user->api_token
-        ]);
+        $callbackEndpoint =
+            config('app.url') .
+            route(
+                'servers.initialization-callback',
+                [
+                    $this->server->id,
+                    'api_token' => $this->server->user->api_token
+                ],
+                false
+            );
 
         $nesaboxIp = config('nesa.ip');
 
@@ -111,6 +117,7 @@ useradd {$user}
 mkdir -p /home/{$user}/.ssh
 mkdir -p /home/{$user}/.{$user}
 mkdir -p /home/{$user}/.{$user}/ecosystems
+mkdir -p /home/{$user}/.{$user}/log-watchers
 adduser {$user} sudo
 
 chsh -s /bin/bash {$user}
@@ -475,10 +482,10 @@ EOD;
             ->where('is_app_key', true)
             ->first();
 
-        $userKeys = '';
+        $serverKeys = '';
 
-        foreach ($this->server->user->sshkeys as $key) {
-            $userKeys .= <<<EOD
+        foreach ($this->server->sshkeys as $key) {
+            $serverKeys .= <<<EOD
 \n
 # {$key->name} key
 
@@ -492,7 +499,7 @@ cat >> /root/.ssh/authorized_keys << EOF
 
 {$sshKey->key}
 
-{$userKeys}
+{$serverKeys}
 EOF
 EOD;
     }

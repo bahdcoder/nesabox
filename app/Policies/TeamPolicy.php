@@ -34,7 +34,7 @@ class TeamPolicy
         return (int) $team->user_id === (int) $user->id;
     }
 
-        /**
+    /**
      * Determine whether the user can view the server.
      *
      * @param  \App\User  $user

@@ -31,7 +31,9 @@ class ServerPolicy
      */
     public function view(User $user, Server $server)
     {
-        if ($server->user_id === $user->id) return true;
+        if ((int) $server->user_id === (int) $user->id) {
+            return true;
+        }
 
         return $server->canBeAccessedBy($user);
     }

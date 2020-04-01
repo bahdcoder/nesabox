@@ -104,7 +104,10 @@ class InstallGhost implements ShouldQueue
                     'logs' => $this->site->logs . $log
                 ]);
 
-                Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+                Notification::send(
+                    $this->server->getAllMembers(),
+                    new SiteUpdated($this->site)
+                );
             });
 
         if ($process->isSuccessful()) {
@@ -118,7 +121,10 @@ class InstallGhost implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+            Notification::send(
+                $this->server->getAllMembers(),
+                new SiteUpdated($this->site)
+            );
         } else {
             $this->alertServer(
                 "Failed installing ghost blog on server {$this->server->name}.",
@@ -140,7 +146,10 @@ class InstallGhost implements ShouldQueue
 
         $this->database->delete();
 
-        Notification::send($this->server->getAllMembers(), new SiteUpdated($this->site));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new SiteUpdated($this->site)
+        );
     }
 
     public function failed(Exception $e)

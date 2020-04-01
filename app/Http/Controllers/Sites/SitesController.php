@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Sites;
 
 use App\Site;
 use App\Server;
-use App\Rules\Subdomain;
 use App\Jobs\Sites\AddSite;
 use Illuminate\Http\Request;
-use App\Jobs\Sites\UpdateSiteSlug;
-use App\Scripts\Sites\DeleteSite;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Http\Requests\Sites\CreateSiteRequest;
@@ -21,7 +18,12 @@ class SitesController extends Controller
     {
         $this->authorize($server, 'view');
 
-        return new SiteResource($site);
+        return new SiteResource($site, true);
+    }
+
+    public function logs(Server $server, Site $site)
+    {
+        return $site->logs;
     }
 
     /**
@@ -34,7 +36,9 @@ class SitesController extends Controller
     {
         $site = $server->sites()->create([
             'name' => $request->name,
-            'status' => STATUS_INSTALLING
+            'type' => $request->type,
+            'status' => STATUS_INSTALLING,
+            'directory' => $request->directory
         ]);
 
         AddSite::dispatch($server, $site);
@@ -53,7 +57,7 @@ class SitesController extends Controller
     {
         $site->update($request->only(['before_deploy_script']));
 
-        return new ServerResource($server->fresh());
+        return new SiteResource($site->fresh());
     }
 
     /**
@@ -85,6 +89,6 @@ class SitesController extends Controller
             'deleting_site' => true
         ]);
 
-        return new ServerResource($server);
+        return new ServerResource($server->fresh());
     }
 }

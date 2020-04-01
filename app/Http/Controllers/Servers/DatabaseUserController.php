@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Servers;
 
+use App\Server;
 use App\Database;
 use App\DatabaseUser;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Servers\AddDatabaseUserRequest;
 use App\Jobs\Servers\AddDatabaseUser;
+use App\Http\Resources\ServerResource;
 use App\Jobs\Servers\DeleteDatabaseUser;
-use App\Server;
+use App\Http\Requests\Servers\AddDatabaseUserRequest;
 
 class DatabaseUserController extends Controller
 {
@@ -38,7 +38,7 @@ class DatabaseUserController extends Controller
 
         AddDatabaseUser::dispatch($server, $user);
 
-        return response()->json([]);
+        return new ServerResource($server->fresh());
     }
 
     public function destroy(Server $server, DatabaseUser $databaseUser)
@@ -51,6 +51,6 @@ class DatabaseUserController extends Controller
 
         DeleteDatabaseUser::dispatch($server, $databaseUser);
 
-        return response()->json([]);
+        return new ServerResource($server->fresh());
     }
 }

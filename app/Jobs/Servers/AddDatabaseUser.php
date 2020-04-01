@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\DatabasesUpdated;
+use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\AddDatabaseUser as AppAddDatabaseUser;
 
 class AddDatabaseUser implements ShouldQueue
@@ -48,13 +48,13 @@ class AddDatabaseUser implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->server->user->notify(new DatabasesUpdated($this->server));
+            $this->server->user->notify(new ServerIsReady($this->server));
         } else {
             $message = "Failed adding database user {$this->databaseUser->name} on server {$this->server->name}.";
 
             $this->databaseUser->delete();
 
-            $this->server->user->notify(new DatabasesUpdated($this->server));
+            $this->server->user->notify(new ServerIsReady($this->server));
 
             $this->alertServer($message, $process->getErrorOutput());
         }

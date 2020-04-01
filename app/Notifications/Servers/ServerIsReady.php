@@ -56,7 +56,7 @@ class ServerIsReady extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
         return (new BroadcastMessage([
-            'server' => (new ServerResource($this->server))->resolve()
+            'server' => $this->server->id
         ]))
             ->onConnection('redis')
             ->onQueue('broadcasts');

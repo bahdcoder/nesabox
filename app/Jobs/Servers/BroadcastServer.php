@@ -9,7 +9,10 @@ trait BroadcastServer
 {
     public function broadcastServerUpdated()
     {
-        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server->fresh()));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new ServerIsReady($this->server->fresh())
+        );
 
         // TODO: Get all teams this server has been added to, and broadcast this notification to all the users
         // on all the teams

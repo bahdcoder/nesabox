@@ -24,7 +24,9 @@ class UpdateServerNetworkRequest extends FormRequest
     public function rules()
     {
         return [
-            'servers' => 'required|array'
+            'servers' => 'required|array',
+            'ports' => 'required|array',
+            'ports.*' => 'numeric'
         ];
     }
 }

@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+
+button {
+    transition: all 0.3s ease !important;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.CodeMirror {
+  padding: 0.5rem;
+  font-size: 14px;
+  height: auto !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+  border-radius: 5px;
+}
+
+.remove-bottom-border-radius .CodeMirror {
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.cm-s-dracula.CodeMirror, .cm-s-dracula .CodeMirror-gutters {
+  background: #2D3748 !important;
+}
+
+.text-xxs {
+    font-size: 0.5rem;
+}
+
+.formkit-subheader, .formkit-input, .formkit-submit span, .formkit-header h1, .formkit-alert, .formkit-alert-error li {
+    font-family: 'Graphik' !important;
+}
+.formkit-subheader {
+    margin: 0 !important;
+}
+
+.formkit-form {
+    background: #F8FAFF !important;
+}
+
+.formkit-header {
+    margin-bottom: 0 !important;
+}
+
+.formkit-input {
+    box-shadow: 0 0px 9px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+    border: none !important;
+}
+
+.docs-content h1 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.docs-content a {
+  color: #56cad8;
+}
+
+.docs-content .info {
+  padding: 1rem;
+  margin: 1rem 0;
+  font-weight: bold;
+  background: rgb(86,202,216, 0.2);
+}
+
+.docs-content h2 {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.docs-content .space {
+  width: 100%;
+  margin: 1rem;
+}
+
+@media (min-width: 640px) {
+    .docs-content h1 {
+      font-size: 24px;
+      margin-bottom: 2rem;
+    }
+
+    .docs-content h2 {
+      font-size: 16px;
+      margin-top: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+}
+
+.bg-page {
+    /* background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='72'%3E%3Cpath d='M2 6h12L8 18 2 6zm18 36h12l-6 12-6-12z' fill='%23e0e5ee' fill-opacity='.26' fill-rule='evenodd'/%3E%3C/svg%3E"); */
+}
+
+.account-menu-enter-active {
+  transition: all .3s ease;
+}
+.account-menu-leave-active {
+  transition: all .4s ease;
+}
+.account-menu-enter, .account-menu-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+@tailwind utilities;

@@ -74,16 +74,16 @@ class DeleteDatabaseUser extends Base
     public function generateMysql8Script($rootPassword)
     {
         return <<<EOD
-mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'{$this->server->ip_address}';";
-mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'%';";
+mysql --user="root" --password="{$rootPassword}" -e "DROP USER IF EXISTS'{$this->databaseUser->name}'@'{$this->server->ip_address}';";
+mysql --user="root" --password="{$rootPassword}" -e "DROP USER IF EXISTS'{$this->databaseUser->name}'@'%';";
 EOD;
     }
 
     public function generateMariadbScript($rootPassword)
     {
         return <<<EOD
-mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'{$this->server->ip_address}';";
-mysql --user="root" --password="{$rootPassword}" -e "DROP USER '{$this->databaseUser->name}'@'%';";
+mysql --user="root" --password="{$rootPassword}" -e "DROP USER IF EXISTS '{$this->databaseUser->name}'@'{$this->server->ip_address}';";
+mysql --user="root" --password="{$rootPassword}" -e "DROP USER IF EXISTS '{$this->databaseUser->name}'@'%';";
 EOD;
     }
 }

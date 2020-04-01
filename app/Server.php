@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Http\Traits\HandlesProcesses;
 use GuzzleHttp\Client;
 use App\Notifications\Servers\Alert;
-use Notification;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class Server extends Model
 {
+    use HandlesProcesses;
     /**
      * Fields to cast to native types
      *
@@ -67,11 +69,6 @@ class Server extends Model
         );
     }
 
-    public function balancedServers()
-    {
-        return $this->hasMany(BalancedServer::class);
-    }
-
     public function friendServers()
     {
         return $this->hasMany(FriendServer::class);
@@ -110,6 +107,40 @@ class Server extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function explode()
+    {
+        // clean up pivot relations
+        $this->hasMany(DatabaseUser::class)
+            ->get()
+            ->map(function ($databaseUser) {
+                $databaseUser->databases()->sync([]);
+            });
+        // clean up database users pivot relations
+        $this->hasMany(Database::class)
+            ->get()
+            ->map(function ($database) {
+                $database->databaseUsers()->sync([]);
+            });
+        // databases and database users
+        $this->hasMany(DatabaseUser::class)->delete();
+        // sites
+        $this->hasMany(Site::class)->delete();
+        // sshkeys
+        $this->hasMany(Sshkey::class)->delete();
+        // daemons
+        $this->hasMany(Daemon::class)->delete();
+        // cron jobs
+        $this->hasMany(Job::class)->delete();
+        // firewallRules
+        $this->hasMany(FirewallRule::class)->delete();
+        // delete ssh keys of server on system
+        $this->execProcess("rm ~/.ssh/{$this->slug}");
+        $this->execProcess("rm ~/.ssh/{$this->slug}.pub");
+
+        $this->teams()->sync([]);
+
+        $this->delete();
     }
 
     /**
@@ -258,7 +289,10 @@ class Server extends Model
      */
     public function alert($message, $output = null, $type = 'error')
     {
-        Notification::send($this->getAllMembers(), new Alert($this, $message, $output, $type));
+        FacadesNotification::send(
+            $this->getAllMembers(),
+            new Alert($this, $message, $output, $type)
+        );
     }
 
     public function teams()
@@ -266,21 +300,30 @@ class Server extends Model
         return $this->belongsToMany(Team::class);
     }
 
-    public function canBeAccessedBy(User $user) {
-        return (bool) TeamInvite::where('user_id', $user->id)->with('team.servers')->get()->first(function ($membership) {
-            return (bool) $membership->team->servers->first(function ($server) {
-                return $server->id === $this->id;
+    public function canBeAccessedBy(User $user)
+    {
+        return (bool) TeamInvite::where('user_id', $user->id)
+            ->with('team.servers')
+            ->get()
+            ->first(function ($membership) {
+                return (bool) $membership->team->servers->first(function (
+                    $server
+                ) {
+                    return $server->id === $this->id;
+                });
             });
-        });;
     }
 
-    public function getAllMembers() {
-        $teams = $this->teams()->with('invites.user')->get();
+    public function getAllMembers()
+    {
+        $teams = $this->teams()
+            ->with('invites.user')
+            ->get();
 
         $users = collect([$this->user]);
 
         $teams->each(function ($team) use ($users) {
-            $team->invites->each(function ($invite) use ($users)  {
+            $team->invites->each(function ($invite) use ($users) {
                 if ($invite->status === 'active') {
                     $users->push($invite->user);
                 }

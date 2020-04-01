@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\DatabasesUpdated;
+use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\DeleteDatabase as AppDeleteDatabase;
 
 class DeleteDatabase implements ShouldQueue
@@ -55,7 +55,7 @@ class DeleteDatabase implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->server->user->notify(new DatabasesUpdated($this->server));
+            $this->server->user->notify(new ServerIsReady($this->server));
 
             $this->alertServer(
                 "Failed deleting database {$this->database->name} on server {$this->server->name}",

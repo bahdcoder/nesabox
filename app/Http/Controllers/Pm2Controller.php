@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\Sites\SiteUpdated;
 use App\Site;
 use App\Server;
 use Illuminate\Http\Request;
 use App\Scripts\Sites\UpdatePm2EcosystemFile;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class Pm2Controller extends Controller
 {
@@ -25,6 +28,31 @@ class Pm2Controller extends Controller
         }
 
         return $process->getOutput();
+    }
+
+    public function logs(Site $site)
+    {
+        $logs = request()->logs;
+
+        if (strlen($site->logs) > 3000) {
+            $site->update([
+                'logs' => $logs
+            ]);
+        } else {
+            $site->update([
+                'logs' => <<<EOF
+$site->logs
+{$logs}
+EOF
+            ]);
+        }
+
+        Notification::send(
+            $site->server->getAllMembers(),
+            new SiteUpdated($site)
+        );
+
+        return response()->json(request()->all());
     }
 
     /**

@@ -33,8 +33,14 @@ class CreateSiteRequest extends FormRequest
                     return $q->where('server_id', $this->route('server')->id);
                 }),
                 new Domain()
-            ]
-            // 'wild_card_subdomains' => 'boolean'
+            ],
+            'type' => [
+                Rule::requiredIf(function () {
+                    return $this->route('server')->type !== 'load_balancer';
+                }),
+                'in:nodejs,html'
+            ],
+            'directory' => 'required'
         ];
     }
 }

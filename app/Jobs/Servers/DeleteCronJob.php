@@ -13,7 +13,11 @@ use App\Scripts\Server\DeleteCronJob as AppDeleteCronJob;
 
 class DeleteCronJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, BroadcastServer;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        BroadcastServer;
 
     public $server;
 

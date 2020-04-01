@@ -44,15 +44,22 @@ class DeleteSite extends Base
 
         return <<<EOD
 # Remove nginx config of site
-rm /etc/nginx/sites-available/{$this->site->name}
-rm /etc/nginx/sites-enabled/{$this->site->name}
 
-rm -rf /etc/nginx/nesa-conf/{$this->site->name}
+if [ -f '/etc/nginx/sites-available/{$this->site->name}' ]
+then
+    rm /etc/nginx/sites-available/{$this->site->name}
+    rm /etc/nginx/sites-enabled/{$this->site->name}
+fi
+
+if [ -d '/etc/nginx/nesa-conf/{$this->site->name}' ]
+then
+    rm -rf /etc/nginx/nesa-conf/{$this->site->name}
+    # Reload nginx
+    systemctl reload nginx
+fi
+
 
 # TODO: Remove all generated ssl certificates for this site
-
-# Reload nginx
-systemctl reload nginx
 
 # Remove site directory if exists
 su {$user} <<EOF
@@ -67,6 +74,13 @@ then
 pm2 delete /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js
 
 rm /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js
+fi
+
+if [ -f '/home/{$user}/.{$user}/log-watchers/{$this->site->name}.watcher.js' ]
+then
+
+rm /home/{$user}/.{$user}/log-watchers/{$this->site->name}.watcher.js
+pm2 delete {$this->site->name}-log-watcher
 fi
 EOF
 EOD;

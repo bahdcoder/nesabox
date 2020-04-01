@@ -40,9 +40,11 @@ class TeamInvitesTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'user_id' => $jane->id,
-                'invites' => [[
-                    'team_id' => $team->id
-                ]]
+                'invites' => [
+                    [
+                        'team_id' => $team->id
+                    ]
+                ]
             ]);
 
         Mail::assertQueued(InviteToTeam::class, function ($mail) use ($mike) {

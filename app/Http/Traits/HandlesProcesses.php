@@ -162,12 +162,20 @@ trait HandlesProcesses
         $scriptPath = base_path(
             $server->type === 'load_balancer'
                 ? 'scripts/sites/add-load-balancing-site.sh'
-                : 'scripts/sites/add-site.sh'
+                : ($site->type === 'nodejs'
+                    ? 'scripts/sites/add-site.sh'
+                    : 'scripts/sites/add-html-site.sh')
         );
 
         $user = SSH_USER;
 
-        $arguments = "{$site->name} {$user}";
+        $thirdArgument = $site->directory;
+
+        if ($server->type === 'load_balancer') {
+            $thirdArgument = str_slug($site->name);
+        }
+
+        $arguments = "{$site->name} {$user} {$thirdArgument}";
 
         return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments)
@@ -205,13 +213,32 @@ trait HandlesProcesses
      */
     public function runInstallGitRepositoryScript(Server $server, Site $site)
     {
-        $scriptPath = base_path('scripts/sites/install-repository.sh');
+        $scriptPath = '';
+
+        if ($site->type === 'nodejs') {
+            $scriptPath = base_path('scripts/sites/install-repository.sh');
+        } elseif ($site->type === 'html') {
+            $scriptPath = base_path('scripts/sites/install-html-repository.sh');
+        }
 
         $repoUrl = $site->getSshUrl();
 
         $user = SSH_USER;
 
-        $arguments = "{$site->name} {$site->repository_branch} {$repoUrl} {$user} {$site->environment['PORT']}";
+        $updateLogsEndpoint = route(
+            'pm2-logs',
+            [
+                'site' => $site->id
+            ],
+            false
+        );
+
+        $hostname = config('app.hostname');
+
+        // LOG_WATCHER_NAME
+        $logWatcher = "{$site->name}-log-watcher";
+
+        $arguments = "{$site->name} {$site->repository_branch} {$repoUrl} {$user} {$site->environment['PORT']} {$updateLogsEndpoint} {$hostname} {$logWatcher} {$site->directory}";
 
         return $this->execProcessAsync(
             $this->sshScript($server, $scriptPath, $arguments, false),
@@ -286,10 +313,13 @@ trait HandlesProcesses
      */
     public function getUserData(Server $server)
     {
-        $deploy_script_route = route('servers.custom-deploy-script', [
-            $server->id,
-            'api_token' => $server->user->api_token
-        ]);
+        $deploy_script_route =
+            config('app.url') .
+            route(
+                'servers.custom-deploy-script',
+                [$server->id, 'api_token' => $server->user->api_token],
+                false
+            );
 
         return <<<EOD
 #!/bin/bash
@@ -336,7 +366,7 @@ EOD;
      *
      * @return \Symphony\Process\Process
      */
-    public function getFileContent(Server $server, $pathToFile)
+    public function getFileContent(Server $server, $pathToFile, $root = true)
     {
         $scriptPath = 'scripts/server/get-file-contents.sh';
 
@@ -345,7 +375,29 @@ EOD;
         $arguments = "{$pathToFile}";
 
         return $this->execProcess(
-            $this->sshScript($server, $scriptName, $arguments)
+            $this->sshScript($server, $scriptName, $arguments, $root)
+        );
+    }
+
+    /**
+     * Update the contents of a file from the server
+     *
+     * @return \Symphony\Process\Process
+     */
+    public function updateFileContent(
+        Server $server,
+        $pathToFile,
+        $content,
+        $root = true
+    ) {
+        $scriptPath = 'scripts/server/get-file-contents.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $arguments = "{$pathToFile} {$content}";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments, $root)
         );
     }
 

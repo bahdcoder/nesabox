@@ -26,18 +26,36 @@ class MongodbController extends Controller
 
         DeleteMongodbDatabaseUser::dispatch($server, $database, $databaseUser);
 
-        return response()->json([]);
+        return new ServerResource($server->fresh());
     }
 
     public function deleteDatabases(Server $server, Database $database)
     {
+        if ($database->type !== MONGO_DB) {
+            return response()->json(
+                [
+                    'message' => 'Database was not found.'
+                ],
+                400
+            );
+        }
+
+        if ($database->status !== STATUS_ACTIVE) {
+            return response()->json(
+                [
+                    'message' => 'Cannot deleted a database that is not active.'
+                ],
+                400
+            );
+        }
+
         $database->update([
             'status' => STATUS_DELETING
         ]);
 
         DeleteMongodbDatabase::dispatch($server, $database);
 
-        return response()->json([]);
+        return new ServerResource($server->fresh());
     }
 
     public function databases(
@@ -50,7 +68,7 @@ class MongodbController extends Controller
             'name' => $request->name
         ]);
 
-        return response()->json([]);
+        return new ServerResource($server->fresh());
     }
 
     public function users(

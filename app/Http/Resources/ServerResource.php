@@ -14,10 +14,13 @@ class ServerResource extends JsonResource
      */
     public function toArray($request)
     {
-        $deploy_script_route = route('servers.custom-deploy-script', [
-            $this->id,
-            'api_token' => $this->resource->user->api_token
-        ]);
+        $deploy_script_route =
+            config('app.url') .
+            route(
+                'servers.custom-deploy-script',
+                [$this->id, 'api_token' => $this->resource->user->api_token],
+                false
+            );
 
         return [
             'id' => $this->id,
@@ -32,9 +35,15 @@ class ServerResource extends JsonResource
             'provider' => $this->provider,
             'databases' => $this->databases,
             'ip_address' => $this->ip_address,
-            'node_version' => $this->node_version,
             'is_ready' => $this->status === STATUS_ACTIVE,
             'jobs' => JobResource::collection($this->jobs),
+            'private_ip_address' => $this->private_ip_address,
+            'database_instances' => $this->databaseInstances()
+                ->with('databaseUsers')
+                ->get(),
+            'database_users_instances' => $this->databaseUsers()
+                ->with('databases')
+                ->get(),
             'daemons' => DaemonsResource::collection($this->daemons),
             'firewall_rules' => FirewallRuleResource::collection(
                 $this->resource->firewallRules
@@ -49,6 +58,7 @@ class ServerResource extends JsonResource
                     'name',
                     'app_type',
                     'status',
+                    'type',
                     'repository_provider'
                 ])
                 ->get()
@@ -56,7 +66,9 @@ class ServerResource extends JsonResource
                     return [
                         'id' => $site->id,
                         'name' => $site->name,
+                        'type' => $site->type,
                         'status' => $site->status,
+                        'repository' => $site->repository,
                         'app_type' => $site->app_type ?? 'None',
                         'repository_provider' => $site->repository_provider
                     ];
@@ -72,9 +84,11 @@ class ServerResource extends JsonResource
                 ->where('region', $this->region)
                 ->where('provider', $this->provider)
                 ->whereNotNull('private_ip_address')
+                ->select(['id', 'name'])
                 ->get(),
-            'balanced_servers' => $this->balancedServers,
-            'friend_servers' => $this->friendServers
+            'friend_servers' => $this->friendServers()
+                ->select(['friend_server_id', 'ports'])
+                ->get()
         ];
     }
 }

@@ -23,7 +23,10 @@ class GhostController extends Controller
     {
         $this->authorize('view', $server);
 
-        abort(400, 'Sorry, we are updating some scripts, so this would be available soon.');
+        abort(
+            400,
+            'Sorry, we are updating some scripts, so this would be available soon.'
+        );
 
         $site->update([
             'logs' => null,

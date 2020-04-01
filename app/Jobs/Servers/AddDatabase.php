@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Notifications\Servers\DatabasesUpdated;
+use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\AddDatabase as AddDatabaseScript;
 
 class AddDatabase implements ShouldQueue
@@ -73,7 +73,7 @@ class AddDatabase implements ShouldQueue
                 ]);
             }
 
-            $this->server->user->notify(new DatabasesUpdated($this->server));
+            $this->server->user->notify(new ServerIsReady($this->server));
         } else {
             $message = "Failed adding database {$this->database->name} on server {$this->server->name}.";
 
@@ -83,7 +83,7 @@ class AddDatabase implements ShouldQueue
                 $this->databaseUser->delete();
             }
 
-            $this->server->user->notify(new DatabasesUpdated($this->server));
+            $this->server->user->notify(new ServerIsReady($this->server));
 
             $this->alertServer($message, $process->getErrorOutput());
         }

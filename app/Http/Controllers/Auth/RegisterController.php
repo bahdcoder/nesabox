@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\TeamInvite;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
@@ -33,7 +34,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -43,6 +44,16 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        return Inertia::render('Auth/Register');
     }
 
     /**
@@ -112,6 +123,8 @@ class RegisterController extends Controller
 
         $user->rollApiKey();
 
-        return new UserResource($user);
+        $this->guard()->login($user);
+
+        return redirect('/dashboard');
     }
 }

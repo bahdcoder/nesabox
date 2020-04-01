@@ -27,15 +27,17 @@ trait HasServerProviders
     {
         $provider = $this->getCredentialProvider($credentialId);
 
-        $newCredentials[$provider] = array_filter(
-            $this->providers[$provider],
+        $newCredentials = collect($this->providers[$provider])->filter(
             function ($credential) use ($credentialId) {
                 return $credential['id'] !== $credentialId;
             }
         );
 
+        $updatedProviders = $this->providers;
+        $updatedProviders[$provider] = $newCredentials->all();
+
         $this->update([
-            'providers' => array_merge($this->providers, $newCredentials)
+            'providers' => $updatedProviders
         ]);
     }
 
@@ -76,9 +78,6 @@ trait HasServerProviders
         $credential = auth()
             ->user()
             ->getDefaultCredentialsFor($provider, $credential_id);
-
-        // dd($credential);
-        var_dump($credential_id);
 
         if (
             !isset($credential->apiToken) &&

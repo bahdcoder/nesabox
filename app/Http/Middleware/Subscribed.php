@@ -15,6 +15,9 @@ class Subscribed
      */
     public function handle($request, Closure $next, $plan)
     {
+        // THIS IS FOR THE BETA PERIOD:
+        return $next($request);
+
         if (
             !auth()
                 ->user()

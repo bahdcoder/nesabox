@@ -4,19 +4,17 @@ namespace App\Jobs\Servers;
 
 use App\Server;
 use Illuminate\Bus\Queueable;
-use App\Scripts\Server\VerifyIsReady;
 use Illuminate\Queue\SerializesModels;
-use App\Scripts\Server\GenerateSshkey;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Exceptions\ServerNotReadyException;
 use App\Notifications\Servers\ServerIsReady;
-use Notification;
 use App\Http\ServerProviders\InteractsWithVultr;
 use App\Http\ServerProviders\HasServerProviders;
 use App\Http\ServerProviders\InteractWithLinode;
 use App\Http\ServerProviders\InteractsWithDigitalOcean;
+use Illuminate\Support\Facades\Notification;
 
 class Initialize implements ShouldQueue
 {
@@ -69,7 +67,10 @@ class Initialize implements ShouldQueue
     {
         $this->sync();
 
-        Notification::send($this->server->getAllMembers(), new ServerIsReady($this->server));
+        Notification::send(
+            $this->server->getAllMembers(),
+            new ServerIsReady($this->server)
+        );
     }
 
     /**
@@ -110,6 +111,8 @@ class Initialize implements ShouldQueue
                 if ($droplet->status === 'active') {
                     $server->update([
                         'ip_address' => $droplet->networks->v4[0]->ip_address,
+                        'private_ip_address' =>
+                            $droplet->networks->v4[1]->ip_address,
                         'status' => STATUS_INITIALIZING
                     ]);
 

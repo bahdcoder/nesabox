@@ -61,10 +61,16 @@ trait InteractsWithGithub
                         'events' => ['push'],
                         'config' => [
                             'content_type' => 'json',
-                            'url' => route('github-webhooks', [
-                                $site->id,
-                                'api_token' => $user->api_token
-                            ]),
+                            'url' =>
+                                config('app.url') .
+                                route(
+                                    'github-webhooks',
+                                    [
+                                        $site->id,
+                                        'api_token' => $user->api_token
+                                    ],
+                                    false
+                                ),
                             'insecure_ssl' => app()->environment('production')
                                 ? 0
                                 : 1

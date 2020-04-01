@@ -21,7 +21,7 @@ class TeamResource extends JsonResource
             'user_id' => $this->user_id,
             'invites' => $this->invites()
                 ->with('user')
-                ->get(),
+                ->get()
         ];
     }
 }

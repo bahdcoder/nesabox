@@ -55,19 +55,4 @@ cat > /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js << EOF
 EOF
 EOD;
     }
-
-    public function reloadPm2()
-    {
-        $user = SSH_USER;
-
-        // Do not reload pm2 if this site has never been deployed.
-        if ($this->site->deployments->count() === 0) {
-            return '';
-        }
-
-        return <<<EOD
-# Reload pm2 site - no downtime
-pm2 reload /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js --update-env
-EOD;
-    }
 }

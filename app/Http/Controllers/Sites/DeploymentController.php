@@ -23,7 +23,10 @@ class DeploymentController extends Controller
 
         $site->triggerDeployment();
 
-        Notification::send($site->server->getAllMembers(), new SiteUpdated($site));
+        Notification::send(
+            $site->server->getAllMembers(),
+            new SiteUpdated($site)
+        );
 
         return response()->json([
             'message' => 'Deployment queued.'
@@ -38,9 +41,12 @@ class DeploymentController extends Controller
             return new SiteResource($site->fresh());
         }
 
-        Notification::send($site->server->getAllMembers(), new SiteUpdated($site));
-
         $site->triggerDeployment();
+
+        Notification::send(
+            $site->server->getAllMembers(),
+            new SiteUpdated($site)
+        );
 
         return new SiteResource($site->fresh());
     }

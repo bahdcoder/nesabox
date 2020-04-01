@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Jobs\Sites\Deploy as AppDeploy;
 use App\Scripts\Site\Deploy;
+use App\Jobs\Sites\Deploy as AppDeploy;
 
 class Site extends Model
 {
@@ -32,6 +32,19 @@ class Site extends Model
             ->paginate();
     }
 
+    public function balancedServers()
+    {
+        return $this->hasMany(BalancedServer::class);
+    }
+
+    public function getLatestDeploymentAttribute()
+    {
+        return Activity::forSubject($this)
+            ->where('description', 'Deployment')
+            ->latest()
+            ->first();
+    }
+
     /**
      *
      * Build the ssh clone url based on the repository provider
@@ -58,15 +71,6 @@ class Site extends Model
     public function server()
     {
         return $this->belongsTo(Server::class);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDeployScript()
-    {
-        return (new Deploy($this->server, $this))->generate();
     }
 
     public function pm2Processes()
@@ -105,16 +109,14 @@ class Site extends Model
             'deploying' => true
         ]);
 
-        AppDeploy::dispatch(
-            $this->server,
-            $this,
-            activity()
-                ->causedBy(auth()->user())
-                ->performedOn($this)
-                ->withProperty('log', '')
-                ->withProperty('status', 'pending')
-                ->log('Deployment')
-        );
+        $deployment = activity()
+            ->causedBy(auth()->user())
+            ->performedOn($this)
+            ->withProperty('log', '')
+            ->withProperty('status', 'pending')
+            ->log('Deployment');
+
+        AppDeploy::dispatch($this->server, $this, $deployment);
     }
 
     /**
@@ -129,5 +131,10 @@ class Site extends Model
         } while ($this->where('slug', $this->slug)->exists());
 
         $this->save();
+    }
+
+    public function toTinyArray()
+    {
+        return [];
     }
 }

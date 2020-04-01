@@ -4,12 +4,15 @@ namespace App\Jobs\Servers;
 
 use App\Server;
 use App\Database;
+use App\DatabaseUser;
+use App\Notifications\Servers\ServerIsReady;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Scripts\Server\DeleteMongodbDatabase as AppDeleteMongodbDatabase;
+use Illuminate\Support\Facades\Notification;
 
 class DeleteMongodbDatabase implements ShouldQueue
 {
@@ -49,10 +52,18 @@ class DeleteMongodbDatabase implements ShouldQueue
         ))->run();
 
         if ($process->isSuccessful()) {
+            $databaseUsers = $this->database->databaseUsers->pluck('id')->all();
+
             $this->database->databaseUsers()->detach();
-            foreach ($this->database->databaseUsers as $databaseUser):
-                $databaseUser->delete();
-            endforeach;
+
+            DatabaseUser::whereIn('id', $databaseUsers)->delete();
+
+            $this->database->delete();
+
+            Notification::send(
+                $this->server->getAllMembers(),
+                new ServerIsReady($this->server->fresh())
+            );
         } else {
             $this->database->update([
                 'status' => STATUS_ACTIVE

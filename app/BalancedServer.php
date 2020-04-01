@@ -6,7 +6,7 @@ class BalancedServer extends Model
 {
     public function server()
     {
-        return $this->belongsTo(Server::class);
+        return $this->belongsTo(Site::class);
     }
 
     public function servers()

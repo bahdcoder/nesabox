@@ -5,13 +5,14 @@ namespace App\Jobs\Servers;
 use App\Server;
 use App\Database;
 use App\DatabaseUser;
-use App\Notifications\Servers\DatabasesUpdated;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Notifications\Servers\ServerIsReady;
 use App\Scripts\Server\AddMongodbUser as AppAddMongodbUser;
+use Illuminate\Support\Facades\Notification;
 
 class AddMongodbUser implements ShouldQueue
 {
@@ -62,15 +63,21 @@ class AddMongodbUser implements ShouldQueue
                 'status' => STATUS_ACTIVE
             ]);
 
-            $this->server->user->notify(new DatabasesUpdated($this->server));
+            Notification::send(
+                $this->server->getAllMembers(),
+                new ServerIsReady($this->server->fresh())
+            );
         } else {
             $message = "Failed creating Mongodb user {$this->databaseUser->name} on database {$this->database->name}.";
-
-            $this->server->user->notify(new DatabasesUpdated($this->server));
 
             $this->alertServer($message, $process->getErrorOutput());
 
             $this->databaseUser->delete();
+
+            Notification::send(
+                $this->server->getAllMembers(),
+                new ServerIsReady($this->server->fresh())
+            );
         }
     }
 }

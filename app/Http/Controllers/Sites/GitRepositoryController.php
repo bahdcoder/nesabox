@@ -21,7 +21,10 @@ class GitRepositoryController extends Controller
 
         $user = SSH_USER;
 
-        $beforeDeployScript = <<<EOD
+        $beforeDeployScript = '';
+
+        if ($site->type === 'nodejs') {
+            $beforeDeployScript = <<<EOD
 cd /home/{$user}/{$site->name}
 
 git pull origin {$request->branch}
@@ -29,7 +32,17 @@ git pull origin {$request->branch}
 npm install --production  
 
 pm2 startOrReload /home/{$user}/.{$user}/ecosystems/{$site->name}.config.js
+
 EOD;
+        }
+
+        if ($site->type === 'html') {
+            $beforeDeployScript = <<<EOD
+cd /home/{$user}/{$site->name}
+
+git pull origin {$request->branch}
+EOD;
+        }
 
         $site->update([
             'app_type' => 'git',

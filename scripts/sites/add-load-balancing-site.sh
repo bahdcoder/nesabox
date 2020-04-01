@@ -1,5 +1,6 @@
 SITE_NAME=$1
 NESA_USER=$2
+UPSTREAM_NAME=$3
 
 # Create config folder for new site
 mkdir -p /etc/nginx/nesa-conf/$SITE_NAME
@@ -25,8 +26,8 @@ cat > /etc/nginx/nesa-conf/$SITE_NAME/upstream.conf << EOF
 # | Upstream configuration file for $SITE_NAME - (Do not remove or modify)      |
 # -------------------------------------------------------------------------------
 
-upstream app {
-    server 192.168.1.1:80;
+upstream $UPSTREAM_NAME {
+    server 172.217.10.14:80;
 }
 EOF
 
@@ -97,7 +98,7 @@ server {
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection "upgrade";
 
-    proxy_pass http://app;
+    proxy_pass http://$UPSTREAM_NAME;
     proxy_redirect off;
     proxy_read_timeout 240s;
 

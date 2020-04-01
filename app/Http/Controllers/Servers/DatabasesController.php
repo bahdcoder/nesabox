@@ -18,7 +18,7 @@ class DatabasesController extends Controller
     public function index(Server $server, string $databaseType)
     {
         $this->authorize('view', $server);
-    
+
         switch ($databaseType) {
             case MYSQL8_DB:
                 return response()->json([
@@ -102,6 +102,15 @@ class DatabasesController extends Controller
     public function destroy(Server $server, Database $database)
     {
         $this->authorize('view', $server);
+
+        if ($database->status !== STATUS_ACTIVE) {
+            return response()->json(
+                [
+                    'message' => 'Cannot deleted a database that is not active.'
+                ],
+                400
+            );
+        }
 
         $database->update([
             'status' => STATUS_DELETING

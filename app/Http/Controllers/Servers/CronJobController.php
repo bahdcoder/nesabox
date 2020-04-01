@@ -61,14 +61,12 @@ class CronJobController extends Controller
     public function log(Server $server, Job $job)
     {
         $this->authorize('view', $server);
-    
+
         $process = (new CronJobOutput($server, $job))->run();
 
-        if (!$process->isSuccessful()) {
-            abort(400);
-        }
-
-        return $process->getOutput();
+        return $process->isSuccessful()
+            ? $process->getOutput()
+            : $process->getErrorOutput();
     }
 
     /**
@@ -82,7 +80,7 @@ class CronJobController extends Controller
     public function destroy(Server $server, Job $job)
     {
         $this->authorize('view', $server);
-    
+
         $job->update([
             'status' => STATUS_DELETING
         ]);

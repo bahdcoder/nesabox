@@ -29,6 +29,8 @@ class UpdateServerNetwork extends Base
      */
     public $server;
 
+    public $ports;
+
     /**
      * Initialize this class
      *
@@ -37,8 +39,10 @@ class UpdateServerNetwork extends Base
     public function __construct(
         Collection $servers,
         Collection $serversToDelete,
-        Server $server
+        Server $server,
+        $ports
     ) {
+        $this->ports = $ports;
         $this->server = $server;
         $this->servers = $servers;
         $this->serversToDelete = $serversToDelete;
@@ -56,79 +60,29 @@ class UpdateServerNetwork extends Base
         $firewallDeleteScript = '';
 
         foreach ($this->servers as $server):
-            $firewallScript .= <<<EOD
+            foreach ($this->ports as $port):
+                if ($port) {
+                    $firewallScript .= <<<EOD
+ufw allow from {$server->ip_address} to any port {$port};
 \n
-ufw allow from {$server->ip_address} to any port 3306;
+ufw allow from {$server->private_ip_address} to any port {$port};
 \n
-ufw allow from {$server->ip_address} to any port 6379;
-\n
-ufw allow from {$server->ip_address} to any port 5432;
-\n
-ufw allow from {$server->ip_address} to any port 27017;
-\n
-ufw allow from {$server->ip_address} to any port 3306;
-\n
-ufw allow from {$server->ip_address} to any port 6379;
-\n
-ufw allow from {$server->ip_address} to any port 5432;
-\n
-ufw allow from {$server->ip_address} to any port 27017;
-
-\n
-ufw allow from {$server->private_ip_address} to any port 3306;
-\n
-ufw allow from {$server->private_ip_address} to any port 6379;
-\n
-ufw allow from {$server->private_ip_address} to any port 5432;
-\n
-ufw allow from {$server->private_ip_address} to any port 27017;
-\n
-ufw allow from {$server->private_ip_address} to any port 3306;
-\n
-ufw allow from {$server->private_ip_address} to any port 6379;
-\n
-ufw allow from {$server->private_ip_address} to any port 5432;
-\n
-ufw allow from {$server->private_ip_address} to any port 27017;
 EOD;
+                }
+            endforeach;
         endforeach;
 
         foreach ($this->serversToDelete as $server):
-            $firewallDeleteScript .= <<<EOD
+            foreach (explode(',', $server['ports']) as $port):
+                if ($port) {
+                    $firewallDeleteScript .= <<<EOD
+ufw delete allow from {$server['ip_address']} to any port {$port};
 \n
-ufw delete allow from {$server->ip_address} to any port 3306;
+ufw delete allow from {$server['private_ip_address']} to any port {$port};
 \n
-ufw delete allow from {$server->ip_address} to any port 6379;
-\n
-ufw delete allow from {$server->ip_address} to any port 5432;
-\n
-ufw delete allow from {$server->ip_address} to any port 27017;
-\n
-ufw delete allow from {$server->ip_address} to any port 3306;
-\n
-ufw delete allow from {$server->ip_address} to any port 6379;
-\n
-ufw delete allow from {$server->ip_address} to any port 5432;
-\n
-ufw delete allow from {$server->ip_address} to any port 27017;
-
-\n
-ufw delete allow from {$server->private_ip_address} to any port 3306;
-\n
-ufw delete allow from {$server->private_ip_address} to any port 6379;
-\n
-ufw delete allow from {$server->private_ip_address} to any port 5432;
-\n
-ufw delete allow from {$server->private_ip_address} to any port 27017;
-\n
-ufw delete allow from {$server->private_ip_address} to any port 3306;
-\n
-ufw delete allow from {$server->private_ip_address} to any port 6379;
-\n
-ufw delete allow from {$server->private_ip_address} to any port 5432;
-\n
-ufw delete allow from {$server->private_ip_address} to any port 27017;
 EOD;
+                }
+            endforeach;
         endforeach;
 
         return <<<EOD
