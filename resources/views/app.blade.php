@@ -7,6 +7,8 @@
   <title>Nesabox</title>
   <link rel="stylesheet" href="{{ mix('css/app.css') }}">
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="{{ asset('css/codemirror.min.css') }}">
+
   <script>
     window.auth = '{!! $auth !!}'
     window.Laravel = {
