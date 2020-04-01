@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -38,11 +37,6 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/dashboard';
-
-    public function showLoginForm()
-    {
-        return Inertia::render('Auth/Login');
-    }
 
     /**
      * The user has logged out of the application.
