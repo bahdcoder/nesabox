@@ -39,6 +39,7 @@ import SiteLayout from '@/Shared/Sitelayout'
 import SelectInput from '@/Shared/SelectInput'
 import ConfirmModal from '@/Shared/ConfirmModal'
 import Serverlayout from '@/Shared/Serverlayout'
+import TextareaInput from '@/Shared/TextareaInput'
 import AccountLayout from '@/Shared/AccountLayout'
 import SidebarLayout from '@/Shared/SidebarLayout'
 import ButtonTransparent from '@/Shared/ButtonTransparent'
@@ -69,6 +70,7 @@ Vue.component('confirm-modal', ConfirmModal)
 Vue.component('server-layout', Serverlayout)
 Vue.component('sidebar-layout', SidebarLayout)
 Vue.component('account-layout', AccountLayout)
+Vue.component('textarea-input', TextareaInput)
 Vue.component('v-trans-button', ButtonTransparent)
 Vue.component('delete-button', DeleteActionButton)
 
@@ -110,6 +112,14 @@ const router = new VueRouter({
             name: 'server.scheduler',
             component: () =>
                 import(`@/Pages/Servers/Scheduler`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/servers/:server/ssh-keys',
+            name: 'server.ssh-keys',
+            component: () =>
+                import(`@/Pages/Account/SshKeys`).then(
                     module => module.default
                 )
         },
@@ -212,6 +222,14 @@ const router = new VueRouter({
             name: 'account.source-control',
             component: () =>
                 import(`@/Pages/Account/SourceControl`).then(
+                    module => module.default
+                )
+        },
+        {
+            path: '/account/ssh-keys',
+            name: 'account.ssh-keys',
+            component: () =>
+                import(`@/Pages/Account/SshKeys`).then(
                     module => module.default
                 )
         }

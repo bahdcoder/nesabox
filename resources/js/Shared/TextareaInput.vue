@@ -20,8 +20,9 @@
             </slot>
         </div>
         <div class="mt-1 rounded-md shadow-sm">
-            <input
+            <textarea
                 ref="input"
+                :rows="rows"
                 :type="type"
                 :value="value"
                 :readonly="readonly"

@@ -482,10 +482,10 @@ EOD;
             ->where('is_app_key', true)
             ->first();
 
-        $userKeys = '';
+        $serverKeys = '';
 
-        foreach ($this->server->user->sshkeys as $key) {
-            $userKeys .= <<<EOD
+        foreach ($this->server->sshkeys as $key) {
+            $serverKeys .= <<<EOD
 \n
 # {$key->name} key
 
@@ -499,7 +499,7 @@ cat >> /root/.ssh/authorized_keys << EOF
 
 {$sshKey->key}
 
-{$userKeys}
+{$serverKeys}
 EOF
 EOD;
     }

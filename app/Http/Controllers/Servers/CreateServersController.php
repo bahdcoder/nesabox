@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Servers;
 
-use App\Exceptions\CredentialsExpiredException;
+use App\Sshkey;
 use App\Server;
 use App\Jobs\Servers\Initialize;
 use App\Http\Controllers\Controller;
@@ -37,6 +37,8 @@ class CreateServersController extends Controller
         endswitch;
 
         $this->createServerDatabases($server);
+
+        $this->copyUserSshkeysToServer($server);
 
         if (!$server) {
             return response()->json(
@@ -261,6 +263,20 @@ class CreateServersController extends Controller
                 "We couldn't create your server. This is most likely because your credentials have expired or do not have write access. Please update your credentials and try again."
             );
         }
+    }
+
+    public function copyUserSshkeysToServer(Server $server) {
+        Sshkey::insert(
+            $server->user->sshkeys->map(function ($key) use ($server) {
+                return [
+                    'server_id' => $server->id,
+                    'name' => $key->name,
+                    'status' => $key->status,
+                    'key' => $key->key,
+                    'is_app_key' => false
+                ];
+            })
+        );
     }
 
     /**

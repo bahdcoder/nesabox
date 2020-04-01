@@ -107,6 +107,11 @@ export default {
                     to: route('')
                 },
                 {
+                    label: 'SSH Keys',
+                    value: 'sshkeys',
+                    to: route('ssh-keys')
+                },
+                {
                     label: 'Scheduler',
                     value: 'scheduler',
                     to: route('scheduler')

@@ -90,6 +90,17 @@
                             />
                         </svg>
 
+                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" 
+                        v-if="item.value === 'sshkeys'"
+                            class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                    active !== item.to,
+                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                    active === item.to
+                            }"
+                        ><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+
                         <svg
                             v-if="item.value === 'files'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
