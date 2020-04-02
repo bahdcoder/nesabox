@@ -41,7 +41,7 @@ class AddCronJob extends Base
 cat >> /etc/crontab << EOF
 # Nesabox cron job - {$this->cronJob->slug}
 
-{$this->cronJob->cron} {$this->cronJob->user} {$this->cronJob->command} > /home/{$user}/.{$user}/cron-job-{$this->cronJob->slug}.log
+{$this->cronJob->cron} {$this->cronJob->user} {$this->cronJob->command} > /home/{$user}/.{$user}/cron-job-logs/cron-job-{$this->cronJob->slug}.log
 
 EOF
 EOD;

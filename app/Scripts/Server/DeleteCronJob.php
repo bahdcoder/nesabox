@@ -38,17 +38,22 @@ class DeleteCronJob extends Base
         $user = SSH_USER;
 
         return <<<EOD
-if grep -v "{$this->cronJob->cron} {$this->cronJob->user} {$this->cronJob->command} > /home/{$user}/.{$user}/cron-job-{$this->cronJob->slug}.log" /etc/crontab > temp_cron_to_be_deleted; then
+if grep -v "{$this->cronJob->cron} {$this->cronJob->user} {$this->cronJob->command} > /home/{$user}/.{$user}/cron-job-logs/cron-job-{$this->cronJob->slug}.log" /etc/crontab > temp_cron_to_be_deleted; then
     cat temp_cron_to_be_deleted > /etc/crontab
 
     rm temp_cron_to_be_deleted
 fi;
 
-if grep -v "# Nesabox cron job - {$this->cronJob->slug}" /etc/crontab > temp_cron_to_be_deleted; then
-    cat temp_cron_to_be_deleted > /etc/crontab
+if grep -v "# Nesabox cron job - {$this->cronJob->slug}" /etc/crontab > temp_cron_name_to_be_deleted; then
+    cat temp_cron_name_to_be_deleted > /etc/crontab
 
-    rm temp_cron_to_be_deleted
+    rm temp_cron_name_to_be_deleted
 fi;
+
+if [ -f '/home/{$user}/.{$user}/cron-job-logs/cron-job-{$this->cronJob->slug}.log' ]
+then
+    rm '/home/{$user}/.{$user}/cron-job-logs/cron-job-{$this->cronJob->slug}.log'
+fi
 EOD;
     }
 }
