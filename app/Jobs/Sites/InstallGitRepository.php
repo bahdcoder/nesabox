@@ -93,8 +93,9 @@ class InstallGitRepository implements ShouldQueue
                 'repository_status' => STATUS_ACTIVE
             ]);
 
-            $this->server->alert('Failed installing site repository.', $process->getErrorOutput());
         } else {
+            $this->server->alert('Failed installing site repository.', $process->getErrorOutput());
+
             $this->site->update([
                 'app_type' => null,
                 'repository' => null,
