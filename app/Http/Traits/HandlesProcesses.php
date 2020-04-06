@@ -240,7 +240,7 @@ trait HandlesProcesses
 
         $arguments = "{$site->name} {$site->repository_branch} {$repoUrl} {$user} {$site->environment['PORT']} {$updateLogsEndpoint} {$hostname} {$logWatcher} {$site->directory}";
 
-        return $this->execProcessAsync(
+        return $this->execProcess(
             $this->sshScript($server, $scriptPath, $arguments, false),
             function ($e) {
                 echo $e;
