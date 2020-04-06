@@ -11,10 +11,14 @@ WEB_DIRECTORY=$9
 
 set -e
 
+if [ -d /home/$SSH_USER/$SITE_NAME ]
+then
+rm -rf /home/$SSH_USER/$SITE_NAME
+fi
 git clone --single-branch --branch $BRANCH $REPOSITORY_URL /home/$SSH_USER/$SITE_NAME
 
 # Make sure latest version of node is available
-n 12.8.0
+n 10.15.0
 
 # Generate PM2 Ecosystem config file
 
