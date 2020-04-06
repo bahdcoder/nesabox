@@ -42,7 +42,6 @@ class DeployGitSite extends Base
     {
         return <<<EOD
 {$this->site->before_deploy_script}
-pm2 reload {$this->site->name}-log-watcher
 EOD;
     }
 }
