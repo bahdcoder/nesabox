@@ -1,1 +1,575 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{JLvP:function(e,t,o){"use strict";o.r(t);function r(e,t){var o=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),o.push.apply(o,r)}return o}function s(e){for(var t=1;t<arguments.length;t++){var o=null!=arguments[t]?arguments[t]:{};t%2?r(Object(o),!0).forEach((function(t){n(e,t,o[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(o)):r(Object(o)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(o,t))}))}return e}function n(e,t,o){return t in e?Object.defineProperty(e,t,{value:o,enumerable:!0,configurable:!0,writable:!0}):e[t]=o,e}var a={mounted:function(){this.form={command:"",user:"nesa",cron1:"*",cron2:"*",cron3:"*",cron4:"*",cron5:"*",frequency:"everyMinute"},this.initializeForm("/api/servers/".concat(this.$route.params.server,"/cron-jobs"))},data:function(){return{logs:"",deletingJob:!1,selectedJob:null,showLogsModal:!1,showDeleteModal:!1,tableHeaders:[{label:"Cron",value:"cron"},{label:"User",value:"user"},{label:"Status",value:"status"},{label:"Command",value:"command"},{label:"",value:"logs"},{label:"",value:"delete"}],frequencies:[{label:"Every Minute",value:"everyMinute"},{label:"Every Five Minutes",value:"everyFiveMinutes"},{label:"Every Ten Minutes",value:"everyTenMinutes"},{label:"Hourly",value:"hourly"},{label:"Nightly",value:"daily"},{label:"Weekly",value:"weekly"},{label:"Monthly",value:"monthly"},{label:"Custom cron",value:"custom"}]}},computed:{server:function(){return this.$root.servers[this.$route.params.server]||{}},jobs:function(){return this.server.jobs||[]}},methods:{hideLogs:function(){this.selectedJob=null,this.showLogsModal=!1},serverMounted:function(){"load_balancer"===this.server.type&&this.$router.push("/servers/".concat(this.server.id))},showConfirmDeleteModal:function(e){this.showDeleteModal=!0,this.selectedJob=e},showLogs:function(e){var t=this;this.showLogsModal=!0,axios.post("/api/servers/".concat(this.server.id,"/cron-jobs/").concat(e.id,"/log")).then((function(o){var r=o.data;t.logs=r,t.selectedJob=e})).catch((function(e){var o=e.response;t.showLogsModal=!1,t.$root.flashMessage(o.data.message||"Failed fetching logs for job.","error")}))},submit:function(){var e=this;"custom"===this.form.frequency&&(this.form=s({},this.form,{cron:"".concat(this.form.cron1).concat(this.form.cron2).concat(this.form.cron3).concat(this.form.cron4).concat(this.form.cron5)})),this.submitForm().then((function(t){e.$root.servers=s({},e.$root.servers,n({},t.id,t)),e.form={command:"",user:"",frequency:"everyMinute"},e.$root.flashMessage("Schedule job added.")}))},deleteJob:function(){var e=this;this.deletingJob=!0,axios.delete("/api/servers/".concat(this.server.id,"/cron-jobs/").concat(this.selectedJob.id)).then((function(t){var o=t.data;e.$root.servers=s({},e.$root.servers,n({},o.id,o)),e.$root.flashMessage("Cron job has been deleted.")})).catch((function(t){var o=t.response;e.$root.flashMessage(o.data.message||"Failed deleting job.","error")})).finally((function(){e.deletingJob=!1,e.selectedJob=null,e.showDeleteModal=!1}))},closeConfirmDeleteJob:function(){this.deletingJob=!1,this.showDeleteModal=!1,this.selectedJob=null}}},l=o("KHd+"),c=Object(l.a)(a,(function(){var e=this,t=e.$createElement,o=e._self._c||t;return o("server-layout",{on:{mounted:e.serverMounted}},[o("template",{slot:"content"},[o("flash"),e._v(" "),o("confirm-modal",{attrs:{open:e.showDeleteModal,confirming:e.deletingJob,confirmHeading:"Delete scheduled job",confirmText:"Are you sure you want to delete the scheduled job "+(e.selectedJob&&e.selectedJob.command)+" ?"},on:{confirm:e.deleteJob,close:e.closeConfirmDeleteJob}}),e._v(" "),o("modal",{attrs:{open:e.showLogsModal}},[o("div",{staticClass:"p-6"},[e.selectedJob?o("div",[o("h2",{staticClass:"text-lg mb-3 text-gray-800"},[e._v("\n                        Job logs ("+e._s(e.selectedJob&&e.selectedJob.slug)+")\n                    ")]),e._v(" "),o("v-codemirror",{attrs:{value:e.logs}})],1):o("div",{staticClass:"w-full h-12 flex justify-center items-center rounded",staticStyle:{background:"#2b3e50"}},[o("pulse")],1),e._v(" "),o("div",{staticClass:"w-full md:flex md:justify-end"},[o("v-trans-button",{staticClass:"mt-4",attrs:{label:"Close"},on:{click:e.hideLogs}})],1)])]),e._v(" "),o("card",{staticClass:"mb-6",attrs:{title:"New Scheduled Job"}},[o("form",{on:{submit:function(t){return t.preventDefault(),e.submit(t)}}},[o("text-input",{attrs:{name:"command",label:"Command",errors:e.formErrors.command},model:{value:e.form.command,callback:function(t){e.$set(e.form,"command",t)},expression:"form.command"}}),e._v(" "),o("text-input",{staticClass:"mt-5",attrs:{name:"user",label:"User",errors:e.formErrors.user,help:"This is the user the cron job would be executed with."},model:{value:e.form.user,callback:function(t){e.$set(e.form,"user",t)},expression:"form.user"}}),e._v(" "),o("div",{staticClass:"mt-4"},[o("v-radio",{attrs:{id:"frequency",label:"Frequency",options:e.frequencies,errors:e.formErrors.frequency},model:{value:e.form.frequency,callback:function(t){e.$set(e.form,"frequency",t)},expression:"form.frequency"}}),e._v(" "),o("a",{attrs:{target:"_blank",href:"https://crontab.guru/"}},["custom"===e.form.frequency?o("info",{staticClass:"mt-4"},[o("div",[e._v("\n                                You can generate a valid cron expression\n                                using\n                                "),o("span",{staticClass:"ml-1 font-semibold"},[e._v("this tool")])])]):e._e()],1),e._v(" "),"custom"===e.form.frequency?o("div",{staticClass:"grid grid-cols-5 gap-4 mt-3"},[o("text-input",{staticClass:"text-center",attrs:{name:"cron-1"},model:{value:e.form.cron1,callback:function(t){e.$set(e.form,"cron1",t)},expression:"form.cron1"}}),e._v(" "),o("text-input",{staticClass:"text-center",attrs:{name:"cron-2"},model:{value:e.form.cron2,callback:function(t){e.$set(e.form,"cron2",t)},expression:"form.cron2"}}),e._v(" "),o("text-input",{staticClass:"text-center",attrs:{name:"cron-3"},model:{value:e.form.cron3,callback:function(t){e.$set(e.form,"cron3",t)},expression:"form.cron3"}}),e._v(" "),o("text-input",{staticClass:"text-center",attrs:{name:"cron-4"},model:{value:e.form.cron4,callback:function(t){e.$set(e.form,"cron4",t)},expression:"form.cron4"}}),e._v(" "),o("text-input",{staticClass:"text-center",attrs:{name:"cron-5"},model:{value:e.form.cron5,callback:function(t){e.$set(e.form,"cron5",t)},expression:"form.cron5"}})],1):e._e()],1),e._v(" "),o("v-button",{staticClass:"mt-5",attrs:{type:"submit",label:"Schedule Job",loading:e.submitting}})],1)]),e._v(" "),o("card",{attrs:{title:"Scheduled jobs",table:!0,rowsCount:e.jobs.length,emptyTableMessage:"No scheduled jobs running on this server yet."}},[o("v-table",{attrs:{headers:e.tableHeaders,rows:e.jobs},scopedSlots:e._u([{key:"row",fn:function(t){var r=t.row,s=t.header;return["status"===s.value?o("table-status",{attrs:{status:r.status}}):e._e(),e._v(" "),"delete"===s.value?o("delete-button",{on:{click:function(t){return e.showConfirmDeleteModal(r)}}}):e._e(),e._v(" "),"logs"===s.value?o("button",{staticClass:"border-2 border-gray-500 p-1 rounded hover:bg-gray-100 shadow",on:{click:function(t){return e.showLogs(r)}}},[o("svg",{attrs:{fill:"none",stroke:"currentColor","stroke-linecap":"round","stroke-linejoin":"round","stroke-width":"2",viewBox:"0 0 24 24",width:"20",height:"20"}},[o("path",{attrs:{d:"M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"}})])]):e._e(),e._v(" "),["slug","user","cron","frequency"].includes(s.value)?o("span",{staticClass:"text-gray-700 text-sm"},[e._v("\n                        "+e._s(r[s.value])+"\n                    ")]):e._e(),e._v(" "),"command"===s.value?o("code",{staticClass:"text-red-400"},[e._v("\n                        "+e._s(r.command)+"\n                    ")]):e._e()]}}])})],1)],1)],2)}),[],!1,null,null,null);t.default=c.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[16],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Files.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sites/Files.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_codemirror__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-codemirror */ "./node_modules/vue-codemirror/dist/vue-codemirror.js");
+/* harmony import */ var vue_codemirror__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_codemirror__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var codemirror_lib_codemirror_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! codemirror/lib/codemirror.css */ "./node_modules/codemirror/lib/codemirror.css");
+/* harmony import */ var codemirror_lib_codemirror_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(codemirror_lib_codemirror_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var codemirror_theme_lucario_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! codemirror/theme/lucario.css */ "./node_modules/codemirror/theme/lucario.css");
+/* harmony import */ var codemirror_theme_lucario_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(codemirror_theme_lucario_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var codemirror_mode_shell_shell_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! codemirror/mode/shell/shell.js */ "./node_modules/codemirror/mode/shell/shell.js");
+/* harmony import */ var codemirror_mode_shell_shell_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(codemirror_mode_shell_shell_js__WEBPACK_IMPORTED_MODULE_3__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    codemirror: vue_codemirror__WEBPACK_IMPORTED_MODULE_0__["codemirror"]
+  },
+  data: function data() {
+    var codeMirrorOptions = {
+      theme: 'lucario',
+      tabSize: 4,
+      line: true,
+      mode: 'shell',
+      lineNumbers: true
+    };
+    return {
+      fetchingEcosystemFile: false,
+      fetchingNginxConfigFile: false,
+      updatingEcosystemFile: false,
+      updatingNginxConfigFile: false,
+      ecosystemFile: '',
+      nginxConfigFile: '',
+      fetchingCustomFile: false,
+      customFileFetched: false,
+      fileContent: '',
+      updatingCustomFile: false,
+      codeMirrorOptions: codeMirrorOptions
+    };
+  },
+  computed: {
+    site: function site() {
+      return this.$root.sites[this.$route.params.site] || {};
+    },
+    server: function server() {
+      return this.$root.servers[this.$route.params.server] || {};
+    },
+    serverId: function serverId() {
+      return this.$route.params.server;
+    },
+    siteId: function siteId() {
+      return this.$route.params.site;
+    }
+  },
+  methods: {
+    fetchPm2File: function fetchPm2File() {
+      var _this = this;
+
+      this.fetchingEcosystemFile = true;
+      axios.get("/api/servers/".concat(this.serverId, "/sites/").concat(this.siteId, "/ecosystem-file")).then(function (_ref) {
+        var data = _ref.data;
+        _this.ecosystemFile = data;
+      })["catch"](function () {
+        _this.$root.flashMessage('Failed to fetch the ecosystem file.', 'error');
+      })["finally"](function () {
+        _this.fetchingEcosystemFile = false;
+      });
+    },
+    fetchNginxConfigFile: function fetchNginxConfigFile() {
+      var _this2 = this;
+
+      this.fetchingNginxConfigFile = true;
+      axios.get("/api/servers/".concat(this.serverId, "/sites/").concat(this.siteId, "/nginx-config")).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.nginxConfigFile = data;
+      })["catch"](function () {
+        _this2.$root.flashMessage('Failed to fetch the nginx configuration file.', 'error');
+      })["finally"](function () {
+        _this2.fetchingNginxConfigFile = false;
+      });
+    },
+    updateNginxConfigFile: function updateNginxConfigFile() {
+      var _this3 = this;
+
+      this.updatingNginxConfigFile = true;
+      axios.post("/api/servers/".concat(this.serverId, "/sites/").concat(this.siteId, "/nginx-config"), {
+        nginxConfig: this.nginxConfigFile
+      }).then(function () {
+        _this3.$root.flashMessage('Nginx configuration file updated.');
+
+        _this3.nginxConfigFile = '';
+      })["catch"](function () {
+        _this3.$root.flashMessage('Failed to update the nginx configuration file.', 'error');
+      })["finally"](function () {
+        _this3.updatingNginxConfigFile = false;
+      });
+    },
+    updatePm2File: function updatePm2File() {
+      var _this4 = this;
+
+      this.updatingEcosystemFile = true;
+      axios.post("/api/servers/".concat(this.serverId, "/sites/").concat(this.siteId, "/ecosystem-file"), {
+        ecosystemFile: this.ecosystemFile
+      }).then(function () {
+        _this4.$root.flashMessage('Ecosystem file updated.');
+
+        _this4.ecosystemFile = '';
+      })["catch"](function () {
+        _this4.$root.flashMessage('Failed to update the ecosystem file.', 'error');
+      })["finally"](function () {
+        _this4.updatingEcosystemFile = false;
+      });
+    },
+    siteMounted: function siteMounted() {
+      this.form = {
+        path: "/home/nesa/".concat(this.site.name, "/.env")
+      };
+    },
+    fetchFile: function fetchFile() {
+      var _this5 = this;
+
+      this.fetchingCustomFile = true;
+      axios.post("/api/sites/".concat(this.site.id, "/get-file-contents"), this.form).then(function (_ref3) {
+        var fileContent = _ref3.data;
+        _this5.customFileFetched = true;
+        _this5.fileContent = fileContent;
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+
+        _this5.$root.flashMessage(response.data.message || 'Failed to fetch this file.');
+      })["finally"](function () {
+        _this5.fetchingCustomFile = false;
+      });
+    },
+    updateFile: function updateFile() {
+      var _this6 = this;
+
+      this.updatingCustomFile = true;
+      axios.post("/api/sites/".concat(this.site.id, "/update-file-contents"), {
+        fileContent: this.fileContent,
+        path: this.form.path
+      }).then(function (_ref5) {
+        var fileContent = _ref5.data;
+        _this6.customFileFetched = false;
+        _this6.fileContent = '';
+
+        _this6.$root.flashMessage('File content updated.');
+      })["catch"](function (_ref6) {
+        var response = _ref6.response;
+
+        _this6.$root.flashMessage(response.data || 'Failed to update this file.');
+      })["finally"](function () {
+        _this6.updatingCustomFile = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Files.vue?vue&type=template&id=4ec34f7b&":
+/*!*********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sites/Files.vue?vue&type=template&id=4ec34f7b& ***!
+  \*********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "site-layout",
+    { on: { mounted: _vm.siteMounted } },
+    [
+      _c(
+        "template",
+        { slot: "content" },
+        [
+          _c("flash"),
+          _vm._v(" "),
+          _vm.site.type === "nodejs" && _vm.server.type !== "load_balancer"
+            ? _c(
+                "card",
+                { staticClass: "mb-6", attrs: { title: "PM2 Ecosystem file" } },
+                [
+                  _c("info", [
+                    _vm._v(
+                      "\n                This is the PM2 configuration for your site. Here you can\n                define environment secrets. The content of this file is\n                never saved on our servers.\n            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  !_vm.ecosystemFile
+                    ? _c("v-button", {
+                        staticClass: "mt-4",
+                        attrs: {
+                          loading: _vm.fetchingEcosystemFile,
+                          label: "Edit Ecosystem file"
+                        },
+                        on: { click: _vm.fetchPm2File }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.ecosystemFile
+                    ? _c("codemirror", {
+                        staticClass: "my-4",
+                        attrs: { options: _vm.codeMirrorOptions },
+                        model: {
+                          value: _vm.ecosystemFile,
+                          callback: function($$v) {
+                            _vm.ecosystemFile = $$v
+                          },
+                          expression: "ecosystemFile"
+                        }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.ecosystemFile
+                    ? _c("v-button", {
+                        staticClass: "mt-4",
+                        attrs: {
+                          loading: _vm.updatingEcosystemFile,
+                          label: "Update Ecosystem file"
+                        },
+                        on: { click: _vm.updatePm2File }
+                      })
+                    : _vm._e()
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "card",
+            {
+              staticClass: "mb-5",
+              attrs: { title: "Nginx configuration file" }
+            },
+            [
+              _c("info", [
+                _vm._v(
+                  "\n                This is the Nginx configuration for your site.\n                "
+                ),
+                _vm.site.type === "nodejs"
+                  ? _c("span", { staticClass: "ml-1" }, [
+                      _vm._v(
+                        "Make sure the proxy port here matches the port your\n                    application is running on."
+                      )
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              !_vm.nginxConfigFile
+                ? _c("v-button", {
+                    staticClass: "mt-4",
+                    attrs: {
+                      loading: _vm.fetchingNginxConfigFile,
+                      label: "Edit Nginx Configuration"
+                    },
+                    on: { click: _vm.fetchNginxConfigFile }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.nginxConfigFile
+                ? _c("codemirror", {
+                    staticClass: "my-4",
+                    attrs: { options: _vm.codeMirrorOptions },
+                    model: {
+                      value: _vm.nginxConfigFile,
+                      callback: function($$v) {
+                        _vm.nginxConfigFile = $$v
+                      },
+                      expression: "nginxConfigFile"
+                    }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.nginxConfigFile
+                ? _c("v-button", {
+                    staticClass: "mt-4",
+                    attrs: {
+                      loading: _vm.updatingNginxConfigFile,
+                      label: "Update Nginx file"
+                    },
+                    on: { click: _vm.updateNginxConfigFile }
+                  })
+                : _vm._e()
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm.server.type !== "load_balancer"
+            ? _c("card", { attrs: { title: "Custom file" } }, [
+                _vm.customFileFetched
+                  ? _c(
+                      "div",
+                      { staticClass: "w-full" },
+                      [
+                        _c("text-input", {
+                          staticClass: "mb-3",
+                          attrs: {
+                            name: "path",
+                            value: _vm.form.path,
+                            readonly: true
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("codemirror", {
+                          attrs: { options: _vm.codeMirrorOptions },
+                          model: {
+                            value: _vm.fileContent,
+                            callback: function($$v) {
+                              _vm.fileContent = $$v
+                            },
+                            expression: "fileContent"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-button", {
+                          staticClass: "mt-3",
+                          attrs: {
+                            label: "Update file",
+                            loading: _vm.updatingCustomFile
+                          },
+                          on: { click: _vm.updateFile }
+                        })
+                      ],
+                      1
+                    )
+                  : _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.fetchFile($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("text-input", {
+                          attrs: {
+                            name: "path",
+                            label: "Path to file",
+                            help:
+                              "Here you can edit a custom file on this site. Make sure this file is not version controlled, because editing it might break deployments."
+                          },
+                          model: {
+                            value: _vm.form.path,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "path", $$v)
+                            },
+                            expression: "form.path"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-button", {
+                          staticClass: "mt-3",
+                          attrs: {
+                            label: "Fetch file",
+                            type: "submit",
+                            loading: _vm.fetchingCustomFile
+                          }
+                        })
+                      ],
+                      1
+                    )
+              ])
+            : _vm._e()
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Files.vue":
+/*!********************************************!*\
+  !*** ./resources/js/Pages/Sites/Files.vue ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Files_vue_vue_type_template_id_4ec34f7b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Files.vue?vue&type=template&id=4ec34f7b& */ "./resources/js/Pages/Sites/Files.vue?vue&type=template&id=4ec34f7b&");
+/* harmony import */ var _Files_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Files.vue?vue&type=script&lang=js& */ "./resources/js/Pages/Sites/Files.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Files_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Files_vue_vue_type_template_id_4ec34f7b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Files_vue_vue_type_template_id_4ec34f7b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Pages/Sites/Files.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Files.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./resources/js/Pages/Sites/Files.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Files_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Files.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Files.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Files_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Files.vue?vue&type=template&id=4ec34f7b&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/Pages/Sites/Files.vue?vue&type=template&id=4ec34f7b& ***!
+  \***************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Files_vue_vue_type_template_id_4ec34f7b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Files.vue?vue&type=template&id=4ec34f7b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Files.vue?vue&type=template&id=4ec34f7b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Files_vue_vue_type_template_id_4ec34f7b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Files_vue_vue_type_template_id_4ec34f7b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);

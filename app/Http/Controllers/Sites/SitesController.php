@@ -23,7 +23,9 @@ class SitesController extends Controller
 
     public function logs(Server $server, Site $site)
     {
-        return $site->logs;
+        $process = $this->getPm2Logs($server, $site);
+
+        return $process->getOutput();
     }
 
     /**

@@ -3,6 +3,17 @@
         <template slot="content">
             <flash />
             <card title="PM2 Logs">
+                <template slot="header">
+                    <div class="w-full flex justify-between px-6">
+                        <h3
+                            class="text-lg leading-6 font-medium text-gray-900 capitalize"
+                        >
+                            {{ title }}
+                        </h3>
+
+                        <v-button label='Refresh logs' @click="fetchLogs" :loading="fetchingLogs" />
+                    </div>
+                </template>
                 <info>
                     The site logs will be updated in real time.
                 </info>
@@ -81,13 +92,7 @@ export default {
                 this.$router.push(`/servers/${this.server.id}`)
                 return
             }
-        }
-    },
-    mounted() {
-        this.fetchLogs()
-    },
-    watch: {
-        site() {
+
             this.fetchLogs()
         }
     }

@@ -361,6 +361,18 @@ EOD;
         return $file;
     }
 
+    public function getPm2Logs(Server $server, Site $site) {
+        $scriptPath = 'scripts/server/get-pm2-logs.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $arguments = "{$site->name}";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments, false)
+        );
+    }
+
     /**
      * Get the contents of a file from the server
      *

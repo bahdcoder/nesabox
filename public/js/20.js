@@ -1,1 +1,221 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[20],{wITW:function(e,t,r){"use strict";r.r(t);function n(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function o(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}var i={data:function(){return{deleting:!1,deletingModalOpen:!1}},computed:{site:function(){return this.$root.sites[this.$route.params.site]||{}},serverId:function(){return this.$route.params.server},siteId:function(){return this.$route.params.site}},methods:{deleteSite:function(){var e=this;this.deleting=!0,axios.delete("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId)).then((function(t){var r=t.data;e.$router.push("/servers/".concat(e.serverId)),e.$root.servers=function(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?n(Object(r),!0).forEach((function(t){o(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):n(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}({},e.$root.server,o({},e.serverId,r))})).catch((function(){e.$root.flashMessage("Cannot delete site at the moment. There might be a process running on this server.","error",5e3)})).finally((function(){e.deleting=!1,e.deletingModalOpen=!1}))}}},s=r("KHd+"),a=Object(s.a)(i,(function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("site-layout",[r("template",{slot:"content"},[r("flash"),e._v(" "),r("confirm-modal",{attrs:{confirming:e.deleting,open:e.deletingModalOpen,confirmHeading:"Delete site",confirmText:"Are you sure you want to delete this site ?"},on:{confirm:e.deleteSite,close:function(t){e.deletingModalOpen=!1}}}),e._v(" "),r("card",{attrs:{title:"Delete site"}},[r("info",[e._v("\n                This will permanently remove all files related to this site\n                from your server.\n            ")]),e._v(" "),r("red-button",{staticClass:"mt-5",attrs:{label:"Delete site"},on:{click:function(t){e.deletingModalOpen=!0}}})],1)],1)],2)}),[],!1,null,null,null);t.default=a.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[20],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Ssl.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sites/Ssl.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      installing: false
+    };
+  },
+  computed: {
+    site: function site() {
+      return this.$root.sites[this.$route.params.site] || {};
+    },
+    server: function server() {
+      return this.$root.servers[this.$route.params.server] || {};
+    },
+    serverId: function serverId() {
+      return this.$route.params.server;
+    },
+    siteId: function siteId() {
+      return this.$route.params.site;
+    }
+  },
+  methods: {
+    install: function install() {
+      var _this = this;
+
+      this.installing = true;
+      axios.post("/api/servers/".concat(this.serverId, "/sites/").concat(this.siteId, "/lets-encrypt")).then(function (_ref) {
+        var site = _ref.data;
+        _this.$root.sites = _objectSpread({}, _this.$root.sites, _defineProperty({}, _this.siteId, site));
+      })["finally"](function () {
+        _this.installing = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Ssl.vue?vue&type=template&id=12e5e8e0&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sites/Ssl.vue?vue&type=template&id=12e5e8e0& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "site-layout",
+    [
+      _c(
+        "template",
+        { slot: "content" },
+        [
+          _c("flash"),
+          _vm._v(" "),
+          !_vm.site.ssl_certificate_installed
+            ? _c(
+                "card",
+                { attrs: { title: "Ssl certificate" } },
+                [
+                  _c("info", { staticClass: "mb-3" }, [
+                    _vm._v(
+                      "\n                To obtain a valid Let's Encrypt certificate, make sure your DNS configuration for " +
+                        _vm._s(_vm.site.name) +
+                        " has an A record pointing to " +
+                        _vm._s(_vm.server.ip_address) +
+                        ". This would be verified when obtaining the certificate.\n            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("v-button", {
+                    attrs: {
+                      loading:
+                        _vm.installing || _vm.site.installing_certificate,
+                      label: "Install ssl certificate"
+                    },
+                    on: { click: _vm.install }
+                  })
+                ],
+                1
+              )
+            : _c(
+                "card",
+                { attrs: { title: "Ssl Certificate" } },
+                [
+                  _c("info", [
+                    _vm._v(
+                      "\n                Ssl certificate for " +
+                        _vm._s(_vm.site.name) +
+                        " is installed and active. It will be automatically renewed.\n            "
+                    )
+                  ])
+                ],
+                1
+              )
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Ssl.vue":
+/*!******************************************!*\
+  !*** ./resources/js/Pages/Sites/Ssl.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Ssl_vue_vue_type_template_id_12e5e8e0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Ssl.vue?vue&type=template&id=12e5e8e0& */ "./resources/js/Pages/Sites/Ssl.vue?vue&type=template&id=12e5e8e0&");
+/* harmony import */ var _Ssl_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Ssl.vue?vue&type=script&lang=js& */ "./resources/js/Pages/Sites/Ssl.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Ssl_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Ssl_vue_vue_type_template_id_12e5e8e0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Ssl_vue_vue_type_template_id_12e5e8e0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Pages/Sites/Ssl.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Ssl.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/Pages/Sites/Ssl.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Ssl_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Ssl.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Ssl.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Ssl_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Ssl.vue?vue&type=template&id=12e5e8e0&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/Pages/Sites/Ssl.vue?vue&type=template&id=12e5e8e0& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Ssl_vue_vue_type_template_id_12e5e8e0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Ssl.vue?vue&type=template&id=12e5e8e0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Ssl.vue?vue&type=template&id=12e5e8e0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Ssl_vue_vue_type_template_id_12e5e8e0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Ssl_vue_vue_type_template_id_12e5e8e0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);
