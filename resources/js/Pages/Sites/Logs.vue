@@ -4,19 +4,16 @@
             <flash />
             <card title="PM2 Logs">
                 <template slot="header">
-                    <div class="w-full flex justify-between px-6">
+                    <div class="w-full flex justify-between items-center">
                         <h3
                             class="text-lg leading-6 font-medium text-gray-900 capitalize"
                         >
-                            {{ title }}
+                            Pm2 Logs
                         </h3>
 
                         <v-button label='Refresh logs' @click="fetchLogs" :loading="fetchingLogs" />
                     </div>
                 </template>
-                <info>
-                    The site logs will be updated in real time.
-                </info>
                 <codemirror
                     v-model="logs"
                     :options="codeMirrorOptions"
@@ -80,6 +77,8 @@ export default {
     },
     methods: {
         fetchLogs() {
+            this.fetchingLogs = true
+
             axios
                 .get(`/api/servers/${this.serverId}/sites/${this.siteId}/logs`)
                 .then(({ data: logs }) => {
