@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use App\Site;
 use App\Server;
 use App\Sshkey;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,8 +27,8 @@ trait HandlesProcesses
 
         $process->{$mustRun ? 'mustRun' : 'run'}();
 
-        echo $process->getOutput();
-        echo $process->getErrorOutput();
+        Log::info($process->getOutput());
+        Log::info($process->getErrorOutput());
 
         return $process;
     }
