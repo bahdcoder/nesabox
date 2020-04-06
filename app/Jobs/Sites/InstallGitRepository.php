@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Http\SourceControlProviders\InteractsWithGithub;
 use App\Http\SourceControlProviders\InteractsWithGitlab;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class InstallGitRepository implements ShouldQueue
@@ -85,8 +86,8 @@ class InstallGitRepository implements ShouldQueue
             $this->site
         );
 
-        echo $process->getOutput();
-        echo $process->getErrorOutput();
+        Log::info($process->getOutput());
+        Log::info($process->getErrorOutput());
 
         if ($process->isSuccessful()) {
             $this->site->update([
