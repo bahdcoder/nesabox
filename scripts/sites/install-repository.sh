@@ -9,6 +9,8 @@ APP_HOSTNAME=$7
 LOG_WATCHER_NAME=$8
 WEB_DIRECTORY=$9
 
+set -e
+
 git clone --single-branch --branch $BRANCH $REPOSITORY_URL /home/$SSH_USER/$SITE_NAME
 
 # Make sure latest version of node is available

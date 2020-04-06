@@ -4,4 +4,6 @@ BRANCH=$2
 REPOSITORY_URL=$3
 SSH_USER=$4
 
+set -e
+
 git clone --single-branch --branch $BRANCH $REPOSITORY_URL /home/$SSH_USER/$SITE_NAME

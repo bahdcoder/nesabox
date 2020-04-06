@@ -1,6 +1,8 @@
 SITE_NAME=$1
 NESA_USER=$2
 
+set -e
+
 # The first step is to get a free port for this site
 read LOWERPORT UPPERPORT < /proc/sys/net/ipv4/ip_local_port_range
 \

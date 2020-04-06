@@ -85,6 +85,9 @@ class InstallGitRepository implements ShouldQueue
             $this->site
         );
 
+        echo $process->getOutput();
+        echo $process->getErrorOutput();
+
         if ($process->isSuccessful()) {
             $this->site->update([
                 'repository_status' => STATUS_ACTIVE
