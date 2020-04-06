@@ -76,13 +76,6 @@ pm2 delete /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js
 rm /home/{$user}/.{$user}/ecosystems/{$this->site->name}.config.js
 fi
 
-if [ -f '/home/{$user}/.{$user}/log-watchers/{$this->site->name}.watcher.js' ]
-then
-
-rm /home/{$user}/.{$user}/log-watchers/{$this->site->name}.watcher.js
-pm2 delete {$this->site->name}-log-watcher
-fi
-EOF
 EOD;
     }
 }
