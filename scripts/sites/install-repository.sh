@@ -93,6 +93,11 @@ Fs.watchFile(filePath, () => {
 })
 EOF
 
+if [ ! -d /home/$SSH_USER/.pm2/logs ]
+then
+    mkdir -p /home/$SSH_USER/.pm2/logs
+fi
+
 cat > /home/$SSH_USER/.pm2/logs/$SITE_NAME << EOF
 <<<< PM2 Logs start >>>>
 EOF
