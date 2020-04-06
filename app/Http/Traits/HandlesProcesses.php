@@ -26,6 +26,9 @@ trait HandlesProcesses
 
         $process->{$mustRun ? 'mustRun' : 'run'}();
 
+        echo $process->getOutput();
+        echo $process->getErrorOutput();
+
         return $process;
     }
 
