@@ -308,7 +308,7 @@ EOD;
         return <<<EOD
 su {$user} <<EOF
 cd ~
-n lts
+n 10.15.0
 npm i -g pm2
 npm i -g yarn
 EOF
