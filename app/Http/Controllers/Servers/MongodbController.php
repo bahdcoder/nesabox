@@ -88,7 +88,7 @@ class MongodbController extends Controller
                         'name' => ['The user already exists in this database.']
                     ]
                 ],
-                400
+                422
             );
         }
 

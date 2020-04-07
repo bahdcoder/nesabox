@@ -89,6 +89,18 @@ class SourceControlProvidersController extends Controller
         $data = [];
         $data[$provider] = null;
 
+        if (! isset($user->source_control[$provider])) {
+            return new UserResource($user->refresh());
+        }
+
+        switch ($provider) {
+            case 'github':
+                $this->unlinkGithubSourceControl($user->source_control['github']);
+                break;
+            default:
+                break;
+        }
+
         $user->update([
             'source_control' => array_merge($user->source_control, $data)
         ]);

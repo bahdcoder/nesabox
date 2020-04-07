@@ -4,7 +4,9 @@ namespace App\Http\SourceControlProviders;
 
 use App\Site;
 use App\User;
+use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
+use iDimensionz\HttpClient\Guzzle\GuzzleHttpClient;
 
 trait InteractsWithGithub
 {
@@ -44,6 +46,26 @@ trait InteractsWithGithub
                 ])
                 ->getBody()
         );
+    }
+
+    /**
+     * 
+     */
+    public function unlinkGithubSourceControl($accessToken)
+    {
+        $clientId = config('services.github.client_id');
+        $clientSecret = config('services.github.client_secret');
+
+        return (new HttpClient([
+            'base_uri' => 'https://api.github.com',
+            'auth' => [
+                $clientId,
+                $clientSecret
+            ],
+            'json' => [
+                'access_token' => $accessToken
+            ]
+        ]))->delete("/applications/{$clientId}/grant");
     }
 
     /**

@@ -407,6 +407,9 @@ export default {
                         } for this site.`
                     )
                 })
+                .catch(({ response }) => {
+                    this.$root.flashMessage(response.data.message || disabling ? 'Failed to disable push to deploy.' : 'Failed to enable push to deploy. This might be because you have not granted access to this repository organisation.')
+                })
                 .finally(() => {
                     this.quickDeploying = false
                 })
