@@ -38,7 +38,7 @@ class CronJobOutput extends Base
         $user = SSH_USER;
 
         return <<<EOD
-cat /home/{$user}/.{$user}/cron-job-logs/cron-job-{$this->cronJob->slug}.log
+tail -500 /home/{$user}/.{$user}/cron-job-logs/cron-job-{$this->cronJob->slug}.log
 EOD;
     }
 }

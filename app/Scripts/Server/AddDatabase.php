@@ -74,7 +74,6 @@ class AddDatabase extends Base
         }
 
         return <<<EOD
-mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
 mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'%' IDENTIFIED BY '{$this->databaseUser->password}';"
 EOD;
     }
@@ -83,7 +82,7 @@ EOD;
     {
         if ($this->databaseUser) {
             return <<<EOD
-mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'%' WITH GRANT OPTION;"
 EOD;
         }
 
@@ -122,7 +121,6 @@ EOD;
         }
 
         return <<<EOD
-mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
 mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'%' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
 EOD;
     }
@@ -134,7 +132,6 @@ EOD;
         }
 
         return <<<EOD
-mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' WITH GRANT OPTION;"
 mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$this->database->name}.* TO '{$this->databaseUser->name}'@'%' WITH GRANT OPTION;"
 EOD;
     }

@@ -19,6 +19,8 @@ git clone --single-branch --branch $BRANCH $REPOSITORY_URL /home/$SSH_USER/$SITE
 
 # Generate PM2 Ecosystem config file
 
+n lts
+
 cat > /home/$SSH_USER/.$SSH_USER/ecosystems/$SITE_NAME.config.js  << EOF
 module.exports = {
     apps: [{

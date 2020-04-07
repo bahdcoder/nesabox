@@ -56,7 +56,7 @@ class AddDatabaseUser extends Base
     public function generateMariadbAddUserScript($rootPassword)
     {
         return <<<EOD
-mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
+mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'%' IDENTIFIED BY '{$this->databaseUser->password}';"
 EOD;
     }
 
@@ -67,7 +67,7 @@ EOD;
         foreach ($this->databaseUser->databases as $database):
             $script .= <<<EOD
 \n
-            mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED BY '{$this->databaseUser->password}';"
+            mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'%' WITH GRANT OPTION;"
 EOD;
         endforeach;
 
@@ -109,7 +109,6 @@ EOD;
         foreach ($this->databaseUser->databases as $database):
             $script .= <<<EOD
 \n
-mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'{$this->server->ip_address}' WITH GRANT OPTION;"
 mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "GRANT ALL PRIVILEGES ON {$database->name}.* TO '{$this->databaseUser->name}'@'%' WITH GRANT OPTION;"
 EOD;
         endforeach;
@@ -120,7 +119,6 @@ EOD;
     public function generateMysql8AddUserScript($rootPassword)
     {
         return <<<EOD
-mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'{$this->server->ip_address}' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
 mysql --user="{$this->defaultUser}" --password="{$rootPassword}" -e "CREATE USER '{$this->databaseUser->name}'@'%' IDENTIFIED WITH mysql_native_password BY '{$this->databaseUser->password}';"
 EOD;
     }

@@ -175,8 +175,6 @@ ufw allow 22
 ufw allow 80
 ufw allow 443
 
-# Enable access to nesabox IP ADDRESS for this server
-ufw allow from {$nesaboxIp} to any port {$metricsPort}
 ufw --force enable
 
 # Create swap file if it does not exist 
