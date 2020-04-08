@@ -1,7 +1,7 @@
 <template>
     <server-layout>
         <template slot="content">
-            <card title="New Site" class="mb-4 md:mb-8">
+            <card v-if="server && server.type !== 'database'" title="New Site" class="mb-4 md:mb-8">
                 <flash />
                 <form @submit.prevent="submit">
                     <div class="w-full mt-5">
@@ -59,6 +59,7 @@
                 title="Active Sites"
                 :rowsCount="sites.length"
                 :table="true"
+                v-if="server && server.type !== 'database'"
                 emptyTableMessage="No sites on this server yet."
             >
                 <v-table
@@ -112,6 +113,10 @@
                         </div>
                     </template>
                 </v-table>
+            </card>
+
+            <card title='No sites available' v-if="server && server.type === 'database'">
+                <info>Sites are not available for database servers.</info>
             </card>
         </template>
     </server-layout>

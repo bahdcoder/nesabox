@@ -74,6 +74,7 @@ ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 apt-get update
 apt-get upgrade -y
 apt-get install -y --force-yes software-properties-common
+apt-add-repository ppa:chris-lea/redis-server -y
 
 # Install essential packages
 
@@ -111,6 +112,20 @@ usermod --password \$PASSWORD {$user}
 usermod -a -G www-data {$user}
 id {$user}
 groups {$user}
+
+# Install node, npm and n
+
+curl --silent --location https://deb.nodesource.com/setup_10.x | bash -
+
+apt-get update
+
+sudo apt-get install -y --force-yes nodejs
+
+node -v
+npm -v
+
+# Install an npm package used to replace lines in files. I can't kill myself abeg
+npm i -g replace-in-file
 
 # Give permissions to nesa user to be able to manage npm and node
 chown -R {$user} /usr/local
@@ -153,9 +168,11 @@ else
     echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.conf
 fi
 
-# supervisor autostarts config
-systemctl enable supervisor.service
-service supervisor start
+# Install redis
+apt-get install -y redis-server
+sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf
+service redis-server restart
+systemctl enable redis-server
 
 # Setup security updates
 cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF

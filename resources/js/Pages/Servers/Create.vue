@@ -342,6 +342,10 @@ export default {
                 {
                     label: 'Load balancer',
                     value: 'load_balancer'
+                },
+                {
+                    label: 'Database',
+                    value: 'database'
                 }
             ],
             providers: [
