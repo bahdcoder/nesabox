@@ -6,6 +6,7 @@ use App\User;
 use App\Server;
 use App\Scripts\Server\Init;
 use App\Http\Controllers\Controller;
+use App\Scripts\Server\InitDatabaseServer;
 use App\Scripts\Server\InitLoadBalancerServer;
 
 class CustomServerController extends Controller
@@ -21,6 +22,10 @@ class CustomServerController extends Controller
 
         if ($server->type === 'load_balancer') {
             return (new InitLoadBalancerServer($server))->generate();
+        }
+
+        if ($server->type === 'database') {
+            return (new InitDatabaseServer($server))->generate();
         }
 
         return (new Init($server))->generate();
