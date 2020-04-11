@@ -79,7 +79,7 @@ server {
   include nesa-conf/$SITE_NAME/ssl_certificates.conf;
 
   location / {
-    try_files \$uri \$uri/ =404;
+    try_files \$uri \$uri/ /index.html;
   }
 }
 EOF

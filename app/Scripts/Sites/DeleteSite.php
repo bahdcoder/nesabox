@@ -44,6 +44,10 @@ class DeleteSite extends Base
 
         return <<<EOD
 # Remove nginx config of site
+if [ -d '/root/.acme.sh/{$this->site->name}' ]
+then
+    rm -rf /root/.acme.sh/{$this->site->name}
+fi
 
 if [ -f '/etc/nginx/sites-available/{$this->site->name}' ]
 then
