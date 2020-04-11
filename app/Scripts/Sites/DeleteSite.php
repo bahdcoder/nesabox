@@ -49,6 +49,11 @@ then
     rm -rf /root/.acme.sh/{$this->site->name}
 fi
 
+if [ -d '/etc/nginx/ssl/{$this->site->name}' ]
+then
+    rm -rf /etc/nginx/ssl/{$this->site->name}
+fi
+
 if [ -f '/etc/nginx/sites-available/{$this->site->name}' ]
 then
     rm /etc/nginx/sites-available/{$this->site->name}
