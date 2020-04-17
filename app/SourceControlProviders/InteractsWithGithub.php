@@ -62,10 +62,7 @@ trait InteractsWithGithub
                 $clientId,
                 $clientSecret
             ],
-            'json' => [
-                'access_token' => $accessToken
-            ]
-        ]))->delete("/applications/{$clientId}/grant");
+        ]))->delete("/applications/{$clientId}/tokens/{$accessToken}");
     }
 
     /**
