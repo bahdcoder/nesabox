@@ -32,7 +32,7 @@
                         >Can connect to</label
                     >
                     <small class="text-gray-600"
-                        >Select all the servers this server would have access
+                        >Select all the servers this server would allow access
                         to.</small
                     >
                     <checkbox
@@ -53,7 +53,7 @@
                     v-model="form.ports"
                     :errors="errors.ports"
                     placeholder="27017,6379"
-                    help="Provide which ports you want this server to have access to. You can add multiple ports separated by commas. For example, if you want this server to be able to access a Mongodb server and Redis server, provide ports 27017,6379"
+                    help="Provide which ports you want this server to expose. You can add multiple ports separated by commas. For example, if you want this server to be allow access to mongodb and redis, provide ports 27017,6379"
                 />
 
                 <v-button

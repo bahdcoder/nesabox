@@ -54,6 +54,6 @@ class GitRepository implements Rule
      */
     public function message()
     {
-        return 'The repository or branch name provided is invalid.';
+        return 'The repository or branch name provided is invalid. Please try disconnecting and reconnecting your source control provider if the repository looks valid.';
     }
 }
