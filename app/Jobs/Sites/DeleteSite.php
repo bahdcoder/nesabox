@@ -17,7 +17,12 @@ use App\Scripts\Sites\DeleteSite as AppDeleteSite;
 
 class DeleteSite implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, InteractsWithGithub, InteractsWithGitlab;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        InteractsWithGithub,
+        InteractsWithGitlab;
 
     /**
      * The server to ssh into
@@ -81,7 +86,10 @@ class DeleteSite implements ShouldQueue
         if ($this->site->push_to_deploy) {
             switch ($this->site->repository_provider):
                 case 'github':
-                    $this->deleteGithubPushWebhook($this->site, $this->site->server->user);
+                    $this->deleteGithubPushWebhook(
+                        $this->site,
+                        $this->site->server->user
+                    );
                 default:
                     break;
             endswitch;

@@ -75,8 +75,9 @@
                     >
                         <p class="text-center text-gray-700">
                             Your site is still being created. we are setting up
-                            nginx configuration files, PM2 ecosystem files, and log
-                            files for this site. This usually takes about 5 seconds.
+                            nginx configuration files, PM2 ecosystem files, and
+                            log files for this site. This usually takes about 5
+                            seconds.
                         </p>
 
                         <p class="w-full py-4 flex justify-center">

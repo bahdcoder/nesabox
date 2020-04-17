@@ -365,7 +365,8 @@ EOD;
         return $file;
     }
 
-    public function getPm2Logs(Server $server, Site $site) {
+    public function getPm2Logs(Server $server, Site $site)
+    {
         $scriptPath = 'scripts/server/get-pm2-logs.sh';
 
         $scriptName = base_path($scriptPath);
@@ -444,6 +445,46 @@ EOD;
         $scriptName = base_path($scriptPath);
 
         $arguments = "{$site->name}";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments)
+        );
+    }
+
+    public function uninstallSsl(Server $server, Site $site)
+    {
+        $scriptPath = 'scripts/sites/uninstall-ssl.sh';
+
+        $scriptName = base_path($scriptPath);
+
+        $arguments = "{$site->name}";
+
+        return $this->execProcess(
+            $this->sshScript($server, $scriptName, $arguments)
+        );
+    }
+
+    public function addCustomSiteSsl(Server $server, Site $site, $data)
+    {
+        $scriptPath = 'scripts/sites/add-custom-site-ssl.sh';
+
+        $certificate =
+            config('app.url') .
+            route(
+                'get-custom-ssl-cert',
+                ['hash' => $data['certificate']],
+                false
+            );
+
+        $privateKey =
+            config('app.url') .
+            route('get-custom-ssl-key', ['hash' => $data['privateKey']], false);
+
+        $scriptName = base_path($scriptPath);
+
+        $arguments = "{$site->name} {$certificate} {$privateKey}";
+
+        Log::info($arguments);
 
         return $this->execProcess(
             $this->sshScript($server, $scriptName, $arguments)

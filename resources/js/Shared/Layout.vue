@@ -27,8 +27,10 @@
                                 class="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700"
                             ></button>
                             <div class="ml-3 relative">
-                                <div class="flex items-center image-button" @click="open = !open">
-                                    
+                                <div
+                                    class="flex items-center image-button"
+                                    @click="open = !open"
+                                >
                                     <button
                                         class="image-button max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid"
                                     >
@@ -44,23 +46,37 @@
                                         {{ $root.auth.name }}
                                     </span>
 
-                                    <svg class="image-button w-3 ml-2 cursor-pointer h-3 fill-current" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                            viewBox="0 0 292.362 292.362" style="enable-background:new 0 0 292.362 292.362;"
-                                            xml:space="preserve">
+                                    <svg
+                                        class="image-button w-3 ml-2 cursor-pointer h-3 fill-current"
+                                        version="1.1"
+                                        id="Capa_1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        x="0px"
+                                        y="0px"
+                                        viewBox="0 0 292.362 292.362"
+                                        style="enable-background:new 0 0 292.362 292.362;"
+                                        xml:space="preserve"
+                                    >
                                         <g>
-                                            <path fill="#fff" d="M286.935,69.377c-3.614-3.617-7.898-5.424-12.848-5.424H18.274c-4.952,0-9.233,1.807-12.85,5.424
+                                            <path
+                                                fill="#fff"
+                                                d="M286.935,69.377c-3.614-3.617-7.898-5.424-12.848-5.424H18.274c-4.952,0-9.233,1.807-12.85,5.424
                                                 C1.807,72.998,0,77.279,0,82.228c0,4.948,1.807,9.229,5.424,12.847l127.907,127.907c3.621,3.617,7.902,5.428,12.85,5.428
-                                                s9.233-1.811,12.847-5.428L286.935,95.074c3.613-3.617,5.427-7.898,5.427-12.847C292.362,77.279,290.548,72.998,286.935,69.377z"/>
+                                                s9.233-1.811,12.847-5.428L286.935,95.074c3.613-3.617,5.427-7.898,5.427-12.847C292.362,77.279,290.548,72.998,286.935,69.377z"
+                                            />
                                         </g>
                                     </svg>
                                 </div>
-                                <transition name='account-menu'>
+                                <transition name="account-menu">
                                     <div
                                         v-show="open"
                                         v-click-outside="handleOutsideClick"
                                         class="account-menu origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg"
                                     >
-                                        <div class="rounded-md bg-white shadow-xs">
+                                        <div
+                                            class="rounded-md bg-white shadow-xs"
+                                        >
                                             <div class="py-1">
                                                 <router-link
                                                     to="/account"
@@ -151,7 +167,7 @@
                     </div>
                     <div class="mt-3 px-2">
                         <router-link
-                            to='/account'
+                            to="/account"
                             class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
                             >Your account</router-link
                         >
@@ -235,16 +251,22 @@ export default {
         },
         handleOutsideClick(event) {
             if (event.target.className) {
-                if (typeof event.target.className === 'string' && event.target.className.match(/image-button/)) {
+                if (
+                    typeof event.target.className === 'string' &&
+                    event.target.className.match(/image-button/)
+                ) {
                     return
                 }
 
-                if (event.target.className.baseVal && event.target.className.baseVal.match(/image-button/)) {
+                if (
+                    event.target.className.baseVal &&
+                    event.target.className.baseVal.match(/image-button/)
+                ) {
                     return
                 }
             }
 
-            if (! this.open) {
+            if (!this.open) {
                 return
             }
 

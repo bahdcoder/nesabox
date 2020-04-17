@@ -11,7 +11,11 @@
                             Pm2 Logs
                         </h3>
 
-                        <v-button label='Refresh logs' @click="fetchLogs" :loading="fetchingLogs" />
+                        <v-button
+                            label="Refresh logs"
+                            @click="fetchLogs"
+                            :loading="fetchingLogs"
+                        />
                     </div>
                 </template>
                 <codemirror

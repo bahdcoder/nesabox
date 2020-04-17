@@ -35,14 +35,18 @@ class SslCertificate implements ShouldQueue
      */
     public $site;
 
+    // the certificate key and private key
+    public $data;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Server $server, Site $site)
+    public function __construct(Server $server, Site $site, $data = [])
     {
         $this->site = $site;
+        $this->data = $data;
         $this->server = $server;
     }
 
@@ -53,7 +57,18 @@ class SslCertificate implements ShouldQueue
      */
     public function handle()
     {
-        $process = $this->addLetsEncryptCertificate($this->server, $this->site);
+        if (isset($this->data['certificate'])) {
+            $process = $this->addCustomSiteSsl(
+                $this->server,
+                $this->site,
+                $this->data
+            );
+        } else {
+            $process = $this->addLetsEncryptCertificate(
+                $this->server,
+                $this->site
+            );
+        }
 
         if ($process->isSuccessful()) {
             $this->site->update([

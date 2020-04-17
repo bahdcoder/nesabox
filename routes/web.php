@@ -361,6 +361,16 @@ Route::middleware(['auth'])
             'letsEncrypt'
         ]);
 
+        Route::post('servers/{server}/sites/{site}/custom-ssl', [
+            SslCertificateController::class,
+            'custom'
+        ]);
+
+        Route::post('servers/{server}/sites/{site}/uninstall-ssl', [
+            SslCertificateController::class,
+            'uninstall'
+        ]);
+
         Route::post(
             'servers/{server}/sites/{site}/push-to-deploy',
             '\App\Http\Controllers\Sites\PushToDeployController'
@@ -423,6 +433,16 @@ Route::get('get-update-nginx-config/{hash}', [
     NginxController::class,
     'getUpdatingConfig'
 ]);
+
+Route::get('get-install-ssl-cert/{hash}', [
+    SslCertificateController::class,
+    'getSslCert'
+])->name('get-custom-ssl-cert');
+
+Route::get('get-install-ssl-key/{hash}', [
+    SslCertificateController::class,
+    'getSslKey'
+])->name('get-custom-ssl-key');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('servers/{server}/vps', [

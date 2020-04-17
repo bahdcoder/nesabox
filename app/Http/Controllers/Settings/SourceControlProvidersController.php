@@ -89,7 +89,7 @@ class SourceControlProvidersController extends Controller
         $data = [];
         $data[$provider] = null;
 
-        if (! isset($user->source_control[$provider])) {
+        if (!isset($user->source_control[$provider])) {
             return new UserResource($user->refresh());
         }
 

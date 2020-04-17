@@ -10,10 +10,14 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
 })
 
 mix.js('resources/js/main.js', 'public/js/main.js')
-    .postCss('resources/css/app.css', 'public/css/app.css', [
-        require('tailwindcss'),
-        process.env.NODE_ENV === 'production' ? purgecss : undefined
-    ].filter(Boolean))
+    .postCss(
+        'resources/css/app.css',
+        'public/css/app.css',
+        [
+            require('tailwindcss'),
+            process.env.NODE_ENV === 'production' ? purgecss : undefined
+        ].filter(Boolean)
+    )
     .webpackConfig({
         output: { chunkFilename: 'js/[name].js?id=[chunkhash]' },
         resolve: {
