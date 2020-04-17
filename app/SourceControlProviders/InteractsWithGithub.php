@@ -49,23 +49,6 @@ trait InteractsWithGithub
     }
 
     /**
-     * 
-     */
-    public function unlinkGithubSourceControl($accessToken)
-    {
-        $clientId = config('services.github.client_id');
-        $clientSecret = config('services.github.client_secret');
-
-        return (new HttpClient([
-            'base_uri' => 'https://api.github.com',
-            'auth' => [
-                $clientId,
-                $clientSecret
-            ],
-        ]))->delete("/applications/{$clientId}/tokens/{$accessToken}");
-    }
-
-    /**
      * Add a webhook to the git repository
      *
      * @return object

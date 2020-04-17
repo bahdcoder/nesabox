@@ -100,7 +100,10 @@ server {
 EOF
 
 # Activate site
-ln -s /etc/nginx/sites-available/$SITE_NAME /etc/nginx/sites-enabled/
+if [ ! -f /etc/nginx/sites-enabled/$SITE_NAME ]
+then
+  ln -s /etc/nginx/sites-available/$SITE_NAME /etc/nginx/sites-enabled/
+fi
 
 # Restart nginx
 systemctl reload nginx
