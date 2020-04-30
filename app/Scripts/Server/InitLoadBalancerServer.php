@@ -209,7 +209,7 @@ cd ./acme.sh
 bash ./acme.sh --install
 cd ~
 rm -rf acme.sh
-
+apt-get install socat -y
 # Setup security updates
 cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
 Unattended-Upgrade::Allowed-Origins {

@@ -19,6 +19,10 @@ else
     rm -rf acme.sh
 fi
 
+if [ -d "/root/.acme.sh/$SITE_NAME" ]; then
+    rm -rf /root/.acme.sh/$SITE_NAME
+fi
+
 echo $DOMAINS;
 
 ufw allow 37083
