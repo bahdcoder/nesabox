@@ -25,11 +25,10 @@ fi
 
 echo $DOMAINS;
 
-ufw allow 37083
+systemctl stop nginx
 # We'll obtain the certificate and copy it to the nginx folder
-eval "/root/.acme.sh/acme.sh --issue --standalone $DOMAINS --httpport 37083 --cert-file /etc/nginx/ssl/$SITE_NAME/server.cer --key-file /etc/nginx/ssl/$SITE_NAME/server.key"
-
-ufw delete allow 37083
+eval "/root/.acme.sh/acme.sh --issue --standalone $DOMAINS --cert-file /etc/nginx/ssl/$SITE_NAME/server.cer --key-file /etc/nginx/ssl/$SITE_NAME/server.key"
+systemctl restart nginx
 
 # Create certificates configuration
 cat > /etc/nginx/nesa-conf/$SITE_NAME/ssl_certificates.conf << EOF
