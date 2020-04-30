@@ -12,7 +12,7 @@ EOF
 cat > /etc/nginx/nesa-conf/$SITE_NAME/base.conf << EOF
 # --------------------------------------------------------------------------------
 # | Nesa base configuration file for $SITE_NAME - (Do not remove or modify)      |
-# -------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 server {
     listen 80;
@@ -36,6 +36,11 @@ fi
 if [ -f /etc/nginx/ssl/$SITE_NAME/server.key]
 then
     rm /etc/nginx/ssl/$SITE_NAME/server.key
+fi
+
+if [ -d /root/.acme.sh/$SITE_NAME]
+then
+    rm -rf /root/.acme.sh/$SITE_NAME
 fi
 
 # Reload nginx

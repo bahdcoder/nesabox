@@ -444,7 +444,11 @@ EOD;
 
         $scriptName = base_path($scriptPath);
 
-        $arguments = "{$site->name}";
+        $arguments = "{$site->name} :{$site->name}";
+
+        if (count(explode('.', $site->name)) === 2) {
+            $arguments = "{$site->name} :{$site->name}:www.{$site->name}";
+        }
 
         return $this->execProcess(
             $this->sshScript($server, $scriptName, $arguments)
