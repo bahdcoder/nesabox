@@ -5,11 +5,12 @@ namespace App;
 use App\Http\Traits\HandlesProcesses;
 use GuzzleHttp\Client;
 use App\Notifications\Servers\Alert;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class Server extends Model
 {
-    use HandlesProcesses;
+    use HandlesProcesses, Notifiable;
     /**
      * Fields to cast to native types
      *
@@ -289,10 +290,7 @@ class Server extends Model
      */
     public function alert($message, $output = null, $type = 'error')
     {
-        FacadesNotification::send(
-            $this->getAllMembers(),
-            new Alert($this, $message, $output, $type)
-        );
+        $this->notify((new Alert($this, $message, $output, $type)));
     }
 
     public function teams()
@@ -302,6 +300,10 @@ class Server extends Model
 
     public function canBeAccessedBy(User $user)
     {
+        if ($user->id === $this->user_id) {
+            return true;
+        }
+
         return (bool) TeamInvite::where('user_id', $user->id)
             ->with('team.servers')
             ->get()
@@ -316,20 +318,6 @@ class Server extends Model
 
     public function getAllMembers()
     {
-        $teams = $this->teams()
-            ->with('invites.user')
-            ->get();
-
-        $users = collect([$this->user]);
-
-        $teams->each(function ($team) use ($users) {
-            $team->invites->each(function ($invite) use ($users) {
-                if ($invite->status === 'active') {
-                    $users->push($invite->user);
-                }
-            });
-        });
-
-        return $users;
+        return collect([$this]);
     }
 }

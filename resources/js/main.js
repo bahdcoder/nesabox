@@ -19,6 +19,7 @@ window.axios = Axios
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 import formMixin from '@/mixins/form'
+import echoMixin from '@/mixins/echo'
 
 import Svg from '@/Shared/Svg'
 import Card from '@/Shared/Card'
@@ -41,6 +42,7 @@ import SelectInput from '@/Shared/SelectInput'
 import ConfirmModal from '@/Shared/ConfirmModal'
 import Serverlayout from '@/Shared/Serverlayout'
 import TextareaInput from '@/Shared/TextareaInput'
+import Notifications from '@/Shared/Notifications'
 import AccountLayout from '@/Shared/AccountLayout'
 import SidebarLayout from '@/Shared/SidebarLayout'
 import ButtonTransparent from '@/Shared/ButtonTransparent'
@@ -48,6 +50,7 @@ import DeleteActionButton from '@/Shared/DeleteActionButton'
 
 Vue.use(VueRouter)
 Vue.mixin(formMixin)
+Vue.mixin(echoMixin)
 Vue.use(vClickOutside)
 Vue.component('info', Info)
 Vue.component('v-svg', Svg)
@@ -70,6 +73,7 @@ Vue.component('select-input', SelectInput)
 Vue.directive('click-outside', ClickOutside)
 Vue.component('confirm-modal', ConfirmModal)
 Vue.component('server-layout', Serverlayout)
+Vue.component('notifications', Notifications)
 Vue.component('sidebar-layout', SidebarLayout)
 Vue.component('account-layout', AccountLayout)
 Vue.component('textarea-input', TextareaInput)
@@ -292,7 +296,8 @@ const app = new Vue({
                 servers: [],
                 team_servers: []
             },
-            sites: {}
+            sites: {},
+            notifications: []
         }
     },
     methods: {
@@ -319,40 +324,38 @@ const app = new Vue({
                     }
                 })
         },
-        fetchServer(serverId) {
-            axios.get(`/api/servers/${serverId}`).then(({ data }) => {
-                this.servers = {
-                    ...this.servers,
-                    [serverId]: data
+        updateServer(serverId, updatedServer) {
+            this.servers = {
+                ...this.servers,
+                [serverId]: updatedServer
+            }
+
+            const servers = this.allServers.servers.map(server => {
+                if (server.id !== serverId) {
+                    return server
                 }
 
-                this.servers = {
-                    ...this.servers,
-                    [serverId]: data
-                }
+                return updatedServer
+            })
 
-                const servers = this.allServers.servers.map(server => {
+            const team_servers = this.allServers.team_servers.map(
+                server => {
                     if (server.id !== serverId) {
                         return server
                     }
 
-                    return data
-                })
-
-                const team_servers = this.allServers.team_servers.map(
-                    server => {
-                        if (server.id !== serverId) {
-                            return server
-                        }
-
-                        return data
-                    }
-                )
-
-                this.allServers = {
-                    servers,
-                    team_servers
+                    return updatedServer
                 }
+            )
+
+            this.allServers = {
+                servers,
+                team_servers
+            }
+        },
+        fetchServer(serverId) {
+            axios.get(`/api/servers/${serverId}`).then(({ data }) => {
+                this.updateServer(serverId, data)
             })
         }
     },
@@ -360,20 +363,5 @@ const app = new Vue({
         if (!this.auth) {
             return
         }
-
-        Echo.private(`App.User.${this.auth.id}`).notification(notification => {
-            if (
-                notification.type === 'App\\Notifications\\Sites\\SiteUpdated'
-            ) {
-                this.fetchSite(notification.server, notification.site)
-            }
-
-            if (
-                notification.type ===
-                'App\\Notifications\\Servers\\ServerIsReady'
-            ) {
-                this.fetchServer(notification.server)
-            }
-        })
     }
 })

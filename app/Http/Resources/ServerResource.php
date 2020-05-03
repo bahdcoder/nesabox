@@ -88,7 +88,17 @@ class ServerResource extends JsonResource
                 ->get(),
             'friend_servers' => $this->friendServers()
                 ->select(['friend_server_id', 'ports'])
-                ->get()
+                ->get(),
+            'unread_notifications' => $this->unreadNotifications->map(function ($notification) {
+                return [
+                    'id' => $notification->id,
+                    'message' => $notification->data['message'],
+                    'output' => $notification->data['output'],
+                    'type' => $notification->data['type'],
+                    'server_id' => $notification->notifiable_id,
+                    'created_at' => $notification->created_at->format('jS F h:i:s A'),
+                ];
+            })
         ];
     }
 }

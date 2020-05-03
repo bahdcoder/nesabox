@@ -17,7 +17,7 @@
   </script>
   <script src="{{ mix('js/main.js') }}" defer></script>
 </head>
-<body class='bg-page bg-gray-100'>
+<body class='bg-page bg-gray-100 font-sans'>
     <div id="app">
       <router-view></router-view>
     </div>

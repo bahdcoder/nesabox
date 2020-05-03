@@ -298,15 +298,6 @@ class CreateServersController extends Controller
                 $server->update([
                     'mongodb_admin_password' => $rootPassword
                 ]);
-
-                $server->user->notify(
-                    new Alert(
-                        $server,
-                        "MongoDB v4.2 admin password on server {$server->name}: {$rootPassword} . Keep it safe.",
-                        null,
-                        'info-delete'
-                    )
-                );
             }
 
             if ($database === MYSQL8_DB) {
@@ -315,28 +306,10 @@ class CreateServersController extends Controller
                 $server->update([
                     'mysql8_root_password' => $rootPassword
                 ]);
-
-                $server->user->notify(
-                    new Alert(
-                        $server,
-                        "Mysql 8 root password on server {$server->name}: {$rootPassword} . Keep it safe.",
-                        null,
-                        'info-delete'
-                    )
-                );
             }
 
             if ($database === MARIA_DB) {
                 $rootPassword = str_random(32);
-
-                $server->user->notify(
-                    new Alert(
-                        $server,
-                        "MariaDB v10.13 root password on server {$server->name}: {$rootPassword} . Keep it safe.",
-                        null,
-                        'info-delete'
-                    )
-                );
 
                 $server->update([
                     'mariadb_root_password' => $rootPassword
@@ -349,15 +322,6 @@ class CreateServersController extends Controller
                 $server->update([
                     'mysql_root_password' => $rootPassword
                 ]);
-
-                $server->user->notify(
-                    new Alert(
-                        $server,
-                        "Mysql 5.7 root password on server {$server->name}: {$rootPassword} . Keep it safe.",
-                        null,
-                        'info-delete'
-                    )
-                );
             }
 
             if ($database === POSTGRES_DB) {

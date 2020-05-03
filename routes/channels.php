@@ -12,9 +12,16 @@
 */
 
 use App\Team;
+use App\Server;
 
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel('App.Server.{id}', function ($user, $id) {
+    $server = Server::findOrFail($id);
+
+    return $server->canBeAccessedBy($user);
 });
 
 Broadcast::channel('App.Team.{id}', function ($user, $id) {

@@ -158,6 +158,8 @@ export default {
             this.addDatabasesToNav()
             this.$emit('mounted')
 
+            this.subscribeToServerBroadcast(this.server)
+
             return
         }
 
@@ -171,6 +173,8 @@ export default {
 
                 this.addDatabasesToNav()
                 this.$emit('mounted')
+
+                this.subscribeToServerBroadcast(this.server)
 
                 this.loading = false
             })

@@ -89,7 +89,7 @@ class Deploy implements ShouldQueue
                 ]);
 
                 Notification::send(
-                    $this->server->getAllMembers(),
+                    collect([$this->server]),
                     new SiteUpdated($this->site)
                 );
             });
@@ -102,14 +102,6 @@ class Deploy implements ShouldQueue
             $this->deployment->update([
                 'properties->status' => 'success'
             ]);
-
-            $user = SSH_USER;
-
-            $this->site->pm2Processes()->create([
-                'command' => null,
-                'name' => $this->site->name,
-                'logs_path' => "/home/{$user}/.pm2/logs/{$this->site->name}"
-            ]);
         } else {
             $this->deployment->update([
                 'properties->status' => 'failed'
@@ -118,7 +110,6 @@ class Deploy implements ShouldQueue
             $this->alertServer(
                 "Deployment failed on site {$this->site->name}",
                 $this->deployment->fresh()->properties['log'],
-                'deployment-failed'
             );
         }
 

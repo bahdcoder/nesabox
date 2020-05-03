@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Server;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationsController extends Controller
 {
-    public function index()
+    public function index(Server $server)
     {
-        return auth()->user()->unreadNotifications;
+        return $server->unreadNotifications;
     }
 
-    public function markAsRead(DatabaseNotification $notification)
+    public function destroy(DatabaseNotification $notification)
     {
         $notification->markAsRead();
 
-        if ($notification->data['type'] === 'info-delete') {
-            $notification->delete();
-        }
+        $notification->delete();
 
         return response()->json([]);
     }

@@ -91,9 +91,12 @@ class Alert extends Notification implements ShouldQueue
     {
         return (new BroadcastMessage([
             'data' => [
+                'id' => $this->id,
                 'message' => $this->message,
                 'output' => $this->output,
-                'type' => $this->type
+                'type' => $this->type,
+                'server_id' => $this->server->id,
+                'created_at' => now()->format('jS F h:i:s A')
             ]
         ]))
             ->onConnection('redis')

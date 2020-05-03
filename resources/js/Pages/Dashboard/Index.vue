@@ -109,7 +109,8 @@ export default {
                         value: 'type'
                     }
                 ]
-            }
+            },
+            interval: null
         }
     },
     computed: {
@@ -122,18 +123,29 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/servers').then(({ data }) => {
-            this.loading = false
-            this.$root.allServers = data
+        this.fetchServers().then(() => {
+            this.subscribeServers()
         })
     },
     methods: {
+        fetchServers() {
+            return axios.get('/api/servers').then(({ data }) => {
+                this.loading = false
+                this.$root.allServers = data
+            })
+        },
         routeToServer(server) {
             this.$router.push(`/servers/${server.id}`)
         },
         toggleShowOwnServers() {
             this.showOnlyOwnServers = !this.showOnlyOwnServers
+        },
+        subscribeServers() {
+            this.interval = setInterval(this.fetchServers, 3000)
         }
+    },
+    beforeDestroy() {
+        clearInterval(this.interval)
     }
 }
 </script>

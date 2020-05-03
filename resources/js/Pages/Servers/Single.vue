@@ -1,6 +1,7 @@
 <template>
     <server-layout>
         <template slot="content">
+            <notifications :notifications="server ? server.unread_notifications : []" />
             <card
                 v-if="server && server.type !== 'database'"
                 title="New Site"
@@ -182,6 +183,8 @@ export default {
     },
     mounted() {
         this.initializeForm(`/api/servers/${this.serverId}/sites`)
+
+        // this.subscribeToServer()
     },
     methods: {
         submit() {

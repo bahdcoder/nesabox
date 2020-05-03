@@ -128,11 +128,11 @@ Route::middleware(['auth'])
             'databases'
         ]);
 
-        Route::get('notifications', [NotificationsController::class, 'index']);
+        Route::get('notifications/{server}', [NotificationsController::class, 'index']);
 
-        Route::post('notifications/{notification}', [
+        Route::delete('notifications/{notification}', [
             NotificationsController::class,
-            'markAsRead'
+            'destroy'
         ]);
 
         Route::get('entities/search', [SearchController::class, 'index']);
