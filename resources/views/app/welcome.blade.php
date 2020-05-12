@@ -34,16 +34,6 @@
             }
         </style>
 
-                    <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-148218629-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'UA-148218629-1');
-        </script>
-        
         <!-- Start of Async Drift Code -->
         <script>
             "use strict";
@@ -356,5 +346,9 @@
                 body.classList.toggle('modal-active')
             }
     </script>
+
+            <!-- Fathom - beautiful, simple website analytics -->
+            <script src="https://cdn.usefathom.com/script.js" site="RYQSQTGP" defer></script>
+            <!-- / Fathom -->
             </body>
 </html>
