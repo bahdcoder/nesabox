@@ -235,7 +235,9 @@ const router = new VueRouter({
             path: '/account/subscription',
             name: 'account.subscription',
             component: () =>
-                import(`@/Pages/Account/Subscription`).then(module => module.default)
+                import(`@/Pages/Account/Subscription`).then(
+                    module => module.default
+                )
         },
         {
             path: '/account/server-providers',

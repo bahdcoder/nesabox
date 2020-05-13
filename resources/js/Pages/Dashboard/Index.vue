@@ -16,7 +16,12 @@
                         <v-button
                             component="router-link"
                             :label="addServerButtonLabel"
-                            :to="addServerButtonLabel === 'Upgrade to add more servers' ? '/account/subscription' : '/servers/create'"
+                            :to="
+                                addServerButtonLabel ===
+                                'Upgrade to add more servers'
+                                    ? '/account/subscription'
+                                    : '/servers/create'
+                            "
                         />
                     </span>
                 </div>

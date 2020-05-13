@@ -73,7 +73,8 @@ class UserResource extends JsonResource
                     : null,
                 'plan' => $this->getCurrentPlanName()
             ],
-            'can_create_more_servers' => $this->getCurrentPlanName() === 'free' ? $serverCount < 1 : true
+            'can_create_more_servers' =>
+                $this->getCurrentPlanName() === 'free' ? $serverCount < 1 : true
         ];
     }
 }
