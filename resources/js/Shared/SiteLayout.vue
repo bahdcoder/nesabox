@@ -25,7 +25,7 @@
                                 }}</router-link>
                             </span>
                             <span
-                                class="w-full mt-2 md:mt-0 md:w-auto text-gray-500 hover:text-gray-600 font-medium text-sm md:ml-4 transition duration-50 ease-in-out"
+                                class="w-full mt-2 md:mt-0 md:w-auto text-gray-700 hover:text-gray-800 font-medium text-sm md:ml-4 transition duration-50 ease-in-out"
                             >
                                 <a
                                     :href="`http://${site.name}`"

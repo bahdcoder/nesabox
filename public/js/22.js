@@ -1,1 +1,104 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[22],{mJnk:function(t,e,i){"use strict";i.r(e);function s(t,e){var i=Object.keys(t);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(t);e&&(s=s.filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),i.push.apply(i,s)}return i}function n(t){for(var e=1;e<arguments.length;e++){var i=null!=arguments[e]?arguments[e]:{};e%2?s(Object(i),!0).forEach((function(e){r(t,e,i[e])})):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(i)):s(Object(i)).forEach((function(e){Object.defineProperty(t,e,Object.getOwnPropertyDescriptor(i,e))}))}return t}function r(t,e,i){return e in t?Object.defineProperty(t,e,{value:i,enumerable:!0,configurable:!0,writable:!0}):t[e]=i,t}var a={data:function(){return{installing:!1,installCustom:!1,uninstalling:!1,showUninstallConfirmation:!1,form:{certificate:"",privateKey:""},errors:{}}},computed:{site:function(){return this.$root.sites[this.$route.params.site]||{}},server:function(){return this.$root.servers[this.$route.params.server]||{}},serverId:function(){return this.$route.params.server},siteId:function(){return this.$route.params.site}},methods:{install:function(){var t=this;this.installing=!0,axios.post("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId,"/lets-encrypt")).then((function(e){var i=e.data;t.$root.sites=n({},t.$root.sites,r({},t.siteId,i))})).finally((function(){t.installing=!1}))},installCustomCertificate:function(){var t=this;this.installing=!0,axios.post("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId,"/custom-ssl"),this.form).then((function(e){var i=e.data;t.$root.sites=n({},t.$root.sites,r({},t.siteId,i)),t.installCustom=!1})).catch((function(e){var i=e.response;422===i.status&&(t.errors=i.data.errors)})).finally((function(){t.installing=!1}))},uninstall:function(){var t=this;this.uninstalling=!0,axios.post("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId,"/uninstall-ssl")).then((function(e){var i=e.data;t.$root.sites=n({},t.$root.sites,r({},t.siteId,i))})).catch((function(e){var i=e.response;t.$root.flashMessage(i.data.message)})).finally((function(){t.uninstalling=!1,t.showUninstallConfirmation=!1}))}}},o=i("KHd+"),l=Object(o.a)(a,(function(){var t=this,e=t.$createElement,i=t._self._c||e;return i("site-layout",[i("template",{slot:"content"},[i("flash"),t._v(" "),i("confirm-modal",{attrs:{confirming:t.uninstalling,open:t.showUninstallConfirmation,confirmHeading:"Uninstall SSL",confirmText:"Are you sure you want to uninstall ssl from this site ? This would delete the existing ssl certificate."},on:{confirm:t.uninstall,close:function(e){t.showUninstallConfirmation=!1}}}),t._v(" "),t.site.ssl_certificate_installed||t.installCustom?t._e():i("card",{attrs:{title:"Ssl certificate"}},[i("info",{staticClass:"mb-3"},[t._v("\n                To obtain a valid Let's Encrypt certificate, make sure your\n                DNS configuration for "+t._s(t.site.name)+" has an A record\n                pointing to "+t._s(t.server.ip_address)+". This would be verified\n                when obtaining the certificate. Otherwise, you can provide a\n                custom certificate to be installed on the server.\n            ")]),t._v(" "),i("v-button",{attrs:{loading:t.installing||t.site.installing_certificate,label:"Install ssl certificate"},on:{click:t.install}}),t._v(" "),t.installing||t.site.installing_certificate?t._e():i("v-trans-button",{staticClass:"mt-2 md:mt-0",attrs:{label:"Install custom certificate"},on:{click:function(e){t.installCustom=!0}}})],1),t._v(" "),t.site.ssl_certificate_installed?i("card",{attrs:{title:"Ssl Certificate"}},[i("info",[t._v("\n                Ssl certificate for "+t._s(t.site.name)+" is installed and active.\n            ")]),t._v(" "),i("red-button",{staticClass:"mt-3",attrs:{label:"Uninstall certificate"},on:{click:function(e){t.showUninstallConfirmation=!0}}})],1):t._e(),t._v(" "),t.installCustom?i("card",{attrs:{title:"Custom ssl certificate"}},[i("form",{on:{submit:function(e){return e.preventDefault(),t.installCustomCertificate(e)}}},[i("textarea-input",{attrs:{errors:t.errors.privateKey,name:"privateKey",rows:6,label:"Private key",help:"This is the private key of your ssl certificate"},model:{value:t.form.privateKey,callback:function(e){t.$set(t.form,"privateKey",e)},expression:"form.privateKey"}}),t._v(" "),i("textarea-input",{staticClass:"mt-3",attrs:{errors:t.errors.certificate,name:"certificate",rows:6,label:"Certificate",help:"This is the actual certificate content."},model:{value:t.form.certificate,callback:function(e){t.$set(t.form,"certificate",e)},expression:"form.certificate"}}),t._v(" "),i("div",{staticClass:"flex flex-wrap justify-end mt-3"},[i("v-trans-button",{staticClass:"mt-2 md:mt-0",attrs:{label:"Cancel"},on:{click:function(e){t.installCustom=!1}}}),t._v(" "),i("v-button",{staticClass:"md:ml-3",attrs:{type:"submit",label:"Install ssl certificate"}})],1)],1)]):t._e()],1)],2)}),[],!1,null,null,null);e.default=l.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[22],{
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Servers/Databases/Postgres.vue?vue&type=template&id=d5bd0550&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Servers/Databases/Postgres.vue?vue&type=template&id=d5bd0550& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "server-layout",
+    [
+      _c(
+        "template",
+        { slot: "content" },
+        [
+          _c(
+            "card",
+            { attrs: { title: "Postgres" } },
+            [
+              _c("info", [
+                _vm._v(
+                  "\n                Postgresql database management is coming soon. For now,\n                please log in to your server and use the command line.\n            "
+                )
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Servers/Databases/Postgres.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/Pages/Servers/Databases/Postgres.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Postgres_vue_vue_type_template_id_d5bd0550___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Postgres.vue?vue&type=template&id=d5bd0550& */ "./resources/js/Pages/Servers/Databases/Postgres.vue?vue&type=template&id=d5bd0550&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _Postgres_vue_vue_type_template_id_d5bd0550___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Postgres_vue_vue_type_template_id_d5bd0550___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Pages/Servers/Databases/Postgres.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Servers/Databases/Postgres.vue?vue&type=template&id=d5bd0550&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/Pages/Servers/Databases/Postgres.vue?vue&type=template&id=d5bd0550& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Postgres_vue_vue_type_template_id_d5bd0550___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Postgres.vue?vue&type=template&id=d5bd0550& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Servers/Databases/Postgres.vue?vue&type=template&id=d5bd0550&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Postgres_vue_vue_type_template_id_d5bd0550___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Postgres_vue_vue_type_template_id_d5bd0550___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);

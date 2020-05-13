@@ -27,15 +27,17 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $token = request()->bearerToken();
+        // $token = request()->bearerToken();
+        $serverCount = $this->servers->count();
 
         return [
             'name' => $this->name,
             'email' => $this->email,
             'id' => $this->resource->id,
-            'api_token' => $this->api_token,
+            // 'api_token' => $this->api_token,
             'photo_url' => $this->photo_url,
             'auth_provider' => $this->auth_provider,
+            'server_count' => $serverCount,
             'sshkeys' => SshkeyResource::collection($this->sshkeys),
             'source_control' => [
                 'github' => (bool) $this->source_control['github'],
@@ -59,9 +61,9 @@ class UserResource extends JsonResource
                     return $this->defineCredential($credential);
                 })
             ],
-            'access_token' => JWTAuth::fromUser($this->resource, [
-                'exp' => \Carbon\Carbon::now()->addDays(7)->timestamp
-            ]),
+            // 'access_token' => JWTAuth::fromUser($this->resource, [
+            //     'exp' => \Carbon\Carbon::now()->addDays(7)->timestamp
+            // ]),
             'subscription' => [
                 'status' => (bool) $this->subscription
                     ? $this->subscription->status
@@ -70,7 +72,8 @@ class UserResource extends JsonResource
                     ? $this->subscription->id
                     : null,
                 'plan' => $this->getCurrentPlanName()
-            ]
+            ],
+            'can_create_more_servers' => $this->getCurrentPlanName() === 'free' ? $serverCount < 1 : true
         ];
     }
 }

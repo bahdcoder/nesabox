@@ -23,6 +23,11 @@ export default {
                     to: route('')
                 },
                 {
+                    label: 'Subscription',
+                    value: 'subscription',
+                    to: route('subscription')
+                },
+                {
                     label: 'SSH keys',
                     value: 'sshkeys',
                     to: route('ssh-keys')

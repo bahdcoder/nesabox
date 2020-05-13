@@ -16,6 +16,7 @@
     }
   </script>
   <script src="{{ mix('js/main.js') }}" defer></script>
+  <script src="https://cdn.paddle.com/paddle/paddle.js" defer></script>
 </head>
 <body class='bg-page bg-gray-100 font-sans'>
     <div id="app">

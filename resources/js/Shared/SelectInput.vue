@@ -14,7 +14,7 @@
             </label>
 
             <slot name="help">
-                <small class="text-gray-600">
+                <small class="text-gray-700">
                     {{ help }}
                 </small>
             </slot>

@@ -1,9 +1,12 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Graphik'],
-                mono: ['monospace']
+                mono: ['monospace'],
+                sans: ['Graphik', ...defaultTheme.fontFamily.sans],
+                serif: ['DM Serif Display', ...defaultTheme.fontFamily.serif]
             },
             lineHeight: {
                 normal: '1.6',
@@ -23,24 +26,29 @@ module.exports = {
                     '0 -1px 27px 0 rgba(0, 0, 0, 0.04), 0 4px 15px 0 rgba(0, 0, 0, 0.08)'
             },
             colors: {
+                ...defaultTheme.colors,
+                yellow: '#f5c06f',
+                'sky-blue': '#f3f8ff',
+                hero: '#1b1742',
                 'primary-green': '#47B881',
                 'svg-green': '#56cad8',
                 'svg-green-light': '#8bdde4',
                 'hero-background': '#F8FAFF',
                 'sha-green': {
-                    100: '#EEFAFB',
-                    200: '#D5F2F5',
-                    300: '#BBEAEF',
-                    400: '#89DAE4',
-                    500: '#56CAD8',
-                    600: '#4DB6C2',
-                    700: '#347982',
-                    800: '#275B61',
-                    900: '#1A3D41'
+                    100: '#E9F8F3',
+                    200: '#C7EDE1',
+                    300: '#A6E3CE',
+                    400: '#63CDAA',
+                    500: '#20B885',
+                    600: '#1DA678',
+                    700: '#136E50',
+                    800: '#0E533C',
+                    900: '#0A3728'
                 }
             }
         },
         fontSize: {
+            ...defaultTheme.fontSize,
             xxs: '.625rem',
             xs: '.8rem',
             sm: '.925rem',
@@ -50,8 +58,8 @@ module.exports = {
             '2xl': '1.5rem',
             '3xl': '1.75rem',
             '4xl': '2.125rem',
-            '5xl': '2.625rem',
-            '6xl': '10rem'
+            '3rem': '3rem',
+            '5xl': '2.625rem'
         }
     },
     variants: {

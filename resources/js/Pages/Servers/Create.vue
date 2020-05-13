@@ -301,6 +301,13 @@
 
 <script>
 export default {
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (! vm.$root.auth.can_create_more_servers) {
+                vm.$router.push('/account/subscription')
+            }
+        })
+    },
     data() {
         return {
             errors: {},

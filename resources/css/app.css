@@ -46,3 +46,7 @@
     font-weight: 900;
  }
  
+
+ .underline-sha-green-500 {
+      background: linear-gradient(180deg,transparent 80%,rgb(32,184,133, 0.7) 0);
+ }

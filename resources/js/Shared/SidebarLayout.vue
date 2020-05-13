@@ -12,7 +12,7 @@
                         :class="{
                             'bg-gray-200 text-gray-900 hover:text-gray-900':
                                 active === item.to,
-                            'hover:bg-gray-50 text-gray-600': active !== item.to
+                            'hover:bg-gray-50 text-gray-700': active !== item.to
                         }"
                     >
                         <svg
@@ -27,9 +27,9 @@
                             "
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             fill="none"
@@ -72,9 +72,9 @@
                             v-if="item.value === 'sites'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             viewBox="0 0 24 24"
@@ -90,6 +90,16 @@
                             />
                         </svg>
 
+                        <svg v-if="item.value === 'subscription'" fill='none' 
+                        class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
+                            :class="{
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
+                                    active !== item.to,
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
+                                    active === item.to
+                            }"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
                         <svg
                             fill="none"
                             stroke="currentColor"
@@ -100,9 +110,9 @@
                             v-if="item.value === 'sshkeys'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                         >
@@ -115,9 +125,9 @@
                             v-if="item.value === 'files'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             stroke="currentColor"
@@ -139,9 +149,9 @@
                             v-if="item.value === 'settings'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                         >
@@ -163,9 +173,9 @@
                             v-if="item.value === 'source-control'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-7 00 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             fill="none"
@@ -184,9 +194,9 @@
                             v-if="item.value === 'account'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             viewBox="0 0 24 24"
@@ -213,9 +223,9 @@
                             v-if="item.value === 'server-providers'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             viewBox="0 0 24 24"
@@ -235,9 +245,9 @@
                             v-if="item.value === 'databases'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             stroke="currentColor"
@@ -256,9 +266,9 @@
                             v-if="item.value === 'ssl'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             fill="none"
@@ -277,9 +287,9 @@
                             v-if="item.value === 'scheduler'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             stroke="currentColor"
@@ -298,9 +308,9 @@
                             v-if="item.value === 'meta'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             fill="none"
@@ -319,9 +329,9 @@
                             v-if="item.value === 'network'"
                             class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150"
                             :class="{
-                                'text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500':
+                                'text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600':
                                     active !== item.to,
-                                'text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700':
+                                'text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800':
                                     active === item.to
                             }"
                             fill="none"

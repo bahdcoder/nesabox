@@ -40,7 +40,11 @@
                     Ssl certificate for {{ site.name }} is installed and active.
                 </info>
 
-                <red-button class="mt-3" @click="showUninstallConfirmation = true" label="Uninstall certificate" />
+                <red-button
+                    class="mt-3"
+                    @click="showUninstallConfirmation = true"
+                    label="Uninstall certificate"
+                />
             </card>
             <card title="Custom ssl certificate" v-if="installCustom">
                 <form @submit.prevent="installCustomCertificate">
@@ -157,7 +161,8 @@ export default {
 
             axios
                 .post(
-                    `/api/servers/${this.serverId}/sites/${this.siteId}/uninstall-ssl`)
+                    `/api/servers/${this.serverId}/sites/${this.siteId}/uninstall-ssl`
+                )
                 .then(({ data: site }) => {
                     this.$root.sites = {
                         ...this.$root.sites,

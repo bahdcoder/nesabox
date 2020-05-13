@@ -232,6 +232,12 @@ const router = new VueRouter({
                 import(`@/Pages/Account/Index`).then(module => module.default)
         },
         {
+            path: '/account/subscription',
+            name: 'account.subscription',
+            component: () =>
+                import(`@/Pages/Account/Subscription`).then(module => module.default)
+        },
+        {
             path: '/account/server-providers',
             name: 'account.server-providers',
             component: () =>
@@ -338,15 +344,13 @@ const app = new Vue({
                 return updatedServer
             })
 
-            const team_servers = this.allServers.team_servers.map(
-                server => {
-                    if (server.id !== serverId) {
-                        return server
-                    }
-
-                    return updatedServer
+            const team_servers = this.allServers.team_servers.map(server => {
+                if (server.id !== serverId) {
+                    return server
                 }
-            )
+
+                return updatedServer
+            })
 
             this.allServers = {
                 servers,

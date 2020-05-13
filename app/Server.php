@@ -290,7 +290,7 @@ class Server extends Model
      */
     public function alert($message, $output = null, $type = 'error')
     {
-        $this->notify((new Alert($this, $message, $output, $type)));
+        $this->notify(new Alert($this, $message, $output, $type));
     }
 
     public function teams()

@@ -1,7 +1,9 @@
 <template>
     <server-layout>
         <template slot="content">
-            <notifications :notifications="server ? server.unread_notifications : []" />
+            <notifications
+                :notifications="server ? server.unread_notifications : []"
+            />
             <card
                 v-if="server && server.type !== 'database'"
                 title="New Site"

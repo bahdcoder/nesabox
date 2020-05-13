@@ -10,7 +10,7 @@
             />
 
             <h2
-                class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900"
+                class="mt-6 text-center text-3xl leading-9 font-bold text-gray-800"
             >
                 Forgot your password ?
             </h2>
@@ -40,12 +40,12 @@
 
                     <div class="mt-6">
                         <span class="block w-full rounded-md shadow-sm">
-                            <button
+                            <v-button
+                                :loading="loading"
                                 type="submit"
-                                class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sha-green-500 hover:bg-sha-green-400 focus:outline-none focus:border-sha-green-600 active:bg-sha-green-600 transition duration-150 ease-in-out"
-                            >
-                                Send Password reset link
-                            </button>
+                                label="Send Password reset link"
+                                :full="true"
+                            />
                         </span>
                     </div>
                 </form>
@@ -58,12 +58,12 @@
 export default {
     data() {
         return {
-            sending: false,
             form: {
                 email: '',
                 password: '',
                 remember: null
             },
+            loading: false,
             success: null,
             errors: {
                 email: []
@@ -72,6 +72,8 @@ export default {
     },
     methods: {
         submit() {
+            this.loading = true
+
             axios
                 .post('/password/email', this.form)
                 .then(() => {
@@ -82,8 +84,12 @@ export default {
                     }
 
                     this.errors = {}
+
+                    this.loading = false
                 })
                 .catch(({ response }) => {
+                    this.loading = false
+
                     if (response.status === 422) {
                         this.errors = response.data.errors
                     } else {

@@ -5,10 +5,7 @@
             title="Server alerts"
             :rowsCount="notifications.length"
         >
-            <v-table
-                :rows="notifications"
-                :headers="headers"
-            >
+            <v-table :rows="notifications" :headers="headers">
                 <template slot="row" slot-scope="{ row, header }">
                     <span
                         class="text-gray-800 text-sm"
@@ -44,9 +41,7 @@
                                 ></path>
                             </svg>
                         </button>
-                        <delete-button
-                            @click="deleteNotification(row)"
-                        />
+                        <delete-button @click="deleteNotification(row)" />
                     </div>
                 </template>
             </v-table>
@@ -60,7 +55,14 @@
                     </h2>
 
                     <info class="my-5">
-                        An error occurred when we tried to execute an action on your server. Sometimes this means we couldn't SSH into your server, or there was a runtime error while executing a command. If there is an error output, please review it below. If you can't resolve this error from your nesabox dashboard, please kindly SSH into your server and manually resolve it, or contact us if you need any assistance.
+                        An error occurred when we tried to execute an action on
+                        your server. Sometimes this means we couldn't SSH into
+                        your server, or there was a runtime error while
+                        executing a command. If there is an error output, please
+                        review it below. If you can't resolve this error from
+                        your nesabox dashboard, please kindly SSH into your
+                        server and manually resolve it, or contact us if you
+                        need any assistance.
                     </info>
 
                     <v-codemirror :value="selectedAlert.output" />
@@ -79,51 +81,55 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            notifications: {
-                type: Array,
-                required: false,
-                default: () => []
-            }
+export default {
+    props: {
+        notifications: {
+            type: Array,
+            required: false,
+            default: () => []
+        }
+    },
+    data() {
+        return {
+            headers: [
+                {
+                    label: 'Issued',
+                    value: 'created_at'
+                },
+                {
+                    label: 'Message',
+                    value: 'message'
+                },
+                {
+                    label: '',
+                    value: 'actions'
+                }
+            ],
+            showLogsModal: false,
+            selectedAlert: null
+        }
+    },
+    methods: {
+        showLogs(alert) {
+            this.selectedAlert = alert
+
+            this.showLogsModal = true
         },
-        data() {
-            return {
-                headers: [{
-                        label: 'Issued',
-                        value: 'created_at'
-                    },
-                    {
-                        label: 'Message',
-                        value: 'message'
-                    },
-                    {
-                        label: '',
-                        value: 'actions'
-                }],
-                showLogsModal: false,
-                selectedAlert: null
-            }
+        hideLogs() {
+            this.selectedAlert = null
+
+            this.showLogsModal = false
         },
-        methods: {
-            showLogs(alert) {
-                this.selectedAlert = alert
+        deleteNotification(notification) {
+            this.$root.updateServer(notification.server_id, {
+                ...this.$root.servers[notification.server_id],
+                unread_notifications: this.$root.servers[
+                    notification.server_id
+                ].unread_notifications.filter(_ => _.id !== notification.id)
+            })
 
-                this.showLogsModal = true
-            },
-            hideLogs() {
-                this.selectedAlert = null
-
-                this.showLogsModal = false
-            },
-            deleteNotification(notification) {
-                this.$root.updateServer(notification.server_id, {
-                    ...this.$root.servers[notification.server_id],
-                    unread_notifications: this.$root.servers[notification.server_id].unread_notifications.filter(_ => _.id !== notification.id)
-                })
-
-                axios.delete(`/api/notifications/${notification.id}`)
-            }
+            axios.delete(`/api/notifications/${notification.id}`)
         }
     }
+}
 </script>

@@ -1,7 +1,9 @@
 <template>
     <site-layout @mounted="siteMounted">
         <template slot="content">
-            <notifications :notifications="server ? server.unread_notifications : []" />
+            <notifications
+                :notifications="server ? server.unread_notifications : []"
+            />
             <flash />
             <card
                 title="Installing repository"

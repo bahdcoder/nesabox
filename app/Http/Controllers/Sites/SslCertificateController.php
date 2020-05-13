@@ -97,9 +97,12 @@ class SslCertificateController extends Controller
                 $process->getErrorOutput()
             );
 
-            return response()->json([
-                'message' => 'Failed to uninstall ssl certificate.'
-            ], 400);
+            return response()->json(
+                [
+                    'message' => 'Failed to uninstall ssl certificate.'
+                ],
+                400
+            );
         }
 
         return new SiteResource($site->fresh());

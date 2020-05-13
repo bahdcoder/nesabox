@@ -128,7 +128,10 @@ Route::middleware(['auth'])
             'databases'
         ]);
 
-        Route::get('notifications/{server}', [NotificationsController::class, 'index']);
+        Route::get('notifications/{server}', [
+            NotificationsController::class,
+            'index'
+        ]);
 
         Route::delete('notifications/{notification}', [
             NotificationsController::class,

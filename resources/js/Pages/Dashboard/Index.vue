@@ -15,8 +15,8 @@
                     <span class="inline-flex rounded-md shadow-sm">
                         <v-button
                             component="router-link"
-                            to="/servers/create"
-                            label="Add new server"
+                            :label="addServerButtonLabel"
+                            :to="addServerButtonLabel === 'Upgrade to add more servers' ? '/account/subscription' : '/servers/create'"
                         />
                     </span>
                 </div>
@@ -120,6 +120,19 @@ export default {
                 : this.$root.allServers.servers.concat(
                       this.$root.allServers.team_servers
                   )
+        },
+        subscription() {
+            return this.user.subscription
+        },
+        user() {
+            return this.$root.auth
+        },
+        addServerButtonLabel() {
+            if (this.user.can_create_more_servers) {
+                return 'Add new server'
+            }
+
+            return 'Upgrade to add more servers'
         }
     },
     mounted() {

@@ -15,7 +15,10 @@ class AddUuidColumnToNotificationsTable extends Migration
     {
         Schema::table('notifications', function (Blueprint $table) {
             $table->uuid('notifiable_id');
-            $table->unsignedBigInteger('useless_notifiable_id')->nullable()->change();
+            $table
+                ->unsignedBigInteger('useless_notifiable_id')
+                ->nullable()
+                ->change();
         });
     }
 
