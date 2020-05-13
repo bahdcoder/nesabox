@@ -4,32 +4,29 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Deploying nodejs - Practical course and book training on how to deploy, manage, ship, and scale modern node.js apps</title>
-        <link rel="stylesheet" href="css/app.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+        <title>Nesabox - a server management tool for provisioning, deploying and scaling node.js applications on DigitalOcean, Linode, Vultr, Amazon and more</title>
+        <link rel="stylesheet" href="css/app.css?v=2" />
+
         <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
-
-        <link rel="shortcut icon" type="image/png" href="/images/favicon-16x16.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta content="https://deployingnodejs.com/images/twitter.png" property="og:image" />
-        <meta content="Deploying node.js" property="og:title" />
-        <meta content="website" property="og:type" />
-        <meta content="https://deployingnodejs.com" property="og:url" />
-        <meta content="Deploying node.js" property="og:site_name" />
-        <meta content="A complete, practical video course and book training to learning how to effectively deploy, manage, ship, and scale modern node.js applications." name="description" />
-        <meta content="A complete, practical video course and book training to learning how to effectively deploy, manage, ship, and scale modern node.js applications." property="og:description" />
         <meta name="twitter:card" content="photo" />
         <meta name="twitter:site" content="@bahdcoder" />
         <meta name="twitter:creator" content="@bahdcoder" />
-        <meta name="twitter:title" content="Deploying node.js" />
-        <meta name="twitter:description" content="A complete, practical video course and book training to learning how to effectively deploy, manage, ship, and scale modern node.js applications." />
-        <meta name="twitter:image" content="https://deployingnodejs.com/images/twitter.png?v=2" />
-        <meta name="twitter:url" content="https://deployingnodejs.com" />
+        <meta name="twitter:title" content="Nesabox" />
+        <meta name="twitter:description" content="Nesabox is a server management tool for provisioning, deploying and scaling node.js applications on DigitalOcean, Linode, Vultr, Amazon and more." />
+
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Nesabox is a server management tool for provisioning, deploying and scaling node.js applications on DigitalOcean, Linode, Vultr, Amazon and more.">
+
+        <meta property="og:site_name" content="Nesabox"/>
+        <meta property="og:title" content="Nesabox"/>
+        <meta property="og:description" content="Nesabox is a server management tool for provisioning, deploying and scaling node.js applications on DigitalOcean, Linode, Vultr, Amazon and more."/>
+        <meta property="og:url" content="https://nesabox.com/"/>
+        <meta property="og:type" content="website"/>
+        <meta name="twitter:url" content="https://nesabox.com" />
+
+        <meta name="twitter:image:alt" content="Nesabox">
+        <meta name="twitter:card" content="summary_large_image">
 
         <style>
             .hero-bg {
