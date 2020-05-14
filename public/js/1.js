@@ -135,7 +135,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     serverMounted: function serverMounted() {
-      this.initializeForm(this.wrapper === 'account-info' ? '/api/me/sshkeys' : "/api/servers/".concat(this.server.id, "/sshkeys"));
+      this.initializeForm("/api/servers/".concat(this.server.id, "/sshkeys"));
     },
     submit: function submit() {
       var _this = this;
@@ -146,7 +146,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           key: ''
         };
 
-        if (_this.wrapper === 'account-info') {
+        if (_this.wrapper === 'account-layout') {
           _this.$root.auth = user;
         } else {
           _this.$root.servers = _objectSpread({}, _this.$root.servers, _defineProperty({}, _this.server.id, user));
@@ -163,10 +163,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       this.deleting = true;
-      axios["delete"](this.wrapper === 'account-info' ? "/api/me/sshkeys/".concat(this.selectedKey.id) : "/api/servers/".concat(this.server.id, "/sshkeys/").concat(this.selectedKey.id)).then(function (_ref2) {
+      axios["delete"](this.wrapper === 'account-layout' ? "/api/me/sshkeys/".concat(this.selectedKey.id) : "/api/servers/".concat(this.server.id, "/sshkeys/").concat(this.selectedKey.id)).then(function (_ref2) {
         var user = _ref2.data;
 
-        if (_this2.wrapper === 'account-info') {
+        if (_this2.wrapper === 'account-layout') {
           _this2.$root.auth = user;
         } else {
           _this2.$root.servers = _objectSpread({}, _this2.$root.servers, _defineProperty({}, _this2.server.id, user));
@@ -181,6 +181,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.selectedKey = null;
         _this2.deleting = false;
       });
+    }
+  },
+  mounted: function mounted() {
+    if (this.wrapper === 'account-layout') {
+      this.initializeForm('/api/me/sshkeys');
     }
   }
 });
@@ -306,7 +311,7 @@ var render = function() {
                 table: true,
                 rowsCount: _vm.keys.length,
                 emptyTableMessage:
-                  _vm.wrapper === "account-info"
+                  _vm.wrapper === "account-layout"
                     ? "No SSH keys yet."
                     : "No SSH keys added to this server yet."
               }

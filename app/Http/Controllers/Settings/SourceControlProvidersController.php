@@ -65,8 +65,10 @@ class SourceControlProvidersController extends Controller
 
         $user = auth()->user();
 
-        if (! $user) {
-            return (new SocialiteController())->handleProviderCallback('github');
+        if (!$user) {
+            return (new SocialiteController())->handleProviderCallback(
+                'github'
+            );
         }
 
         $userDetails = Socialite::driver($provider)

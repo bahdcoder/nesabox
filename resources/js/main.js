@@ -232,6 +232,12 @@ const router = new VueRouter({
                 import(`@/Pages/Account/Index`).then(module => module.default)
         },
         {
+            path: '/account/teams',
+            name: 'account.teams',
+            component: () =>
+                import(`@/Pages/Account/Teams`).then(module => module.default)
+        },
+        {
             path: '/account/subscription',
             name: 'account.subscription',
             component: () =>

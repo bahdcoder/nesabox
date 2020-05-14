@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teams\CreateTeamRequest;
 use App\Http\Resources\TeamResource;
+use App\Http\Resources\UserResource;
 use App\Team;
 use App\TeamInvite;
 
@@ -44,12 +45,12 @@ class TeamController extends Controller
      */
     public function store(CreateTeamRequest $request)
     {
-        return response()->json(
-            auth()
-                ->user()
-                ->teams()
-                ->create($request->only(['name']))
-        );
+        auth()
+            ->user()
+            ->teams()
+            ->create($request->only(['name']));
+
+        return new UserResource(auth()->user());
     }
 
     /**
@@ -62,7 +63,7 @@ class TeamController extends Controller
 
         $team->update($request->only(['name']));
 
-        return response()->json($team->fresh());
+        return new UserResource(auth()->user());
     }
 
     /**
@@ -79,6 +80,6 @@ class TeamController extends Controller
 
         $team->delete();
 
-        return response()->json([]);
+        return new UserResource(auth()->user());
     }
 }

@@ -86,6 +86,13 @@
                                             </div>
                                             <div class="py-1">
                                                 <router-link
+                                                    to="/account/teams"
+                                                    class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                                                    >Teams</router-link
+                                                >
+                                            </div>
+                                            <div class="py-1">
+                                                <router-link
                                                     to="/account/subscription"
                                                     class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
                                                     >Subscription</router-link
@@ -177,6 +184,11 @@
                             to="/account"
                             class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
                             >Your account</router-link
+                        >
+                        <router-link
+                            to="/account/teams"
+                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
+                            >Teams</router-link
                         >
                         <router-link
                             to="/account/subscription"

@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"db39a4a515ef5233e805","1":"ab5e65d502d782e427de","2":"d6328164358c39329193","3":"acebddbad3a48c9350df","4":"0493abc2baf0c446fed0","5":"7b542fd3241daca83aab","6":"e582abc1949473831a10","7":"da31469e990ba237c17f","8":"7e584eecfaca13c16a06","9":"255aa7ede348c33f5eab","10":"15b20050d83ee70d5ea5","11":"a0d06398a47294c87793","12":"abced4122381b4a236e0","13":"1706ac5cae08242647cd","14":"707533f3dc36299e7d11","15":"51ed78f634a0e0f52082","16":"c561df4576bc34e19b6e","17":"d0cbfd9acf2159ff39a7","18":"249b659b4095a88301f4","19":"6fe46167968619509f48","20":"74efbc97003291ec861e","21":"4df6fb9af8c7091f0c00","22":"3e3ecba0b83b61bf378c","23":"ed98ec4d3c4819dbb586"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"db39a4a515ef5233e805","1":"ba9d20d9d84d464a130a","2":"d6328164358c39329193","3":"acebddbad3a48c9350df","4":"0493abc2baf0c446fed0","5":"7b542fd3241daca83aab","6":"e582abc1949473831a10","7":"da31469e990ba237c17f","8":"7e584eecfaca13c16a06","9":"255aa7ede348c33f5eab","10":"15b20050d83ee70d5ea5","11":"a0d06398a47294c87793","12":"abced4122381b4a236e0","13":"1706ac5cae08242647cd","14":"707533f3dc36299e7d11","15":"51ed78f634a0e0f52082","16":"c561df4576bc34e19b6e","17":"d0cbfd9acf2159ff39a7","18":"249b659b4095a88301f4","19":"6fe46167968619509f48","20":"74efbc97003291ec861e","21":"4df6fb9af8c7091f0c00","22":"3e3ecba0b83b61bf378c","23":"ed98ec4d3c4819dbb586","24":"60929c0923cb95b81de8"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2051,6 +2051,10 @@ __webpack_require__.r(__webpack_exports__);
         value: 'subscription',
         to: route('subscription')
       }, {
+        label: 'Teams',
+        value: 'teams',
+        to: route('teams')
+      }, {
         label: 'SSH keys',
         value: 'sshkeys',
         to: route('ssh-keys')
@@ -2609,6 +2613,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3963,6 +3979,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     nav: {
@@ -4233,6 +4270,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -26713,6 +26751,23 @@ var render = function() {
                                   {
                                     staticClass:
                                       "block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900",
+                                    attrs: { to: "/account/teams" }
+                                  },
+                                  [_vm._v("Teams")]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "py-1" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticClass:
+                                      "block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900",
                                     attrs: { to: "/account/subscription" }
                                   },
                                   [_vm._v("Subscription")]
@@ -26887,6 +26942,16 @@ var render = function() {
                     attrs: { to: "/account" }
                   },
                   [_vm._v("Your account")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass:
+                      "block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700",
+                    attrs: { to: "/account/teams" }
+                  },
+                  [_vm._v("Teams")]
                 ),
                 _vm._v(" "),
                 _c(
@@ -27966,6 +28031,38 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
+                      item.value === "teams"
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass:
+                                "flex-shrink-0 -ml-1 mr-3 h-6 w-6 transition ease-in-out duration-150",
+                              class: {
+                                "text-gray-500 group-hover:text-gray-600 group-focus:text-gray-600":
+                                  _vm.active !== item.to,
+                                "text-gray-700 group-hover:text-gray-800 group-focus:text-gray-800":
+                                  _vm.active === item.to
+                              },
+                              attrs: {
+                                fill: "none",
+                                "stroke-linecap": "round",
+                                "stroke-linejoin": "round",
+                                "stroke-width": "2",
+                                stroke: "currentColor",
+                                viewBox: "0 0 24 24"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       item.value === "subscription"
                         ? _c(
                             "svg",
@@ -28692,7 +28789,8 @@ var render = function() {
           "bg-blue-100 text-blue-800": [
             "new",
             "initializing",
-            "installing"
+            "installing",
+            "pending"
           ].includes(_vm.status)
         }
       },
@@ -46332,6 +46430,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     name: 'account.profile',
     component: function component() {
       return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! @/Pages/Account/Index */ "./resources/js/Pages/Account/Index.vue")).then(function (module) {
+        return module["default"];
+      });
+    }
+  }, {
+    path: '/account/teams',
+    name: 'account.teams',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! @/Pages/Account/Teams */ "./resources/js/Pages/Account/Teams.vue")).then(function (module) {
         return module["default"];
       });
     }

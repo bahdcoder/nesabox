@@ -7,7 +7,8 @@
                 'bg-blue-100 text-blue-800': [
                     'new',
                     'initializing',
-                    'installing'
+                    'installing',
+                    'pending'
                 ].includes(status)
             }"
         >
