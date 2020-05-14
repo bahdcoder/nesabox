@@ -1,1 +1,548 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{nlrc:function(e,t,r){"use strict";r.r(t);function i(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var i=Object.getOwnPropertySymbols(e);t&&(i=i.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,i)}return r}function o(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}var n={data:function(){return{table:{headers:[{label:"Profile name",value:"profileName"},{label:"Provider",value:"provider"},{label:"",value:"actions"}]},serverOptions:[{label:"Digital Ocean",value:"digital-ocean"},{label:"Linode",value:"linode"},{label:"Vultr",value:"vultr"}],form:{provider:"",profileName:"",accessToken:"",apiKey:"",apiToken:""},deletingProvider:null,deleting:!1}},computed:{credentials:function(){var e=this,t=[];return Object.keys(this.$root.auth.providers).forEach((function(r){t=t.concat(e.$root.auth.providers[r].map((function(e){return function(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?i(Object(r),!0).forEach((function(t){o(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):i(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}({},e,{provider:{"digital-ocean":"Digital Ocean",linode:"Linode",vultr:"Vultr"}[r]})})))})),t},apiKeyLabel:function(){return{"digital-ocean":{label:"API Token",name:"apiToken",link:"https://cloud.digitalocean.com/account/api/tokens"},linode:{label:"Access Token",name:"accessToken",link:"https://cloud.linode.com/profile/tokens"},vultr:{label:"API Key",name:"apiKey",link:"https://my.vultr.com/settings/#settingsapi"}}[this.form.provider]||{}}},mounted:function(){this.initializeForm("/api/settings/server-providers")},methods:{submit:function(){var e=this;this.submitForm().then((function(t){e.form={profileName:"",accessToken:"",apiKey:"",apiToken:""},e.$root.auth=t,e.$root.flashMessage("Provider added successfully. You can now create servers using your new ".concat(e.form.provider," credentials."))}))},setDeletingProvider:function(e){this.deletingProvider=e},deleteProfile:function(){var e=this;this.deleting=!0,axios.delete("/api/settings/server-providers/".concat(this.deletingProvider.id)).then((function(t){var r=t.data;e.$root.flashMessage("Profile has been deleted."),e.$root.auth=r,e.deletingProvider=null,e.deleting=!1})).catch((function(){e.$root.flashMessage("Failed deleting profile."),e.deleting=!1,e.deletingProvider=null}))},closeConfirmDelete:function(){this.deletingProvider=null,this.deleting=!1}}},l=r("KHd+"),a=Object(l.a)(n,(function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("account-layout",[r("template",{slot:"content"},[r("confirm-modal",{attrs:{confirming:e.deleting,open:!!e.deletingProvider,confirmHeading:"Delete provider profile",confirmText:"Are you sure you want to delete your "+(e.deletingProvider&&e.deletingProvider.profileName)+" profile for "+(e.deletingProvider&&e.deletingProvider.provider)+" ?"},on:{confirm:e.deleteProfile,close:e.closeConfirmDelete}}),e._v(" "),r("card",{staticClass:"mb-5",attrs:{title:"New Server Provider"}},[r("flash",{staticClass:"my-2"}),e._v(" "),r("form",{on:{submit:function(t){return t.preventDefault(),e.submit(t)}}},[r("v-radio",{attrs:{id:"provider",label:"Provider",options:e.serverOptions,errors:e.formErrors.provider},model:{value:e.form.provider,callback:function(t){e.$set(e.form,"provider",t)},expression:"form.provider"}}),e._v(" "),r("div",{staticClass:"w-full mt-5"},[e.form.provider?r("text-input",{attrs:{name:"profileName",label:"Profile name",errors:e.formErrors.profileName,help:"This should be a memorable name to identify the provider api key. It can also be the name of the account."},model:{value:e.form.profileName,callback:function(t){e.$set(e.form,"profileName",t)},expression:"form.profileName"}}):e._e()],1),e._v(" "),r("div",{staticClass:"w-full mt-5"},[e.form.provider?r("text-input",{attrs:{name:e.apiKeyLabel.name,label:e.apiKeyLabel.label},model:{value:e.form[e.apiKeyLabel.name],callback:function(t){e.$set(e.form,e.apiKeyLabel.name,t)},expression:"form[apiKeyLabel.name]"}},[r("template",{slot:"help"},[r("small",{staticClass:"text-gray-600"},[e._v("\n                                Generate an "+e._s(e.apiKeyLabel.label)+" for\n                                "+e._s(e.form.provider)+" here\n                                "),r("a",{staticClass:"ml-1 text-sha-green-500",attrs:{href:e.apiKeyLabel.link,target:"_blank"}},[e._v(e._s(e.apiKeyLabel.link))])])])],2):e._e()],1),e._v(" "),r("div",{staticClass:"flex justify-end w-full w-full mt-5"},[r("v-button",{staticClass:"w-full md:w-1/5",attrs:{type:"submit",loading:e.submitting,disabled:e.submitting,label:"Add provider"}})],1)],1)],1),e._v(" "),r("card",{attrs:{title:"Active Providers",table:!0,rowsCount:e.credentials.length,emptyTableMessage:"No providers yet."}},[r("v-table",{attrs:{headers:e.table.headers,rows:e.credentials},scopedSlots:e._u([{key:"row",fn:function(t){var i=t.row,o=t.header;return[["profileName","provider"].includes(o.value)?r("span",{staticClass:"text-gray-800 text-sm"},[e._v("\n                        "+e._s(i[o.value])+"\n                    ")]):e._e(),e._v(" "),"actions"===o.value?r("delete-button",{on:{click:function(t){return e.setDeletingProvider(i)}}}):e._e()]}}])})],1)],1)],2)}),[],!1,null,null,null);t.default=a.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[5],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Account/Subscription.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Account/Subscription.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      updating: false,
+      cancellingSubscription: false,
+      cancelling: false,
+      plans: [{
+        name: 'Free',
+        key: 'free',
+        price: 0,
+        features: [{
+          name: '1 Server',
+          bold: true
+        }, {
+          name: 'Unlimited Sites'
+        }, {
+          name: 'Unlimited Deployments'
+        }, {
+          name: 'Push To Deploy'
+        }]
+      }, {
+        name: 'Pro',
+        key: 'pro',
+        price: 5,
+        id: parseInt("579858"),
+        features: [{
+          name: 'Unlimited Servers',
+          bold: true
+        }, {
+          name: 'Unlimited Sites'
+        }, {
+          name: 'Unlimited Deployments'
+        }, {
+          name: 'Push To Deploy'
+        }]
+      }, {
+        name: 'Business',
+        key: 'business',
+        price: 15,
+        id: parseInt("579859"),
+        features: [{
+          name: 'Unlimited Servers'
+        }, {
+          name: 'Unlimited Sites'
+        }, {
+          name: 'Unlimited Teams'
+        }, {
+          name: 'Unlimited Collaboratos',
+          bold: true
+        }]
+      }]
+    };
+  },
+  computed: {
+    subscription: function subscription() {
+      return this.user.subscription;
+    },
+    user: function user() {
+      return this.$root.auth;
+    }
+  },
+  mounted: function mounted() {
+    window.Paddle.Setup({
+      vendor: parseInt("40489")
+    });
+  },
+  methods: {
+    getPlanLabel: function getPlanLabel(plan) {
+      if (this.subscription.plan === 'free') {
+        return "Upgrade to ".concat(plan.name, " plan");
+      }
+
+      if (this.subscription.plan === 'business') {
+        return "Downgrade to ".concat(plan.name, " plan");
+      }
+
+      if (this.subscription.plan === 'pro') {
+        if (plan.key === 'free') {
+          return 'Downgrade to free plan';
+        }
+
+        return 'Upgrade to Business plan';
+      }
+    },
+    openPaddle: function openPaddle(selectedPlan) {
+      var _this = this;
+
+      if (selectedPlan.key === 'free') {
+        this.toggleCancellingSubscription();
+        return;
+      }
+
+      if (this.subscription.plan !== 'free') {
+        this.updatePlan(selectedPlan);
+        return;
+      }
+
+      window.Paddle.Checkout.open({
+        product: selectedPlan.id,
+        email: this.user.email,
+        successCallback: function successCallback(data) {
+          _this.updating = true;
+          setTimeout(function () {
+            window.location.href = '/account/subscription';
+          }, 5000);
+        }
+      });
+    },
+    cancelSubscription: function cancelSubscription() {
+      var _this2 = this;
+
+      this.cancelling = true;
+      axios["delete"]('/api/subscription/cancel').then(function (_ref) {
+        var data = _ref.data;
+        _this2.$root.auth = data;
+
+        _this2.$root.flashMessage("Your plan has been cancelled.");
+      })["catch"](function (_ref2) {
+        var response = _ref2.response;
+
+        if (response.data && response.data.message) {
+          _this2.$root.flashMessage(response.data.message, 'error');
+        } else {
+          _this2.$root.flashMessage('Failed to cancel subscription.', 'error');
+        }
+      })["finally"](function () {
+        _this2.cancelling = false;
+
+        _this2.toggleCancellingSubscription();
+      });
+    },
+    toggleCancellingSubscription: function toggleCancellingSubscription() {
+      this.cancellingSubscription = !this.cancellingSubscription;
+    },
+    updatePlan: function updatePlan(selectedPlan) {
+      var _this3 = this;
+
+      this.updating = true;
+      axios.patch('/api/subscription/update', {
+        plan: selectedPlan.key
+      }).then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.$root.auth = data;
+
+        _this3.$root.flashMessage("Subscription has been updated to ".concat(selectedPlan.key));
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+
+        if (response.data && response.data.message) {
+          _this3.$root.flashMessage(response.data.message, 'error');
+        } else {
+          _this3.$root.flashMessage('Failed to update subscription plan.', 'error');
+        }
+      })["finally"](function () {
+        _this3.updating = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Account/Subscription.vue?vue&type=template&id=044b98f0&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Account/Subscription.vue?vue&type=template&id=044b98f0& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "account-layout",
+    [
+      _c(
+        "template",
+        { slot: "content" },
+        [
+          _c("confirm-modal", {
+            attrs: {
+              confirming: _vm.cancelling,
+              open: _vm.cancellingSubscription,
+              confirmHeading: "Cancel subscription",
+              confirmText:
+                "Are you sure you want cancel your subscription ? You would loose all features in the " +
+                _vm.subscription.plan +
+                " plan"
+            },
+            on: {
+              confirm: _vm.cancelSubscription,
+              close: _vm.toggleCancellingSubscription
+            }
+          }),
+          _vm._v(" "),
+          _c("flash"),
+          _vm._v(" "),
+          _c(
+            "card",
+            {
+              staticClass: "mb-6",
+              attrs: { title: "Update your nesabox plan" }
+            },
+            [
+              !_vm.updating
+                ? _c(
+                    "div",
+                    { staticClass: "w-full flex flex-wrap" },
+                    _vm._l(_vm.plans, function(plan) {
+                      return _c(
+                        "div",
+                        {
+                          key: plan.key,
+                          staticClass:
+                            "w-full sm:w-1/2 lg:w-1/3 px-2 mt-4 md:mt-0"
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "bg-white shadow rounded overflow-hidden"
+                            },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "bg-sha-green-500 text-white px-3 py-3 text-xl"
+                                },
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "flex justify-between items-center font-medium"
+                                    },
+                                    [
+                                      _c("div", [_vm._v(_vm._s(plan.name))]),
+                                      _vm._v(" "),
+                                      _c("div", [
+                                        _vm._v(
+                                          "$" + _vm._s(plan.price) + " / month"
+                                        )
+                                      ])
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "bg-white px-4 py-4" },
+                                _vm._l(plan.features, function(feature) {
+                                  return _c(
+                                    "div",
+                                    { key: feature.name, staticClass: "mt-4" },
+                                    [
+                                      _c(
+                                        "div",
+                                        { staticClass: "flex items-center" },
+                                        [
+                                          _c(
+                                            "svg",
+                                            {
+                                              staticClass:
+                                                "w-6 h-6 text-sha-green-500",
+                                              attrs: {
+                                                fill: "none",
+                                                stroke: "currentColor",
+                                                "stroke-linecap": "round",
+                                                "stroke-linejoin": "round",
+                                                "stroke-width": "2",
+                                                viewBox: "0 0 24 24"
+                                              }
+                                            },
+                                            [
+                                              _c("path", {
+                                                attrs: { d: "M5 13l4 4L19 7" }
+                                              })
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass: "ml-2",
+                                              class: {
+                                                "font-medium": feature.bold
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                        " +
+                                                  _vm._s(feature.name) +
+                                                  "\n                                    "
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                }),
+                                0
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm.subscription.plan === plan.key
+                            ? _c(
+                                "p",
+                                {
+                                  staticClass:
+                                    "mt-4 text-center font-medium text-lg"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        Your current plan\n                    "
+                                  )
+                                ]
+                              )
+                            : _c(
+                                _vm.getPlanLabel(plan).match(/Downgrade/)
+                                  ? "red-button"
+                                  : "v-button",
+                                {
+                                  tag: "component",
+                                  staticClass: "mt-4",
+                                  attrs: {
+                                    full: true,
+                                    label: _vm.getPlanLabel(plan)
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.openPaddle(plan)
+                                    }
+                                  }
+                                }
+                              )
+                        ],
+                        1
+                      )
+                    }),
+                    0
+                  )
+                : _c("v-button", {
+                    attrs: { label: "Updating subscription", loading: true }
+                  })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Account/Subscription.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/Pages/Account/Subscription.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Subscription_vue_vue_type_template_id_044b98f0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Subscription.vue?vue&type=template&id=044b98f0& */ "./resources/js/Pages/Account/Subscription.vue?vue&type=template&id=044b98f0&");
+/* harmony import */ var _Subscription_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Subscription.vue?vue&type=script&lang=js& */ "./resources/js/Pages/Account/Subscription.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Subscription_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Subscription_vue_vue_type_template_id_044b98f0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Subscription_vue_vue_type_template_id_044b98f0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Pages/Account/Subscription.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Account/Subscription.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/Pages/Account/Subscription.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscription_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Subscription.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Account/Subscription.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscription_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Account/Subscription.vue?vue&type=template&id=044b98f0&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/Pages/Account/Subscription.vue?vue&type=template&id=044b98f0& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscription_vue_vue_type_template_id_044b98f0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Subscription.vue?vue&type=template&id=044b98f0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Account/Subscription.vue?vue&type=template&id=044b98f0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscription_vue_vue_type_template_id_044b98f0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscription_vue_vue_type_template_id_044b98f0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);

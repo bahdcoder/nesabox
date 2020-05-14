@@ -56,6 +56,8 @@ class SocialiteController extends Controller
             'source_control' => array_merge($user->source_control, $data)
         ]);
 
-        return new UserResource($user->fresh());
+        auth()->login($user);
+
+        return redirect('/');
     }
 }
