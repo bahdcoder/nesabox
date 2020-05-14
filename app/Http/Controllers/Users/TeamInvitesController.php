@@ -7,6 +7,7 @@ use App\Team;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teams\CreateTeamInviteRequest;
 use App\Http\Resources\TeamResource;
+use App\Http\Resources\UserResource;
 use App\TeamInvite;
 use App\User;
 
@@ -27,24 +28,25 @@ class TeamInvitesController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        if (! $user) {
+            abort(422, 'This user does not have an account on nesabox.');
+        }
+
+        if ((int) $user->id === (int) auth()->user()->id) {
+            abort(400, 'You cannot invite yourself to a team.');
+        }
+
         $data = [
             'email' => $request->email,
-            'status' => 'pending'
+            'status' => 'pending',
+            'user_id' => $user->id
         ];
-
-        if ($user) {
-            $data['user_id'] = $user->id;
-
-            if ((int) $user->id === (int) auth()->user()->id) {
-                abort(400, 'You cannot invite yourself to a team.');
-            }
-        }
 
         $invite = $team->invites()->create($data);
 
         event(new UserInvitedToTeam($invite));
 
-        return new TeamResource($team->fresh());
+        return new UserResource(auth()->user()->fresh());
     }
 
     public function show(TeamInvite $teamInvite)
