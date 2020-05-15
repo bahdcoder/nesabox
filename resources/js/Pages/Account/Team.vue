@@ -11,7 +11,12 @@
             </card>
 
             <div v-else>
-                <card title="Add new team member" class="mb-5">
+                <card
+                    title="Invite new team member"
+                    class="mb-5"
+                    hasBackButton
+                    :backHandler="() => this.$router.push({name: 'account.teams'})"
+                >
                     <form @submit.prevent="submit">
                         <text-input
                             name="email"
@@ -46,26 +51,7 @@
                             <table-status v-if="header.value === 'status'" :status="row.status" />
 
                             <div v-if="header.value === 'actions'">
-                                <button
-                                    type="button"
-                                    class="border-2 border-blue-500 p-1 rounded hover:bg-blue-100 shadow mr-3"
-                                >
-                                    <svg
-                                        width="20"
-                                        height="20"
-                                        class="text-blue-500"
-                                        fill="none"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                                        />
-                                    </svg>
-                                </button>
+                                <delete-button />
                             </div>
                         </template>
                     </v-table>
@@ -108,6 +94,7 @@ export default {
             const team = this.$root.auth.teams.find(
                 team => team.id === this.$route.params.id
             )
+            console.log(team, '>>team')
             return team.invites
         }
     },

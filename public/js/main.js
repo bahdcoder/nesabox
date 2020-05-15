@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"cad7eb241d5ccd6edfb5","1":"242540b60f346dc364ab","2":"af67bac311560da804fc","3":"d7b502cb3a873ccf8e78","4":"a204122892e400e504a3","5":"17069746c738deca9764","6":"77c142bd81ba9cd19922","7":"8d9134b152c16d493dca","8":"295c60ee43d1fbf5f286","9":"93511ab94e6edad7632d","10":"e3d9c06f5bb25ec5f977","11":"7cb4da95fe1dc7e0bb53","12":"135e3e22d1666827cf77","13":"fc1c17d2fe22464af845","14":"e9b5478313d5234e6a87","15":"3deb8acc752c6aa315ed","16":"b9c1ea389bd6f9938294","17":"ab97b1f7e3aa38c9f8d8","18":"ef7b90622c111bfe3127","19":"2b16d424d1fc8dad5a52","20":"f1406c1217fdebb6c955","21":"b24fd21bd010206307a3","22":"b9b6d45ae08f8d89c80d","23":"64047925854dfc58b931","24":"3f6c4b777b2a790dac45","25":"e414583f00d82dc2a050"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"cad7eb241d5ccd6edfb5","1":"242540b60f346dc364ab","2":"af67bac311560da804fc","3":"d7b502cb3a873ccf8e78","4":"a204122892e400e504a3","5":"17069746c738deca9764","6":"77c142bd81ba9cd19922","7":"8d9134b152c16d493dca","8":"295c60ee43d1fbf5f286","9":"93511ab94e6edad7632d","10":"e3d9c06f5bb25ec5f977","11":"7cb4da95fe1dc7e0bb53","12":"135e3e22d1666827cf77","13":"fc1c17d2fe22464af845","14":"e9b5478313d5234e6a87","15":"3deb8acc752c6aa315ed","16":"b9c1ea389bd6f9938294","17":"ab97b1f7e3aa38c9f8d8","18":"ef7b90622c111bfe3127","19":"2b16d424d1fc8dad5a52","20":"f1406c1217fdebb6c955","21":"b24fd21bd010206307a3","22":"b9b6d45ae08f8d89c80d","23":"64047925854dfc58b931","24":"3f6c4b777b2a790dac45","25":"482a968ba7a3ef79005e"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2226,11 +2226,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     title: {
@@ -2250,6 +2245,15 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       required: false,
       "default": 'No items yet.'
+    },
+    hasBackButton: {
+      type: Boolean,
+      required: false,
+      "default": false
+    },
+    backHandler: {
+      type: Function,
+      required: false
     }
   }
 });
@@ -3998,8 +4002,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     nav: {
@@ -4017,6 +4019,11 @@ __webpack_require__.r(__webpack_exports__);
     active: {
       type: String,
       required: false
+    }
+  },
+  computed: {
+    routeName: function routeName() {
+      return this.$route.name;
     }
   }
 });
@@ -26041,7 +26048,7 @@ var render = function() {
         "div",
         {
           staticClass:
-            "bg-white px-4 py-5 border-b border-gray-200 sm:px-6 rounded-t-lg"
+            "bg-white px-4 py-5 border-b border-gray-200 sm:px-6 rounded-t-lg flex justify-between items-center"
         },
         [
           _vm._t("header", [
@@ -26051,13 +26058,16 @@ var render = function() {
                 staticClass:
                   "text-lg leading-6 font-medium text-gray-900 capitalize"
               },
-              [
-                _vm._v(
-                  "\n                " + _vm._s(_vm.title) + "\n            "
-                )
-              ]
+              [_vm._v(_vm._s(_vm.title))]
             )
-          ])
+          ]),
+          _vm._v(" "),
+          _vm.hasBackButton
+            ? _c("v-button", {
+                attrs: { label: "Go back" },
+                on: { click: _vm.backHandler }
+              })
+            : _vm._e()
         ],
         2
       ),
@@ -26071,7 +26081,7 @@ var render = function() {
               staticClass:
                 "w-full flex px-6 py-12 justify-center items-center bg-white shadow"
             },
-            [_vm._v("\n        " + _vm._s(_vm.emptyTableMessage) + "\n    ")]
+            [_vm._v(_vm._s(_vm.emptyTableMessage))]
           )
         : _vm._e(),
       _vm._v(" "),
@@ -27914,7 +27924,9 @@ var render = function() {
                         "mt-1 group flex items-center px-3 py-2 text-sm leading-5 font-medium rounded-md focus:outline-none transition ease-in-out duration-150",
                       class: {
                         "bg-gray-200 text-gray-900 hover:text-gray-900":
-                          _vm.active === item.to,
+                          _vm.active === item.to ||
+                          (item.to.includes("/account/teams") &&
+                            _vm.routeName === "account.team.team-id"),
                         "hover:bg-gray-50 text-gray-700": _vm.active !== item.to
                       },
                       attrs: { to: item.to }
@@ -28469,11 +28481,7 @@ var render = function() {
                         : _vm._e(),
                       _vm._v(" "),
                       _c("span", { staticClass: "capitalize truncate" }, [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(item.label) +
-                            "\n                    "
-                        )
+                        _vm._v(_vm._s(item.label))
                       ])
                     ]
                   )

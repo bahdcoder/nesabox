@@ -29,7 +29,7 @@ class TeamInvitesController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (! $user) {
-            abort(422, 'This user does not have an account on nesabox.');
+            abort(400, 'This user does not have an account on nesabox.');
         }
 
         if ((int) $user->id === (int) auth()->user()->id) {
