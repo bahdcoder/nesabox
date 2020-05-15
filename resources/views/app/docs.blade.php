@@ -48,13 +48,28 @@
             ])
         </div>
 
-        <div class="max-w-screen-lg mx-auto my-16 px-6 md:px-0">
+        <div class="container mx-auto my-16 px-6 md:px-0">
             <div class="w-full flex flex-wrap">
                 <div class="w-full md:w-1/4 bg-sky-blue py-4 px-5">
-                    @include('app.partials.docs-nav')
+                    @include('app.partials.docs-nav', [
+                        'path' => $current['path']
+                    ])
                 </div>
 
+                <div class="w-full md:w-3/4 md:pl-20">
+                    <div class="max-w-3xl text-lg text-gray-700 leading-8">
+                        <h3 class="mt-6 md:mt-0 mb-3 text-left font-serif text-2xl md:text-4xl font-semibold mb-6 sm:mb-8">
+                            {{ $current['name'] }}
+                        </h3>
+                        @include('app.docs.' . $page)
 
+                        @if($current['next'])
+                            <div class="mt-6 flex justify-end">
+                                <a href="/docs/{{ $current['next'] }}" class='underline-sha-green-500'>Next →</a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
 

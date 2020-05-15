@@ -1,1 +1,230 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[19],{"1ki8":function(t,e,i){"use strict";i.r(e);var n=i("j5TT"),s=(i("p77/"),i("c3yf"),i("AvDn"),{components:{codemirror:n.codemirror},data:function(){return{fetchingEcosystemFile:!1,fetchingNginxConfigFile:!1,updatingEcosystemFile:!1,updatingNginxConfigFile:!1,ecosystemFile:"",nginxConfigFile:"",fetchingCustomFile:!1,customFileFetched:!1,fileContent:"",updatingCustomFile:!1,codeMirrorOptions:{theme:"lucario",tabSize:4,line:!0,mode:"shell",lineNumbers:!0}}},computed:{site:function(){return this.$root.sites[this.$route.params.site]||{}},server:function(){return this.$root.servers[this.$route.params.server]||{}},serverId:function(){return this.$route.params.server},siteId:function(){return this.$route.params.site}},methods:{fetchPm2File:function(){var t=this;this.fetchingEcosystemFile=!0,axios.get("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId,"/ecosystem-file")).then((function(e){var i=e.data;t.ecosystemFile=i})).catch((function(){t.$root.flashMessage("Failed to fetch the ecosystem file.","error")})).finally((function(){t.fetchingEcosystemFile=!1}))},fetchNginxConfigFile:function(){var t=this;this.fetchingNginxConfigFile=!0,axios.get("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId,"/nginx-config")).then((function(e){var i=e.data;t.nginxConfigFile=i})).catch((function(){t.$root.flashMessage("Failed to fetch the nginx configuration file.","error")})).finally((function(){t.fetchingNginxConfigFile=!1}))},updateNginxConfigFile:function(){var t=this;this.updatingNginxConfigFile=!0,axios.post("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId,"/nginx-config"),{nginxConfig:this.nginxConfigFile}).then((function(){t.$root.flashMessage("Nginx configuration file updated."),t.nginxConfigFile=""})).catch((function(){t.$root.flashMessage("Failed to update the nginx configuration file.","error")})).finally((function(){t.updatingNginxConfigFile=!1}))},updatePm2File:function(){var t=this;this.updatingEcosystemFile=!0,axios.post("/api/servers/".concat(this.serverId,"/sites/").concat(this.siteId,"/ecosystem-file"),{ecosystemFile:this.ecosystemFile}).then((function(){t.$root.flashMessage("Ecosystem file updated."),t.ecosystemFile=""})).catch((function(){t.$root.flashMessage("Failed to update the ecosystem file.","error")})).finally((function(){t.updatingEcosystemFile=!1}))},siteMounted:function(){this.form={path:"/home/nesa/".concat(this.site.name,"/.env")}},fetchFile:function(){var t=this;this.fetchingCustomFile=!0,axios.post("/api/sites/".concat(this.site.id,"/get-file-contents"),this.form).then((function(e){var i=e.data;t.customFileFetched=!0,t.fileContent=i})).catch((function(e){var i=e.response;t.$root.flashMessage(i.data.message||"Failed to fetch this file.")})).finally((function(){t.fetchingCustomFile=!1}))},updateFile:function(){var t=this;this.updatingCustomFile=!0,axios.post("/api/sites/".concat(this.site.id,"/update-file-contents"),{fileContent:this.fileContent,path:this.form.path}).then((function(e){e.data;t.customFileFetched=!1,t.fileContent="",t.$root.flashMessage("File content updated.")})).catch((function(e){var i=e.response;t.$root.flashMessage(i.data||"Failed to update this file.")})).finally((function(){t.updatingCustomFile=!1}))}}}),o=i("KHd+"),a=Object(o.a)(s,(function(){var t=this,e=t.$createElement,i=t._self._c||e;return i("site-layout",{on:{mounted:t.siteMounted}},[i("template",{slot:"content"},[i("flash"),t._v(" "),"nodejs"===t.site.type&&"load_balancer"!==t.server.type?i("card",{staticClass:"mb-6",attrs:{title:"PM2 Ecosystem file"}},[i("info",[t._v("\n                This is the PM2 configuration for your site. Here you can\n                define environment secrets. The content of this file is\n                never saved on our servers.\n            ")]),t._v(" "),t.ecosystemFile?t._e():i("v-button",{staticClass:"mt-4",attrs:{loading:t.fetchingEcosystemFile,label:"Edit Ecosystem file"},on:{click:t.fetchPm2File}}),t._v(" "),t.ecosystemFile?i("codemirror",{staticClass:"my-4",attrs:{options:t.codeMirrorOptions},model:{value:t.ecosystemFile,callback:function(e){t.ecosystemFile=e},expression:"ecosystemFile"}}):t._e(),t._v(" "),t.ecosystemFile?i("v-button",{staticClass:"mt-4",attrs:{loading:t.updatingEcosystemFile,label:"Update Ecosystem file"},on:{click:t.updatePm2File}}):t._e()],1):t._e(),t._v(" "),i("card",{staticClass:"mb-5",attrs:{title:"Nginx configuration file"}},[i("info",[t._v("\n                This is the Nginx configuration for your site.\n                "),"nodejs"===t.site.type?i("span",{staticClass:"ml-1"},[t._v("Make sure the proxy port here matches the port your\n                    application is running on.")]):t._e()]),t._v(" "),t.nginxConfigFile?t._e():i("v-button",{staticClass:"mt-4",attrs:{loading:t.fetchingNginxConfigFile,label:"Edit Nginx Configuration"},on:{click:t.fetchNginxConfigFile}}),t._v(" "),t.nginxConfigFile?i("codemirror",{staticClass:"my-4",attrs:{options:t.codeMirrorOptions},model:{value:t.nginxConfigFile,callback:function(e){t.nginxConfigFile=e},expression:"nginxConfigFile"}}):t._e(),t._v(" "),t.nginxConfigFile?i("v-button",{staticClass:"mt-4",attrs:{loading:t.updatingNginxConfigFile,label:"Update Nginx file"},on:{click:t.updateNginxConfigFile}}):t._e()],1),t._v(" "),"load_balancer"!==t.server.type?i("card",{attrs:{title:"Custom file"}},[t.customFileFetched?i("div",{staticClass:"w-full"},[i("text-input",{staticClass:"mb-3",attrs:{name:"path",value:t.form.path,readonly:!0}}),t._v(" "),i("codemirror",{attrs:{options:t.codeMirrorOptions},model:{value:t.fileContent,callback:function(e){t.fileContent=e},expression:"fileContent"}}),t._v(" "),i("v-button",{staticClass:"mt-3",attrs:{label:"Update file",loading:t.updatingCustomFile},on:{click:t.updateFile}})],1):i("form",{on:{submit:function(e){return e.preventDefault(),t.fetchFile(e)}}},[i("text-input",{attrs:{name:"path",label:"Path to file",help:"Here you can edit a custom file on this site. Make sure this file is not version controlled, because editing it might break deployments."},model:{value:t.form.path,callback:function(e){t.$set(t.form,"path",e)},expression:"form.path"}}),t._v(" "),i("v-button",{staticClass:"mt-3",attrs:{label:"Fetch file",type:"submit",loading:t.fetchingCustomFile}})],1)]):t._e()],1)],2)}),[],!1,null,null,null);e.default=a.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[19],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Settings.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sites/Settings.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      deleting: false,
+      deletingModalOpen: false
+    };
+  },
+  computed: {
+    site: function site() {
+      return this.$root.sites[this.$route.params.site] || {};
+    },
+    serverId: function serverId() {
+      return this.$route.params.server;
+    },
+    siteId: function siteId() {
+      return this.$route.params.site;
+    }
+  },
+  methods: {
+    deleteSite: function deleteSite() {
+      var _this = this;
+
+      this.deleting = true;
+      axios["delete"]("/api/servers/".concat(this.serverId, "/sites/").concat(this.siteId)).then(function (_ref) {
+        var server = _ref.data;
+
+        _this.$router.push("/servers/".concat(_this.serverId));
+
+        _this.$root.servers = _objectSpread({}, _this.$root.server, _defineProperty({}, _this.serverId, server));
+      })["catch"](function () {
+        _this.$root.flashMessage('Cannot delete site at the moment. There might be a process running on this server.', 'error', 5000);
+      })["finally"](function () {
+        _this.deleting = false;
+        _this.deletingModalOpen = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Settings.vue?vue&type=template&id=2e35d7cf&":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Pages/Sites/Settings.vue?vue&type=template&id=2e35d7cf& ***!
+  \************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "site-layout",
+    [
+      _c(
+        "template",
+        { slot: "content" },
+        [
+          _c("flash"),
+          _vm._v(" "),
+          _c("confirm-modal", {
+            attrs: {
+              confirming: _vm.deleting,
+              open: _vm.deletingModalOpen,
+              confirmHeading: "Delete site",
+              confirmText: "Are you sure you want to delete this site ?"
+            },
+            on: {
+              confirm: _vm.deleteSite,
+              close: function($event) {
+                _vm.deletingModalOpen = false
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "card",
+            { attrs: { title: "Delete site" } },
+            [
+              _c("info", [
+                _vm._v(
+                  "\n                This will permanently remove all files related to this site\n                from your server.\n            "
+                )
+              ]),
+              _vm._v(" "),
+              _c("red-button", {
+                staticClass: "mt-5",
+                attrs: { label: "Delete site" },
+                on: {
+                  click: function($event) {
+                    _vm.deletingModalOpen = true
+                  }
+                }
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Settings.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/Pages/Sites/Settings.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Settings_vue_vue_type_template_id_2e35d7cf___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Settings.vue?vue&type=template&id=2e35d7cf& */ "./resources/js/Pages/Sites/Settings.vue?vue&type=template&id=2e35d7cf&");
+/* harmony import */ var _Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Settings.vue?vue&type=script&lang=js& */ "./resources/js/Pages/Sites/Settings.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Settings_vue_vue_type_template_id_2e35d7cf___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Settings_vue_vue_type_template_id_2e35d7cf___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Pages/Sites/Settings.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Settings.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/Pages/Sites/Settings.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Settings.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Settings.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Sites/Settings.vue?vue&type=template&id=2e35d7cf&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/Pages/Sites/Settings.vue?vue&type=template&id=2e35d7cf& ***!
+  \******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_2e35d7cf___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Settings.vue?vue&type=template&id=2e35d7cf& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Pages/Sites/Settings.vue?vue&type=template&id=2e35d7cf&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_2e35d7cf___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_2e35d7cf___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);

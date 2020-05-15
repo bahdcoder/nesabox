@@ -25,6 +25,7 @@ use App\Http\Controllers\Servers\RegionAndSizeController;
 use App\Http\Controllers\Settings\ServerProvidersController;
 use App\Http\Controllers\Settings\SourceControlProvidersController;
 use App\Http\Controllers\Auth\SshkeysController as UserSshkeysController;
+use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\NginxController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\Pm2Controller;
@@ -478,6 +479,11 @@ Route::middleware(['auth:api'])->group(function () {
         '\App\Http\Controllers\Sites\GithubWebhookController'
     )->name('github-webhooks');
 });
+
+Route::get('/docs/{section?}/{page?}', [
+    DocumentationController::class,
+    'index'
+]);
 
 Route::get('/{any}', function ($request) {
     return view('app')->with([
