@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Settings;
 
-use Socialite;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\Auth\SocialiteController;
 
 class SourceControlProvidersController extends Controller
 {
@@ -60,7 +60,16 @@ class SourceControlProvidersController extends Controller
      */
     public function handleProviderCallback($provider)
     {
+        // this is no longer protected by the auth middleware.
+        // if there is no auth user, it means we need to register the user.
+
         $user = auth()->user();
+
+        if (!$user) {
+            return (new SocialiteController())->handleProviderCallback(
+                'github'
+            );
+        }
 
         $userDetails = Socialite::driver($provider)
             ->stateless()

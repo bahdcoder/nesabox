@@ -28,6 +28,11 @@ export default {
                     to: route('subscription')
                 },
                 {
+                    label: 'Teams',
+                    value: 'teams',
+                    to: route('teams')
+                },
+                {
                     label: 'SSH keys',
                     value: 'sshkeys',
                     to: route('ssh-keys')

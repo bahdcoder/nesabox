@@ -36,6 +36,8 @@ class UserResource extends JsonResource
             'id' => $this->resource->id,
             // 'api_token' => $this->api_token,
             'photo_url' => $this->photo_url,
+            'teams' => TeamResource::collection($this->teams),
+            'team_memberships' => $this->memberships()->paginate(25),
             'auth_provider' => $this->auth_provider,
             'server_count' => $serverCount,
             'sshkeys' => SshkeyResource::collection($this->sshkeys),

@@ -52,7 +52,7 @@
                 :table="true"
                 :rowsCount="keys.length"
                 :emptyTableMessage="
-                    wrapper === 'account-info'
+                    wrapper === 'account-layout'
                         ? 'No SSH keys yet.'
                         : 'No SSH keys added to this server yet.'
                 "
@@ -126,11 +126,7 @@ export default {
     },
     methods: {
         serverMounted() {
-            this.initializeForm(
-                this.wrapper === 'account-info'
-                    ? '/api/me/sshkeys'
-                    : `/api/servers/${this.server.id}/sshkeys`
-            )
+            this.initializeForm(`/api/servers/${this.server.id}/sshkeys`)
         },
         submit() {
             this.submitForm()
@@ -140,7 +136,7 @@ export default {
                         key: ''
                     }
 
-                    if (this.wrapper === 'account-info') {
+                    if (this.wrapper === 'account-layout') {
                         this.$root.auth = user
                     } else {
                         this.$root.servers = {
@@ -163,12 +159,12 @@ export default {
 
             axios
                 .delete(
-                    this.wrapper === 'account-info'
+                    this.wrapper === 'account-layout'
                         ? `/api/me/sshkeys/${this.selectedKey.id}`
                         : `/api/servers/${this.server.id}/sshkeys/${this.selectedKey.id}`
                 )
                 .then(({ data: user }) => {
-                    if (this.wrapper === 'account-info') {
+                    if (this.wrapper === 'account-layout') {
                         this.$root.auth = user
                     } else {
                         this.$root.servers = {
@@ -190,6 +186,11 @@ export default {
 
                     this.deleting = false
                 })
+        }
+    },
+    mounted() {
+        if (this.wrapper === 'account-layout') {
+            this.initializeForm('/api/me/sshkeys')
         }
     }
 }

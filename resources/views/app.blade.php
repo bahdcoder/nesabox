@@ -14,6 +14,7 @@
     window.Laravel = {
         csrfToken: "{{ csrf_token() }}"
     }
+    window.github_login_url = '{{ $github_login_url }}'
   </script>
   <script src="{{ mix('js/main.js') }}" defer></script>
   <script src="https://cdn.paddle.com/paddle/paddle.js" defer></script>

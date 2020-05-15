@@ -40,6 +40,7 @@ use App\Http\Controllers\Sites\FileContentController;
 use App\Http\Controllers\Sites\SslCertificateController;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', [WelcomeController::class, 'index']);
 
@@ -65,22 +66,15 @@ Route::get('settings/source-control', [
     'getRedirectUrls'
 ]);
 
-Route::post('auth/{provider}/callback', [
-    SocialiteController::class,
-    'handleProviderCallback'
-]);
-
 Route::get(
     '/invites/{teamInvite}',
     '\App\Http\Controllers\Users\TeamInvitesController@show'
 );
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('settings/source-control/{provider}/callback', [
-        SourceControlProvidersController::class,
-        'handleProviderCallback'
-    ]);
-});
+Route::get('settings/source-control/{provider}/callback', [
+    SourceControlProvidersController::class,
+    'handleProviderCallback'
+]);
 
 Route::post('sites/{site}/pm2-logs', [Pm2Controller::class, 'logs'])->name(
     'pm2-logs'
@@ -489,6 +483,10 @@ Route::get('/{any}', function ($request) {
     return view('app')->with([
         'auth' => auth()->user()
             ? json_encode((new UserResource(auth()->user()))->toArray($request))
-            : null
+            : null,
+        'github_login_url' => Socialite::driver('github')
+            ->scopes(['repo', 'admin:public_key'])
+            ->redirect()
+            ->getTargetUrl()
     ]);
 })->where('any', '.*');
