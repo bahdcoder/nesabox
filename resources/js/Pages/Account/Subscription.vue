@@ -20,12 +20,8 @@
                         class="w-full sm:w-1/2 lg:w-1/3 px-2 mt-4 md:mt-0"
                     >
                         <div class="bg-white shadow rounded overflow-hidden">
-                            <div
-                                class="bg-sha-green-500 text-white px-3 py-3 text-xl"
-                            >
-                                <div
-                                    class="flex justify-between items-center font-medium"
-                                >
+                            <div class="bg-sha-green-500 text-white px-3 py-3 text-xl">
+                                <div class="flex justify-between items-center font-medium">
                                     <div>{{ plan.name }}</div>
                                     <div>${{ plan.price }} / month</div>
                                 </div>
@@ -47,16 +43,14 @@
                                             viewBox="0 0 24 24"
                                             class="w-6 h-6 text-sha-green-500"
                                         >
-                                            <path d="M5 13l4 4L19 7"></path>
+                                            <path d="M5 13l4 4L19 7" />
                                         </svg>
                                         <div
                                             class="ml-2"
                                             :class="{
                                                 'font-medium': feature.bold
                                             }"
-                                        >
-                                            {{ feature.name }}
-                                        </div>
+                                        >{{ feature.name }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -65,9 +59,7 @@
                         <p
                             v-if="subscription.plan === plan.key"
                             class="mt-4 text-center font-medium text-lg"
-                        >
-                            Your current plan
-                        </p>
+                        >Your current plan</p>
 
                         <component
                             v-else
@@ -84,11 +76,7 @@
                     </div>
                 </div>
 
-                <v-button
-                    v-else
-                    label="Updating subscription"
-                    :loading="true"
-                />
+                <v-button v-else label="Updating subscription" :loading="true" />
             </card>
         </template>
     </account-layout>
@@ -182,6 +170,7 @@ export default {
     },
     methods: {
         getPlanLabel(plan) {
+            console.log(this.subscription.plan, '>>>this.subscription.plan')
             if (this.subscription.plan === 'free') {
                 return `Upgrade to ${plan.name} plan`
             }
