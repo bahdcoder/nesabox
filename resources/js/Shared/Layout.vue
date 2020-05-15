@@ -85,6 +85,13 @@
                                                 >
                                             </div>
                                             <div class="py-1">
+                                                <a
+                                                    href="/docs"
+                                                    class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                                                    >Docs</a
+                                                >
+                                            </div>
+                                            <div class="py-1">
                                                 <router-link
                                                     to="/account/teams"
                                                     class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
@@ -184,6 +191,11 @@
                             to="/account"
                             class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
                             >Your account</router-link
+                        >
+                        <a
+                            href="/docs"
+                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
+                            >Docs</a
                         >
                         <router-link
                             to="/account/teams"

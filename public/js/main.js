@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"db39a4a515ef5233e805","1":"ba9d20d9d84d464a130a","2":"d6328164358c39329193","3":"acebddbad3a48c9350df","4":"0493abc2baf0c446fed0","5":"8d10b1923b8fb0f5430c","6":"e582abc1949473831a10","7":"da31469e990ba237c17f","8":"7e584eecfaca13c16a06","9":"255aa7ede348c33f5eab","10":"15b20050d83ee70d5ea5","11":"a0d06398a47294c87793","12":"abced4122381b4a236e0","13":"1706ac5cae08242647cd","14":"707533f3dc36299e7d11","15":"51ed78f634a0e0f52082","16":"c561df4576bc34e19b6e","17":"d0cbfd9acf2159ff39a7","18":"249b659b4095a88301f4","19":"6fe46167968619509f48","20":"74efbc97003291ec861e","21":"4df6fb9af8c7091f0c00","22":"3e3ecba0b83b61bf378c","23":"ed98ec4d3c4819dbb586","24":"964b3e0afd3a43274aa5","25":"a47032bc0d1b429bbc45"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "js/" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"db39a4a515ef5233e805","1":"ba9d20d9d84d464a130a","2":"d6328164358c39329193","3":"acebddbad3a48c9350df","4":"0493abc2baf0c446fed0","5":"8d10b1923b8fb0f5430c","6":"13ba57fd19204a69dfff","7":"bbada05717cc187f99d2","8":"da64529f861295cec5f3","9":"95e8e09765971741788a","10":"582b93468e2729e4021d","11":"c9230fc4e0726904f324","12":"05a4c9ed6fea0ee0908d","13":"631156465e9d9db6c157","14":"f62c4670df5e381b8760","15":"b02a7514eeb342ad26a6","16":"ae4ec058c2e2c4d3be49","17":"9af3e204bb433529c270","18":"1d8eff4639542543b0c7","19":"aafae6794860bf489575","20":"b1c2474c87eb9066bff3","21":"899f250409eb1cddb7c4","22":"20135c4f86e90111aa77","23":"e881104021fb1efdcea4","24":"4d7c29069b9eb2451c76","25":"bbd83d33e6ea13e1c381"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2617,6 +2617,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -26752,6 +26764,18 @@ var render = function() {
                               1
                             ),
                             _vm._v(" "),
+                            _c("div", { staticClass: "py-1" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900",
+                                  attrs: { href: "/docs" }
+                                },
+                                [_vm._v("Docs")]
+                              )
+                            ]),
+                            _vm._v(" "),
                             _c(
                               "div",
                               { staticClass: "py-1" },
@@ -26952,6 +26976,16 @@ var render = function() {
                     attrs: { to: "/account" }
                   },
                   [_vm._v("Your account")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass:
+                      "block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700",
+                    attrs: { href: "/docs" }
+                  },
+                  [_vm._v("Docs")]
                 ),
                 _vm._v(" "),
                 _c(
@@ -46269,7 +46303,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/auth/login',
     name: 'login',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! @/Pages/Auth/Login */ "./resources/js/Pages/Auth/Login.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! @/Pages/Auth/Login */ "./resources/js/Pages/Auth/Login.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46277,7 +46311,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/auth/forgot-password',
     name: 'forgot-password',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! @/Pages/Auth/ForgotPassword */ "./resources/js/Pages/Auth/ForgotPassword.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! @/Pages/Auth/ForgotPassword */ "./resources/js/Pages/Auth/ForgotPassword.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46285,7 +46319,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/auth/reset-password/:token',
     name: 'reset-password',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! @/Pages/Auth/ResetPassword */ "./resources/js/Pages/Auth/ResetPassword.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! @/Pages/Auth/ResetPassword */ "./resources/js/Pages/Auth/ResetPassword.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46293,7 +46327,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/auth/register',
     name: 'register',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! @/Pages/Auth/Register */ "./resources/js/Pages/Auth/Register.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! @/Pages/Auth/Register */ "./resources/js/Pages/Auth/Register.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46301,7 +46335,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/dashboard',
     name: 'dashboard',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! @/Pages/Dashboard/Index */ "./resources/js/Pages/Dashboard/Index.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! @/Pages/Dashboard/Index */ "./resources/js/Pages/Dashboard/Index.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46309,7 +46343,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/create',
     name: 'server.create',
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(23), __webpack_require__.e(11)]).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Create */ "./resources/js/Pages/Servers/Create.vue")).then(function (module) {
+      return Promise.all(/*! import() */[__webpack_require__.e(25), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Create */ "./resources/js/Pages/Servers/Create.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46317,7 +46351,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server',
     name: 'server.single',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Single */ "./resources/js/Pages/Servers/Single.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Single */ "./resources/js/Pages/Servers/Single.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46325,7 +46359,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/scheduler',
     name: 'server.scheduler',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Scheduler */ "./resources/js/Pages/Servers/Scheduler.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Scheduler */ "./resources/js/Pages/Servers/Scheduler.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46341,7 +46375,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/meta',
     name: 'server.meta',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Meta */ "./resources/js/Pages/Servers/Meta.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Meta */ "./resources/js/Pages/Servers/Meta.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46349,7 +46383,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/network',
     name: 'server.network',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Network */ "./resources/js/Pages/Servers/Network.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Network */ "./resources/js/Pages/Servers/Network.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46381,7 +46415,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/databases/postgresql',
     name: 'server.databases.postgresql',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Postgres */ "./resources/js/Pages/Servers/Databases/Postgres.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Postgres */ "./resources/js/Pages/Servers/Databases/Postgres.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46389,7 +46423,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/databases/mongodb',
     name: 'server.databases.mongodb',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mongodb */ "./resources/js/Pages/Servers/Databases/Mongodb.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! @/Pages/Servers/Databases/Mongodb */ "./resources/js/Pages/Servers/Databases/Mongodb.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46397,7 +46431,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site',
     name: 'server.site',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Single */ "./resources/js/Pages/Sites/Single.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Single */ "./resources/js/Pages/Sites/Single.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46405,7 +46439,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site/settings',
     name: 'server.site.settings',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Settings */ "./resources/js/Pages/Sites/Settings.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Settings */ "./resources/js/Pages/Sites/Settings.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46413,7 +46447,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site/files',
     name: 'server.site.files',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Files */ "./resources/js/Pages/Sites/Files.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Files */ "./resources/js/Pages/Sites/Files.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46421,7 +46455,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site/ssl',
     name: 'server.site.ssl',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Ssl */ "./resources/js/Pages/Sites/Ssl.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Ssl */ "./resources/js/Pages/Sites/Ssl.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46429,7 +46463,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/servers/:server/sites/:site/logs',
     name: 'server.site.logs',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Logs */ "./resources/js/Pages/Sites/Logs.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! @/Pages/Sites/Logs */ "./resources/js/Pages/Sites/Logs.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46445,7 +46479,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/account/teams',
     name: 'account.teams',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! @/Pages/Account/Teams */ "./resources/js/Pages/Account/Teams.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! @/Pages/Account/Teams */ "./resources/js/Pages/Account/Teams.vue")).then(function (module) {
         return module["default"];
       });
     }
@@ -46485,7 +46519,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/account/teams/:id',
     name: 'account.team.team-id',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! @/Pages/Account/Team */ "./resources/js/Pages/Account/Team.vue")).then(function (module) {
+      return __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! @/Pages/Account/Team */ "./resources/js/Pages/Account/Team.vue")).then(function (module) {
         return module["default"];
       });
     }

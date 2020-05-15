@@ -5,8 +5,8 @@
             Docs
         </a>
 
-        <a href="/auth/login" class="text-white hover:text-sha-green-500">
-            Log in here →
+        <a href="{{ auth()->user() ? '/dashboard' : '/auth/login' }}" class="text-white hover:text-sha-green-500">
+            {{ auth()->user() ? 'Your dashboard ' : 'Log in here ' }}→
         </a>
     </div>
 </div>

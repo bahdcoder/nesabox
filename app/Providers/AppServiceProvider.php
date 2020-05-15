@@ -5,6 +5,7 @@ namespace App\Providers;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
