@@ -9,19 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* WEBPACK VAR INJECTION */(function(process) {//
 //
 //
 //
@@ -129,7 +117,7 @@ __webpack_require__.r(__webpack_exports__);
         name: 'Pro',
         key: 'pro',
         price: 5,
-        id: parseInt("579858"),
+        id: parseInt(process.env.MIX_PADDLE_PRO_PLAN_ID),
         features: [{
           name: 'Unlimited Servers',
           bold: true
@@ -144,7 +132,7 @@ __webpack_require__.r(__webpack_exports__);
         name: 'Business',
         key: 'business',
         price: 15,
-        id: parseInt("579859"),
+        id: parseInt(process.env.MIX_PADDLE_BUSINESS_PLAN_ID),
         features: [{
           name: 'Unlimited Servers'
         }, {
@@ -168,11 +156,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     window.Paddle.Setup({
-      vendor: parseInt("40489")
+      vendor: parseInt(process.env.MIX_PADDLE_VENDOR_ID)
     });
   },
   methods: {
     getPlanLabel: function getPlanLabel(plan) {
+      console.log(this.subscription.plan, '>>>this.subscription.plan');
+
       if (this.subscription.plan === 'free') {
         return "Upgrade to ".concat(plan.name, " plan");
       }
@@ -264,6 +254,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -401,13 +392,7 @@ var render = function() {
                                                 "font-medium": feature.bold
                                               }
                                             },
-                                            [
-                                              _vm._v(
-                                                "\n                                        " +
-                                                  _vm._s(feature.name) +
-                                                  "\n                                    "
-                                              )
-                                            ]
+                                            [_vm._v(_vm._s(feature.name))]
                                           )
                                         ]
                                       )
@@ -426,11 +411,7 @@ var render = function() {
                                   staticClass:
                                     "mt-4 text-center font-medium text-lg"
                                 },
-                                [
-                                  _vm._v(
-                                    "\n                        Your current plan\n                    "
-                                  )
-                                ]
+                                [_vm._v("Your current plan")]
                               )
                             : _c(
                                 _vm.getPlanLabel(plan).match(/Downgrade/)

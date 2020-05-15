@@ -266,6 +266,12 @@ const router = new VueRouter({
             name: 'account.ssh-keys',
             component: () =>
                 import(`@/Pages/Account/SshKeys`).then(module => module.default)
+        },
+        {
+            path: '/account/teams/:id',
+            name: 'account.team.team-id',
+            component: () =>
+                import(`@/Pages/Account/Team`).then(module => module.default)
         }
     ]
 })

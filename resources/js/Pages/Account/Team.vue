@@ -11,21 +11,21 @@
             </card>
 
             <div v-else>
-                <card title="Add new team" class="mb-5">
+                <card title="Add new team member" class="mb-5">
                     <form @submit.prevent="submit">
                         <text-input
-                            name="name"
-                            label="Name"
-                            v-model="form.name"
-                            placeholder="Artisans"
+                            name="email"
+                            label="Email"
+                            v-model="form.email"
+                            placeholder="member@email.com"
                             :errors="formErrors.name"
-                            help="Provide a name for your team."
+                            help="Provide an email to invite to team."
                         />
 
                         <v-button
                             type="submit"
                             class="mt-5"
-                            label="Add team"
+                            label="Add team member"
                             :loading="submitting"
                         />
                     </form>
@@ -33,45 +33,19 @@
 
                 <card
                     :table="true"
-                    title="Teams"
-                    :rowsCount="teams.length"
-                    emptyTableMessage="No teams yet."
+                    title="Team Members"
+                    :rowsCount="teamInvites.length"
+                    emptyTableMessage="No team invites sent yet."
                 >
-                    <v-table :headers="table.headers" :rows="teams">
+                    <v-table :headers="table.headers" :rows="teamInvites">
                         <template slot="row" slot-scope="{ row, header }">
                             <span
-                                v-if="header.value === 'name'"
+                                v-if="header.value === 'email'"
                                 class="text-gray-800"
                             >{{ row[header.value] }}</span>
+                            <table-status v-if="header.value === 'status'" :status="row.status" />
 
                             <div v-if="header.value === 'actions'">
-                                <router-link
-                                    tag="button"
-                                    class="border-2 border-blue-500 p-1 rounded hover:bg-blue-100 shadow mr-3"
-                                    :to="{
-                                        name: 'account.team.team-id',
-                                        params: {
-                                            id: row.id
-                                        },
-                                    }"
-                                >
-                                    <svg
-                                        class="text-blue-500"
-                                        width="20"
-                                        height="20"
-                                        fill="none"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                                        />
-                                    </svg>
-                                </router-link>
-
                                 <button
                                     type="button"
                                     class="border-2 border-blue-500 p-1 rounded hover:bg-blue-100 shadow mr-3"
@@ -92,8 +66,6 @@
                                         />
                                     </svg>
                                 </button>
-
-                                <delete-button />
                             </div>
                         </template>
                     </v-table>
@@ -110,8 +82,12 @@ export default {
             table: {
                 headers: [
                     {
-                        label: 'Name',
-                        value: 'name'
+                        label: 'Email',
+                        value: 'email'
+                    },
+                    {
+                        label: 'Status',
+                        value: 'status'
                     },
                     {
                         label: '',
@@ -120,7 +96,7 @@ export default {
                 ]
             },
             form: {
-                name: ''
+                email: ''
             }
         }
     },
@@ -128,12 +104,15 @@ export default {
         subscription() {
             return this.$root.auth.subscription
         },
-        teams() {
-            return this.$root.auth.teams
+        teamInvites() {
+            const team = this.$root.auth.teams.find(
+                team => team.id === this.$route.params.id
+            )
+            return team.invites
         }
     },
     mounted() {
-        this.initializeForm('/api/teams')
+        this.initializeForm(`/api/teams/${this.$route.params.id}/invites`)
     },
     methods: {
         submit() {
@@ -142,14 +121,14 @@ export default {
                     this.$root.auth = user
 
                     this.form = {
-                        name: ''
+                        email: ''
                     }
 
-                    this.$root.flashMessage('Team has been added.')
+                    this.$root.flashMessage('Team invite has been sent.')
                 })
-                .catch(({ response }) => {
+                .catch(response => {
                     this.$root.flashMessage(
-                        response.data.message || 'Failed creating team.',
+                        response.data.message || 'Failed sending team invite.',
                         'error'
                     )
                 })
