@@ -5,18 +5,21 @@
                 <h2 class="mb-4 font-semibold text-2xl">Create server</h2>
                 <form @submit.prevent="create" class="w-full" method="POST">
                     <div class="shadow sm:rounded-md sm:overflow-hidden">
-                        <div class="px-4 md:px-12 py-5 md:py-12 bg-white sm:p-6">
+                        <div
+                            class="px-4 md:px-12 py-5 md:py-12 bg-white sm:p-6"
+                        >
                             <div class="mb-4">
                                 <label class="block w-full font-semibold"
                                     >Server provider</label
                                 >
                                 <small class="text-gray-600 inline-block"
                                     >Select your server provider. Nesabox will
-                                    connect using your provider's API and provision
-                                    a server with the specs you select. If you have
-                                    already provisioned a server on any provider,
-                                    select custom provider. Nesabox will connect to
-                                    your already provisioned server.
+                                    connect using your provider's API and
+                                    provision a server with the specs you
+                                    select. If you have already provisioned a
+                                    server on any provider, select custom
+                                    provider. Nesabox will connect to your
+                                    already provisioned server.
                                 </small>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -48,7 +51,9 @@
 
                             <div
                                 class="w-full mt-5"
-                                v-if="form.provider && form.provider !== 'custom'"
+                                v-if="
+                                    form.provider && form.provider !== 'custom'
+                                "
                             >
                                 <select-input
                                     name="credential"
@@ -58,11 +63,15 @@
                                 >
                                     <template slot="help">
                                         <small class="text-gray-600">
-                                            Select the {{ form.provider }} api key
-                                            to be used to create this server.
-                                            <span v-if="credentials.length === 0">
+                                            Select the {{ form.provider }} api
+                                            key to be used to create this
+                                            server.
+                                            <span
+                                                v-if="credentials.length === 0"
+                                            >
                                                 You do not have any
-                                                {{ form.provider }} credentials yet.
+                                                {{ form.provider }} credentials
+                                                yet.
                                                 <router-link
                                                     to="/account/server-providers"
                                                     class="rounded text-white bg-sha-green-500 p-1 text-xs px-2"
@@ -97,7 +106,9 @@
                             </div>
 
                             <div
-                                v-if="showServerName && form.provider !== 'custom'"
+                                v-if="
+                                    showServerName && form.provider !== 'custom'
+                                "
                                 class="w-full mt-8"
                             >
                                 <select-input
@@ -111,7 +122,9 @@
                             </div>
 
                             <div
-                                v-if="showServerName && form.provider !== 'custom'"
+                                v-if="
+                                    showServerName && form.provider !== 'custom'
+                                "
                                 class="w-full mt-8"
                             >
                                 <select-input
@@ -125,7 +138,9 @@
                             </div>
 
                             <div
-                                v-if="showServerName && form.provider === 'custom'"
+                                v-if="
+                                    showServerName && form.provider === 'custom'
+                                "
                                 class="w-full mt-8"
                             >
                                 <text-input
@@ -140,7 +155,9 @@
                             </div>
 
                             <div
-                                v-if="showServerName && form.provider === 'custom'"
+                                v-if="
+                                    showServerName && form.provider === 'custom'
+                                "
                                 class="w-full mt-8"
                             >
                                 <text-input
@@ -155,7 +172,9 @@
 
                             <div
                                 class="w-full mt-8"
-                                v-if="showServerName && form.provider === 'custom'"
+                                v-if="
+                                    showServerName && form.provider === 'custom'
+                                "
                             >
                                 <text-input
                                     name="ip_address"
@@ -169,7 +188,9 @@
 
                             <div
                                 class="w-full mt-8"
-                                v-if="showServerName && form.provider === 'custom'"
+                                v-if="
+                                    showServerName && form.provider === 'custom'
+                                "
                             >
                                 <text-input
                                     name="private_ip_address"
@@ -183,19 +204,25 @@
 
                             <hr
                                 class="my-6 md:my-12"
-                                v-if="form.type && form.type !== 'load_balancer'"
+                                v-if="
+                                    form.type && form.type !== 'load_balancer'
+                                "
                             />
 
                             <div
                                 class="w-full mt-8"
-                                v-if="form.type && form.type !== 'load_balancer'"
+                                v-if="
+                                    form.type && form.type !== 'load_balancer'
+                                "
                             >
-                                <h3 class="leading-6 font-semibold text-gray-900">
+                                <h3
+                                    class="leading-6 font-semibold text-gray-900"
+                                >
                                     Databases
                                 </h3>
                                 <small class="mt-1 text-gray-500">
-                                    Check the databases you need installed on this
-                                    server.
+                                    Check the databases you need installed on
+                                    this server.
                                 </small>
 
                                 <div class="mt-4">
@@ -205,7 +232,9 @@
                                             :key="database.value"
                                             v-for="database in databases"
                                         >
-                                            <div class="relative flex items-start">
+                                            <div
+                                                class="relative flex items-start"
+                                            >
                                                 <div
                                                     class="absolute flex items-center h-5"
                                                 >
@@ -213,7 +242,9 @@
                                                         type="checkbox"
                                                         :id="database.value"
                                                         @change="
-                                                            selectDatabase(database)
+                                                            selectDatabase(
+                                                                database
+                                                            )
                                                         "
                                                         :checked="
                                                             form.databases.includes(
@@ -223,7 +254,9 @@
                                                         class="form-checkbox h-4 w-4 text-sha-green-600 transition duration-150 ease-in-out"
                                                     />
                                                 </div>
-                                                <div class="pl-7 text-sm leading-5">
+                                                <div
+                                                    class="pl-7 text-sm leading-5"
+                                                >
                                                     <label
                                                         :for="database.value"
                                                         class="font-medium text-gray-700"
@@ -272,10 +305,10 @@
                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                     <div class="p-5 bg-white">
                         <p class="w-full mb-4 text-gray-900">
-                            Almost there! Login to your server as root and run the
-                            following command. This would provision your server so
-                            that it can be managed by us. Once done, your server
-                            will become active on this dashboard.
+                            Almost there! Login to your server as root and run
+                            the following command. This would provision your
+                            server so that it can be managed by us. Once done,
+                            your server will become active on this dashboard.
                         </p>
                         <textarea
                             id="command"

@@ -28,12 +28,16 @@ class TeamInvitesController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (! $user) {
+        if (!$user) {
             abort(400, 'This user does not have an account on nesabox.');
         }
 
         if ((int) $user->id === (int) auth()->user()->id) {
             abort(400, 'You cannot invite yourself to a team.');
+        }
+
+        if ($team->hasInvite($user)) {
+            abort(400, $user->email . ' has already been invited to this team.');
         }
 
         $data = [
@@ -46,7 +50,11 @@ class TeamInvitesController extends Controller
 
         event(new UserInvitedToTeam($invite));
 
-        return new UserResource(auth()->user()->fresh());
+        return new UserResource(
+            auth()
+                ->user()
+                ->fresh()
+        );
     }
 
     public function show(TeamInvite $teamInvite)
@@ -77,7 +85,11 @@ class TeamInvitesController extends Controller
 
         // TODO: Notify owner of team the the invite was accepted or rejected.
 
-        return response()->json([]);
+        return new UserResource(
+            auth()
+                ->user()
+                ->fresh()
+        );
     }
 
     public function destroy(TeamInvite $teamInvite)
@@ -87,6 +99,10 @@ class TeamInvitesController extends Controller
 
         $teamInvite->delete();
 
-        return new TeamResource($team->fresh());
+        return new UserResource(
+            auth()
+                ->user()
+                ->fresh()
+        );
     }
 }

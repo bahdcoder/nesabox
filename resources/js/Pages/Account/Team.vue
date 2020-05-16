@@ -1,8 +1,19 @@
 <template>
     <account-layout>
-        <template slot="content">
+        <template v-if="validated" slot="content">
             <flash />
-            <card v-if="subscription.plan !== 'business'" title="Upgrade your plan to add teams">
+            <confirm-modal
+                :open="!!removingMember"
+                @confirm="removeMember"
+                confirmHeading="Remove member"
+                @close="removingMember = null"
+                :confirming="removingMemberLoading"
+                :confirmText="`Are you sure you want to revoke this member's access to this team and its servers?`"
+            />
+            <card
+                v-if="subscription.plan !== 'business'"
+                title="Upgrade your plan to add teams"
+            >
                 <v-button
                     label="Upgrade to Business"
                     component="router-link"
@@ -11,12 +22,25 @@
             </card>
 
             <div v-else>
-                <card
-                    title="Invite new team member"
-                    class="mb-5"
-                    hasBackButton
-                    :backHandler="() => this.$router.push({name: 'account.teams'})"
-                >
+                <card title="Invite new team member" class="mb-5">
+                    <template slot="header">
+                        <div class="w-full flex justify-between items-center">
+                            <h3
+                                class="text-lg leading-6 font-medium text-gray-900 capitalize"
+                            >
+                                Invite new team member ({{ team.name }})
+                            </h3>
+
+                            <router-link
+                                class="mr-5 text-sha-green-500"
+                                style="text-decoration: underline;"
+                                to="/account/teams"
+                            >
+                                Back to teams
+                            </router-link>
+                        </div>
+                    </template>
+
                     <form @submit.prevent="submit">
                         <text-input
                             name="email"
@@ -38,7 +62,7 @@
 
                 <card
                     :table="true"
-                    title="Team Members"
+                    :title="`Team Members (${team.name})`"
                     :rowsCount="teamInvites.length"
                     emptyTableMessage="No team invites sent yet."
                 >
@@ -47,11 +71,15 @@
                             <span
                                 v-if="header.value === 'email'"
                                 class="text-gray-800"
-                            >{{ row[header.value] }}</span>
-                            <table-status v-if="header.value === 'status'" :status="row.status" />
+                                >{{ row[header.value] }}</span
+                            >
+                            <table-status
+                                v-if="header.value === 'status'"
+                                :status="row.status"
+                            />
 
                             <div v-if="header.value === 'actions'">
-                                <delete-button />
+                                <delete-button @click="removingMember = row" />
                             </div>
                         </template>
                     </v-table>
@@ -83,7 +111,10 @@ export default {
             },
             form: {
                 email: ''
-            }
+            },
+            validated: false,
+            removingMember: null,
+            removingMemberLoading: false
         }
     },
     computed: {
@@ -91,15 +122,24 @@ export default {
             return this.$root.auth.subscription
         },
         teamInvites() {
-            const team = this.$root.auth.teams.find(
+            return this.team.invites
+        },
+        team() {
+            return this.$root.auth.teams.find(
                 team => team.id === this.$route.params.id
             )
-            console.log(team, '>>team')
-            return team.invites
         }
     },
     mounted() {
         this.initializeForm(`/api/teams/${this.$route.params.id}/invites`)
+
+        if (! this.team) {
+            this.$router.push('/account/teams')
+
+            return
+        }
+
+        this.validated = true
     },
     methods: {
         submit() {
@@ -119,6 +159,30 @@ export default {
                         'error'
                     )
                 })
+        },
+        removeMember() {
+            this.removingMemberLoading = true
+
+            axios.delete(`/api/invites/${this.removingMember.id}`)
+                .then(({ data }) => {
+                    this.removingMember = null
+                    this.removingMemberLoading = false
+
+                    this.$root.auth = data
+
+                    this.$root.flashMessage('Member removed.')
+                })
+                .catch((error) => {
+                    this.removingMember = null
+                    this.removingMemberLoading = false
+
+                    this.$root.flashMessage(error.response.data.message || 'Failed to remove member.')
+                })
+        },
+        setRemoveMember(member) {
+           this.removeMemberConfirming = true
+
+           this.removingMember = member
         }
     }
 }

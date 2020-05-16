@@ -11,7 +11,9 @@
                         class="mt-1 group flex items-center px-3 py-2 text-sm leading-5 font-medium rounded-md focus:outline-none transition ease-in-out duration-150"
                         :class="{
                             'bg-gray-200 text-gray-900 hover:text-gray-900':
-                                active === item.to || (item.to.includes('/account/teams') && routeName === 'account.team.team-id'),
+                                active === item.to ||
+                                (item.to.includes('/account/teams') &&
+                                    routeName === 'account.team.team-id'),
                             'hover:bg-gray-50 text-gray-700': active !== item.to
                         }"
                     >
@@ -378,7 +380,9 @@
                             />
                         </svg>
 
-                        <span class="capitalize truncate">{{ item.label }}</span>
+                        <span class="capitalize truncate">{{
+                            item.label
+                        }}</span>
                     </router-link>
                 </nav>
             </div>

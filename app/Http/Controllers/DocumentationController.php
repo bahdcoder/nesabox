@@ -16,7 +16,7 @@ class DocumentationController extends Controller
                         'name' => 'Getting started',
                         'path' => 'general/getting-started',
                         'next' => 'account/server-providers'
-                    ],
+                    ]
                 ])
             ],
             [
@@ -51,9 +51,9 @@ class DocumentationController extends Controller
                         'name' => 'Ssh keys',
                         'path' => 'account/ssh-keys',
                         'next' => 'server-management/provision-a-server'
-                    ],
+                    ]
                 ])
-                ],
+            ],
             [
                 'name' => 'Server management',
                 'items' => collect([
@@ -88,7 +88,7 @@ class DocumentationController extends Controller
                         'next' => 'sites/git-repositories'
                     ]
                 ])
-                    ],
+            ],
             [
                 'name' => 'Sites',
                 'items' => collect([
@@ -116,7 +116,7 @@ class DocumentationController extends Controller
                         'name' => 'Deployments',
                         'path' => 'sites/deployments',
                         'next' => null
-                    ],
+                    ]
                 ])
             ]
         ]);
@@ -141,18 +141,18 @@ class DocumentationController extends Controller
             });
         }
 
-        if (! $page || ! $section) {
+        if (!$page || !$section) {
             return redirect('/docs/' . $menu->first()['items'][0]['path']);
         }
 
         $nextPage = $section['items']->first(function ($current) use ($path) {
             $current = strpos($path, $current['path']);
-        });;
+        });
 
         return view('app.docs', [
             'menu' => $menu,
             'current' => $page,
-            'page' => str_replace('/', '.', $page['path']),
+            'page' => str_replace('/', '.', $page['path'])
         ]);
     }
 }

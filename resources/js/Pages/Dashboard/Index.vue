@@ -159,7 +159,7 @@ export default {
             this.showOnlyOwnServers = !this.showOnlyOwnServers
         },
         subscribeServers() {
-            this.interval = setInterval(this.fetchServers, 3000)
+            this.interval = setInterval(this.fetchServers, 10000)
         }
     },
     beforeDestroy() {
