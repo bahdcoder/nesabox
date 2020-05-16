@@ -18,6 +18,14 @@
   </script>
   <script src="{{ mix('js/main.js') }}" defer></script>
   <script src="https://cdn.paddle.com/paddle/paddle.js" defer></script>
+  <script>
+    // @see https://docs.headwayapp.co/widget for more configuration options.
+    var HW_config = {
+      selector: "#change-log", // CSS selector where to inject the badge
+      account:  "JmeL2J"
+    }
+  </script>
+  <script async src="https://cdn.headwayapp.co/widget.js"></script>
 </head>
 <body class='bg-page bg-gray-100 font-sans'>
     <div id="app">
