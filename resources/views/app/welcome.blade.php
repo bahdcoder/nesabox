@@ -37,6 +37,8 @@
                 background: #f3f8ff;
             }
         </style>
+
+        <style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
     </head>
 
     <body class="font-sans bg-sky-blue">
@@ -73,7 +75,7 @@
         </div>
 
         <div class="max-w-5xl mx-auto px-6 relative mb-8 cursor-pointer">
-            <svg class="absolute w-12 h-12 md:w-20 md:h-20 m-auto top-0 left-0 right-0 bottom-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            {{-- <svg class="absolute w-12 h-12 md:w-20 md:h-20 m-auto top-0 left-0 right-0 bottom-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <defs />
                 <path
                     fill="#2D3748"
@@ -83,7 +85,10 @@
                     data-original="#000000"
                 />
             </svg>
-            <img class="shadow-lg -mt-56 mb-12" src="/assets/images/app.png" alt="" />
+            <img class="shadow-lg -mt-56 mb-12" src="/assets/images/app.png" alt="" /> --}}
+            <div class="-mt-56 embed-container">
+                <iframe src="https://player.vimeo.com/video/418795691" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
         </div>
 
         <div class="mt-12 mx-auto max-w-3xl px-4 text-xl text-gray-700 leading-8">

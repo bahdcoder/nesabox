@@ -37,6 +37,21 @@
                 background: #f3f8ff;
             }
         </style>
+
+        <script>
+            function toggleMenu() {
+                var toggleButton = document.getElementById('toggle-menu-button')
+                var menu = document.getElementById('menu')
+
+                if (menu.classList.contains('hidden')) {
+                    toggleButton.innerText = 'Hide menu'
+                } else {
+                    toggleButton.innerText = 'Show menu'
+                }
+
+                menu.classList.toggle('hidden')
+            }
+        </script>
     </head>
 
     <body class="font-sans bg-white">
@@ -48,9 +63,16 @@
             ])
         </div>
 
-        <div class="container mx-auto my-16 px-6 md:px-0">
+        <div class="container mx-auto my-8 md:my-12 px-6 md:px-0">
             <div class="w-full flex flex-wrap">
-                <div class="w-full md:w-1/4 bg-sky-blue py-4 px-5">
+                <button
+                    onclick='toggleMenu()'
+                    id='toggle-menu-button'
+                    class="md:hidden mb-3 md:mb-0 w-full md:w-auto capitalize inline-flex justify-center py-3 px-5 border text-gray-700 border-transparent text-sm leading-5 font-medium rounded-sm text-white bg-sky-blue focus:outline-none transition duration-150 ease-in-out"
+                >
+                    Show menu
+                </button>
+                <div id='menu' class="w-full md:w-1/4 hidden md:block bg-sky-blue py-4 px-5">
                     @include('app.partials.docs-nav', [
                         'path' => $current['path']
                     ])
