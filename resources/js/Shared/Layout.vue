@@ -46,7 +46,7 @@
                                         {{ $root.auth.name }}
                                     </span>
 
-                                    <svg fill="none" class="image-button text-white w-4 ml-2 cursor-pointer h-" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+                                    <svg fill="none" class="image-button text-white w-4 ml-2 cursor-pointer h-4 -mt-1" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
                                 </div>
                                 <transition name="account-menu">
                                     <div
