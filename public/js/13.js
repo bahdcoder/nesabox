@@ -336,6 +336,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     next(function (vm) {
@@ -559,636 +561,647 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("layout", [
-    !_vm.created
-      ? _c("div", [
-          _c("h2", { staticClass: "mb-4 font-semibold text-2xl" }, [
-            _vm._v("Create server")
-          ]),
-          _vm._v(" "),
-          _c(
-            "form",
-            {
-              staticClass: "w-full",
-              attrs: { method: "POST" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.create($event)
+    _c("div", { staticClass: "max-w-4xl mx-auto" }, [
+      !_vm.created
+        ? _c("div", [
+            _c("h2", { staticClass: "mb-4 font-semibold text-2xl" }, [
+              _vm._v("Create server")
+            ]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                staticClass: "w-full",
+                attrs: { method: "POST" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.create($event)
+                  }
                 }
-              }
-            },
-            [
-              _c(
-                "div",
-                { staticClass: "shadow sm:rounded-md sm:overflow-hidden" },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "px-4 md:px-12 py-5 md:py-12 bg-white sm:p-6"
-                    },
-                    [
-                      _c("div", { staticClass: "mb-4" }, [
-                        _c(
-                          "label",
-                          { staticClass: "block w-full font-semibold" },
-                          [_vm._v("Server provider")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "small",
-                          { staticClass: "text-gray-600 inline-block" },
-                          [
-                            _vm._v(
-                              "Select your server provider. Nesabox will\n                            connect using your provider's API and provision\n                            a server with the specs you select. If you have\n                            already provisioned a server on any provider,\n                            select custom provider. Nesabox will connect to\n                            your already provisioned server.\n                        "
-                            )
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "grid grid-cols-1 md:grid-cols-4 gap-4"
-                        },
-                        _vm._l(_vm.providers, function(provider) {
-                          return _c(
-                            "div",
-                            {
-                              key: provider.icon,
-                              staticClass:
-                                "py-8 rounded-sm flex items-center flex-col justify-center w-full cursor-pointer border-gray-300 hover:border-sha-green-500",
-                              class: {
-                                "border-2 border-sha-green-500":
-                                  _vm.form.provider === provider.icon,
-                                "border opacity-50":
-                                  _vm.form.provider !== provider.icon
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.setProvider(provider)
-                                }
-                              }
-                            },
-                            [
-                              _c("v-svg", {
-                                attrs: {
-                                  icon: provider.icon,
-                                  width: provider.width,
-                                  height: provider.height
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("p", { staticClass: "mt-3" }, [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(provider.name) +
-                                    "\n                            "
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        }),
-                        0
-                      ),
-                      _vm._v(" "),
-                      _vm.form.provider
-                        ? _c("hr", { staticClass: "my-6 md:my-12" })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.form.provider && _vm.form.provider !== "custom"
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-5" },
-                            [
-                              _c(
-                                "select-input",
-                                {
-                                  attrs: {
-                                    name: "credential",
-                                    options: _vm.credentials,
-                                    label: "Provider Credential"
-                                  },
-                                  model: {
-                                    value: _vm.form.credential_id,
-                                    callback: function($$v) {
-                                      _vm.$set(_vm.form, "credential_id", $$v)
-                                    },
-                                    expression: "form.credential_id"
-                                  }
-                                },
-                                [
-                                  _c("template", { slot: "help" }, [
-                                    _c(
-                                      "small",
-                                      { staticClass: "text-gray-600" },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Select the " +
-                                            _vm._s(_vm.form.provider) +
-                                            " api key\n                                    to be used to create this server.\n                                    "
-                                        ),
-                                        _vm.credentials.length === 0
-                                          ? _c(
-                                              "span",
-                                              [
-                                                _vm._v(
-                                                  "\n                                        You do not have any\n                                        " +
-                                                    _vm._s(_vm.form.provider) +
-                                                    " credentials yet.\n                                        "
-                                                ),
-                                                _c(
-                                                  "router-link",
-                                                  {
-                                                    staticClass:
-                                                      "rounded text-white bg-sha-green-500 p-1 text-xs px-2",
-                                                    attrs: {
-                                                      to:
-                                                        "/account/server-providers"
-                                                    }
-                                                  },
-                                                  [_vm._v("Add one here")]
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          : _vm._e()
-                                      ]
-                                    )
-                                  ])
-                                ],
-                                2
-                              )
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("text-input", {
-                                attrs: {
-                                  name: "name",
-                                  label: "Server name",
-                                  errors: _vm.errors.name,
-                                  placeholder: "exasperant-sand-dunes-093",
-                                  help:
-                                    "Choose a memorable name that helps you easily find this server. This could be the name of your project."
-                                },
-                                model: {
-                                  value: _vm.form.name,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "name", $$v)
-                                  },
-                                  expression: "form.name"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("select-input", {
-                                attrs: {
-                                  name: "type",
-                                  label: "Server type",
-                                  errors: _vm.errors.type,
-                                  options: _vm.serverTypes,
-                                  help:
-                                    "The default installs everything you need to run sites on a server. The load balancer provisions only nginx, optimizes it for load balancing, with no additional software."
-                                },
-                                model: {
-                                  value: _vm.form.type,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "type", $$v)
-                                  },
-                                  expression: "form.type"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName && _vm.form.provider !== "custom"
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("select-input", {
-                                attrs: {
-                                  name: "region",
-                                  label: "Region",
-                                  options: _vm.regions,
-                                  errors: _vm.errors.region,
-                                  help:
-                                    "Select the region / data center where this server should be provisioned. If you are horizontally scaling, make sure you select the same region for all your resources."
-                                },
-                                model: {
-                                  value: _vm.form.region,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "region", $$v)
-                                  },
-                                  expression: "form.region"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName && _vm.form.provider !== "custom"
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("select-input", {
-                                attrs: {
-                                  name: "size",
-                                  label: "Size",
-                                  options: _vm.sizes,
-                                  errors: _vm.errors.size,
-                                  help:
-                                    "Select the size of this server. RAM, GB and vCPUs."
-                                },
-                                model: {
-                                  value: _vm.form.size,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "size", $$v)
-                                  },
-                                  expression: "form.size"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName && _vm.form.provider === "custom"
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("text-input", {
-                                attrs: {
-                                  name: "size",
-                                  label: "Size",
-                                  type: "number",
-                                  placeholder: "4",
-                                  errors: _vm.errors.size,
-                                  help:
-                                    "Provide the RAM of your server in GB. It'll be used to set the SWAP size."
-                                },
-                                model: {
-                                  value: _vm.form.size,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "size", $$v)
-                                  },
-                                  expression: "form.size"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName && _vm.form.provider === "custom"
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("text-input", {
-                                attrs: {
-                                  name: "region",
-                                  label: "Region",
-                                  errors: _vm.errors.region,
-                                  placeholder: "New York 1",
-                                  help:
-                                    "Provide the region of your custom server. This can help you identify the location of the server in future."
-                                },
-                                model: {
-                                  value: _vm.form.region,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "region", $$v)
-                                  },
-                                  expression: "form.region"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName && _vm.form.provider === "custom"
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("text-input", {
-                                attrs: {
-                                  name: "ip_address",
-                                  label: "IP Address",
-                                  placeholder: "196.50.6.1",
-                                  errors: _vm.errors.ip_address,
-                                  help:
-                                    "Provide the public IPv4 address of your custom server. We'll use this so we can connect to your server."
-                                },
-                                model: {
-                                  value: _vm.form.ip_address,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "ip_address", $$v)
-                                  },
-                                  expression: "form.ip_address"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.showServerName && _vm.form.provider === "custom"
-                        ? _c(
-                            "div",
-                            { staticClass: "w-full mt-8" },
-                            [
-                              _c("text-input", {
-                                attrs: {
-                                  name: "private_ip_address",
-                                  placeholder: "196.50.6.1",
-                                  label: "Private IP Address",
-                                  errors: _vm.errors.private_ip_address,
-                                  help:
-                                    "Provide the private IPv4 address of your custom server. This is optional, and is useful if you are setting up a network of servers."
-                                },
-                                model: {
-                                  value: _vm.form.private_ip_address,
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.form,
-                                      "private_ip_address",
-                                      $$v
-                                    )
-                                  },
-                                  expression: "form.private_ip_address"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.form.type && _vm.form.type !== "load_balancer"
-                        ? _c("hr", { staticClass: "my-6 md:my-12" })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.form.type && _vm.form.type !== "load_balancer"
-                        ? _c("div", { staticClass: "w-full mt-8" }, [
-                            _c(
-                              "h3",
-                              {
-                                staticClass:
-                                  "leading-6 font-semibold text-gray-900"
-                              },
-                              [
-                                _vm._v(
-                                  "\n                            Databases\n                        "
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("small", { staticClass: "mt-1 text-gray-500" }, [
-                              _vm._v(
-                                "\n                            Check the databases you need installed on this\n                            server.\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "mt-4" },
-                              [
-                                _c(
-                                  "fieldset",
-                                  _vm._l(_vm.databases, function(database) {
-                                    return _c(
-                                      "div",
-                                      {
-                                        key: database.value,
-                                        staticClass: "mt-4"
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass:
-                                              "relative flex items-start"
-                                          },
-                                          [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "absolute flex items-center h-5"
-                                              },
-                                              [
-                                                _c("input", {
-                                                  staticClass:
-                                                    "form-checkbox h-4 w-4 text-sha-green-600 transition duration-150 ease-in-out",
-                                                  attrs: {
-                                                    type: "checkbox",
-                                                    id: database.value
-                                                  },
-                                                  domProps: {
-                                                    checked: _vm.form.databases.includes(
-                                                      database.value
-                                                    )
-                                                  },
-                                                  on: {
-                                                    change: function($event) {
-                                                      return _vm.selectDatabase(
-                                                        database
-                                                      )
-                                                    }
-                                                  }
-                                                })
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "pl-7 text-sm leading-5"
-                                              },
-                                              [
-                                                _c(
-                                                  "label",
-                                                  {
-                                                    staticClass:
-                                                      "font-medium text-gray-700",
-                                                    attrs: {
-                                                      for: database.value
-                                                    }
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                                " +
-                                                        _vm._s(database.label) +
-                                                        "\n                                            "
-                                                    )
-                                                  ]
-                                                )
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  }),
-                                  0
-                                ),
-                                _vm._v(" "),
-                                _c("flash", { staticClass: "my-4" })
-                              ],
-                              1
-                            )
-                          ])
-                        : _vm._e()
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex flex-wrap flex-wrap-reverse md:block px-4 py-3 bg-gray-50 text-right sm:px-6"
-                    },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass:
-                            "w-full md:w-auto inline-flex rounded-md shadow-sm",
-                          attrs: { to: "/dashboard" }
-                        },
-                        [
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "shadow sm:rounded-md sm:overflow-hidden" },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "px-4 md:px-12 py-5 md:py-12 bg-white sm:p-6"
+                      },
+                      [
+                        _c("div", { staticClass: "mb-4" }, [
                           _c(
-                            "button",
-                            {
-                              staticClass:
-                                "w-full py-2 px-4 border border-gray-300 rounded-md text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out",
-                              attrs: { type: "button" }
-                            },
+                            "label",
+                            { staticClass: "block w-full font-semibold" },
+                            [_vm._v("Server provider")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "small",
+                            { staticClass: "text-gray-600 inline-block" },
                             [
                               _vm._v(
-                                "\n                            Cancel\n                        "
+                                "Select your server provider. Nesabox will\n                                connect using your provider's API and provision\n                                a server with the specs you select. If you have\n                                already provisioned a server on any provider,\n                                select custom provider. Nesabox will connect to\n                                your already provisioned server.\n                            "
                               )
                             ]
                           )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "span",
-                        {
-                          staticClass:
-                            "mb-3 md:mb-0 w-full md:w-auto inline-flex rounded-md shadow-sm"
-                        },
-                        [
-                          _c("v-button", {
-                            attrs: {
-                              type: "submit",
-                              disabled: _vm.loading,
-                              loading: _vm.loading,
-                              label: "Deploy Server"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ]
-              )
-            ]
-          )
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.created && _vm.form.provider === "custom"
-      ? _c("div", [
-          _c("h2", { staticClass: "mb-4 font-semibold text-2xl" }, [
-            _vm._v("Create server")
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "shadow sm:rounded-md sm:overflow-hidden" },
-            [
-              _c(
-                "div",
-                { staticClass: "p-5 bg-white" },
-                [
-                  _c("p", { staticClass: "w-full mb-4 text-gray-900" }, [
-                    _vm._v(
-                      "\n                    Almost there! Login to your server as root and run the\n                    following command. This would provision your server so\n                    that it can be managed by us. Once done, your server\n                    will become active on this dashboard.\n                "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "grid grid-cols-1 md:grid-cols-4 gap-4"
+                          },
+                          _vm._l(_vm.providers, function(provider) {
+                            return _c(
+                              "div",
+                              {
+                                key: provider.icon,
+                                staticClass:
+                                  "py-8 rounded-sm flex items-center flex-col justify-center w-full cursor-pointer border-gray-300 hover:border-sha-green-500",
+                                class: {
+                                  "border-2 border-sha-green-500":
+                                    _vm.form.provider === provider.icon,
+                                  "border opacity-50":
+                                    _vm.form.provider !== provider.icon
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.setProvider(provider)
+                                  }
+                                }
+                              },
+                              [
+                                _c("v-svg", {
+                                  attrs: {
+                                    icon: provider.icon,
+                                    width: provider.width,
+                                    height: provider.height
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "mt-3" }, [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(provider.name) +
+                                      "\n                                "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          }),
+                          0
+                        ),
+                        _vm._v(" "),
+                        _vm.form.provider
+                          ? _c("hr", { staticClass: "my-6 md:my-12" })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.form.provider && _vm.form.provider !== "custom"
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-5" },
+                              [
+                                _c(
+                                  "select-input",
+                                  {
+                                    attrs: {
+                                      name: "credential",
+                                      options: _vm.credentials,
+                                      label: "Provider Credential"
+                                    },
+                                    model: {
+                                      value: _vm.form.credential_id,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "credential_id", $$v)
+                                      },
+                                      expression: "form.credential_id"
+                                    }
+                                  },
+                                  [
+                                    _c("template", { slot: "help" }, [
+                                      _c(
+                                        "small",
+                                        { staticClass: "text-gray-600" },
+                                        [
+                                          _vm._v(
+                                            "\n                                        Select the " +
+                                              _vm._s(_vm.form.provider) +
+                                              " api key\n                                        to be used to create this server.\n                                        "
+                                          ),
+                                          _vm.credentials.length === 0
+                                            ? _c(
+                                                "span",
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            You do not have any\n                                            " +
+                                                      _vm._s(
+                                                        _vm.form.provider
+                                                      ) +
+                                                      " credentials yet.\n                                            "
+                                                  ),
+                                                  _c(
+                                                    "router-link",
+                                                    {
+                                                      staticClass:
+                                                        "rounded text-white bg-sha-green-500 p-1 text-xs px-2",
+                                                      attrs: {
+                                                        to:
+                                                          "/account/server-providers"
+                                                      }
+                                                    },
+                                                    [_vm._v("Add one here")]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      )
+                                    ])
+                                  ],
+                                  2
+                                )
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("text-input", {
+                                  attrs: {
+                                    name: "name",
+                                    label: "Server name",
+                                    errors: _vm.errors.name,
+                                    placeholder: "exasperant-sand-dunes-093",
+                                    help:
+                                      "Choose a memorable name that helps you easily find this server. This could be the name of your project."
+                                  },
+                                  model: {
+                                    value: _vm.form.name,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "name", $$v)
+                                    },
+                                    expression: "form.name"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("select-input", {
+                                  attrs: {
+                                    name: "type",
+                                    label: "Server type",
+                                    errors: _vm.errors.type,
+                                    options: _vm.serverTypes,
+                                    help:
+                                      "The default installs everything you need to run sites on a server. The load balancer provisions only nginx, optimizes it for load balancing, with no additional software."
+                                  },
+                                  model: {
+                                    value: _vm.form.type,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "type", $$v)
+                                    },
+                                    expression: "form.type"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName && _vm.form.provider !== "custom"
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("select-input", {
+                                  attrs: {
+                                    name: "region",
+                                    label: "Region",
+                                    options: _vm.regions,
+                                    errors: _vm.errors.region,
+                                    help:
+                                      "Select the region / data center where this server should be provisioned. If you are horizontally scaling, make sure you select the same region for all your resources."
+                                  },
+                                  model: {
+                                    value: _vm.form.region,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "region", $$v)
+                                    },
+                                    expression: "form.region"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName && _vm.form.provider !== "custom"
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("select-input", {
+                                  attrs: {
+                                    name: "size",
+                                    label: "Size",
+                                    options: _vm.sizes,
+                                    errors: _vm.errors.size,
+                                    help:
+                                      "Select the size of this server. RAM, GB and vCPUs."
+                                  },
+                                  model: {
+                                    value: _vm.form.size,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "size", $$v)
+                                    },
+                                    expression: "form.size"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName && _vm.form.provider === "custom"
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("text-input", {
+                                  attrs: {
+                                    name: "size",
+                                    label: "Size",
+                                    type: "number",
+                                    placeholder: "4",
+                                    errors: _vm.errors.size,
+                                    help:
+                                      "Provide the RAM of your server in GB. It'll be used to set the SWAP size."
+                                  },
+                                  model: {
+                                    value: _vm.form.size,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "size", $$v)
+                                    },
+                                    expression: "form.size"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName && _vm.form.provider === "custom"
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("text-input", {
+                                  attrs: {
+                                    name: "region",
+                                    label: "Region",
+                                    errors: _vm.errors.region,
+                                    placeholder: "New York 1",
+                                    help:
+                                      "Provide the region of your custom server. This can help you identify the location of the server in future."
+                                  },
+                                  model: {
+                                    value: _vm.form.region,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "region", $$v)
+                                    },
+                                    expression: "form.region"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName && _vm.form.provider === "custom"
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("text-input", {
+                                  attrs: {
+                                    name: "ip_address",
+                                    label: "IP Address",
+                                    placeholder: "196.50.6.1",
+                                    errors: _vm.errors.ip_address,
+                                    help:
+                                      "Provide the public IPv4 address of your custom server. We'll use this so we can connect to your server."
+                                  },
+                                  model: {
+                                    value: _vm.form.ip_address,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "ip_address", $$v)
+                                    },
+                                    expression: "form.ip_address"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.showServerName && _vm.form.provider === "custom"
+                          ? _c(
+                              "div",
+                              { staticClass: "w-full mt-8" },
+                              [
+                                _c("text-input", {
+                                  attrs: {
+                                    name: "private_ip_address",
+                                    placeholder: "196.50.6.1",
+                                    label: "Private IP Address",
+                                    errors: _vm.errors.private_ip_address,
+                                    help:
+                                      "Provide the private IPv4 address of your custom server. This is optional, and is useful if you are setting up a network of servers."
+                                  },
+                                  model: {
+                                    value: _vm.form.private_ip_address,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.form,
+                                        "private_ip_address",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "form.private_ip_address"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.form.type && _vm.form.type !== "load_balancer"
+                          ? _c("hr", { staticClass: "my-6 md:my-12" })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.form.type && _vm.form.type !== "load_balancer"
+                          ? _c("div", { staticClass: "w-full mt-8" }, [
+                              _c(
+                                "h3",
+                                {
+                                  staticClass:
+                                    "leading-6 font-semibold text-gray-900"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                Databases\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "small",
+                                { staticClass: "mt-1 text-gray-500" },
+                                [
+                                  _vm._v(
+                                    "\n                                Check the databases you need installed on this\n                                server.\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "mt-4" },
+                                [
+                                  _c(
+                                    "fieldset",
+                                    _vm._l(_vm.databases, function(database) {
+                                      return _c(
+                                        "div",
+                                        {
+                                          key: database.value,
+                                          staticClass: "mt-4"
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "relative flex items-start"
+                                            },
+                                            [
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "absolute flex items-center h-5"
+                                                },
+                                                [
+                                                  _c("input", {
+                                                    staticClass:
+                                                      "form-checkbox h-4 w-4 text-sha-green-600 transition duration-150 ease-in-out",
+                                                    attrs: {
+                                                      type: "checkbox",
+                                                      id: database.value
+                                                    },
+                                                    domProps: {
+                                                      checked: _vm.form.databases.includes(
+                                                        database.value
+                                                      )
+                                                    },
+                                                    on: {
+                                                      change: function($event) {
+                                                        return _vm.selectDatabase(
+                                                          database
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "pl-7 text-sm leading-5"
+                                                },
+                                                [
+                                                  _c(
+                                                    "label",
+                                                    {
+                                                      staticClass:
+                                                        "font-medium text-gray-700",
+                                                      attrs: {
+                                                        for: database.value
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            database.label
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    }),
+                                    0
+                                  ),
+                                  _vm._v(" "),
+                                  _c("flash", { staticClass: "my-4" })
+                                ],
+                                1
+                              )
+                            ])
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
                       {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.deployCommand,
-                        expression: "deployCommand"
-                      }
-                    ],
-                    staticClass:
-                      "w-full bg-gray-100 shadow-sm px-4 py-3 text-xs text-gray-600 border border-gray-200 rounded",
-                    attrs: { id: "command", readonly: "" },
-                    domProps: { value: _vm.deployCommand },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                        staticClass:
+                          "flex flex-wrap flex-wrap-reverse md:block px-4 py-3 bg-gray-50 text-right sm:px-6"
+                      },
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass:
+                              "w-full md:w-auto inline-flex rounded-md shadow-sm",
+                            attrs: { to: "/dashboard" }
+                          },
+                          [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "w-full py-2 px-4 border border-gray-300 rounded-md text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out",
+                                attrs: { type: "button" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Cancel\n                            "
+                                )
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            staticClass:
+                              "mb-3 md:mb-0 w-full md:w-auto inline-flex rounded-md shadow-sm"
+                          },
+                          [
+                            _c("v-button", {
+                              attrs: {
+                                type: "submit",
+                                disabled: _vm.loading,
+                                loading: _vm.loading,
+                                label: "Deploy Server"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.created && _vm.form.provider === "custom"
+        ? _c("div", [
+            _c("h2", { staticClass: "mb-4 font-semibold text-2xl" }, [
+              _vm._v("Create server")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "shadow sm:rounded-md sm:overflow-hidden" },
+              [
+                _c(
+                  "div",
+                  { staticClass: "p-5 bg-white" },
+                  [
+                    _c("p", { staticClass: "w-full mb-4 text-gray-900" }, [
+                      _vm._v(
+                        "\n                        Almost there! Login to your server as root and run the\n                        following command. This would provision your server so\n                        that it can be managed by us. Once done, your server\n                        will become active on this dashboard.\n                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.deployCommand,
+                          expression: "deployCommand"
                         }
-                        _vm.deployCommand = $event.target.value
+                      ],
+                      staticClass:
+                        "w-full bg-gray-100 shadow-sm px-4 py-3 text-xs text-gray-600 border border-gray-200 rounded",
+                      attrs: { id: "command", readonly: "" },
+                      domProps: { value: _vm.deployCommand },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.deployCommand = $event.target.value
+                        }
                       }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("v-button", {
-                    staticClass: "mt-4",
-                    attrs: { label: "Copy command" },
-                    on: { click: _vm.copyCommand }
-                  }),
-                  _vm._v(" "),
-                  _c("v-trans-button", {
-                    staticClass: "mt-4",
-                    attrs: { label: "Go to dashboard" },
-                    on: {
-                      click: function($event) {
-                        return _vm.$router.push("/dashboard")
+                    }),
+                    _vm._v(" "),
+                    _c("v-button", {
+                      staticClass: "mt-4",
+                      attrs: { label: "Copy command" },
+                      on: { click: _vm.copyCommand }
+                    }),
+                    _vm._v(" "),
+                    _c("v-trans-button", {
+                      staticClass: "mt-4",
+                      attrs: { label: "Go to dashboard" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.push("/dashboard")
+                        }
                       }
-                    }
-                  })
-                ],
-                1
-              )
-            ]
-          )
-        ])
-      : _vm._e()
+                    })
+                  ],
+                  1
+                )
+              ]
+            )
+          ])
+        : _vm._e()
+    ])
   ])
 }
 var staticRenderFns = []

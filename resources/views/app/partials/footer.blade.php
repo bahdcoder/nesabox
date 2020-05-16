@@ -16,5 +16,7 @@
 </div>
 
 <!-- Fathom - beautiful, simple website analytics -->
+@if(app('env') === 'production')
 <script src="https://cdn.usefathom.com/script.js" site="HZGTLOKN" defer></script>
+@endif
 <!-- / Fathom -->

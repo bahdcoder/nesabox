@@ -45,13 +45,23 @@ class DocumentationController extends Controller
                     [
                         'name' => 'Source control providers',
                         'path' => 'account/source-control-providers',
-                        'next' => 'server-management/databases'
+                        'next' => 'account/ssh-keys'
+                    ],
+                    [
+                        'name' => 'Ssh keys',
+                        'path' => 'account/ssh-keys',
+                        'next' => 'server-management/provision-a-server'
                     ],
                 ])
                 ],
             [
                 'name' => 'Server management',
                 'items' => collect([
+                    [
+                        'name' => 'Provision a server',
+                        'path' => 'server-management/provision-a-server',
+                        'next' => 'server-management/databases'
+                    ],
                     [
                         'name' => 'Databases',
                         'path' => 'server-management/databases',
