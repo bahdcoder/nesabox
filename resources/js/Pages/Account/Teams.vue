@@ -64,7 +64,9 @@
                                         }
                                     }"
                                 >
-                                    {{ row.invites.length }} Member{{ row.invites.length === 1 ? '' : 's' }}
+                                    {{ row.invites.length }} Member{{
+                                        row.invites.length === 1 ? '' : 's'
+                                    }}
                                 </router-link>
 
                                 <button
@@ -95,8 +97,16 @@
                 </card>
             </div>
 
-            <card title='Team memberships' :table='true' :rowsCount="memberships.length" emptyTableMessage='You have not been added to any teams.'>
-                <v-table :headers="membershipsTable.headers" :rows="memberships">
+            <card
+                title="Team memberships"
+                :table="true"
+                :rowsCount="memberships.length"
+                emptyTableMessage="You have not been added to any teams."
+            >
+                <v-table
+                    :headers="membershipsTable.headers"
+                    :rows="memberships"
+                >
                     <template slot="row" slot-scope="{ row, header }">
                         <span
                             v-if="header.value === 'team_name'"
@@ -110,19 +120,36 @@
                         />
 
                         <div
-                                class="flex items-center"
-                                v-if="header.value === 'actions' && row.status !== 'active'"
+                            class="flex items-center"
+                            v-if="
+                                header.value === 'actions' &&
+                                    row.status !== 'active'
+                            "
+                        >
+                            <button
+                                type="button"
+                                @click="acceptInvite(row)"
+                                class="border-2 border-sha-green-500 p-1 rounded hover:bg-sha-green-100 shadow mr-3"
                             >
-                                <button
-                                    type="button"
-                                    @click="acceptInvite(row)"
-                                    class="border-2 border-sha-green-500 p-1 rounded hover:bg-sha-green-100 shadow mr-3"
+                                <svg
+                                    class="text-sha-green-500"
+                                    width="20"
+                                    height="20"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
                                 >
-                                    <svg class="text-sha-green-500" width='20' height='20' fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                </button>
+                                    <path
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    ></path>
+                                </svg>
+                            </button>
 
-                                <delete-button @click="rejectInvite(row)" />
-                            </div>
+                            <delete-button @click="rejectInvite(row)" />
+                        </div>
                     </template>
                 </v-table>
             </card>
@@ -210,12 +237,16 @@ export default {
             this.updateInvite(invite, 'rejected')
         },
         updateInvite(invite, status) {
-            axios.patch(`/api/invites/${invite.id}/${status}`)
+            axios
+                .patch(`/api/invites/${invite.id}/${status}`)
                 .then(({ data: user }) => {
                     this.$root.auth = user
                 })
-                .catch((error) => {
-                    this.$root.flashMessage(error.response.data.message || 'Failed to update invite.')
+                .catch(error => {
+                    this.$root.flashMessage(
+                        error.response.data.message ||
+                            'Failed to update invite.'
+                    )
                 })
         }
     }

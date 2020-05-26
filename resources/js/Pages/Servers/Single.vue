@@ -82,23 +82,21 @@
                         <span
                             class="text-gray-800 text-sm"
                             v-if="header.value === 'name'"
+                            >{{ row.name }}</span
                         >
-                            {{ row.name }}
-                        </span>
 
                         <span
                             v-if="header.value === 'type'"
                             class="text-gray-800 text-sm capitalize"
+                            >{{ row.type }}</span
                         >
-                            {{ row.type }}
-                        </span>
 
                         <table-status
                             v-if="header.value === 'status'"
                             :status="row.status"
                         />
 
-                        <div class="flex " v-if="header.value === 'repository'">
+                        <div class="flex" v-if="header.value === 'repository'">
                             <svg
                                 v-if="!row.repository"
                                 class="mr-3"
@@ -185,7 +183,6 @@ export default {
     },
     mounted() {
         this.initializeForm(`/api/servers/${this.serverId}/sites`)
-
         // this.subscribeToServer()
     },
     methods: {

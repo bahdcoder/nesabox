@@ -37,7 +37,10 @@ class TeamInvitesController extends Controller
         }
 
         if ($team->hasInvite($user)) {
-            abort(400, $user->email . ' has already been invited to this team.');
+            abort(
+                400,
+                $user->email . ' has already been invited to this team.'
+            );
         }
 
         $data = [

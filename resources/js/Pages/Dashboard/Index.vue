@@ -45,15 +45,13 @@
                     <span
                         v-if="header.value === 'ip_address'"
                         class="inline-flex text-xs leading-5 font-semibold rounded-full capitalize"
+                        >{{ row.ip_address }}</span
                     >
-                        {{ row.ip_address }}
-                    </span>
                     <span
                         v-if="header.value === 'type'"
                         class="inline-flex text-xs leading-5 font-semibold rounded-full capitalize text-gray-700"
+                        >{{ row.type.split('_').join(' ') }}</span
                     >
-                        {{ row.type.split('_').join(' ') }}
-                    </span>
                     <table-status
                         v-if="header.value === 'status'"
                         :status="row.status"
@@ -121,14 +119,15 @@ export default {
     computed: {
         servers() {
             let servers = []
-
-            this.$root.allServers.team_servers.forEach((membership) => {
-                servers = [
-                    ...this.$root.allServers.servers,
-                    ...membership.team.servers
-                ]
-            })
-            
+            if (this.$root.allServers.team_servers.length) {
+                this.$root.allServers.team_servers.forEach(membership => {
+                    servers = [
+                        ...this.$root.allServers.servers,
+                        ...membership.team.servers
+                    ]
+                })
+            }
+            servers = [...servers, ...this.$root.allServers.servers]
             return servers
         },
         subscription() {

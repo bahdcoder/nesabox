@@ -8,7 +8,9 @@
                 confirmHeading="Remove member"
                 @close="removingMember = null"
                 :confirming="removingMemberLoading"
-                :confirmText="`Are you sure you want to revoke this member's access to this team and its servers?`"
+                :confirmText="
+                    `Are you sure you want to revoke this member's access to this team and its servers?`
+                "
             />
             <card
                 v-if="subscription.plan !== 'business'"
@@ -133,7 +135,7 @@ export default {
     mounted() {
         this.initializeForm(`/api/teams/${this.$route.params.id}/invites`)
 
-        if (! this.team) {
+        if (!this.team) {
             this.$router.push('/account/teams')
 
             return
@@ -163,7 +165,8 @@ export default {
         removeMember() {
             this.removingMemberLoading = true
 
-            axios.delete(`/api/invites/${this.removingMember.id}`)
+            axios
+                .delete(`/api/invites/${this.removingMember.id}`)
                 .then(({ data }) => {
                     this.removingMember = null
                     this.removingMemberLoading = false
@@ -172,17 +175,20 @@ export default {
 
                     this.$root.flashMessage('Member removed.')
                 })
-                .catch((error) => {
+                .catch(error => {
                     this.removingMember = null
                     this.removingMemberLoading = false
 
-                    this.$root.flashMessage(error.response.data.message || 'Failed to remove member.')
+                    this.$root.flashMessage(
+                        error.response.data.message ||
+                            'Failed to remove member.'
+                    )
                 })
         },
         setRemoveMember(member) {
-           this.removeMemberConfirming = true
+            this.removeMemberConfirming = true
 
-           this.removingMember = member
+            this.removingMember = member
         }
     }
 }
