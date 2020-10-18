@@ -120,15 +120,18 @@ export default {
     },
     computed: {
         servers() {
-            let servers = []
+            let servers = [
+                ...this.$root.allServers.servers
+            ]
+
 
             this.$root.allServers.team_servers.forEach((membership) => {
                 servers = [
-                    ...this.$root.allServers.servers,
+                    ...servers,
                     ...membership.team.servers
                 ]
             })
-            
+
             return servers
         },
         subscription() {
